@@ -1,0 +1,418 @@
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 5d1e139..b3f9ace 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -15,11 +15,6 @@ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+   IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
+-  # This should match the timezone of the Rock server
+-  TIMEZONE: 'America/New_York'
+-ONE_SIGNAL:
+-  APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+-  REST_KEY: ${ONE_SIGNAL_REST_KEY}
+ ANALYTICS:
+   # Filling out these fields will automatically enable analytics tracking
+   # on the accompanying service
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 1caae25..fb2545d 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0-alpha.7",
++  "version": "0.8.0-alpha.5",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -28,14 +28,13 @@
+     "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-bible": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-onesignal": "^0.8.0-alpha.7",
+-    "@apollosproject/data-connector-rock": "^0.8.0-alpha.7",
+-    "@apollosproject/server-core": "^0.8.0-alpha.7",
++    "@apollosproject/config": "^0.8.0-alpha.5",
++    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.5",
++    "@apollosproject/data-connector-bible": "^0.8.0-alpha.5",
++    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.5",
++    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.5",
++    "@apollosproject/data-connector-rock": "^0.8.0-alpha.5",
++    "@apollosproject/server-core": "^0.8.0-alpha.5",
+     "apollo-server": "^2.0.5",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+@@ -44,8 +43,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.7",
+-    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.7",
++    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.5",
++    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.5",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 60e95b2..d18d797 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -6,7 +6,6 @@ import * as Analytics from '@apollosproject/data-connector-analytics';
+ import * as Scripture from '@apollosproject/data-connector-bible';
+ import * as LiveStream from '@apollosproject/data-connector-church-online';
+ import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+-import * as OneSignal from '@apollosproject/data-connector-onesignal';
+ import {
+   Followings,
+   Interactions,
+@@ -17,14 +16,9 @@ import {
+   ContentChannel,
+   Sharable,
+   Auth,
+-  PersonalDevice,
+ } from '@apollosproject/data-connector-rock';
+ import * as Theme from './theme';
+ 
+-// This module is used to attach Rock User updating to the OneSignal module.
+-// This module includes a Resolver that overides a resolver defined in `OneSignal`
+-import * as OneSignalWithRock from './oneSignalWithRock';
+-
+ const data = {
+   Followings,
+   ContentChannel,
+@@ -40,7 +34,6 @@ const data = {
+   Sharable,
+   Analytics,
+   Family,
+-  OneSignal,
+   UniversalContentItem: {
+     dataSource: ContentItem.dataSource,
+   }, // alias
+@@ -53,8 +46,6 @@ const data = {
+   MediaContentItem: {
+     dataSource: ContentItem.dataSource,
+   }, // alias
+-  PersonalDevice,
+-  OneSignalWithRock,
+ };
+ 
+ const { dataSources, resolvers, schema, context } = createApolloServerConfig(
+diff --git a/apollos-church-api/src/data/oneSignalWithRock.js b/apollos-church-api/src/data/oneSignalWithRock.js
+deleted file mode 100644
+index e810c58..0000000
+--- a/apollos-church-api/src/data/oneSignalWithRock.js
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/* eslint-disable import/prefer-default-export */
+-
+-export const resolver = {
+-  Mutation: {
+-    updateUserPushSettings: async (root, { input }, { dataSources }) => {
+-      // register the changes w/ one signal
+-      const returnValue = await dataSources.OneSignal.updatePushSettings(input);
+-
+-      // if the pushProviderUserId is changing, we need ot register the device with rock.
+-      if (input.pushProviderUserId != null) {
+-        await dataSources.PersonalDevice.addPersonalDevice({
+-          pushId: input.pushProviderUserId,
+-        });
+-      }
+-
+-      // return the original return value (which is currentPerson)
+-      return returnValue;
+-    },
+-  },
+-};
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 6435ad1..5846984 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.0-alpha.7",
++  "version": "0.8.0-alpha.5",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -62,7 +62,7 @@
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.8.0-alpha.7",
++    "@apollosproject/ui-kit": "^0.8.0-alpha.5",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
+diff --git a/apolloschurchapp/src/notifications/NotificationManager.js b/apolloschurchapp/src/Notifications.js
+similarity index 77%
+rename from apolloschurchapp/src/notifications/NotificationManager.js
+rename to apolloschurchapp/src/Notifications.js
+index bc1ba54..d37e22f 100644
+--- a/apolloschurchapp/src/notifications/NotificationManager.js
++++ b/apolloschurchapp/src/Notifications.js
+@@ -1,31 +1,24 @@
+ import querystring from 'querystring';
+ import URL from 'url';
+-import gql from 'graphql-tag';
+ import { Component } from 'react';
+ import { Linking } from 'react-native';
+ import OneSignal from 'react-native-onesignal';
+-import { get } from 'lodash';
+-import NavigationService from '../NavigationService';
+-import { ONE_SIGNAL_KEY } from '../config';
+-import { client } from '../client';
+-
+-const UPDATE_DEVICE_PUSH_ID = gql`
+-  mutation updateDevicePushId($pushId: String!) {
+-    updateDevicePushId(pushId: $pushId) @client
+-  }
+-`;
++import NavigationService from './NavigationService';
++import { ONE_SIGNAL_KEY } from './config';
+ 
+ export default class NotificationsInit extends Component {
+   static navigationOptions = {};
+ 
+-  componentDidMount() {
++  componentWillMount() {
+     OneSignal.init(ONE_SIGNAL_KEY, {
+       kOSSettingsKeyAutoPrompt: true,
+     });
+     OneSignal.addEventListener('received', this.onReceived);
+     OneSignal.addEventListener('opened', this.onOpened);
+     OneSignal.addEventListener('ids', this.onIds);
+-    OneSignal.configure();
++  }
++
++  componentDidMount() {
+     Linking.getInitialURL().then((url) => {
+       this.navigate(url);
+     });
+@@ -60,17 +53,14 @@ export default class NotificationsInit extends Component {
+     // apolloschurchapp://AppStackNavigator/Connect
+     // apolloschurchapp://SomethingElse/Connect
+     // apolloschurchapp://SomethingElse/ContentSingle?itemId=SomeItemId:blablalba
+-    const url = get(openResult, 'notification.payload.additionalData.url');
++    const { url } = openResult.notification.payload.additionalData;
+     if (url) {
+       this.navigate(url);
+     }
+   };
+ 
+   onIds = (device) => {
+-    client.mutate({
+-      mutation: UPDATE_DEVICE_PUSH_ID,
+-      variables: { pushId: device.userId },
+-    });
++    console.log('Device info: ', device);
+   };
+ 
+   render() {
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 1b0a319..84c6cda 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -4,7 +4,6 @@ import { ApolloProvider } from 'react-apollo';
+ import { ApolloClient } from 'apollo-client';
+ import { ApolloLink } from 'apollo-link';
+ import SplashScreen from 'react-native-splash-screen';
+-import gql from 'graphql-tag';
+ 
+ import httpLink from './httpLink';
+ import clientStateLink from './clientStateLink';
+@@ -22,18 +21,6 @@ export const client = new ApolloClient({
+ 
+ client.onResetStore(clientStateLink.writeDefaults);
+ 
+-export const CACHE_LOADED = gql`
+-  query {
+-    cacheLoaded @client
+-  }
+-`;
+-
+-export const MARK_CACHE_LOADED = gql`
+-  mutation markCacheLoaded {
+-    cacheMarkLoaded @client
+-  }
+-`;
+-
+ class ClientProvider extends PureComponent {
+   static propTypes = {
+     client: PropTypes.shape({
+@@ -52,7 +39,6 @@ class ClientProvider extends PureComponent {
+       throw e;
+     } finally {
+       if (SplashScreen && SplashScreen.hide) SplashScreen.hide();
+-      client.mutate({ mutation: MARK_CACHE_LOADED });
+     }
+   }
+ 
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index e669ac3..7fe89f1 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation';
+ import { BackgroundView, withTheme } from '@apollosproject/ui-kit';
+ import MediaPlayer from 'apolloschurchapp/src/ui/MediaPlayer';
+ import Providers from './Providers';
+-import { NotificationsManager } from './notifications';
++import NotificationsInit from './Notifications';
+ import NavigationService from './NavigationService';
+ import ContentSingle from './content-single';
+ import Tabs from './tabs';
+@@ -47,7 +47,7 @@ const App = () => (
+           NavigationService.setTopLevelNavigator(navigatorRef);
+         }}
+       />
+-      <NotificationsManager />
++      <NotificationsInit />
+       <MediaPlayer />
+     </BackgroundView>
+   </Providers>
+diff --git a/apolloschurchapp/src/notifications/index.js b/apolloschurchapp/src/notifications/index.js
+deleted file mode 100644
+index a42b2e1..0000000
+--- a/apolloschurchapp/src/notifications/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export NotificationsManager from './NotificationManager';
+diff --git a/apolloschurchapp/src/notifications/updatePushId.js b/apolloschurchapp/src/notifications/updatePushId.js
+deleted file mode 100644
+index ab5480b..0000000
+--- a/apolloschurchapp/src/notifications/updatePushId.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import gql from 'graphql-tag';
+-import { client } from '../client';
+-
+-const UPDATE_PUSH_ID = gql`
+-  mutation updateUserPushSettings($input: PushSettingsInput!) {
+-    updateUserPushSettings(input: $input) {
+-      id
+-    }
+-  }
+-`;
+-
+-const updatePushId = async ({ pushId }) => {
+-  await client.mutate({
+-    mutation: UPDATE_PUSH_ID,
+-    variables: { input: { pushProviderUserId: pushId } },
+-  });
+-};
+-
+-export { updatePushId as default };
+diff --git a/apolloschurchapp/src/store/index.js b/apolloschurchapp/src/store/index.js
+index 7169296..f9bec86 100644
+--- a/apolloschurchapp/src/store/index.js
++++ b/apolloschurchapp/src/store/index.js
+@@ -2,8 +2,7 @@ import { merge, get } from 'lodash';
+ import gql from 'graphql-tag';
+ import getLoginState from 'apolloschurchapp/src/auth/getLoginState';
+ import { track, events } from 'apolloschurchapp/src/analytics';
+-import { client, CACHE_LOADED } from '../client'; // eslint-disable-line
+-import updatePushId from '../notifications/updatePushId';
++import { client } from '../client'; // eslint-disable-line
+ import getAuthToken from './getAuthToken';
+ // TODO: this will require more organization...ie...not keeping everything in one file.
+ // But this is simple while our needs our small.
+@@ -13,8 +12,6 @@ export const schema = `
+     authToken: String
+     mediaPlayer: MediaPlayerState
+     isLoggedIn: Boolean
+-    devicePushId: String
+-    cacheLoaded: Boolean
+   }
+ 
+   type Mutation {
+@@ -30,11 +27,7 @@ export const schema = `
+       isVideo: Boolean,
+     ): Boolean
+ 
+-    cacheMarkLoaded
+-
+     handleLogin(authToken: String!)
+-
+-    updateDevicePushId(pushId: String!)
+   }
+ 
+   type MediaPlayerState {
+@@ -66,8 +59,6 @@ export const schema = `
+ export const defaults = {
+   __typename: 'Query',
+   authToken: null,
+-  cacheLoaded: false,
+-  pushId: null,
+   mediaPlayer: {
+     __typename: 'MediaPlayerState',
+     currentTrack: null,
+@@ -116,17 +107,6 @@ export const resolvers = {
+           data: { authToken },
+         });
+ 
+-        const { pushId } = cache.readQuery({
+-          query: gql`
+-            query {
+-              pushId
+-            }
+-          `,
+-        });
+-        if (pushId) {
+-          updatePushId({ pushId });
+-        }
+-
+         track({ eventName: events.UserLogin });
+       } catch (e) {
+         throw e.message;
+@@ -256,45 +236,5 @@ export const resolvers = {
+       });
+       return null;
+     },
+-    updateDevicePushId: (root, { pushId }, { cache }) => {
+-      const query = gql`
+-        query {
+-          pushId @client
+-        }
+-      `;
+-      cache.writeQuery({
+-        query,
+-        data: {
+-          pushId,
+-        },
+-      });
+-
+-      const isLoggedIn = resolvers.Query.isLoggedIn();
+-      if (isLoggedIn) {
+-        updatePushId({ pushId });
+-      }
+-      return null;
+-    },
+-
+-    cacheMarkLoaded: (root, args, { cache }) => {
+-      cache.writeQuery({
+-        query: CACHE_LOADED,
+-        data: {
+-          cacheLoaded: true,
+-        },
+-      });
+-      const isLoggedIn = resolvers.Query.isLoggedIn();
+-      const { pushId } = cache.readQuery({
+-        query: gql`
+-          query {
+-            pushId @client
+-          }
+-        `,
+-      });
+-
+-      if (isLoggedIn && pushId) {
+-        updatePushId({ pushId });
+-      }
+-    },
+   },
+ };
