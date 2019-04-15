@@ -1,0 +1,1163 @@
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 4302a6f..564a740 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -72,10 +72,6 @@ ROCK_MAPPINGS:
+       EntityType: ContentChannelItem
+     ContentItem:
+       EntityType: ContentChannelItem
+-  
+-  DATAVIEW_CATEGORIES:
+-    # Id of the category used to store all persona dataviews
+-    PersonaId: 210
+ 
+   # Apollos will pull these content channels and expose them in the app on the discover screen.
+   DISCOVER_CONTENT_CHANNEL_IDS:
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 1808bee..a44b597 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0",
++  "version": "0.8.0-alpha.9",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -34,15 +34,15 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0",
+-    "@apollosproject/data-connector-analytics": "^0.8.0",
+-    "@apollosproject/data-connector-bible": "^0.8.0",
+-    "@apollosproject/data-connector-church-online": "^0.8.0",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.0",
+-    "@apollosproject/data-connector-onesignal": "^0.8.0",
+-    "@apollosproject/data-connector-passes": "^0.8.0",
+-    "@apollosproject/data-connector-rock": "^0.8.0",
+-    "@apollosproject/server-core": "^0.8.0",
++    "@apollosproject/config": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-bible": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-onesignal": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-passes": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-rock": "^0.8.0-alpha.9",
++    "@apollosproject/server-core": "^0.8.0-alpha.9",
+     "apollo-server": "^2.0.5",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+@@ -51,8 +51,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.0",
+-    "@apollosproject/babel-preset-apollos": "^0.8.0",
++    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.9",
++    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.9",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index ca35750..b59d936 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -13,6 +13,7 @@ import {
+   Followings,
+   Interactions,
+   RockConstants,
++  Family,
+   Person,
+   ContentItem,
+   ContentChannel,
+@@ -45,6 +46,7 @@ const data = {
+   RockConstants,
+   Sharable,
+   Analytics,
++  Family,
+   OneSignal,
+   UniversalContentItem: {
+     dataSource: ContentItem.dataSource,
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 080f09b..8ed800d 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.0",
++  "version": "0.8.0-alpha.9",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -64,8 +64,8 @@
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.8.0",
+-    "@apollosproject/ui-passes": "^0.8.0",
++    "@apollosproject/ui-kit": "^0.8.0-alpha.9",
++    "@apollosproject/ui-passes": "^0.8.0-alpha.9",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
+@@ -84,6 +84,7 @@
+     "graphql": "0.13.2",
+     "graphql-tag": "2.9.2",
+     "graphql-tools": "3.1.1",
++    "htmlparser2": "3.9.2",
+     "lodash": "^4.17.11",
+     "memoize-one": "4.0.0",
+     "moment": "2.22.2",
+@@ -109,7 +110,6 @@
+     "react-native-screens": "1.0.0-alpha.12",
+     "react-native-splash-screen": "^3.1.1",
+     "react-native-svg": "6.5.2",
+-    "react-native-swiper": "^1.5.14",
+     "react-native-video": "3.2.0",
+     "react-native-video-controls": "2.2.3",
+     "react-native-webview": "^5.2.0",
+diff --git a/apolloschurchapp/rn-cli.config.js b/apolloschurchapp/rn-cli.config.js
+index ee4e789..d0ef55a 100644
+--- a/apolloschurchapp/rn-cli.config.js
++++ b/apolloschurchapp/rn-cli.config.js
+@@ -4,7 +4,6 @@ const blacklist = require('metro-config/src/defaults/blacklist');
+ const localDeps = [
+   path.resolve('..', 'apollos-ui-kit'),
+   path.resolve('..', 'apollos-ui-passes'),
+-  path.resolve('..', 'apollos-ui-htmlview'),
+ ];
+ 
+ module.exports = {
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 14cf82b..6ae4e00 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Pass"},{"name":"Campus"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/content-single/HTMLContent/index.js b/apolloschurchapp/src/content-single/HTMLContent/index.js
+index 39c62bc..4d4f384 100644
+--- a/apolloschurchapp/src/content-single/HTMLContent/index.js
++++ b/apolloschurchapp/src/content-single/HTMLContent/index.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import PropTypes from 'prop-types';
+ import { Query } from 'react-apollo';
+ 
+-import HTMLView from '@apollosproject/ui-htmlview';
++import HTMLView from 'apolloschurchapp/src/ui/HTMLView';
+ import { ErrorCard } from '@apollosproject/ui-kit';
+ 
+ import getContentItemContent from './getContentItemContent';
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+index 1ab8d26..599f719 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+@@ -10,9 +10,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+     {({
+       data: {
+         currentUser: {
+-          profile: { photo, firstName, lastName, campus: { name } } = {
+-            campus: {},
+-          },
++          profile: { photo, firstName, lastName, location } = {},
+         } = {},
+       } = {},
+       refetch,
+@@ -20,7 +18,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+       <UserAvatarHeader
+         firstName={firstName}
+         lastName={lastName}
+-        location={name}
++        location={location}
+         photo={photo}
+         refetch={refetch}
+         navigation={navigation}
+diff --git a/apolloschurchapp/src/tabs/connect/getUserProfile.js b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+index f749258..b591a5b 100644
+--- a/apolloschurchapp/src/tabs/connect/getUserProfile.js
++++ b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+@@ -7,9 +7,7 @@ export default gql`
+       profile {
+         firstName
+         lastName
+-        campus {
+-          name
+-        }
++        location
+         email
+         nickName
+         photo {
+diff --git a/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js b/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js
+new file mode 100644
+index 0000000..0d69e14
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js
+@@ -0,0 +1,21 @@
++import React from 'react';
++import { ScrollView } from 'react-native';
++import { storiesOf } from '@storybook/react-native';
++
++import HTMLView from '.';
++
++storiesOf('HTMLView', module)
++  .add('Example', () => (
++    <ScrollView>
++      <HTMLView>
++        {
++          "<p>I sat on my couch next to my high school <a href='https://newspringfuse.com/groups' target='_blank'>Fuse Group</a>, silently fuming at their inability to put their phones down during Bible study. Finally, I spoke up, teasing one of the girls in a tone that clearly said, &ldquo;I&rsquo;m not actually kidding.&rdquo;&nbsp;</p>\n\n<p>A few days later, I was in the car with my sister, and as I sat in the passenger seat responding to emails, I heard her laugh and say, &ldquo;You always mumble when you are typing. Stop doing that.&rdquo;&nbsp;</p>\n\n<p>&ldquo;Sorry,&rdquo; I responded. &ldquo;I just don&rsquo;t want people to think I&rsquo;m ignoring them when I&rsquo;m typing.&rdquo;</p>\n\n<p>But the truth is, I am ignoring them! In my head, this behavior is totally acceptable. I tell myself I&rsquo;m tending to my priorities in order, and in doing so, I send a message to the person in front of me that she is of lesser importance.</p>\n\n<blockquote>\n<p>My phone is the primary outlet that distracts me from people who need my attention.</p>\n</blockquote>\n\n<p>I quickly get frustrated when I am the one on the outside, but how often to I shut others out during my own social media binges or email frenzies? Just like my girls, I&rsquo;m learning that my phone is the primary outlet that distracts me from people who need my attention.</p>\n\n<h3>Why Being Present Matters</h3>\n\n<p>There is nothing wrong with using our phones &mdash; as long as we remember that the best investment we can make is to invest in our relationships with Jesus and each other. We were created for <a href='http://newspring.cc/community' target='_blank'>community</a> by God, who exists in community as Father, Son, and Holy Spirit (John 1:1-2, Genesis 2:18).&nbsp;</p>\n\n<p>Our phones help us stay connected, but they are not the foundation of all connection. If we&rsquo;re honest, our phones are much quicker to distract and disengage us from the people right in front of us.&nbsp;</p>\n\n<p>Jesus said loving God and loving others is greatest of all God&rsquo;s commandments (Matthew 22:38-40). And, after trying everything the world had to offer, King Solomon reminded his people that their relationships with God and others are the only things that really matter (Ecclesiastes 2:24-26, Ecclesiastes 3:9).&nbsp;</p>\n\n<blockquote>\n<p>Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones.</p>\n</blockquote>\n\n<p>So the next time we feel like we have to text back immediately or tweet before someone else does, consider:&nbsp;</p>\n\n<ul>\n\t<li>Am I putting others before myself right now?</li>\n\t<li>How can I love the people around me if I&rsquo;m not even paying attention to them?</li>\n\t<li>What if Jesus wants to speak through me, but I&rsquo;ve got my nose stuck in my phone?&nbsp;</li>\n</ul>\n\n<p>The world won&rsquo;t implode if we don&rsquo;t reply to every text or email immediately. And that Instagram picture doesn&rsquo;t need to go up ASAP. If it&rsquo;s already been a week between posts, what&rsquo;s a few more hours? We love everyone better &mdash; our friends to our coworkers to our social media followers &mdash; when we give them the gift of our full attention.&nbsp;</p>\n\n<p>I can almost hear Jesus saying, &ldquo;Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones&rdquo;&nbsp; (John 15:13).&nbsp;</p>\n\n<h3>Four Ways To Stay Away From Your Phone And Be Intentionally Present</h3>\n\n<p><a href='http://newspring.cc/christmas' target='_blank'>This holiday season</a>, we will have more opportunities to be around friends and family than usual. So let&rsquo;s make the most of each minute. The following are some tips can help us all be a little more present.&nbsp;&nbsp;</p>\n\n<ol>\n\t<li>Turn your phone off, leave it in the car, or put it in airplane mode. Habitual notification checks can take a break.</li>\n\t<li>Talk about something other than yourself. Ask someone else about their life (job, school, kids).</li>\n\t<li>Look for opportunities to encourage someone. Ask the Holy Spirit to speak through you and help you love people.</li>\n\t<li>Ask Jesus to keep your heart interested and engaged in what really matters. He wants to help!</li>\n</ol>\n\n<p>Intentionally taking advantage of time with loved ones sometimes does require sacrificing our own immediate desires or comforts, but that&rsquo;s what we are commanded to do (Philippians 2:3).&nbsp;</p>\n\n<p>Take pictures, but don&rsquo;t let the only memory be a digital one. The positive outcome of interactions should be more than Instagram likes. Unplug from social media, choose to be present, and you will be surprised at the good it does for your heart and the hearts of those around you.&nbsp;</p>"
++        }
++      </HTMLView>
++    </ScrollView>
++  ))
++  .add('isLoading', () => (
++    <ScrollView>
++      <HTMLView isLoading />
++    </ScrollView>
++  ));
+diff --git a/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js b/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js
+new file mode 100644
+index 0000000..a0eb6ec
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js
+@@ -0,0 +1,191 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import HTMLView from '.';
++
++describe('the HTMLView component', () => {
++  it('should render an H1', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h1>Testings</h1>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H2', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h2>Testings</h2>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H3', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h3>Testings</h3>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H4', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h4>Testings</h4>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H5', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h5>Testings</h5>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H6', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h6>Testings</h6>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a paragraph', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p>Testings</p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render italic text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p><em>Testings</em></p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render bold text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p><strong>Testings</strong></p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a block quote', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings</p><blockquote>Testings</blockquote>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a list', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<ul><li>Testings</li><li>Testings</li></ul>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a link', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings <a href="http://wwww.google.com">Google</a></p>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render handle relative links', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings <a href="//google.com">Google</a></p>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('strips out badly formatted links', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{"<p><a href='{page_536525}'>Bad link</a></p>"}</HTMLView>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an image', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<img src="https://placeholdit.co/i/150x150?bg=eeeeee&fc=577084" />'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a line break (br)', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p>Testings</p><br>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a loading state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView isLoading />
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render example HTML', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {
++            "<p>I sat on my couch next to my high school <a href='https://newspringfuse.com/groups' target='_blank'>Fuse Group</a>, silently fuming at their inability to put their phones down during Bible study. Finally, I spoke up, teasing one of the girls in a tone that clearly said, &ldquo;I&rsquo;m not actually kidding.&rdquo;&nbsp;</p>\n\n<p>A few days later, I was in the car with my sister, and as I sat in the passenger seat responding to emails, I heard her laugh and say, &ldquo;You always mumble when you are typing. Stop doing that.&rdquo;&nbsp;</p>\n\n<p>&ldquo;Sorry,&rdquo; I responded. &ldquo;I just don&rsquo;t want people to think I&rsquo;m ignoring them when I&rsquo;m typing.&rdquo;</p>\n\n<p>But the truth is, I am ignoring them! In my head, this behavior is totally acceptable. I tell myself I&rsquo;m tending to my priorities in order, and in doing so, I send a message to the person in front of me that she is of lesser importance.</p>\n\n<blockquote>\n<p>My phone is the primary outlet that distracts me from people who need my attention.</p>\n</blockquote>\n\n<p>I quickly get frustrated when I am the one on the outside, but how often to I shut others out during my own social media binges or email frenzies? Just like my girls, I&rsquo;m learning that my phone is the primary outlet that distracts me from people who need my attention.</p>\n\n<h3>Why Being Present Matters</h3>\n\n<p>There is nothing wrong with using our phones &mdash; as long as we remember that the best investment we can make is to invest in our relationships with Jesus and each other. We were created for <a href='http://newspring.cc/community' target='_blank'>community</a> by God, who exists in community as Father, Son, and Holy Spirit (John 1:1-2, Genesis 2:18).&nbsp;</p>\n\n<p>Our phones help us stay connected, but they are not the foundation of all connection. If we&rsquo;re honest, our phones are much quicker to distract and disengage us from the people right in front of us.&nbsp;</p>\n\n<p>Jesus said loving God and loving others is greatest of all God&rsquo;s commandments (Matthew 22:38-40). And, after trying everything the world had to offer, King Solomon reminded his people that their relationships with God and others are the only things that really matter (Ecclesiastes 2:24-26, Ecclesiastes 3:9).&nbsp;</p>\n\n<blockquote>\n<p>Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones.</p>\n</blockquote>\n\n<p>So the next time we feel like we have to text back immediately or tweet before someone else does, consider:&nbsp;</p>\n\n<ul>\n\t<li>Am I putting others before myself right now?</li>\n\t<li>How can I love the people around me if I&rsquo;m not even paying attention to them?</li>\n\t<li>What if Jesus wants to speak through me, but I&rsquo;ve got my nose stuck in my phone?&nbsp;</li>\n</ul>\n\n<p>The world won&rsquo;t implode if we don&rsquo;t reply to every text or email immediately. And that Instagram picture doesn&rsquo;t need to go up ASAP. If it&rsquo;s already been a week between posts, what&rsquo;s a few more hours? We love everyone better &mdash; our friends to our coworkers to our social media followers &mdash; when we give them the gift of our full attention.&nbsp;</p>\n\n<p>I can almost hear Jesus saying, &ldquo;Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones&rdquo;&nbsp; (John 15:13).&nbsp;</p>\n\n<h3>Four Ways To Stay Away From Your Phone And Be Intentionally Present</h3>\n\n<p><a href='http://newspring.cc/christmas' target='_blank'>This holiday season</a>, we will have more opportunities to be around friends and family than usual. So let&rsquo;s make the most of each minute. The following are some tips can help us all be a little more present.&nbsp;&nbsp;</p>\n\n<ol>\n\t<li>Turn your phone off, leave it in the car, or put it in airplane mode. Habitual notification checks can take a break.</li>\n\t<li>Talk about something other than yourself. Ask someone else about their life (job, school, kids).</li>\n\t<li>Look for opportunities to encourage someone. Ask the Holy Spirit to speak through you and help you love people.</li>\n\t<li>Ask Jesus to keep your heart interested and engaged in what really matters. He wants to help!</li>\n</ol>\n\n<p>Intentionally taking advantage of time with loved ones sometimes does require sacrificing our own immediate desires or comforts, but that&rsquo;s what we are commanded to do (Philippians 2:3).&nbsp;</p>\n\n<p>Take pictures, but don&rsquo;t let the only memory be a digital one. The positive outcome of interactions should be more than Instagram likes. Unplug from social media, choose to be present, and you will be surprised at the good it does for your heart and the hearts of those around you.</p>"
++          }
++        </HTMLView>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should accept an alternative render', () => {
++    const testRenderer = jest.fn();
++    renderer.create(
++      <Providers>
++        <HTMLView renderer={testRenderer}>{'<p>Testings</p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(testRenderer).toBeCalled();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js b/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js
+new file mode 100644
+index 0000000..b8af60c
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js
+@@ -0,0 +1,128 @@
++import React, { Children } from 'react';
++import { Text, Linking } from 'react-native';
++import { decodeHTML } from 'entities';
++
++import {
++  BodyText,
++  H1,
++  H2,
++  H3,
++  H4,
++  H5,
++  H6,
++  Paragraph,
++  BlockQuote,
++  BulletListItem,
++  ButtonLink,
++  ConnectedImage,
++} from '@apollosproject/ui-kit';
++
++const LINE_BREAK = '\n';
++const TEXT_TYPES_THAT_SHOULD_WRAP = [Text, BodyText, ButtonLink];
++
++export const wrapTextChildren = (children, Component = BodyText) => {
++  const newChildren = [];
++  let currentTextChildren = [];
++  Children.toArray(children).forEach((child, i) => {
++    if (TEXT_TYPES_THAT_SHOULD_WRAP.includes(child.type)) {
++      currentTextChildren.push(child);
++    } else {
++      if (currentTextChildren.length) {
++        newChildren.push(
++          // eslint-disable-next-line
++          <Component key={`composed-children-${i}`}>
++            {currentTextChildren}
++          </Component>
++        );
++        currentTextChildren = [];
++      }
++      newChildren.push(child);
++    }
++  });
++  if (currentTextChildren.length) {
++    newChildren.push(
++      <Component key="composed-children">{currentTextChildren}</Component>
++    );
++  }
++  return newChildren;
++};
++
++const defaultRenderer = (node, { children }) => {
++  if (node.type === 'text' && node.data && node.data.trim()) {
++    const text = decodeHTML(node.data);
++    if (!node.parent) {
++      return (
++        <Paragraph>
++          <BodyText>{text}</BodyText>
++        </Paragraph>
++      );
++    }
++    return <Text>{text}</Text>;
++  }
++
++  switch (node.name) {
++    case 'p':
++      return <Paragraph>{wrapTextChildren(children)}</Paragraph>;
++    case 'strong':
++      return <BodyText bold>{children}</BodyText>;
++    case 'em':
++      return <BodyText italic>{children}</BodyText>;
++    case 'blockquote':
++      return <BlockQuote>{wrapTextChildren(children, Text)}</BlockQuote>;
++    case 'h1':
++      return <H1 padded>{wrapTextChildren(children, Text)}</H1>;
++    case 'h2':
++      return <H2 padded>{wrapTextChildren(children, Text)}</H2>;
++    case 'h3':
++      return <H3 padded>{wrapTextChildren(children, Text)}</H3>;
++    case 'h4':
++      return <H4 padded>{wrapTextChildren(children, Text)}</H4>;
++    case 'h5':
++      return <H5 padded>{wrapTextChildren(children, Text)}</H5>;
++    case 'h6':
++      return <H6 padded>{wrapTextChildren(children, Text)}</H6>;
++    case 'ul':
++      return <Paragraph>{children}</Paragraph>;
++    case 'li':
++      return <BulletListItem>{wrapTextChildren(children)}</BulletListItem>;
++    case 'a': {
++      let url = node.attribs && node.attribs.href;
++      url = decodeHTML(url);
++
++      if (url && url.startsWith('//')) {
++        url = `http:${url}`;
++      }
++      if (!url.startsWith('http')) {
++        // we can't currently handle non web-links, so just return regular text instead:
++        return children;
++      }
++      const onPress = () => Linking.openURL(url);
++      if (url) {
++        return <ButtonLink onPress={onPress}>{children}</ButtonLink>;
++      }
++    }
++    /* ignoring fallthrough on the next line because of the conditional return above,
++     * so we handle the edge-case of an <a> tag used w/o a href
++     */
++    case 'img': {
++      const source = {
++        url: node.attribs.src,
++      };
++
++      const imgStyles = {
++        resizeMode: 'contain',
++        width: '100%',
++      };
++
++      return (
++        <ConnectedImage maintainAspectRatio source={source} style={imgStyles} />
++      );
++    }
++    case 'br':
++      return <BodyText>{LINE_BREAK}</BodyText>;
++    default:
++      return children;
++  }
++};
++
++export default defaultRenderer;
+diff --git a/apolloschurchapp/src/ui/HTMLView/index.js b/apolloschurchapp/src/ui/HTMLView/index.js
+new file mode 100644
+index 0000000..5873b74
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/index.js
+@@ -0,0 +1,75 @@
++import React, { PureComponent, cloneElement } from 'react';
++import PropTypes from 'prop-types';
++import { View } from 'react-native';
++import { Parser, DomHandler } from 'htmlparser2';
++
++import { Paragraph as ParagraphPlaceholder } from '@apollosproject/ui-kit';
++
++import defaultRenderer from './defaultRenderer';
++
++class HTMLView extends PureComponent {
++  static propTypes = {
++    children: PropTypes.string,
++    renderer: PropTypes.func,
++    isLoading: PropTypes.bool,
++  };
++
++  static defaultProps = {
++    renderer: defaultRenderer,
++  };
++
++  constructor(...args) {
++    super(...args);
++    this.parser = new Parser(
++      new DomHandler(
++        (err, dom) => {
++          this.parsed = this.renderDom(dom);
++        },
++        { normalizeWhitespace: true }
++      )
++    );
++    if (this.props.children) this.parse(this.props.children);
++  }
++
++  componentWillUpdate(props) {
++    this.parse(props.children);
++  }
++
++  parse(html = '') {
++    this.parser.write(html);
++    this.parser.done();
++  }
++
++  renderDom(dom) {
++    return dom
++      .map((node, index) => {
++        let children = [];
++        if (node.children) children = this.renderDom(node.children);
++
++        let renderedNode = this.props.renderer(node, { children });
++        if (
++          !renderedNode &&
++          renderedNode !== null &&
++          this.props.renderer !== defaultRenderer
++        ) {
++          renderedNode = defaultRenderer(node, { children });
++        }
++
++        if (renderedNode && !Array.isArray(renderedNode)) {
++          renderedNode = cloneElement(renderedNode, { key: index });
++        }
++        return renderedNode;
++      })
++      .filter((e) => e !== undefined);
++  }
++
++  render() {
++    return (
++      <ParagraphPlaceholder lineNumber={8} onReady={!this.props.isLoading}>
++        <View>{this.parsed}</View>
++      </ParagraphPlaceholder>
++    );
++  }
++}
++
++export default HTMLView;
+diff --git a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js b/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
+deleted file mode 100644
+index d304b28..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
++++ /dev/null
+@@ -1,6 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Onboarding from '.';
+-
+-storiesOf('Onboarding', module).add('Example', () => <Onboarding />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
+deleted file mode 100644
+index 778c381..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Slide from '.';
+-
+-storiesOf('Onboarding/Slide', module)
+-  .add('default', () => (
+-    <Slide>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Navigation', () => (
+-    <Slide onPressPrimary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavText', () => (
+-    <Slide onPressPrimary={() => {}} primaryNavText={'Custom button text'}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavIcon', () => (
+-    <Slide
+-      onPressPrimary={() => {}}
+-      primaryNavText={'Custom icon'}
+-      primaryNavIcon={'umbrella'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Skip Button', () => (
+-    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Skip Button', () => (
+-    <Slide
+-      onPressPrimary={() => {}}
+-      onPressSecondary={() => {}}
+-      secondaryNavText={'Custom skip button'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('hidePrimaryNav', () => (
+-    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}} hidePrimaryNav>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
+deleted file mode 100644
+index 30af59d..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
++++ /dev/null
+@@ -1,92 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import Slide from '.';
+-
+-describe('The Onboarding Slide component', () => {
+-  it('should render children', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding next button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} primaryNavText={'Custom nav text'}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with a custom icon', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          primaryNavText={'Custom nav text with custom icon'}
+-          primaryNavIcon={'umbrella'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} onPressSecondary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          onPressSecondary={jest.fn()}
+-          secondaryNavText={'Custom skip button text'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should hide onboarding primary navigation button', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          onPressSecondary={jest.fn()}
+-          hidePrimaryNav
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/index.js b/apolloschurchapp/src/ui/Onboarding/Slide/index.js
+deleted file mode 100644
+index 764e4ac..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/index.js
++++ /dev/null
+@@ -1,92 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  FlexedView,
+-  PaddedView,
+-  H5,
+-  ButtonLink,
+-  Button,
+-  Icon,
+-} from '@apollosproject/ui-kit';
+-
+-const NavWrapper = styled(({ theme }) => ({
+-  flexDirection: 'row-reverse', // reversed so the primary action is always on the right
+-  alignItems: 'center', // centers optional back button with dots/next button
+-  justifyContent: 'space-between',
+-  marginBottom: theme.sizing.baseUnit * 0.5, // centers nav/button with pager dots
+-}))(PaddedView);
+-
+-const PrimaryNavIcon = withTheme(({ theme }) => ({
+-  size: theme.helpers.rem(1.25),
+-  style: {
+-    marginLeft: theme.sizing.baseUnit * 0.5,
+-    marginRight: theme.sizing.baseUnit * -0.5,
+-  },
+-}))(Icon);
+-
+-const SkipButton = styled(({ theme }) => ({
+-  color: theme.colors.text.tertiary, // this is probably not the right color
+-  paddingVertical: theme.sizing.baseUnit * 0.9375, // optically centered on typographic baseline
+-  paddingHorizontal: theme.sizing.baseUnit, // improves tappability
+-  marginLeft: theme.sizing.baseUnit * -1, // adjusts for paddingHorizontal
+-}))(ButtonLink);
+-
+-// memo = sfc PureComponent 💥
+-const Slide = memo(
+-  ({
+-    children,
+-    onPressPrimary,
+-    onPressSecondary,
+-    primaryNavText,
+-    primaryNavIcon,
+-    hidePrimaryNav,
+-    secondaryNavText,
+-  }) => (
+-    <>
+-      <FlexedView>
+-        <PaddedView>{children}</PaddedView>
+-      </FlexedView>
+-      {onPressPrimary ? (
+-        <NavWrapper vertical={false}>
+-          {!hidePrimaryNav ? (
+-            <Button onPress={onPressPrimary}>
+-              <>
+-                <H5>{primaryNavText}</H5>
+-                <PrimaryNavIcon name={primaryNavIcon} />
+-              </>
+-            </Button>
+-          ) : null}
+-          {onPressSecondary ? (
+-            <SkipButton onPress={onPressSecondary}>
+-              {secondaryNavText}
+-            </SkipButton>
+-          ) : null}
+-        </NavWrapper>
+-      ) : null}
+-    </>
+-  )
+-);
+-
+-Slide.propTypes = {
+-  children: PropTypes.oneOfType([
+-    PropTypes.arrayOf(PropTypes.node),
+-    PropTypes.node,
+-  ]),
+-  onPressPrimary: PropTypes.func,
+-  onPressSecondary: PropTypes.func,
+-  primaryNavText: PropTypes.string, // colored button text
+-  primaryNavIcon: PropTypes.string, // optional custom icon name
+-  hidePrimaryNav: PropTypes.bool, // optionally only show the secondary nav text
+-  secondaryNavText: PropTypes.string, // text link
+-};
+-
+-Slide.defaultProps = {
+-  primaryNavText: 'Next',
+-  primaryNavIcon: 'arrow-next',
+-  secondaryNavText: 'Skip',
+-};
+-
+-export default Slide;
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+deleted file mode 100644
+index 35bf0eb..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ /dev/null
+@@ -1,93 +0,0 @@
+-import React, { Component } from 'react';
+-import { Text } from 'react-native';
+-// import PropTypes from 'prop-types';
+-import Swiper from 'react-native-swiper';
+-import {
+-  withTheme,
+-  styled,
+-  BackgroundView,
+-  FlexedView,
+-} from '@apollosproject/ui-kit';
+-
+-import { AskName } from './slides';
+-
+-// Provides themed colors to Swiper dots
+-const ThemedSwiper = withTheme(({ theme }) => ({
+-  dotColor: theme.colors.background.inactive, // theme.colors.lightSecondary looks the best.
+-  activeDotColor: theme.colors.action.primary,
+-}))(({ swiperRef, ...props }) => <Swiper ref={swiperRef} {...props} />);
+-
+-const Boom = styled(({ bgcolor }) => ({
+-  backgroundColor: bgcolor,
+-}))(FlexedView);
+-
+-class Onboarding extends Component {
+-  constructor() {
+-    super();
+-
+-    this.swiper = null;
+-    this.state = { pagination: true };
+-  }
+-
+-  handleOnIndexChanged = (index) => {
+-    this.currentIndex = index;
+-
+-    this.togglePagination();
+-
+-    return this.currentIndex;
+-  };
+-
+-  togglePagination = () => {
+-    if (this.currentIndex === 2 || this.state.pagination === false) {
+-      this.setState((state) => ({
+-        pagination: !state.pagination,
+-      }));
+-    }
+-  };
+-
+-  // Creates ref to Swiper to be passed as a prop to children.
+-  setSwiperRef = (r) => {
+-    this.swiper = r;
+-
+-    return this.swiper;
+-  };
+-
+-  // Advance swiper 1 slide. See Swiper documentation for scrollBy details. https://github.com/leecade/react-native-swiper#methods
+-  handleOnPressPrimary = () => this.swiper.scrollBy(1);
+-
+-  render() {
+-    return (
+-      <BackgroundView>
+-        <ThemedSwiper
+-          showsPagination={this.state.pagination}
+-          onIndexChanged={this.handleOnIndexChanged}
+-          loop={false}
+-          /* Disables swipe gestures. We currently we don't display a back button so this is our
+-           * only back navigation option. */
+-          // scrollEnabled={false}
+-          showsButtons={false}
+-          swiperRef={this.setSwiperRef}
+-        >
+-          <AskName onPressPrimary={this.handleOnPressPrimary} />
+-          <Boom bgcolor={'salmon'}>
+-            <Text>Hello World 1</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-          <Boom bgcolor={'lightgreen'}>
+-            <Text>Hello World 2</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-          <Boom bgcolor={'lightyellow'}>
+-            <Text>No pager!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-        </ThemedSwiper>
+-      </BackgroundView>
+-    );
+-  }
+-}
+-
+-export default Onboarding;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
+deleted file mode 100644
+index bbf5b5f..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
++++ /dev/null
+@@ -1,10 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import AskName from '.';
+-
+-storiesOf('Onboarding/slides/AskName', module)
+-  .add('default', () => <AskName />)
+-  .add('slideTitle', () => <AskName slideTitle={'Custom title text'} />)
+-  .add('description', () => <AskName description={'Custom description text'} />)
+-  .add('SlideWrapper props', () => <AskName onboardingScrollBy={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
+deleted file mode 100644
+index 78bfc2b..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
++++ /dev/null
+@@ -1,41 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import AskName from '.';
+-
+-describe('The Onboarding SlideWrapper component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName slideTitle={'Custom title text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName description={'Custom description text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to SlideWrapper', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName onPressPrimary={jest.fn()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
+deleted file mode 100644
+index 006d5d8..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
++++ /dev/null
+@@ -1,72 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  H2,
+-  H5,
+-  TextInput,
+-  Icon,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const BrandIcon = withTheme(({ theme }) => ({
+-  name: 'brand-icon',
+-  size: theme.sizing.baseUnit * 3.0,
+-  fill: theme.colors.primary,
+-  style: { marginBottom: theme.sizing.baseUnit * 0.5 },
+-}))(Icon);
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-}))(H2);
+-
+-const StyledH5 = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-}))(H5);
+-
+-// memo = sfc PureComponent 💥
+-const AskName = memo(({ slideTitle, description, ...props }) => {
+-  let LastNameInput = null;
+-
+-  return (
+-    <Slide {...props}>
+-      <BrandIcon />
+-      <Title>{slideTitle}</Title>
+-      <StyledH5>{description}</StyledH5>
+-      <TextInput
+-        label="First Name"
+-        type="text"
+-        returnKeyType="next"
+-        onSubmitEditing={() => LastNameInput.focus()}
+-        enzblesReturnKeyAutomatically
+-      />
+-      <TextInput
+-        label="Last Name"
+-        type="text"
+-        returnKeyType="next"
+-        enablesReturnKeyAutomatically
+-        inputRef={(r) => {
+-          LastNameInput = r;
+-        }}
+-      />
+-    </Slide>
+-  );
+-});
+-
+-AskName.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-};
+-
+-AskName.defaultProps = {
+-  slideTitle: 'Welcome!',
+-  description: "Every relationship starts with a name. What's yours?",
+-};
+-
+-export default AskName;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/index.js b/apolloschurchapp/src/ui/Onboarding/slides/index.js
+deleted file mode 100644
+index 4114394..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export AskName from './AskName';
+diff --git a/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js b/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
+index 507c90b..fb6a93d 100644
+--- a/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
++++ b/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
+@@ -3,10 +3,10 @@ import { withProps } from 'recompose';
+ import { Platform } from 'react-native';
+ 
+ import { Paragraph, H4 } from '@apollosproject/ui-kit';
+-import HTMLView, {
+-  defaultRenderer,
++import HTMLView from 'apolloschurchapp/src/ui/HTMLView';
++import defaultRenderer, {
+   wrapTextChildren,
+-} from '@apollosproject/ui-htmlview';
++} from 'apolloschurchapp/src/ui/HTMLView/defaultRenderer';
+ 
+ import {
+   ScriptureText,

@@ -1,0 +1,2886 @@
+diff --git a/apollos-church-api/.dockerignore b/apollos-church-api/.dockerignore
+deleted file mode 100644
+index 66a3225..0000000
+--- a/apollos-church-api/.dockerignore
++++ /dev/null
+@@ -1,4 +0,0 @@
+-packages/apolloschurchapp
+-packages/apollos-ui-kit
+-packages/apollos-church-api/.env
+-packages/*/node_modules
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 4302a6f..b3f9ace 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -11,28 +11,10 @@ APP:
+   # This variable is used for generating deep links.
+   # It should match whatver is in your Info.plist `CFBundleURLTypes`
+   DEEP_LINK_HOST: apolloschurchapp
+-  ROOT_API_URL: ${ROOT_URL}
+ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+   IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
+-  # This should match the timezone of the Rock server
+-  TIMEZONE: 'America/New_York'
+-ONE_SIGNAL:
+-  APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+-  REST_KEY: ${ONE_SIGNAL_REST_KEY}
+-TWILIO:
+-  ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+-  AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+-  FROM_NUMBER: ${TWILIO_FROM_NUMBER}
+-PASS:
+-  TEMPLATES:
+-    CHECKIN: ${PWD}/wallet-passes/checkin.pass
+-  CERTIFICATES:
+-    WWDR: ${PASS_WWDR_CERT}
+-    SIGNER_CERT: ${PASS_SIGNER_CERT}
+-    SIGNER_KEY: ${PASS_SIGNER_KEY}
+-    SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
+ ANALYTICS:
+   # Filling out these fields will automatically enable analytics tracking
+   # on the accompanying service
+@@ -40,7 +22,7 @@ ANALYTICS:
+   GA_ID:
+ BIBLE_API:
+   KEY: ${BIBLE_API_KEY}
+-  BIBLE_ID: '9879dbb7cfe39e4d-01'
++  BIBLE_ID: "9879dbb7cfe39e4d-01"
+ CLOUDINARY:
+   # Cloudinary is used to improve image loading
+   # value should look something like
+@@ -49,6 +31,7 @@ CLOUDINARY:
+ 
+ # This key holds various properties that allow our GraphQL server to map to your Rock Instance
+ ROCK_MAPPINGS:
++
+   INTERACTIONS:
+     # Name of the InteractionChannel that will be created
+     CHANNEL_NAME: Apollos App
+@@ -72,10 +55,6 @@ ROCK_MAPPINGS:
+       EntityType: ContentChannelItem
+     ContentItem:
+       EntityType: ContentChannelItem
+-  
+-  DATAVIEW_CATEGORIES:
+-    # Id of the category used to store all persona dataviews
+-    PersonaId: 210
+ 
+   # Apollos will pull these content channels and expose them in the app on the discover screen.
+   DISCOVER_CONTENT_CHANNEL_IDS:
+@@ -206,4 +185,4 @@ ROCK_CONSTANTS:
+   INTERACTION_CHANNEL: 117
+   GROUP_MEMBER: 118
+   TIME_ZONE: 119
+-  LABEL: 120
++  LABEL: 120
+\ No newline at end of file
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 1808bee..2026363 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0",
++  "version": "0.8.0-alpha.6",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -21,28 +21,20 @@
+   },
+   "jest": {
+     "collectCoverage": true,
+-    "collectCoverageFrom": [
+-      "src/**/*.{js,jsx}"
+-    ],
+     "testMatch": [
+       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
+       "<rootDir>/src/**/?(*.)(spec|test|tests).{js,jsx,mjs}"
+     ],
+-    "testEnvironment": "node",
+-    "reporters": [
+-      "<rootDir>/../../scripts/fingers-crossed-reporter.js"
+-    ]
++    "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0",
+-    "@apollosproject/data-connector-analytics": "^0.8.0",
+-    "@apollosproject/data-connector-bible": "^0.8.0",
+-    "@apollosproject/data-connector-church-online": "^0.8.0",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.0",
+-    "@apollosproject/data-connector-onesignal": "^0.8.0",
+-    "@apollosproject/data-connector-passes": "^0.8.0",
+-    "@apollosproject/data-connector-rock": "^0.8.0",
+-    "@apollosproject/server-core": "^0.8.0",
++    "@apollosproject/config": "^0.8.0-alpha.6",
++    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.6",
++    "@apollosproject/data-connector-bible": "^0.8.0-alpha.6",
++    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.6",
++    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.6",
++    "@apollosproject/data-connector-rock": "^0.8.0-alpha.6",
++    "@apollosproject/server-core": "^0.8.0-alpha.6",
+     "apollo-server": "^2.0.5",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+@@ -51,8 +43,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.0",
+-    "@apollosproject/babel-preset-apollos": "^0.8.0",
++    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.6",
++    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.6",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index ca35750..d18d797 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -6,29 +6,19 @@ import * as Analytics from '@apollosproject/data-connector-analytics';
+ import * as Scripture from '@apollosproject/data-connector-bible';
+ import * as LiveStream from '@apollosproject/data-connector-church-online';
+ import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+-import * as OneSignal from '@apollosproject/data-connector-onesignal';
+-import * as Pass from '@apollosproject/data-connector-passes';
+-import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+   Interactions,
+   RockConstants,
++  Family,
+   Person,
+   ContentItem,
+   ContentChannel,
+   Sharable,
+   Auth,
+-  PersonalDevice,
+-  Template,
+-  AuthSms,
+-  Campus,
+ } from '@apollosproject/data-connector-rock';
+ import * as Theme from './theme';
+ 
+-// This module is used to attach Rock User updating to the OneSignal module.
+-// This module includes a Resolver that overides a resolver defined in `OneSignal`
+-import * as OneSignalWithRock from './oneSignalWithRock';
+-
+ const data = {
+   Followings,
+   ContentChannel,
+@@ -36,8 +26,6 @@ const data = {
+   Person,
+   Cloudinary,
+   Auth,
+-  AuthSms,
+-  Sms,
+   LiveStream,
+   Theme,
+   Scripture,
+@@ -45,7 +33,7 @@ const data = {
+   RockConstants,
+   Sharable,
+   Analytics,
+-  OneSignal,
++  Family,
+   UniversalContentItem: {
+     dataSource: ContentItem.dataSource,
+   }, // alias
+@@ -58,22 +46,13 @@ const data = {
+   MediaContentItem: {
+     dataSource: ContentItem.dataSource,
+   }, // alias
+-  PersonalDevice,
+-  OneSignalWithRock,
+-  Pass,
+-  Template,
+-  Campus,
+ };
+ 
+-const {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-} = createApolloServerConfig(data);
++const { dataSources, resolvers, schema, context } = createApolloServerConfig(
++  data
++);
+ 
+-export { dataSources, resolvers, schema, context, applyServerMiddleware };
++export { dataSources, resolvers, schema, context };
+ 
+ // the upload Scalar is added
+ export const testSchema = [
+diff --git a/apollos-church-api/src/data/oneSignalWithRock.js b/apollos-church-api/src/data/oneSignalWithRock.js
+deleted file mode 100644
+index e810c58..0000000
+--- a/apollos-church-api/src/data/oneSignalWithRock.js
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/* eslint-disable import/prefer-default-export */
+-
+-export const resolver = {
+-  Mutation: {
+-    updateUserPushSettings: async (root, { input }, { dataSources }) => {
+-      // register the changes w/ one signal
+-      const returnValue = await dataSources.OneSignal.updatePushSettings(input);
+-
+-      // if the pushProviderUserId is changing, we need ot register the device with rock.
+-      if (input.pushProviderUserId != null) {
+-        await dataSources.PersonalDevice.addPersonalDevice({
+-          pushId: input.pushProviderUserId,
+-        });
+-      }
+-
+-      // return the original return value (which is currentPerson)
+-      return returnValue;
+-    },
+-  },
+-};
+diff --git a/apollos-church-api/src/index.js b/apollos-church-api/src/index.js
+index 796ad4d..a7f0ca1 100644
+--- a/apollos-church-api/src/index.js
++++ b/apollos-church-api/src/index.js
+@@ -11,6 +11,6 @@ if (!PORT && process.env.NODE_ENV !== 'test')
+     'Add `ENV=4000` if you are having trouble connecting to the server. By default, PORT is random.'
+   );
+ 
+-server.listen({ port: PORT }, () => {
+-  console.log(`🚀 Server ready at http://0.0.0.0:${PORT}`);
++server.listen({ port: PORT }).then(({ url }) => {
++  console.log(`🚀 Server ready at ${url}`);
+ });
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 5b23c66..e82048c 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,30 +1,15 @@
+-import { ApolloServer } from 'apollo-server-express';
+-import express from 'express';
+-import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
++import { ApolloServer } from 'apollo-server';
+ 
+-import {
+-  resolvers,
+-  schema,
+-  testSchema,
+-  context,
+-  dataSources,
+-  applyServerMiddleware,
+-} from './data';
++import { resolvers, schema, testSchema, context, dataSources } from './data';
+ 
+ export { resolvers, schema, testSchema };
+ 
+-const isDev =
+-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test';
+-
+-const extensions = isDev ? [() => new RockLoggingExtension()] : [];
+-
+-const apolloServer = new ApolloServer({
++export default new ApolloServer({
+   typeDefs: schema,
+   resolvers,
+   dataSources,
+   context,
+   introspection: true,
+-  extensions,
+   formatError: (error) => {
+     console.error(error.extensions.exception.stacktrace.join('\n'));
+     return error;
+@@ -34,17 +19,4 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
+-  cacheControl: {
+-    stripFormattedExtensions: false,
+-    calculateHttpHeaders: true,
+-    defaultMaxAge: 600,
+-  },
+ });
+-
+-const app = express();
+-
+-apolloServer.applyMiddleware({ app });
+-apolloServer.applyMiddleware({ app, path: '/' });
+-applyServerMiddleware({ app, dataSources, context });
+-
+-export default app;
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/icon.png b/apollos-church-api/wallet-passes/checkin.pass/icon.png
+deleted file mode 100644
+index eb025791d640b41889b0584085aec4f7540d9ed8..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 658
+zcmV;D0&V??P)<h;3K|Lk000e1NJLTq0012T0012b1^@s6R+DEB00001b5ch_0Itp)
+z=>Px%Oi4sRR7eeDWJu5b&p>CuL}&ZJ){R<9(@<w2)pSQyWrpq9DR6D?zkOqnuWe)a
+z_4hAaj1Yt5IE^wjLNQa2i;KZiTLVRm5Qij7xmZ~l0`;{q%#1;E2!;YQ0g^2B)6-_)
+zVP{7(f`P$9OPxUo=wo65NtQ+<`RLKR4-EhQL&_CaW@d&kBRyj6WFXp72|gYMXLS|0
+z!BY+$WjJ`}E}S1_VhCpwVi0X<xRD_P6C)$symc2YGpspx3C=fDkYi906@l~dF^IMl
+zIk6nS_mJVqhmQ;!FI{8!`|lsz{AeP5OO&NLk`fHM(h_jP*PMs=@Xgn+4Et^&f;iID
+zkO2`EaOD^bqAW%B<$qw}S$FX=+@Q5k2Y>_=gajF^l@;J}xEKU21;t~yu>oBFk-PU9
+zo`3ob=Wo1xmEjLk5J#Dy79MbgNDP9OI;*KLNb>W-wX6juAY}0V+joY&H*Uj)LJV~o
+zI9TwPt^_TO0>%>zfb!+Ki&tP=IKBG9ML3&}gM-0aM-$G+#=vVS4?7!!Kd=;nfkSuh
+zF}(Wx1;&Nbn=f5w_>ENHBc}nlA|wW0O9O!AEEgLaTsd;SgbM;0AAkH{*meCDT*ysR
+zjX{)$2hK-l;0=8AMB$~Q!C<ANfNlnuFC)MY7iVT-0vC%@4;_PxAv17VDlNdr0IEBY
+zftNP^xI$J7DyMN-iZgg4fZ2o*sn|m{kQla+tTcm$xENNYI4un^&|~=Z=MP0V)DU~k
+s!#LXR#Tpq@62uv&R5Bl{F#}>L06Dg??>EPstpET307*qoM6N<$f}#QyX#fBK
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/icon@2x.png b/apollos-church-api/wallet-passes/checkin.pass/icon@2x.png
+deleted file mode 100644
+index bc4e9a6c50da95a102613f00515da6e5f1504773..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 1191
+zcmV;Y1X%ltP)<h;3K|Lk000e1NJLTq0024w0024&1^@s6;k!yG00001b5ch_0Itp)
+z=>Px(VM#<mRA>e5T1!t;K@>ja{b+ewd5MU;DHNzcTo?@oiBUp~1_bKDoh#S;1Al>u
+zJ9n-qsECR|G#bOofRwj@8bgeUQ3;Py%F7u{YkNC0_s+d@A(fuZy)$Rd%=zY=Irq$I
+z4RGuBE*t`iI0P8?AcledZ<Y>QG;Glj-GQ*{hN$7FY9AVlMp3swAmdtfB|Ny<Nu6<M
+zb`CDzyHDkdVC;)UZ`9eCx;7LSLRONAIYui}cc5mY5iXP!Gxdxx7@(uJnmI-*Q+J?k
+zHY-F$$S>1bTcZ^VQ(j&Jrno%QF5|Y|87i`~z?zfkZ3=(t3bf>?8Em;Zij|f-%Zeu=
+z4Ad1Uui|aCYKTPVRS(h)C|0+fGr(k`$lF*_qz6vW4d}VT0?18G;a0k{PM@Hp8_>>r
+zy25t`hG2DLgSZJTRtp$oV~9L0ow@*xkB)|`RTV_Nwsv;l?%QGLAD<%fS+Ya{g`K(p
+zZLyXktHcsjcr`l@zg#Zp9vvt0ai_hWok>vz84O*3vc8>;(Xl;s24_CPvfE8m?QFqG
+zbiR{`Jhh#|fo7QKk#lo<8~Vnl_jL8(cPH6>4d@foeoAagC>$tO5a+HWdO0%(OY7@C
+zmg9rd_bz?03r-1z1GO_g58b1Iz=kkz*FWI?U`sPIxUwpLS<<^upq8vml&@xy)&bAf
+z7W7a2bzAR%O%#D2k577=K~LVyDrf?~4xvC<ioKX72Oq~spq2e}gVq{lHy?i)+Pg5I
+z_*`DMRngV~+If6Ew*Wua)`)UulM$L^?y^KdLZ>jG=TVg)J0*#*1b};U6P`-k);ka<
+z5RaU6_Z1bCgaKt;oCl_6QOf7>VheiqjL?&Z=E`zNj*APD;q4FtG%+Ryu2fm5YfGc8
+zbl{u$1^BVDD(&8D$3{f~F0N@MAwV(61O%2uE{_MEPtK57zP|0<U3lo6@U^8cB5pK7
+zfU?~783O4-XH<?HjNJE3K|Y*FOO=~~$=3`tJJ|#{5YfmXNfKz|-YtBF@5?JRw&p6K
+zW}rCb!?`Jm)=&V#fk+AMAouMZqX#9{MM25@nt`&Cg#L*saHEV!DfKYix6ph9>hp4y
+zP8Bpx6VNJ@?v<mok4AFQRw_6A=?i>YT9$VE+FGot2`I~&E9kB{h>~_5!hetH9b>12
+z(F%&;q%~Co#brrco}^Kqa~d`{+}1k}tMZVRm;e_orQV@jPu0JsHI^1ZMv{@b*y7TX
+zs?sG6YuFo1lxzrl(GyC&iK+}@s0M1UwXx=fuBHa)f(GUoHOx!MqNxe-@SAdvrOm0z
+zbxo-7g$rN@LD7+s&{}QfURo7UT*{0?CC!5(H7TJgpseEbet<unp9cl$>0C>31I1-X
+z{By%W6R%adfp!S4&Z*rnUZC7jx7kugEj+7LT8&&f`li+%KL+o=E-Df?g#WLrXrDr7
+z5ce4k9cY1?hJgm|N9ec077cwH1|kSsG;lvczjbIV`Uf@}0T|pBL$3e;002ovPDHLk
+FV1lDsAjJRx
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/logo.png b/apollos-church-api/wallet-passes/checkin.pass/logo.png
+deleted file mode 100644
+index 66c5d6acadd9847001564a64d3cef75337d6027b..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 619
+zcmV-x0+juUP)<h;3K|Lk000e1NJLTq0012T0012b1^@s6R+DEB00001b5ch_0Itp)
+z=>Px%B}qg<R7ef&RLzRiKoG8KH)hPZ2n&KJ9z1y1gLrXa51zz>_yhjHs;ld>_zL<K
+zs|(^y5J3?<`4WmCh$6zwB%Plwzo3=r>?WDSi<b#BRrRH-zN+f#CR%>W4*ZV}WN~~c
+zi6^4V#*-f+a(GBCX2|ApuQP7P_YtDCG>xzM*dl!pDJqIc<j#ShB99JW9l#*cG)-=b
+z&}u`xt4L_A0dIr`k%~C4BL2k8MH#g`)6CB9H8M1Sy-7tTCz$AR6@&SSki1nJ9jKkP
+z;!UzQskLSs6&)&rph5{ldTxYwH7F9;Op@fR+Fi0YDbsvdP}K+K=u0q)ULb*730R6=
+z)%GH_)}BL^=QX(DKNW)TJFd(d#f9l1_Tdz|zh0yyMKwSmazQA28rBFsQymj^CeM?L
+zmEEE&Bt_;1Yg_%Hzh@qQRr_y?GqsDN{&*<v%Y~%5onm6;q&lIs^U46C@}Cf|^*_#j
+z3yF=?ZjuX0op%*LPy}IAwN?YNk@*x09mBJDL;p3&PEuri6s6o!M_h|{ApWMd${-lO
+z1fHsmv#n;J!aSvuG|Q&9K|I#|hUWKDu~LHY7sM+My8^%Co?TN{YSuo(x%w-E>v7%2
+zvzF<U)9Mbw6>H=Bu%9aC%ho$3GCP%8`HTRa-SC6?Ium~kkBm2bO!d})Y3d&QD`6QN
+z=YIi@%DNKyvc0{+Tg+tr&4YE9--XZP!G24JWe56n;5TEM+8QPN!ZiQ@002ovPDHLk
+FV1lg7AM5}C
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/logo@2x.png b/apollos-church-api/wallet-passes/checkin.pass/logo@2x.png
+deleted file mode 100644
+index c47ad00a6c448de33f13033da23e6c089de00b67..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 1207
+zcmV;o1W5adP)<h;3K|Lk000e1NJLTq0024w0024&1^@s6;k!yG00001b5ch_0Itp)
+z=>Px(aY;l$RA>e5S#66HM-c9w-J6@c^W}qRd_fTcA;@6_69geBh8XdKh$tpe^JDx6
+z{)s>|CPt%T3?hi1{23AgA{x)z-I>|FE}vQ1b9bofo1W<r0==+IPrY>2Q(fI%-J?|a
+zg$RTQgb0KPgb0KPgb0KPypMqX7=g&L{sl7Tx@b$Qhe@*Oq{#Qch&=SMaTi2C*@U#x
+zCy08xY%)!Gtpg>Z?Qrrto1>8FWEowy$u#A)4m8UKKLE(wMvh_*{l9@~qAMGLEcis~
+zV4kmjQAM_nOsgZBW!dMX=*!BE8D*WzmHS}?TLr4j$jNa-x=8a5<7Z=1Ye3<!CZ#U9
+zc}TlPS?^mnoodpp0Uf33am>7Z)!g_XWk^+;(;qadwORveA|pDCee<f;>MiS{)@P9o
+zn^;~0Vk<!5=mM6}^PFE=>tUQMUQ?uQbA0G74$~g1%gI-zwE{HH2N)H#S#aWSfPF<;
+z|03{}(f(K8R)Atu#MKu2>bT~epI>}{^nJsDMQR@->hI-vb!py#0^}#Ca@ds<Bbm=7
+zOScMVi?$*?ZkL@$A5oqg#}&KW%j~;%peXq+!BJ^1{0jj8o47z)$tN1mtFL#UT3Jdy
+z9nH*3r0+wd@9PQh=_ls+fjsXWo~AWvdj*P;ZyBR`h;s-dnZ<E3v(kb#L=OMX$&YD9
+zp6jBH!0-xG(VDmj!Tx;!TPgby5zUP9G#|yo_Xu2fnpU^%4QR1|;QyoOh}P_U?9MMe
+zg3e1pZwGECP6<3GvNxckEc*r}-yY67Msg6x3wH$G2<iJ9$17-6k9m^*gzgQfA-Uv(
+zv3mf!Ix$*)b|_*;dn~8*8Dz@VvX1M!7oc!t386nH8n;wIg-$m~9^>(%XqSKJI~k_^
+z3uU_NyBDCtVei}+EMpxb*+bgiWmxMZ$gClKZ>|$c4P)D~O0v?c7of&ij#fl}0!UwS
+zU_$S7X7|_$y?8?ZYZ?spPt#o6je+8tayM#IEJVUDvdq6Jm2NkA0!aT(k=C2Y7M(|?
+z(dAiVptz<iN<Ow9jKnI^_TIY3mIh>v(&|@Hq~ax;q|Z7i33GH5@N$trbQ=ItPLHD@
+zeZ|!mCE;gz-ao?WRiQNkitEWka9~+7WIJ<mI!NEANZ)@rUO_VrO2S4!mF0R8#rjHd
+z=9HY~=oo#9G~M8M1r5c+MNE@9iEpFV1`30n;(Ai-9A`~9o{4;k5y`7BZWXs7eNRiO
+zHhS%X88s-re$h@#=g)^}${xTiI>^rv;-gkDCAP3~G+q<_V0ji|?azkUVD)E2SRPS}
+z(IzZJA&=)5cjC#OW2L@pr7qHTGj{Q_Qm1XwVLKjX{fn+PY5^^-BVlmC)tE1Nq_ucw
+zEZL|96xWf?h9n2-(DC8wD5dGAF1pS@i)%=fe8*jkv>}_*np3cyf#MqSGSas8BIXM;
+zJa7W)zP%WI2KzdD@$3skwSEYDYVWH!UV2tdK1hWKgb0KPgb0KPgb0KPgb2Kkz&jnu
+VcU*cLS`+{P002ovPDHLkV1mczIo<#O
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/pass.json b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+deleted file mode 100644
+index 8909bd1..0000000
+--- a/apollos-church-api/wallet-passes/checkin.pass/pass.json
++++ /dev/null
+@@ -1,56 +0,0 @@
+-{
+-  "description": "Apollos Church",
+-  "formatVersion": 1,
+-  "organizationName": "Apollos Church",
+-  "passTypeIdentifier": "pass.com.apollos.testing",
+-  "teamIdentifier": "7TM8C6252Z",
+-  "logoText": "Apollos Church",
+-  "backgroundColor": "rgb(0,103,109)",
+-  "foregroundColor": "rgb(248,247,244)",
+-  "serialNumber": "checkinpass-{{ person | GetPersonAlternateId }}",
+-  "thumbnail": {
+-    "uri": "{{ person.Photo.Url }}&format=png&height=200"
+-  },
+-  "thumbnail@2x": {
+-    "uri": "{{ person.Photo.Url }}&format=png&height=400"
+-  },
+-  "barcodes": [
+-    {
+-      "message": "{{ person | GetPersonAlternateId }}",
+-      "format": "PKBarcodeFormatQR",
+-      "messageEncoding": "iso-8859-1"
+-    }
+-  ],
+-{% assign personCampus = person | Campus %}
+-{% if personCampus.Location.Latitude %}
+-  "locations": [
+-    {
+-      "latitude": {{ personCampus.Location.Latitude }},
+-      "longitude": {{ personCampus.Location.Longitude }},
+-      "relevantText": "Tap to check-in at {{ personCampus.Name }}"
+-    }
+-  ],
+-{% endif %}
+-  "generic": {
+-    "primaryFields": [
+-      {
+-        "key": "member",
+-        "value": "{{ person.FullName }}"
+-      }
+-    ],
+-    "secondaryFields": [
+-      {
+-        "key": "home",
+-        "label": "home",
+-        "value": "{{ person | Address:'Home','[[City]], [[State]]' }}"
+-      },
+-      {
+-        "key": "campus",
+-        "label": "campus",
+-        "textAlignment": "PKTextAlignmentRight",
+-        "value":
+-          "{% assign personCampus = person | Campus %}{{ personCampus.Name  }}"
+-      }
+-    ]
+-  }
+-}
+diff --git a/apolloschurchapp/.babelrc b/apolloschurchapp/.babelrc
+index f5d6241..25c8292 100644
+--- a/apolloschurchapp/.babelrc
++++ b/apolloschurchapp/.babelrc
+@@ -1,5 +1,5 @@
+ {
+-  "presets": ["module:metro-react-native-babel-preset"],
++  "presets": ["module:metro-react-native-babel-preset", "module:react-native-dotenv"],
+   "plugins": [
+     ["@babel/plugin-proposal-decorators", {
+       "legacy": true
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+index 521e4cb..4f37d9c 100644
+--- a/apolloschurchapp/.env.production
++++ b/apolloschurchapp/.env.production
+@@ -1,3 +1,3 @@
+-APP_DATA_URL=https://apollos-church-api-herokuapp-com.global.ssl.fastly.net/
++APP_DATA_URL=https://apollos-church-api.herokuapp.com/
+ ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+-ANDROID_URL=doesnotmatter
++ANDROID_URL=doesnotmatter
+\ No newline at end of file
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 9a4839b..6be0c59 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -10,12 +10,6 @@ buildscript {
+ apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+ apply plugin: "com.android.application"
+ 
+-project.ext.envConfigFiles = [
+-    release: ".env.production",
+-]
+-
+-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+-
+ import com.android.build.OutputFile
+ 
+ /**
+@@ -122,7 +116,6 @@ android {
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+-        resValue "string", "build_config_package", "com.apolloschurchapp"
+     }
+     splits {
+         abi {
+@@ -154,10 +147,6 @@ android {
+ }
+ 
+ dependencies {
+-    compile project(':rn-fetch-blob')
+-    compile project(':react-native-passkit-wallet')
+-    compile project(':react-native-webview')
+-    compile project(':react-native-config')
+     compile project(':react-native-screens')
+     compile project(':react-native-onesignal')
+     compile project(':react-native-image-picker')
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index 53d55a7..988588b 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -2,7 +2,6 @@
+     package="com.apolloschurchapp">
+ 
+     <uses-permission android:name="android.permission.INTERNET" />
+-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
+     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+     <uses-permission android:name="android.permission.CAMERA" />
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+@@ -21,7 +20,6 @@
+         <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+         </intent-filter>
+         <intent-filter android:label="filter_react_native">
+           <action android:name="android.intent.action.VIEW" />
+diff --git a/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+index 3fff2a0..95e9084 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
++++ b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+@@ -3,10 +3,6 @@ package com.apolloschurchapp;
+ import android.app.Application;
+ 
+ import com.facebook.react.ReactApplication;
+-import com.RNFetchBlob.RNFetchBlobPackage;
+-import com.mybdesign.RNPassKit.RNPassKitPackage;
+-import com.reactnativecommunity.webview.RNCWebViewPackage;
+-import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+ import com.swmansion.rnscreens.RNScreenPackage;
+ import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+ import com.imagepicker.ImagePickerPackage;
+@@ -37,10 +33,6 @@ public class MainApplication extends Application implements ReactApplication {
+     protected List<ReactPackage> getPackages() {
+       return Arrays.<ReactPackage>asList(
+           new MainReactPackage(),
+-            new RNFetchBlobPackage(),
+-            new RNPassKitPackage(),
+-            new RNCWebViewPackage(),
+-            new ReactNativeConfigPackage(),
+             new RNScreenPackage(),
+             new ReactNativeOneSignalPackage(),
+             new ImagePickerPackage(),
+diff --git a/apolloschurchapp/android/settings.gradle b/apolloschurchapp/android/settings.gradle
+index c2bfacc..e1ecbb9 100644
+--- a/apolloschurchapp/android/settings.gradle
++++ b/apolloschurchapp/android/settings.gradle
+@@ -1,12 +1,4 @@
+ rootProject.name = 'apolloschurchapp'
+-include ':rn-fetch-blob'
+-project(':rn-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/rn-fetch-blob/android')
+-include ':react-native-passkit-wallet'
+-project(':react-native-passkit-wallet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-passkit-wallet/android')
+-include ':react-native-webview'
+-project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
+-include ':react-native-config'
+-project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
+ include ':react-native-screens'
+ project(':react-native-screens').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screens/android')
+ include ':react-native-onesignal'
+diff --git a/apolloschurchapp/appcenter-post-clone.sh b/apolloschurchapp/appcenter-post-clone.sh
+index 268f281..97b3e73 100755
+--- a/apolloschurchapp/appcenter-post-clone.sh
++++ b/apolloschurchapp/appcenter-post-clone.sh
+@@ -10,6 +10,4 @@ cp $(pwd)/../../yarn.lock $(pwd)/yarn.lock
+ 
+ # Swaps out all placeholder env variables w/ their real values
+ # Placeholders look like "$ONE_SIGNAL_KEY"
+-grep -o '\$.*' .env.production | sed 's/\$\(.*\)/\1/' | xargs -I {} sh -c "sed -i -e 's/\$"{}"/'$"{}"'/' .env.production"
+-# Make sure ReactNativeConfig picks up values from prod env file.
+-cp .env.production .env
+\ No newline at end of file
++grep -o '\$.*' .env.production | sed 's/\$\(.*\)/\1/' | xargs -I {} sh -c "sed -i -e 's/\$"{}"/'$"{}"'/' .env.production"
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 904172b..bf6b5cd 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -14,7 +14,6 @@
+ 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+ 		00E356F31AD99517003FC87E /* apolloschurchappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* apolloschurchappTests.m */; };
+ 		0D4EDF6EBA274F9D93DDED76 /* Inter-UI-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = F79112193F3548D284406ABF /* Inter-UI-MediumItalic.otf */; };
+-		0DC5CDB69C3C4BCC9DD00070 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19EF4D99E3FA43FDB57C4CF0 /* libRNFetchBlob.a */; };
+ 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
+ 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
+ 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
+@@ -42,16 +41,13 @@
+ 		3CAA28FFFCCF46518672AC8F /* libDBCustomTabs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71E6499CCC9D4DB2ADD365D8 /* libDBCustomTabs.a */; };
+ 		417027FD83CA4902AB4DB2B4 /* Inter-UI-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8E13C8F9AE60487C9ED95C21 /* Inter-UI-Black.otf */; };
+ 		43B3730CE8FA462F87E6A00F /* libRNAirplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 99E3C0D4851A40CCA095A30A /* libRNAirplay.a */; };
+-		47D66CD51CC44ED1BFFC7FB6 /* libReactNativeConfig-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D081CFC9F7CF44A283276523 /* libReactNativeConfig-tvOS.a */; };
+ 		4B29B8AACC2A4FB7BA6A8EEB /* libSafariViewManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5A2B416EB74A44923FED7B /* libSafariViewManager.a */; };
+ 		59D8DFA78CDF4642892CC142 /* DroidSerif-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D979B537509247C099CE3F24 /* DroidSerif-BoldItalic.ttf */; };
+ 		5C862E57737C4032A378868D /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B16900D1DAC94F96B742B4EA /* libRNScreens.a */; };
+ 		5CA1D8E805684478B04ABB60 /* Inter-UI-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3C04F98954FB2895CD36D /* Inter-UI-Italic.otf */; };
+ 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
+-		69FC66FAF4BF4EC69C11B7F1 /* libRNPassKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6523DB0DD34F9CAE748DAE /* libRNPassKit.a */; };
+ 		6C6BE3C2189E4FBA9FB66BE5 /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 828255630B3246AEA19CF24D /* libRCTOneSignal.a */; };
+ 		6E4442FB39BE4F898DE4C454 /* Inter-UI-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 22246A6BC58E4CF09A22A4DF /* Inter-UI-BlackItalic.otf */; };
+-		70EF26E40899400DBE087CE1 /* libReactNativeConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 091DD84EC9DB4C32BCB0A0FC /* libReactNativeConfig.a */; };
+ 		7D060CA312AB4E828CD60DDC /* Inter-UI-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 10F42B11F27E467A8C71C280 /* Inter-UI-Regular.otf */; };
+ 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+ 		86D0B47B5BF143E797822EF1 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8FFB7C37BB4499AEB6FA37 /* libRCTVideo.a */; };
+@@ -67,7 +63,6 @@
+ 		D5744BF3B41D4BC49F93CD68 /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76E6AD5294554A5FA53DB415 /* DroidSerif-Regular.ttf */; };
+ 		DEF13113111A40DF8F4FEB13 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84716CBFF56347BA880A16C6 /* libRNSVG-tvOS.a */; };
+ 		E374C61F2AAF41D3B615AB44 /* Inter-UI-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 32A467E2C3364ABDBB7BD0D1 /* Inter-UI-BoldItalic.otf */; };
+-		F11DC26543E04A3DA179B698 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E919BA2ED2A4CA48E331A2E /* libRNCWebView.a */; };
+ 		F3F4A3D13570438F9562746F /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F08D1EBF0C2A4E6798AA8F36 /* libSplashScreen.a */; };
+ 		F8FAD93CCE5641A8B87611EA /* Inter-UI-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FB25CB02F40D4CC39DDA3C74 /* Inter-UI-Bold.otf */; };
+ /* End PBXBuildFile section */
+@@ -409,12 +404,12 @@
+ 			remoteGlobalIDString = 3D7682761D8E76B80014119E;
+ 			remoteInfo = SplashScreen;
+ 		};
+-		7941889D22204B710014A75B /* PBXContainerItemProxy */ = {
++		794FE987219DF8880046142B /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+-			containerPortal = CB4A6E14A2C44A53B23042FF /* RNCWebView.xcodeproj */;
++			containerPortal = 59AF37DEFAA847DBAB3A0526 /* RNScreens.xcodeproj */;
+ 			proxyType = 2;
+ 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+-			remoteInfo = RNCWebView;
++			remoteInfo = RNScreens;
+ 		};
+ 		796F2532212CAD5D00C6935E /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+@@ -444,27 +439,6 @@
+ 			remoteGlobalIDString = A3FC285E1EA7A8350097B6A9;
+ 			remoteInfo = "MusicControl-tvOS";
+ 		};
+-		79A38E1D221C8C69002356B6 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 4C2572091A7645C2AA852E59 /* RNPassKit.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = 6D42A7D820341E6800A0D1AE;
+-			remoteInfo = RNPassKit;
+-		};
+-		79A38EF7221C989B002356B6 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 06026C5613C84055BF449230 /* RNFetchBlob.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = A15C300E1CD25C330074CB35;
+-			remoteInfo = RNFetchBlob;
+-		};
+-		79A38FF3221CA949002356B6 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = CB4A6E14A2C44A53B23042FF /* RNCWebView.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+-			remoteInfo = RNCWebView;
+-		};
+ 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+ 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
+@@ -486,20 +460,6 @@
+ 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
+ 			remoteInfo = RNImagePicker;
+ 		};
+-		BFC9A46821FA2E8D00A591BF /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 99E70A413A2B4EC2AD2A6773 /* ReactNativeConfig.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = EB2648DF1C7BE17A00B8F155;
+-			remoteInfo = ReactNativeConfig;
+-		};
+-		BFC9A46A21FA2E8D00A591BF /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 99E70A413A2B4EC2AD2A6773 /* ReactNativeConfig.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = 3DF7F6AC203AA09B00D0EAB7;
+-			remoteInfo = "ReactNativeConfig-tvOS";
+-		};
+ 		DC7D3D0421A32C8500626550 /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+ 			containerPortal = 4BE1789D74F64437B8E6A905 /* RNAirplay.xcodeproj */;
+@@ -533,8 +493,6 @@
+ 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+ 		00E356F21AD99517003FC87E /* apolloschurchappTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = apolloschurchappTests.m; sourceTree = "<group>"; };
+ 		01441BF099BE44EE8BA8E390 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
+-		06026C5613C84055BF449230 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/rn-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
+-		091DD84EC9DB4C32BCB0A0FC /* libReactNativeConfig.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libReactNativeConfig.a; sourceTree = "<group>"; };
+ 		10F42B11F27E467A8C71C280 /* Inter-UI-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Regular.otf"; path = "../assets/fonts/Inter-UI-Regular.otf"; sourceTree = "<group>"; };
+ 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
+ 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
+@@ -547,7 +505,6 @@
+ 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = apolloschurchapp/main.m; sourceTree = "<group>"; };
+ 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+ 		14D838A2FAE743C7B1DA5E31 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
+-		19EF4D99E3FA43FDB57C4CF0 /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
+ 		22246A6BC58E4CF09A22A4DF /* Inter-UI-BlackItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-BlackItalic.otf"; path = "../assets/fonts/Inter-UI-BlackItalic.otf"; sourceTree = "<group>"; };
+ 		239ECFF08FA841B99DB1CAFA /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
+ 		2D02E47B1E0B4A5D006451C7 /* apolloschurchapp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "apolloschurchapp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+@@ -564,7 +521,6 @@
+ 		46704FC4FCEB45B6B9DD92BB /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
+ 		4BD3C4E6742F4F6380640CA9 /* MusicControl.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = MusicControl.xcodeproj; path = "../node_modules/react-native-music-control/ios/MusicControl.xcodeproj"; sourceTree = "<group>"; };
+ 		4BE1789D74F64437B8E6A905 /* RNAirplay.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNAirplay.xcodeproj; path = "../node_modules/react-native-airplay-btn/ios/RNAirplay.xcodeproj"; sourceTree = "<group>"; };
+-		4C2572091A7645C2AA852E59 /* RNPassKit.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNPassKit.xcodeproj; path = "../node_modules/react-native-passkit-wallet/ios/RNPassKit.xcodeproj"; sourceTree = "<group>"; };
+ 		59AF37DEFAA847DBAB3A0526 /* RNScreens.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNScreens.xcodeproj; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; };
+ 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+ 		60E52391C9744A46B3925A78 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+@@ -581,20 +537,15 @@
+ 		84B340CC6C3940A782834F00 /* RCTOneSignal.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOneSignal.xcodeproj; path = "../node_modules/react-native-onesignal/ios/RCTOneSignal.xcodeproj"; sourceTree = "<group>"; };
+ 		8CA3C04F98954FB2895CD36D /* Inter-UI-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Italic.otf"; path = "../assets/fonts/Inter-UI-Italic.otf"; sourceTree = "<group>"; };
+ 		8E13C8F9AE60487C9ED95C21 /* Inter-UI-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Black.otf"; path = "../assets/fonts/Inter-UI-Black.otf"; sourceTree = "<group>"; };
+-		8E919BA2ED2A4CA48E331A2E /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
+ 		99E3C0D4851A40CCA095A30A /* libRNAirplay.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNAirplay.a; sourceTree = "<group>"; };
+-		99E70A413A2B4EC2AD2A6773 /* ReactNativeConfig.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeConfig.xcodeproj; path = "../node_modules/react-native-config/ios/ReactNativeConfig.xcodeproj"; sourceTree = "<group>"; };
+ 		9FD7D997F4F14C439AC699B3 /* Inter-UI-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Medium.otf"; path = "../assets/fonts/Inter-UI-Medium.otf"; sourceTree = "<group>"; };
+ 		A574C961754742F688E43151 /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
+ 		A64D00F181AE4927A4632B6E /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
+ 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
+ 		B16900D1DAC94F96B742B4EA /* libRNScreens.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNScreens.a; sourceTree = "<group>"; };
+ 		BF5A2B416EB74A44923FED7B /* libSafariViewManager.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSafariViewManager.a; sourceTree = "<group>"; };
+-		CB4A6E14A2C44A53B23042FF /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
+ 		CFAF46FBA8B44C7B8DCA7707 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
+-		D081CFC9F7CF44A283276523 /* libReactNativeConfig-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libReactNativeConfig-tvOS.a"; sourceTree = "<group>"; };
+ 		D979B537509247C099CE3F24 /* DroidSerif-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DroidSerif-BoldItalic.ttf"; path = "../assets/fonts/DroidSerif-BoldItalic.ttf"; sourceTree = "<group>"; };
+-		DB6523DB0DD34F9CAE748DAE /* libRNPassKit.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNPassKit.a; sourceTree = "<group>"; };
+ 		F08D1EBF0C2A4E6798AA8F36 /* libSplashScreen.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libSplashScreen.a; sourceTree = "<group>"; };
+ 		F79112193F3548D284406ABF /* Inter-UI-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-MediumItalic.otf"; path = "../assets/fonts/Inter-UI-MediumItalic.otf"; sourceTree = "<group>"; };
+ 		F9CFD638A5414DFF961A8D11 /* DroidSerif-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DroidSerif-Italic.ttf"; path = "../assets/fonts/DroidSerif-Italic.ttf"; sourceTree = "<group>"; };
+@@ -640,10 +591,6 @@
+ 				1680179655164C96985B5731 /* libMusicControl.a in Frameworks */,
+ 				5C862E57737C4032A378868D /* libRNScreens.a in Frameworks */,
+ 				43B3730CE8FA462F87E6A00F /* libRNAirplay.a in Frameworks */,
+-				70EF26E40899400DBE087CE1 /* libReactNativeConfig.a in Frameworks */,
+-				69FC66FAF4BF4EC69C11B7F1 /* libRNPassKit.a in Frameworks */,
+-				0DC5CDB69C3C4BCC9DD00070 /* libRNFetchBlob.a in Frameworks */,
+-				F11DC26543E04A3DA179B698 /* libRNCWebView.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -662,7 +609,6 @@
+ 				DEF13113111A40DF8F4FEB13 /* libRNSVG-tvOS.a in Frameworks */,
+ 				AC4174D90AD644A28D0CA9D9 /* libRNDeviceInfo-tvOS.a in Frameworks */,
+ 				AB7B2136E56C4B40B64F9C87 /* libMusicControl-tvOS.a in Frameworks */,
+-				47D66CD51CC44ED1BFFC7FB6 /* libReactNativeConfig-tvOS.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+@@ -875,11 +821,6 @@
+ 				67E66409EF8A4BC7A1B9E054 /* libMusicControl-tvOS.a */,
+ 				B16900D1DAC94F96B742B4EA /* libRNScreens.a */,
+ 				99E3C0D4851A40CCA095A30A /* libRNAirplay.a */,
+-				091DD84EC9DB4C32BCB0A0FC /* libReactNativeConfig.a */,
+-				D081CFC9F7CF44A283276523 /* libReactNativeConfig-tvOS.a */,
+-				DB6523DB0DD34F9CAE748DAE /* libRNPassKit.a */,
+-				19EF4D99E3FA43FDB57C4CF0 /* libRNFetchBlob.a */,
+-				8E919BA2ED2A4CA48E331A2E /* libRNCWebView.a */,
+ 			);
+ 			name = "Recovered References";
+ 			sourceTree = "<group>";
+@@ -935,10 +876,10 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		7941889A22204B710014A75B /* Products */ = {
++		794FE954219DF8880046142B /* Products */ = {
+ 			isa = PBXGroup;
+ 			children = (
+-				7941889E22204B710014A75B /* libRNCWebView.a */,
++				794FE988219DF8880046142B /* libRNScreens.a */,
+ 			);
+ 			name = Products;
+ 			sourceTree = "<group>";
+@@ -961,30 +902,6 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		79A38E1A221C8C69002356B6 /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				79A38E1E221C8C69002356B6 /* libRNPassKit.a */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+-		79A38EF4221C989B002356B6 /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				79A38EF8221C989B002356B6 /* libRNFetchBlob.a */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+-		79A38FF0221CA949002356B6 /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				79A38FF4221CA949002356B6 /* libRNCWebView.a */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+ 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -1012,10 +929,6 @@
+ 				4BD3C4E6742F4F6380640CA9 /* MusicControl.xcodeproj */,
+ 				59AF37DEFAA847DBAB3A0526 /* RNScreens.xcodeproj */,
+ 				4BE1789D74F64437B8E6A905 /* RNAirplay.xcodeproj */,
+-				99E70A413A2B4EC2AD2A6773 /* ReactNativeConfig.xcodeproj */,
+-				4C2572091A7645C2AA852E59 /* RNPassKit.xcodeproj */,
+-				06026C5613C84055BF449230 /* RNFetchBlob.xcodeproj */,
+-				CB4A6E14A2C44A53B23042FF /* RNCWebView.xcodeproj */,
+ 			);
+ 			name = Libraries;
+ 			sourceTree = "<group>";
+@@ -1073,15 +986,6 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		BFC9A46421FA2E8D00A591BF /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				BFC9A46921FA2E8D00A591BF /* libReactNativeConfig.a */,
+-				BFC9A46B21FA2E8D00A591BF /* libReactNativeConfig-tvOS.a */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+ 		DC7D3D0121A32C8400626550 /* Products */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -1274,10 +1178,6 @@
+ 					ProductGroup = 146834001AC3E56700842450 /* Products */;
+ 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+ 				},
+-				{
+-					ProductGroup = BFC9A46421FA2E8D00A591BF /* Products */;
+-					ProjectRef = 99E70A413A2B4EC2AD2A6773 /* ReactNativeConfig.xcodeproj */;
+-				},
+ 				{
+ 					ProductGroup = 7914346A2126017A006F13B7 /* Products */;
+ 					ProjectRef = 6BAAC994942548609D0EEECA /* ReactNativeCustomTabs.xcodeproj */;
+@@ -1286,26 +1186,14 @@
+ 					ProductGroup = DC7D3D0121A32C8400626550 /* Products */;
+ 					ProjectRef = 4BE1789D74F64437B8E6A905 /* RNAirplay.xcodeproj */;
+ 				},
+-				{
+-					ProductGroup = 7941889A22204B710014A75B /* Products */;
+-					ProjectRef = CB4A6E14A2C44A53B23042FF /* RNCWebView.xcodeproj */;
+-				},
+ 				{
+ 					ProductGroup = 796F252E212CAD5D00C6935E /* Products */;
+ 					ProjectRef = 239ECFF08FA841B99DB1CAFA /* RNDeviceInfo.xcodeproj */;
+ 				},
+-				{
+-					ProductGroup = 79A38EF4221C989B002356B6 /* Products */;
+-					ProjectRef = 06026C5613C84055BF449230 /* RNFetchBlob.xcodeproj */;
+-				},
+ 				{
+ 					ProductGroup = BF99316D2138673B0077FD20 /* Products */;
+ 					ProjectRef = 3BD7DCDF7B194D7BB9BE3C6C /* RNImagePicker.xcodeproj */;
+ 				},
+-				{
+-					ProductGroup = 79A38E1A221C8C69002356B6 /* Products */;
+-					ProjectRef = 4C2572091A7645C2AA852E59 /* RNPassKit.xcodeproj */;
+-				},
+ 				{
+ 					ProductGroup = 42B4B698219DD7CA00162F25 /* Products */;
+ 					ProjectRef = 59AF37DEFAA847DBAB3A0526 /* RNScreens.xcodeproj */;
+@@ -1656,11 +1544,11 @@
+ 			remoteRef = 7914348D2126017B006F13B7 /* PBXContainerItemProxy */;
+ 			sourceTree = BUILT_PRODUCTS_DIR;
+ 		};
+-		7941889E22204B710014A75B /* libRNCWebView.a */ = {
++		794FE988219DF8880046142B /* libRNScreens.a */ = {
+ 			isa = PBXReferenceProxy;
+ 			fileType = archive.ar;
+-			path = libRNCWebView.a;
+-			remoteRef = 7941889D22204B710014A75B /* PBXContainerItemProxy */;
++			path = libRNScreens.a;
++			remoteRef = 794FE987219DF8880046142B /* PBXContainerItemProxy */;
+ 			sourceTree = BUILT_PRODUCTS_DIR;
+ 		};
+ 		796F2533212CAD5D00C6935E /* libRNDeviceInfo.a */ = {
+@@ -1691,27 +1579,6 @@
+ 			remoteRef = 7973041A2146322D00F6E05B /* PBXContainerItemProxy */;
+ 			sourceTree = BUILT_PRODUCTS_DIR;
+ 		};
+-		79A38E1E221C8C69002356B6 /* libRNPassKit.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = libRNPassKit.a;
+-			remoteRef = 79A38E1D221C8C69002356B6 /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+-		79A38EF8221C989B002356B6 /* libRNFetchBlob.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = libRNFetchBlob.a;
+-			remoteRef = 79A38EF7221C989B002356B6 /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+-		79A38FF4221CA949002356B6 /* libRNCWebView.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = libRNCWebView.a;
+-			remoteRef = 79A38FF3221CA949002356B6 /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+ 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
+ 			isa = PBXReferenceProxy;
+ 			fileType = archive.ar;
+@@ -1733,20 +1600,6 @@
+ 			remoteRef = BF9931702138673B0077FD20 /* PBXContainerItemProxy */;
+ 			sourceTree = BUILT_PRODUCTS_DIR;
+ 		};
+-		BFC9A46921FA2E8D00A591BF /* libReactNativeConfig.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = libReactNativeConfig.a;
+-			remoteRef = BFC9A46821FA2E8D00A591BF /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+-		BFC9A46B21FA2E8D00A591BF /* libReactNativeConfig-tvOS.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = "libReactNativeConfig-tvOS.a";
+-			remoteRef = BFC9A46A21FA2E8D00A591BF /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+ 		DC7D3D0521A32C8500626550 /* libRNAirplay.a */ = {
+ 			isa = PBXReferenceProxy;
+ 			fileType = archive.ar;
+@@ -1918,10 +1771,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = apolloschurchappTests/Info.plist;
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+@@ -1930,10 +1779,6 @@
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -1963,10 +1808,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = apolloschurchappTests/Info.plist;
+ 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+@@ -1975,10 +1816,6 @@
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2012,10 +1849,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = apolloschurchapp/Info.plist;
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+@@ -2051,10 +1884,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = apolloschurchapp/Info.plist;
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+@@ -2094,10 +1923,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = "apolloschurchapp-tvOS/Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+@@ -2105,10 +1930,6 @@
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2148,10 +1969,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = "apolloschurchapp-tvOS/Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+@@ -2159,10 +1976,6 @@
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2201,16 +2014,13 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = "apolloschurchapp-tvOSTests/Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
++					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2249,10 +2059,6 @@
+ 					"$(SRCROOT)/../node_modules/react-native-music-control/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+-					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-passkit-wallet/ios/RNPassKit",
+-					"$(SRCROOT)/../node_modules/rn-fetch-blob/ios/**",
+-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
+ 				);
+ 				INFOPLIST_FILE = "apolloschurchapp-tvOSTests/Info.plist";
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+@@ -2260,9 +2066,6 @@
+ 					"$(inherited)",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 6be8140..0d5c926 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -32,9 +32,9 @@
+ 	<key>CFBundleVersion</key>
+ 	<string>5</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+-	<false/>
++	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true/>
++	<true />
+ 	<key>NSAppTransportSecurity</key>
+ 	<dict>
+ 		<key>NSExceptionDomains</key>
+@@ -42,17 +42,17 @@
+ 			<key>embed.wistia.com</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true/>
++				<true />
+ 			</dict>
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true/>
++				<true />
+ 			</dict>
+ 		</dict>
+ 	</dict>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string/>
++	<string />
+ 	<key>UIAppFonts</key>
+ 	<array>
+ 		<string>DroidSerif-Bold.ttf</string>
+@@ -88,7 +88,7 @@
+ 		<string>UIInterfaceOrientationLandscapeRight</string>
+ 	</array>
+ 	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false/>
++	<false />
+ 	<key>NSPhotoLibraryUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+ 	<key>NSCameraUsageDescription</key>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index b74ab2b..43e7fb4 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -1,5 +1,5 @@
+ jest.mock('./src/client/index');
+-jest.mock('react-native-config', () => ({
++jest.mock('./src/config', () => ({
+   ONE_SIGNAL_KEY: 'doesntmatter',
+ }));
+ jest.mock('react-native-custom-tabs', () => ({
+@@ -29,12 +29,6 @@ jest.mock('react-native-device-info', () => ({
+   getBuildNumber: () => 0,
+ }));
+ 
+-jest.mock('rn-fetch-blob', () => 'Fetch');
+-jest.mock(
+-  '@apollosproject/ui-passes/node_modules/rn-fetch-blob',
+-  () => 'Fetch'
+-);
+-
+ jest.mock('react-native-video', () => 'Video');
+ 
+ jest.mock('NativeEventEmitter');
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 080f09b..f426219 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.0",
++  "version": "0.8.0-alpha.6",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -14,6 +14,7 @@
+     "nodemon": "1.18.7",
+     "prop-types": "15.6.1",
+     "react-dom": "16.6.3",
++    "react-native-dotenv": "0.2.0",
+     "react-native-storybook-loader": "1.8.0",
+     "react-native-version": "2.6.2",
+     "react-test-renderer": "16.6.1",
+@@ -34,7 +35,7 @@
+     "postversion": "react-native-version --never-amend --android android/app/build.gradle --ios ios/",
+     "prestart": "babel-node ./scripts/get-introspection-data.js",
+     "start": "react-native start",
+-    "storybook": "rnstl --searchDir ../ --pattern \"apollos*/src/**/*.stories.js\" && storybook start -p 7007 | react-native start --projectRoot storybook",
++    "storybook": "rnstl --searchDir ./storybook ./src --pattern \"**/*.stories.js\" && storybook start -p 7007 --root ../../",
+     "test": "jest",
+     "release": "standard-version --release-as minor"
+   },
+@@ -56,16 +57,12 @@
+     "setupFiles": [
+       "./jest.setup.js"
+     ],
+-    "reporters": [
+-      "<rootDir>/../../scripts/fingers-crossed-reporter.js"
+-    ],
+     "transform": {
+       ".+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.8.0",
+-    "@apollosproject/ui-passes": "^0.8.0",
++    "@apollosproject/ui-kit": "^0.8.0-alpha.6",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
+@@ -77,13 +74,13 @@
+     "apollo-upload-client": "9.0.0",
+     "buffer": "^5.2.1",
+     "color": "3.0.0",
+-    "dotenv": "^6.2.0",
+     "entities": "1.1.1",
+     "events": "^3.0.0",
+     "formik": "0.11.11",
+     "graphql": "0.13.2",
+     "graphql-tag": "2.9.2",
+     "graphql-tools": "3.1.1",
++    "htmlparser2": "3.9.2",
+     "lodash": "^4.17.11",
+     "memoize-one": "4.0.0",
+     "moment": "2.22.2",
+@@ -95,7 +92,6 @@
+     "react-apollo": "2.2.4",
+     "react-native": "0.57.5",
+     "react-native-airplay-btn": "^1.0.6",
+-    "react-native-config": "^0.11.7",
+     "react-native-custom-tabs": "0.1.7",
+     "react-native-device-info": "0.22.5",
+     "react-native-image-picker": "0.26.10",
+@@ -103,19 +99,15 @@
+     "react-native-linear-gradient": "2.4.0",
+     "react-native-music-control": "0.7.3",
+     "react-native-onesignal": "3.2.7",
+-    "react-native-passkit-wallet": "^0.1.4",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-view": "0.11.0",
+     "react-native-screens": "1.0.0-alpha.12",
+     "react-native-splash-screen": "^3.1.1",
+     "react-native-svg": "6.5.2",
+-    "react-native-swiper": "^1.5.14",
+     "react-native-video": "3.2.0",
+     "react-native-video-controls": "2.2.3",
+-    "react-native-webview": "^5.2.0",
+     "react-navigation": "2.11.2",
+     "recompose": "^0.30.0",
+-    "rn-fetch-blob": "^0.10.15",
+     "rn-placeholder": "1.2.0",
+     "stream": "0.0.2",
+     "url": "^0.11.0",
+diff --git a/apolloschurchapp/rn-cli.config.js b/apolloschurchapp/rn-cli.config.js
+index ee4e789..4235fa0 100644
+--- a/apolloschurchapp/rn-cli.config.js
++++ b/apolloschurchapp/rn-cli.config.js
+@@ -1,11 +1,7 @@
+ const path = require('path');
+ const blacklist = require('metro-config/src/defaults/blacklist');
+ 
+-const localDeps = [
+-  path.resolve('..', 'apollos-ui-kit'),
+-  path.resolve('..', 'apollos-ui-passes'),
+-  path.resolve('..', 'apollos-ui-htmlview'),
+-];
++const localDeps = [path.resolve('..', 'apollos-ui-kit')];
+ 
+ module.exports = {
+   resolver: {
+diff --git a/apolloschurchapp/scripts/get-introspection-data.js b/apolloschurchapp/scripts/get-introspection-data.js
+index 7efab0c..f2c7e28 100755
+--- a/apolloschurchapp/scripts/get-introspection-data.js
++++ b/apolloschurchapp/scripts/get-introspection-data.js
+@@ -1,6 +1,6 @@
+ import fs from 'fs';
+ import Path from 'path';
+-import 'dotenv/config';
++import { APP_DATA_URL } from 'react-native-dotenv';
+ import fetch from 'node-fetch';
+ 
+ const attempts = 0;
+@@ -9,7 +9,7 @@ const timeBetweenAttempts = 5 * 1000;
+ 
+ const getIntrospectionData = async () => {
+   try {
+-    const query = await fetch(process.env.APP_DATA_URL, {
++    const query = await fetch(APP_DATA_URL, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({
+diff --git a/apolloschurchapp/src/notifications/NotificationManager.js b/apolloschurchapp/src/Notifications.js
+similarity index 75%
+rename from apolloschurchapp/src/notifications/NotificationManager.js
+rename to apolloschurchapp/src/Notifications.js
+index 1eaaad3..d37e22f 100644
+--- a/apolloschurchapp/src/notifications/NotificationManager.js
++++ b/apolloschurchapp/src/Notifications.js
+@@ -1,31 +1,24 @@
+ import querystring from 'querystring';
+ import URL from 'url';
+-import gql from 'graphql-tag';
+ import { Component } from 'react';
+ import { Linking } from 'react-native';
+ import OneSignal from 'react-native-onesignal';
+-import { get } from 'lodash';
+-import Config from 'react-native-config';
+-import NavigationService from '../NavigationService';
+-import { client } from '../client';
+-
+-const UPDATE_DEVICE_PUSH_ID = gql`
+-  mutation updateDevicePushId($pushId: String!) {
+-    updateDevicePushId(pushId: $pushId) @client
+-  }
+-`;
++import NavigationService from './NavigationService';
++import { ONE_SIGNAL_KEY } from './config';
+ 
+ export default class NotificationsInit extends Component {
+   static navigationOptions = {};
+ 
+-  componentDidMount() {
+-    OneSignal.init(Config.ONE_SIGNAL_KEY, {
++  componentWillMount() {
++    OneSignal.init(ONE_SIGNAL_KEY, {
+       kOSSettingsKeyAutoPrompt: true,
+     });
+     OneSignal.addEventListener('received', this.onReceived);
+     OneSignal.addEventListener('opened', this.onOpened);
+     OneSignal.addEventListener('ids', this.onIds);
+-    OneSignal.configure();
++  }
++
++  componentDidMount() {
+     Linking.getInitialURL().then((url) => {
+       this.navigate(url);
+     });
+@@ -60,17 +53,14 @@ export default class NotificationsInit extends Component {
+     // apolloschurchapp://AppStackNavigator/Connect
+     // apolloschurchapp://SomethingElse/Connect
+     // apolloschurchapp://SomethingElse/ContentSingle?itemId=SomeItemId:blablalba
+-    const url = get(openResult, 'notification.payload.additionalData.url');
++    const { url } = openResult.notification.payload.additionalData;
+     if (url) {
+       this.navigate(url);
+     }
+   };
+ 
+   onIds = (device) => {
+-    client.mutate({
+-      mutation: UPDATE_DEVICE_PUSH_ID,
+-      variables: { pushId: device.userId },
+-    });
++    console.log('Device info: ', device);
+   };
+ 
+   render() {
+diff --git a/apolloschurchapp/src/__mocks__/config.js b/apolloschurchapp/src/__mocks__/config.js
+new file mode 100644
+index 0000000..b1162fc
+--- /dev/null
++++ b/apolloschurchapp/src/__mocks__/config.js
+@@ -0,0 +1,2 @@
++/* eslint-disable import/prefer-default-export */
++export const ONE_SIGNAL_KEY = 'doesntmatter';
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 14cf82b..cf7174a 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/client/httpLink.js b/apolloschurchapp/src/client/httpLink.js
+index c8974f8..157fb8e 100644
+--- a/apolloschurchapp/src/client/httpLink.js
++++ b/apolloschurchapp/src/client/httpLink.js
+@@ -1,24 +1,11 @@
+ import { Platform } from 'react-native';
+ import { createUploadLink } from 'apollo-upload-client';
+-import Config from 'react-native-config';
+-import { split } from 'apollo-link';
+-import { createHttpLink } from 'apollo-link-http';
+-import { getMainDefinition } from 'apollo-utilities';
++import { APP_DATA_URL, ANDROID_URL } from 'react-native-dotenv';
+ 
+-let uri = Config.APP_DATA_URL;
+-const androidUri = Config.ANDROID_URL || '10.0.2.2';
++let uri = APP_DATA_URL;
++const androidUri = ANDROID_URL || '10.0.2.2';
+ 
+ // Android's emulator requires localhost network traffic to go through 10.0.2.2
+ if (Platform.OS === 'android') uri = uri.replace('localhost', androidUri);
+ 
+-export default split(
+-  ({ query }) => {
+-    const { kind, operation } = getMainDefinition(query);
+-    return kind === 'OperationDefinition' && operation === 'mutation';
+-  },
+-  createUploadLink({ uri }),
+-  createHttpLink({
+-    uri,
+-    useGETForQueries: true,
+-  })
+-);
++export default createUploadLink({ uri });
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 1b0a319..84c6cda 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -4,7 +4,6 @@ import { ApolloProvider } from 'react-apollo';
+ import { ApolloClient } from 'apollo-client';
+ import { ApolloLink } from 'apollo-link';
+ import SplashScreen from 'react-native-splash-screen';
+-import gql from 'graphql-tag';
+ 
+ import httpLink from './httpLink';
+ import clientStateLink from './clientStateLink';
+@@ -22,18 +21,6 @@ export const client = new ApolloClient({
+ 
+ client.onResetStore(clientStateLink.writeDefaults);
+ 
+-export const CACHE_LOADED = gql`
+-  query {
+-    cacheLoaded @client
+-  }
+-`;
+-
+-export const MARK_CACHE_LOADED = gql`
+-  mutation markCacheLoaded {
+-    cacheMarkLoaded @client
+-  }
+-`;
+-
+ class ClientProvider extends PureComponent {
+   static propTypes = {
+     client: PropTypes.shape({
+@@ -52,7 +39,6 @@ class ClientProvider extends PureComponent {
+       throw e;
+     } finally {
+       if (SplashScreen && SplashScreen.hide) SplashScreen.hide();
+-      client.mutate({ mutation: MARK_CACHE_LOADED });
+     }
+   }
+ 
+diff --git a/apolloschurchapp/src/config.js b/apolloschurchapp/src/config.js
+new file mode 100644
+index 0000000..248183d
+--- /dev/null
++++ b/apolloschurchapp/src/config.js
+@@ -0,0 +1,6 @@
++/* eslint-disable import/prefer-default-export */
++import { ONE_SIGNAL_KEY as oneSignalKey } from 'react-native-dotenv';
++
++const ONE_SIGNAL_KEY = oneSignalKey;
++
++export { ONE_SIGNAL_KEY };
+diff --git a/apolloschurchapp/src/content-single/HTMLContent/index.js b/apolloschurchapp/src/content-single/HTMLContent/index.js
+index 39c62bc..4d4f384 100644
+--- a/apolloschurchapp/src/content-single/HTMLContent/index.js
++++ b/apolloschurchapp/src/content-single/HTMLContent/index.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import PropTypes from 'prop-types';
+ import { Query } from 'react-apollo';
+ 
+-import HTMLView from '@apollosproject/ui-htmlview';
++import HTMLView from 'apolloschurchapp/src/ui/HTMLView';
+ import { ErrorCard } from '@apollosproject/ui-kit';
+ 
+ import getContentItemContent from './getContentItemContent';
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index cb802d5..7fe89f1 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -4,18 +4,15 @@ import { createStackNavigator } from 'react-navigation';
+ // import { Sentry } from 'react-native-sentry';
+ 
+ import { BackgroundView, withTheme } from '@apollosproject/ui-kit';
+-import Passes from '@apollosproject/ui-passes';
+-
+ import MediaPlayer from 'apolloschurchapp/src/ui/MediaPlayer';
+ import Providers from './Providers';
+-import { NotificationsManager } from './notifications';
++import NotificationsInit from './Notifications';
+ import NavigationService from './NavigationService';
+ import ContentSingle from './content-single';
+ import Tabs from './tabs';
+ import Auth from './auth';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+-import UserWebBrowser from './user-web-browser';
+ 
+ // Sentry.config(
+ //   'https://5908fa19ed37447f86b2717423cadec5:45dd3b58792b413cb67109c5e63a0bb7@sentry.io/1241658'
+@@ -33,8 +30,6 @@ const AppNavigator = createStackNavigator(
+     Auth,
+     PersonalDetails,
+     ChangePassword,
+-    Passes,
+-    UserWebBrowser,
+   },
+   {
+     initialRouteName: 'Tabs',
+@@ -52,7 +47,7 @@ const App = () => (
+           NavigationService.setTopLevelNavigator(navigatorRef);
+         }}
+       />
+-      <NotificationsManager />
++      <NotificationsInit />
+       <MediaPlayer />
+     </BackgroundView>
+   </Providers>
+diff --git a/apolloschurchapp/src/notifications/index.js b/apolloschurchapp/src/notifications/index.js
+deleted file mode 100644
+index a42b2e1..0000000
+--- a/apolloschurchapp/src/notifications/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export NotificationsManager from './NotificationManager';
+diff --git a/apolloschurchapp/src/notifications/updatePushId.js b/apolloschurchapp/src/notifications/updatePushId.js
+deleted file mode 100644
+index ab5480b..0000000
+--- a/apolloschurchapp/src/notifications/updatePushId.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import gql from 'graphql-tag';
+-import { client } from '../client';
+-
+-const UPDATE_PUSH_ID = gql`
+-  mutation updateUserPushSettings($input: PushSettingsInput!) {
+-    updateUserPushSettings(input: $input) {
+-      id
+-    }
+-  }
+-`;
+-
+-const updatePushId = async ({ pushId }) => {
+-  await client.mutate({
+-    mutation: UPDATE_PUSH_ID,
+-    variables: { input: { pushProviderUserId: pushId } },
+-  });
+-};
+-
+-export { updatePushId as default };
+diff --git a/apolloschurchapp/src/store/index.js b/apolloschurchapp/src/store/index.js
+index 68fd1c8..f9bec86 100644
+--- a/apolloschurchapp/src/store/index.js
++++ b/apolloschurchapp/src/store/index.js
+@@ -2,8 +2,7 @@ import { merge, get } from 'lodash';
+ import gql from 'graphql-tag';
+ import getLoginState from 'apolloschurchapp/src/auth/getLoginState';
+ import { track, events } from 'apolloschurchapp/src/analytics';
+-import { client, CACHE_LOADED } from "../client"; // eslint-disable-line
+-import updatePushId from '../notifications/updatePushId';
++import { client } from '../client'; // eslint-disable-line
+ import getAuthToken from './getAuthToken';
+ // TODO: this will require more organization...ie...not keeping everything in one file.
+ // But this is simple while our needs our small.
+@@ -13,8 +12,6 @@ export const schema = `
+     authToken: String
+     mediaPlayer: MediaPlayerState
+     isLoggedIn: Boolean
+-    devicePushId: String
+-    cacheLoaded: Boolean
+   }
+ 
+   type Mutation {
+@@ -30,11 +27,7 @@ export const schema = `
+       isVideo: Boolean,
+     ): Boolean
+ 
+-    cacheMarkLoaded
+-
+     handleLogin(authToken: String!)
+-
+-    updateDevicePushId(pushId: String!)
+   }
+ 
+   type MediaPlayerState {
+@@ -66,8 +59,6 @@ export const schema = `
+ export const defaults = {
+   __typename: 'Query',
+   authToken: null,
+-  cacheLoaded: false,
+-  pushId: null,
+   mediaPlayer: {
+     __typename: 'MediaPlayerState',
+     currentTrack: null,
+@@ -116,17 +107,6 @@ export const resolvers = {
+           data: { authToken },
+         });
+ 
+-        const { pushId } = cache.readQuery({
+-          query: gql`
+-            query {
+-              pushId
+-            }
+-          `,
+-        });
+-        if (pushId) {
+-          updatePushId({ pushId });
+-        }
+-
+         track({ eventName: events.UserLogin });
+       } catch (e) {
+         throw e.message;
+@@ -256,46 +236,5 @@ export const resolvers = {
+       });
+       return null;
+     },
+-    updateDevicePushId: (root, { pushId }, { cache }) => {
+-      const query = gql`
+-        query {
+-          pushId @client
+-        }
+-      `;
+-      cache.writeQuery({
+-        query,
+-        data: {
+-          pushId,
+-        },
+-      });
+-
+-      const isLoggedIn = resolvers.Query.isLoggedIn();
+-      if (isLoggedIn) {
+-        updatePushId({ pushId });
+-      }
+-      return null;
+-    },
+-
+-    cacheMarkLoaded: (root, args, { cache }) => {
+-      cache.writeQuery({
+-        query: CACHE_LOADED,
+-        data: {
+-          cacheLoaded: true,
+-        },
+-      });
+-      const isLoggedIn = resolvers.Query.isLoggedIn();
+-      const { pushId } = cache.readQuery({
+-        query: gql`
+-          query {
+-            pushId @client
+-          }
+-        `,
+-      });
+-
+-      if (isLoggedIn && pushId) {
+-        updatePushId({ pushId });
+-      }
+-      return null;
+-    },
+   },
+ };
+diff --git a/apolloschurchapp/src/tabs/connect/Connect.js b/apolloschurchapp/src/tabs/connect/Connect.js
+index d445769..8de06b1 100644
+--- a/apolloschurchapp/src/tabs/connect/Connect.js
++++ b/apolloschurchapp/src/tabs/connect/Connect.js
+@@ -16,7 +16,6 @@ import {
+   PaddedView,
+ } from '@apollosproject/ui-kit';
+ import ActionTable from './ActionTable';
+-import Toolbar from './Toolbar';
+ import { UserAvatarHeaderConnected } from './UserAvatarHeader';
+ import { RecentlyLikedTileFeedConnected } from './RecentlyLikedTileFeed';
+ import getLoginState from './getLoginState';
+@@ -67,7 +66,6 @@ class Connect extends PureComponent {
+                   <ScrollView>
+                     <UserAvatarHeaderConnected key="UserAvatarHeaderConnected" />
+                     <RecentlyLikedTileFeedConnected key="RecentlyLikedTileFeedConnected" />
+-                    <Toolbar />
+                     <ActionTable />
+                   </ScrollView>
+                 </SafeAreaView>
+diff --git a/apolloschurchapp/src/tabs/connect/Toolbar.js b/apolloschurchapp/src/tabs/connect/Toolbar.js
+deleted file mode 100644
+index 159180e..0000000
+--- a/apolloschurchapp/src/tabs/connect/Toolbar.js
++++ /dev/null
+@@ -1,33 +0,0 @@
+-import React from 'react';
+-import {
+-  TableView,
+-  Cell,
+-  CellIcon,
+-  CellText,
+-  Touchable,
+-} from '@apollosproject/ui-kit';
+-import { withNavigation } from 'react-navigation';
+-import PropTypes from 'prop-types';
+-
+-const Toolbar = ({ navigation }) => (
+-  <TableView>
+-    <Touchable
+-      onPress={() => {
+-        navigation.navigate('Passes');
+-      }}
+-    >
+-      <Cell>
+-        <CellIcon name="check" />
+-        <CellText>Check-in</CellText>
+-      </Cell>
+-    </Touchable>
+-  </TableView>
+-);
+-
+-Toolbar.propTypes = {
+-  navigation: PropTypes.shape({
+-    navigate: PropTypes.func.isRequired,
+-  }).isRequired,
+-};
+-
+-export default withNavigation(Toolbar);
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+index 1ab8d26..599f719 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+@@ -10,9 +10,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+     {({
+       data: {
+         currentUser: {
+-          profile: { photo, firstName, lastName, campus: { name } } = {
+-            campus: {},
+-          },
++          profile: { photo, firstName, lastName, location } = {},
+         } = {},
+       } = {},
+       refetch,
+@@ -20,7 +18,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+       <UserAvatarHeader
+         firstName={firstName}
+         lastName={lastName}
+-        location={name}
++        location={location}
+         photo={photo}
+         refetch={refetch}
+         navigation={navigation}
+diff --git a/apolloschurchapp/src/tabs/connect/getUserProfile.js b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+index f749258..b591a5b 100644
+--- a/apolloschurchapp/src/tabs/connect/getUserProfile.js
++++ b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+@@ -7,9 +7,7 @@ export default gql`
+       profile {
+         firstName
+         lastName
+-        campus {
+-          name
+-        }
++        location
+         email
+         nickName
+         photo {
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index 299086c..121e804 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,8 +1,6 @@
+ import React, { PureComponent } from 'react';
+ import { TableView, Divider } from '@apollosproject/ui-kit';
+-import { UserWebBrowserConsumer } from 'apolloschurchapp/src/user-web-browser';
+ import ChangeLivestream from './ChangeLivestream';
+-import TouchableCell from './TouchableCell';
+ 
+ export default class TestingControlPanel extends PureComponent {
+   static navigationOptions = () => ({
+@@ -14,20 +12,6 @@ export default class TestingControlPanel extends PureComponent {
+       <TableView>
+         <ChangeLivestream />
+         <Divider />
+-        <UserWebBrowserConsumer>
+-          {(openUserWebView) => (
+-            <TouchableCell
+-              handlePress={() =>
+-                openUserWebView({
+-                  url:
+-                    'https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending',
+-                })
+-              }
+-              iconName="share"
+-              cellText={`Open Web Browser With User Cookie`}
+-            />
+-          )}
+-        </UserWebBrowserConsumer>
+       </TableView>
+     );
+   }
+diff --git a/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js b/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js
+new file mode 100644
+index 0000000..0d69e14
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/HTMLView.stories.js
+@@ -0,0 +1,21 @@
++import React from 'react';
++import { ScrollView } from 'react-native';
++import { storiesOf } from '@storybook/react-native';
++
++import HTMLView from '.';
++
++storiesOf('HTMLView', module)
++  .add('Example', () => (
++    <ScrollView>
++      <HTMLView>
++        {
++          "<p>I sat on my couch next to my high school <a href='https://newspringfuse.com/groups' target='_blank'>Fuse Group</a>, silently fuming at their inability to put their phones down during Bible study. Finally, I spoke up, teasing one of the girls in a tone that clearly said, &ldquo;I&rsquo;m not actually kidding.&rdquo;&nbsp;</p>\n\n<p>A few days later, I was in the car with my sister, and as I sat in the passenger seat responding to emails, I heard her laugh and say, &ldquo;You always mumble when you are typing. Stop doing that.&rdquo;&nbsp;</p>\n\n<p>&ldquo;Sorry,&rdquo; I responded. &ldquo;I just don&rsquo;t want people to think I&rsquo;m ignoring them when I&rsquo;m typing.&rdquo;</p>\n\n<p>But the truth is, I am ignoring them! In my head, this behavior is totally acceptable. I tell myself I&rsquo;m tending to my priorities in order, and in doing so, I send a message to the person in front of me that she is of lesser importance.</p>\n\n<blockquote>\n<p>My phone is the primary outlet that distracts me from people who need my attention.</p>\n</blockquote>\n\n<p>I quickly get frustrated when I am the one on the outside, but how often to I shut others out during my own social media binges or email frenzies? Just like my girls, I&rsquo;m learning that my phone is the primary outlet that distracts me from people who need my attention.</p>\n\n<h3>Why Being Present Matters</h3>\n\n<p>There is nothing wrong with using our phones &mdash; as long as we remember that the best investment we can make is to invest in our relationships with Jesus and each other. We were created for <a href='http://newspring.cc/community' target='_blank'>community</a> by God, who exists in community as Father, Son, and Holy Spirit (John 1:1-2, Genesis 2:18).&nbsp;</p>\n\n<p>Our phones help us stay connected, but they are not the foundation of all connection. If we&rsquo;re honest, our phones are much quicker to distract and disengage us from the people right in front of us.&nbsp;</p>\n\n<p>Jesus said loving God and loving others is greatest of all God&rsquo;s commandments (Matthew 22:38-40). And, after trying everything the world had to offer, King Solomon reminded his people that their relationships with God and others are the only things that really matter (Ecclesiastes 2:24-26, Ecclesiastes 3:9).&nbsp;</p>\n\n<blockquote>\n<p>Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones.</p>\n</blockquote>\n\n<p>So the next time we feel like we have to text back immediately or tweet before someone else does, consider:&nbsp;</p>\n\n<ul>\n\t<li>Am I putting others before myself right now?</li>\n\t<li>How can I love the people around me if I&rsquo;m not even paying attention to them?</li>\n\t<li>What if Jesus wants to speak through me, but I&rsquo;ve got my nose stuck in my phone?&nbsp;</li>\n</ul>\n\n<p>The world won&rsquo;t implode if we don&rsquo;t reply to every text or email immediately. And that Instagram picture doesn&rsquo;t need to go up ASAP. If it&rsquo;s already been a week between posts, what&rsquo;s a few more hours? We love everyone better &mdash; our friends to our coworkers to our social media followers &mdash; when we give them the gift of our full attention.&nbsp;</p>\n\n<p>I can almost hear Jesus saying, &ldquo;Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones&rdquo;&nbsp; (John 15:13).&nbsp;</p>\n\n<h3>Four Ways To Stay Away From Your Phone And Be Intentionally Present</h3>\n\n<p><a href='http://newspring.cc/christmas' target='_blank'>This holiday season</a>, we will have more opportunities to be around friends and family than usual. So let&rsquo;s make the most of each minute. The following are some tips can help us all be a little more present.&nbsp;&nbsp;</p>\n\n<ol>\n\t<li>Turn your phone off, leave it in the car, or put it in airplane mode. Habitual notification checks can take a break.</li>\n\t<li>Talk about something other than yourself. Ask someone else about their life (job, school, kids).</li>\n\t<li>Look for opportunities to encourage someone. Ask the Holy Spirit to speak through you and help you love people.</li>\n\t<li>Ask Jesus to keep your heart interested and engaged in what really matters. He wants to help!</li>\n</ol>\n\n<p>Intentionally taking advantage of time with loved ones sometimes does require sacrificing our own immediate desires or comforts, but that&rsquo;s what we are commanded to do (Philippians 2:3).&nbsp;</p>\n\n<p>Take pictures, but don&rsquo;t let the only memory be a digital one. The positive outcome of interactions should be more than Instagram likes. Unplug from social media, choose to be present, and you will be surprised at the good it does for your heart and the hearts of those around you.&nbsp;</p>"
++        }
++      </HTMLView>
++    </ScrollView>
++  ))
++  .add('isLoading', () => (
++    <ScrollView>
++      <HTMLView isLoading />
++    </ScrollView>
++  ));
+diff --git a/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js b/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js
+new file mode 100644
+index 0000000..a0eb6ec
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/HTMLView.tests.js
+@@ -0,0 +1,191 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import HTMLView from '.';
++
++describe('the HTMLView component', () => {
++  it('should render an H1', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h1>Testings</h1>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H2', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h2>Testings</h2>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H3', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h3>Testings</h3>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H4', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h4>Testings</h4>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H5', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h5>Testings</h5>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an H6', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<h6>Testings</h6>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a paragraph', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p>Testings</p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render italic text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p><em>Testings</em></p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render bold text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p><strong>Testings</strong></p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a block quote', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings</p><blockquote>Testings</blockquote>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a list', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<ul><li>Testings</li><li>Testings</li></ul>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a link', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings <a href="http://wwww.google.com">Google</a></p>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render handle relative links', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<p>Testings <a href="//google.com">Google</a></p>'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('strips out badly formatted links', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{"<p><a href='{page_536525}'>Bad link</a></p>"}</HTMLView>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render an image', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {'<img src="https://placeholdit.co/i/150x150?bg=eeeeee&fc=577084" />'}
++        </HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a line break (br)', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>{'<p>Testings</p><br>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a loading state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView isLoading />
++      </Providers>
++    );
++
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render example HTML', () => {
++    const tree = renderer.create(
++      <Providers>
++        <HTMLView>
++          {
++            "<p>I sat on my couch next to my high school <a href='https://newspringfuse.com/groups' target='_blank'>Fuse Group</a>, silently fuming at their inability to put their phones down during Bible study. Finally, I spoke up, teasing one of the girls in a tone that clearly said, &ldquo;I&rsquo;m not actually kidding.&rdquo;&nbsp;</p>\n\n<p>A few days later, I was in the car with my sister, and as I sat in the passenger seat responding to emails, I heard her laugh and say, &ldquo;You always mumble when you are typing. Stop doing that.&rdquo;&nbsp;</p>\n\n<p>&ldquo;Sorry,&rdquo; I responded. &ldquo;I just don&rsquo;t want people to think I&rsquo;m ignoring them when I&rsquo;m typing.&rdquo;</p>\n\n<p>But the truth is, I am ignoring them! In my head, this behavior is totally acceptable. I tell myself I&rsquo;m tending to my priorities in order, and in doing so, I send a message to the person in front of me that she is of lesser importance.</p>\n\n<blockquote>\n<p>My phone is the primary outlet that distracts me from people who need my attention.</p>\n</blockquote>\n\n<p>I quickly get frustrated when I am the one on the outside, but how often to I shut others out during my own social media binges or email frenzies? Just like my girls, I&rsquo;m learning that my phone is the primary outlet that distracts me from people who need my attention.</p>\n\n<h3>Why Being Present Matters</h3>\n\n<p>There is nothing wrong with using our phones &mdash; as long as we remember that the best investment we can make is to invest in our relationships with Jesus and each other. We were created for <a href='http://newspring.cc/community' target='_blank'>community</a> by God, who exists in community as Father, Son, and Holy Spirit (John 1:1-2, Genesis 2:18).&nbsp;</p>\n\n<p>Our phones help us stay connected, but they are not the foundation of all connection. If we&rsquo;re honest, our phones are much quicker to distract and disengage us from the people right in front of us.&nbsp;</p>\n\n<p>Jesus said loving God and loving others is greatest of all God&rsquo;s commandments (Matthew 22:38-40). And, after trying everything the world had to offer, King Solomon reminded his people that their relationships with God and others are the only things that really matter (Ecclesiastes 2:24-26, Ecclesiastes 3:9).&nbsp;</p>\n\n<blockquote>\n<p>Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones.</p>\n</blockquote>\n\n<p>So the next time we feel like we have to text back immediately or tweet before someone else does, consider:&nbsp;</p>\n\n<ul>\n\t<li>Am I putting others before myself right now?</li>\n\t<li>How can I love the people around me if I&rsquo;m not even paying attention to them?</li>\n\t<li>What if Jesus wants to speak through me, but I&rsquo;ve got my nose stuck in my phone?&nbsp;</li>\n</ul>\n\n<p>The world won&rsquo;t implode if we don&rsquo;t reply to every text or email immediately. And that Instagram picture doesn&rsquo;t need to go up ASAP. If it&rsquo;s already been a week between posts, what&rsquo;s a few more hours? We love everyone better &mdash; our friends to our coworkers to our social media followers &mdash; when we give them the gift of our full attention.&nbsp;</p>\n\n<p>I can almost hear Jesus saying, &ldquo;Greater love has no one than this: to lay down one&rsquo;s phone for one&rsquo;s loved ones&rdquo;&nbsp; (John 15:13).&nbsp;</p>\n\n<h3>Four Ways To Stay Away From Your Phone And Be Intentionally Present</h3>\n\n<p><a href='http://newspring.cc/christmas' target='_blank'>This holiday season</a>, we will have more opportunities to be around friends and family than usual. So let&rsquo;s make the most of each minute. The following are some tips can help us all be a little more present.&nbsp;&nbsp;</p>\n\n<ol>\n\t<li>Turn your phone off, leave it in the car, or put it in airplane mode. Habitual notification checks can take a break.</li>\n\t<li>Talk about something other than yourself. Ask someone else about their life (job, school, kids).</li>\n\t<li>Look for opportunities to encourage someone. Ask the Holy Spirit to speak through you and help you love people.</li>\n\t<li>Ask Jesus to keep your heart interested and engaged in what really matters. He wants to help!</li>\n</ol>\n\n<p>Intentionally taking advantage of time with loved ones sometimes does require sacrificing our own immediate desires or comforts, but that&rsquo;s what we are commanded to do (Philippians 2:3).&nbsp;</p>\n\n<p>Take pictures, but don&rsquo;t let the only memory be a digital one. The positive outcome of interactions should be more than Instagram likes. Unplug from social media, choose to be present, and you will be surprised at the good it does for your heart and the hearts of those around you.</p>"
++          }
++        </HTMLView>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should accept an alternative render', () => {
++    const testRenderer = jest.fn();
++    renderer.create(
++      <Providers>
++        <HTMLView renderer={testRenderer}>{'<p>Testings</p>'}</HTMLView>
++      </Providers>
++    );
++
++    expect(testRenderer).toBeCalled();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js b/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js
+new file mode 100644
+index 0000000..b8af60c
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/defaultRenderer.js
+@@ -0,0 +1,128 @@
++import React, { Children } from 'react';
++import { Text, Linking } from 'react-native';
++import { decodeHTML } from 'entities';
++
++import {
++  BodyText,
++  H1,
++  H2,
++  H3,
++  H4,
++  H5,
++  H6,
++  Paragraph,
++  BlockQuote,
++  BulletListItem,
++  ButtonLink,
++  ConnectedImage,
++} from '@apollosproject/ui-kit';
++
++const LINE_BREAK = '\n';
++const TEXT_TYPES_THAT_SHOULD_WRAP = [Text, BodyText, ButtonLink];
++
++export const wrapTextChildren = (children, Component = BodyText) => {
++  const newChildren = [];
++  let currentTextChildren = [];
++  Children.toArray(children).forEach((child, i) => {
++    if (TEXT_TYPES_THAT_SHOULD_WRAP.includes(child.type)) {
++      currentTextChildren.push(child);
++    } else {
++      if (currentTextChildren.length) {
++        newChildren.push(
++          // eslint-disable-next-line
++          <Component key={`composed-children-${i}`}>
++            {currentTextChildren}
++          </Component>
++        );
++        currentTextChildren = [];
++      }
++      newChildren.push(child);
++    }
++  });
++  if (currentTextChildren.length) {
++    newChildren.push(
++      <Component key="composed-children">{currentTextChildren}</Component>
++    );
++  }
++  return newChildren;
++};
++
++const defaultRenderer = (node, { children }) => {
++  if (node.type === 'text' && node.data && node.data.trim()) {
++    const text = decodeHTML(node.data);
++    if (!node.parent) {
++      return (
++        <Paragraph>
++          <BodyText>{text}</BodyText>
++        </Paragraph>
++      );
++    }
++    return <Text>{text}</Text>;
++  }
++
++  switch (node.name) {
++    case 'p':
++      return <Paragraph>{wrapTextChildren(children)}</Paragraph>;
++    case 'strong':
++      return <BodyText bold>{children}</BodyText>;
++    case 'em':
++      return <BodyText italic>{children}</BodyText>;
++    case 'blockquote':
++      return <BlockQuote>{wrapTextChildren(children, Text)}</BlockQuote>;
++    case 'h1':
++      return <H1 padded>{wrapTextChildren(children, Text)}</H1>;
++    case 'h2':
++      return <H2 padded>{wrapTextChildren(children, Text)}</H2>;
++    case 'h3':
++      return <H3 padded>{wrapTextChildren(children, Text)}</H3>;
++    case 'h4':
++      return <H4 padded>{wrapTextChildren(children, Text)}</H4>;
++    case 'h5':
++      return <H5 padded>{wrapTextChildren(children, Text)}</H5>;
++    case 'h6':
++      return <H6 padded>{wrapTextChildren(children, Text)}</H6>;
++    case 'ul':
++      return <Paragraph>{children}</Paragraph>;
++    case 'li':
++      return <BulletListItem>{wrapTextChildren(children)}</BulletListItem>;
++    case 'a': {
++      let url = node.attribs && node.attribs.href;
++      url = decodeHTML(url);
++
++      if (url && url.startsWith('//')) {
++        url = `http:${url}`;
++      }
++      if (!url.startsWith('http')) {
++        // we can't currently handle non web-links, so just return regular text instead:
++        return children;
++      }
++      const onPress = () => Linking.openURL(url);
++      if (url) {
++        return <ButtonLink onPress={onPress}>{children}</ButtonLink>;
++      }
++    }
++    /* ignoring fallthrough on the next line because of the conditional return above,
++     * so we handle the edge-case of an <a> tag used w/o a href
++     */
++    case 'img': {
++      const source = {
++        url: node.attribs.src,
++      };
++
++      const imgStyles = {
++        resizeMode: 'contain',
++        width: '100%',
++      };
++
++      return (
++        <ConnectedImage maintainAspectRatio source={source} style={imgStyles} />
++      );
++    }
++    case 'br':
++      return <BodyText>{LINE_BREAK}</BodyText>;
++    default:
++      return children;
++  }
++};
++
++export default defaultRenderer;
+diff --git a/apolloschurchapp/src/ui/HTMLView/index.js b/apolloschurchapp/src/ui/HTMLView/index.js
+new file mode 100644
+index 0000000..5873b74
+--- /dev/null
++++ b/apolloschurchapp/src/ui/HTMLView/index.js
+@@ -0,0 +1,75 @@
++import React, { PureComponent, cloneElement } from 'react';
++import PropTypes from 'prop-types';
++import { View } from 'react-native';
++import { Parser, DomHandler } from 'htmlparser2';
++
++import { Paragraph as ParagraphPlaceholder } from '@apollosproject/ui-kit';
++
++import defaultRenderer from './defaultRenderer';
++
++class HTMLView extends PureComponent {
++  static propTypes = {
++    children: PropTypes.string,
++    renderer: PropTypes.func,
++    isLoading: PropTypes.bool,
++  };
++
++  static defaultProps = {
++    renderer: defaultRenderer,
++  };
++
++  constructor(...args) {
++    super(...args);
++    this.parser = new Parser(
++      new DomHandler(
++        (err, dom) => {
++          this.parsed = this.renderDom(dom);
++        },
++        { normalizeWhitespace: true }
++      )
++    );
++    if (this.props.children) this.parse(this.props.children);
++  }
++
++  componentWillUpdate(props) {
++    this.parse(props.children);
++  }
++
++  parse(html = '') {
++    this.parser.write(html);
++    this.parser.done();
++  }
++
++  renderDom(dom) {
++    return dom
++      .map((node, index) => {
++        let children = [];
++        if (node.children) children = this.renderDom(node.children);
++
++        let renderedNode = this.props.renderer(node, { children });
++        if (
++          !renderedNode &&
++          renderedNode !== null &&
++          this.props.renderer !== defaultRenderer
++        ) {
++          renderedNode = defaultRenderer(node, { children });
++        }
++
++        if (renderedNode && !Array.isArray(renderedNode)) {
++          renderedNode = cloneElement(renderedNode, { key: index });
++        }
++        return renderedNode;
++      })
++      .filter((e) => e !== undefined);
++  }
++
++  render() {
++    return (
++      <ParagraphPlaceholder lineNumber={8} onReady={!this.props.isLoading}>
++        <View>{this.parsed}</View>
++      </ParagraphPlaceholder>
++    );
++  }
++}
++
++export default HTMLView;
+diff --git a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js b/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
+deleted file mode 100644
+index d304b28..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
++++ /dev/null
+@@ -1,6 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Onboarding from '.';
+-
+-storiesOf('Onboarding', module).add('Example', () => <Onboarding />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
+deleted file mode 100644
+index 778c381..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Slide from '.';
+-
+-storiesOf('Onboarding/Slide', module)
+-  .add('default', () => (
+-    <Slide>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Navigation', () => (
+-    <Slide onPressPrimary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavText', () => (
+-    <Slide onPressPrimary={() => {}} primaryNavText={'Custom button text'}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavIcon', () => (
+-    <Slide
+-      onPressPrimary={() => {}}
+-      primaryNavText={'Custom icon'}
+-      primaryNavIcon={'umbrella'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Skip Button', () => (
+-    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Skip Button', () => (
+-    <Slide
+-      onPressPrimary={() => {}}
+-      onPressSecondary={() => {}}
+-      secondaryNavText={'Custom skip button'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('hidePrimaryNav', () => (
+-    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}} hidePrimaryNav>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
+deleted file mode 100644
+index 30af59d..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
++++ /dev/null
+@@ -1,92 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import Slide from '.';
+-
+-describe('The Onboarding Slide component', () => {
+-  it('should render children', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding next button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} primaryNavText={'Custom nav text'}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with a custom icon', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          primaryNavText={'Custom nav text with custom icon'}
+-          primaryNavIcon={'umbrella'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} onPressSecondary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          onPressSecondary={jest.fn()}
+-          secondaryNavText={'Custom skip button text'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should hide onboarding primary navigation button', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          onPressSecondary={jest.fn()}
+-          hidePrimaryNav
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/index.js b/apolloschurchapp/src/ui/Onboarding/Slide/index.js
+deleted file mode 100644
+index 764e4ac..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/index.js
++++ /dev/null
+@@ -1,92 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  FlexedView,
+-  PaddedView,
+-  H5,
+-  ButtonLink,
+-  Button,
+-  Icon,
+-} from '@apollosproject/ui-kit';
+-
+-const NavWrapper = styled(({ theme }) => ({
+-  flexDirection: 'row-reverse', // reversed so the primary action is always on the right
+-  alignItems: 'center', // centers optional back button with dots/next button
+-  justifyContent: 'space-between',
+-  marginBottom: theme.sizing.baseUnit * 0.5, // centers nav/button with pager dots
+-}))(PaddedView);
+-
+-const PrimaryNavIcon = withTheme(({ theme }) => ({
+-  size: theme.helpers.rem(1.25),
+-  style: {
+-    marginLeft: theme.sizing.baseUnit * 0.5,
+-    marginRight: theme.sizing.baseUnit * -0.5,
+-  },
+-}))(Icon);
+-
+-const SkipButton = styled(({ theme }) => ({
+-  color: theme.colors.text.tertiary, // this is probably not the right color
+-  paddingVertical: theme.sizing.baseUnit * 0.9375, // optically centered on typographic baseline
+-  paddingHorizontal: theme.sizing.baseUnit, // improves tappability
+-  marginLeft: theme.sizing.baseUnit * -1, // adjusts for paddingHorizontal
+-}))(ButtonLink);
+-
+-// memo = sfc PureComponent 💥
+-const Slide = memo(
+-  ({
+-    children,
+-    onPressPrimary,
+-    onPressSecondary,
+-    primaryNavText,
+-    primaryNavIcon,
+-    hidePrimaryNav,
+-    secondaryNavText,
+-  }) => (
+-    <>
+-      <FlexedView>
+-        <PaddedView>{children}</PaddedView>
+-      </FlexedView>
+-      {onPressPrimary ? (
+-        <NavWrapper vertical={false}>
+-          {!hidePrimaryNav ? (
+-            <Button onPress={onPressPrimary}>
+-              <>
+-                <H5>{primaryNavText}</H5>
+-                <PrimaryNavIcon name={primaryNavIcon} />
+-              </>
+-            </Button>
+-          ) : null}
+-          {onPressSecondary ? (
+-            <SkipButton onPress={onPressSecondary}>
+-              {secondaryNavText}
+-            </SkipButton>
+-          ) : null}
+-        </NavWrapper>
+-      ) : null}
+-    </>
+-  )
+-);
+-
+-Slide.propTypes = {
+-  children: PropTypes.oneOfType([
+-    PropTypes.arrayOf(PropTypes.node),
+-    PropTypes.node,
+-  ]),
+-  onPressPrimary: PropTypes.func,
+-  onPressSecondary: PropTypes.func,
+-  primaryNavText: PropTypes.string, // colored button text
+-  primaryNavIcon: PropTypes.string, // optional custom icon name
+-  hidePrimaryNav: PropTypes.bool, // optionally only show the secondary nav text
+-  secondaryNavText: PropTypes.string, // text link
+-};
+-
+-Slide.defaultProps = {
+-  primaryNavText: 'Next',
+-  primaryNavIcon: 'arrow-next',
+-  secondaryNavText: 'Skip',
+-};
+-
+-export default Slide;
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+deleted file mode 100644
+index 35bf0eb..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ /dev/null
+@@ -1,93 +0,0 @@
+-import React, { Component } from 'react';
+-import { Text } from 'react-native';
+-// import PropTypes from 'prop-types';
+-import Swiper from 'react-native-swiper';
+-import {
+-  withTheme,
+-  styled,
+-  BackgroundView,
+-  FlexedView,
+-} from '@apollosproject/ui-kit';
+-
+-import { AskName } from './slides';
+-
+-// Provides themed colors to Swiper dots
+-const ThemedSwiper = withTheme(({ theme }) => ({
+-  dotColor: theme.colors.background.inactive, // theme.colors.lightSecondary looks the best.
+-  activeDotColor: theme.colors.action.primary,
+-}))(({ swiperRef, ...props }) => <Swiper ref={swiperRef} {...props} />);
+-
+-const Boom = styled(({ bgcolor }) => ({
+-  backgroundColor: bgcolor,
+-}))(FlexedView);
+-
+-class Onboarding extends Component {
+-  constructor() {
+-    super();
+-
+-    this.swiper = null;
+-    this.state = { pagination: true };
+-  }
+-
+-  handleOnIndexChanged = (index) => {
+-    this.currentIndex = index;
+-
+-    this.togglePagination();
+-
+-    return this.currentIndex;
+-  };
+-
+-  togglePagination = () => {
+-    if (this.currentIndex === 2 || this.state.pagination === false) {
+-      this.setState((state) => ({
+-        pagination: !state.pagination,
+-      }));
+-    }
+-  };
+-
+-  // Creates ref to Swiper to be passed as a prop to children.
+-  setSwiperRef = (r) => {
+-    this.swiper = r;
+-
+-    return this.swiper;
+-  };
+-
+-  // Advance swiper 1 slide. See Swiper documentation for scrollBy details. https://github.com/leecade/react-native-swiper#methods
+-  handleOnPressPrimary = () => this.swiper.scrollBy(1);
+-
+-  render() {
+-    return (
+-      <BackgroundView>
+-        <ThemedSwiper
+-          showsPagination={this.state.pagination}
+-          onIndexChanged={this.handleOnIndexChanged}
+-          loop={false}
+-          /* Disables swipe gestures. We currently we don't display a back button so this is our
+-           * only back navigation option. */
+-          // scrollEnabled={false}
+-          showsButtons={false}
+-          swiperRef={this.setSwiperRef}
+-        >
+-          <AskName onPressPrimary={this.handleOnPressPrimary} />
+-          <Boom bgcolor={'salmon'}>
+-            <Text>Hello World 1</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-          <Boom bgcolor={'lightgreen'}>
+-            <Text>Hello World 2</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-          <Boom bgcolor={'lightyellow'}>
+-            <Text>No pager!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-        </ThemedSwiper>
+-      </BackgroundView>
+-    );
+-  }
+-}
+-
+-export default Onboarding;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
+deleted file mode 100644
+index bbf5b5f..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
++++ /dev/null
+@@ -1,10 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import AskName from '.';
+-
+-storiesOf('Onboarding/slides/AskName', module)
+-  .add('default', () => <AskName />)
+-  .add('slideTitle', () => <AskName slideTitle={'Custom title text'} />)
+-  .add('description', () => <AskName description={'Custom description text'} />)
+-  .add('SlideWrapper props', () => <AskName onboardingScrollBy={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
+deleted file mode 100644
+index 78bfc2b..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
++++ /dev/null
+@@ -1,41 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import AskName from '.';
+-
+-describe('The Onboarding SlideWrapper component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName slideTitle={'Custom title text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName description={'Custom description text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to SlideWrapper', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName onPressPrimary={jest.fn()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
+deleted file mode 100644
+index 006d5d8..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
++++ /dev/null
+@@ -1,72 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  H2,
+-  H5,
+-  TextInput,
+-  Icon,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const BrandIcon = withTheme(({ theme }) => ({
+-  name: 'brand-icon',
+-  size: theme.sizing.baseUnit * 3.0,
+-  fill: theme.colors.primary,
+-  style: { marginBottom: theme.sizing.baseUnit * 0.5 },
+-}))(Icon);
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-}))(H2);
+-
+-const StyledH5 = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-}))(H5);
+-
+-// memo = sfc PureComponent 💥
+-const AskName = memo(({ slideTitle, description, ...props }) => {
+-  let LastNameInput = null;
+-
+-  return (
+-    <Slide {...props}>
+-      <BrandIcon />
+-      <Title>{slideTitle}</Title>
+-      <StyledH5>{description}</StyledH5>
+-      <TextInput
+-        label="First Name"
+-        type="text"
+-        returnKeyType="next"
+-        onSubmitEditing={() => LastNameInput.focus()}
+-        enzblesReturnKeyAutomatically
+-      />
+-      <TextInput
+-        label="Last Name"
+-        type="text"
+-        returnKeyType="next"
+-        enablesReturnKeyAutomatically
+-        inputRef={(r) => {
+-          LastNameInput = r;
+-        }}
+-      />
+-    </Slide>
+-  );
+-});
+-
+-AskName.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-};
+-
+-AskName.defaultProps = {
+-  slideTitle: 'Welcome!',
+-  description: "Every relationship starts with a name. What's yours?",
+-};
+-
+-export default AskName;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/index.js b/apolloschurchapp/src/ui/Onboarding/slides/index.js
+deleted file mode 100644
+index 4114394..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export AskName from './AskName';
+diff --git a/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js b/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
+index 507c90b..fb6a93d 100644
+--- a/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
++++ b/apolloschurchapp/src/ui/Scripture/ScriptureHTMLView.js
+@@ -3,10 +3,10 @@ import { withProps } from 'recompose';
+ import { Platform } from 'react-native';
+ 
+ import { Paragraph, H4 } from '@apollosproject/ui-kit';
+-import HTMLView, {
+-  defaultRenderer,
++import HTMLView from 'apolloschurchapp/src/ui/HTMLView';
++import defaultRenderer, {
+   wrapTextChildren,
+-} from '@apollosproject/ui-htmlview';
++} from 'apolloschurchapp/src/ui/HTMLView/defaultRenderer';
+ 
+ import {
+   ScriptureText,
+diff --git a/apolloschurchapp/src/user-settings/ChangePassword.js b/apolloschurchapp/src/user-settings/ChangePassword.js
+index 6f5f027..4b5bdf3 100644
+--- a/apolloschurchapp/src/user-settings/ChangePassword.js
++++ b/apolloschurchapp/src/user-settings/ChangePassword.js
+@@ -67,7 +67,7 @@ class ChangePassword extends PureComponent {
+       <SafeAreaView>
+         <PaddedView>
+           <Button
+-            disabled={props.isSubmitting}
++            disabled={!props.isValid || props.isSubmitting}
+             onPress={props.handleSubmit}
+             title="Save"
+             loading={props.isSubmitting}
+diff --git a/apolloschurchapp/src/user-web-browser/Provider.js b/apolloschurchapp/src/user-web-browser/Provider.js
+deleted file mode 100644
+index e620207..0000000
+--- a/apolloschurchapp/src/user-web-browser/Provider.js
++++ /dev/null
+@@ -1,12 +0,0 @@
+-import { createContext } from 'react';
+-import NavigationService from '../NavigationService';
+-
+-// Can can either call the OpenUserWebView function directly, or call it using the Consuemer.
+-// Your choice.
+-export const OpenUserWebView = ({ url }) =>
+-  NavigationService.navigate('UserWebBrowser', { url });
+-
+-const { Provider, Consumer } = createContext(OpenUserWebView);
+-
+-export { Provider as UserWebBrowserProvider };
+-export { Consumer as UserWebBrowserConsumer };
+diff --git a/apolloschurchapp/src/user-web-browser/index.js b/apolloschurchapp/src/user-web-browser/index.js
+deleted file mode 100644
+index d830fe5..0000000
+--- a/apolloschurchapp/src/user-web-browser/index.js
++++ /dev/null
+@@ -1,67 +0,0 @@
+-// Provider API for WebBrowser that injects theme values and defaults to the web browser:
+-// import { Platform } from 'react-native';
+-import React from 'react';
+-import gql from 'graphql-tag';
+-import { Query } from 'react-apollo';
+-import { ModalView } from '@apollosproject/ui-kit';
+-import { WebView } from 'react-native-webview';
+-import PropTypes from 'prop-types';
+-import { get } from 'lodash';
+-
+-const Browser = ({ url, cookie = '', modal, navigation }) => {
+-  console.warn(cookie);
+-  if (modal) {
+-    return (
+-      <ModalView navigation={navigation}>
+-        <WebView source={{ uri: url, headers: { Cookie: cookie } }} />
+-      </ModalView>
+-    );
+-  }
+-  return <WebView source={{ uri: url, headers: { Cookie: cookie } }} />;
+-};
+-
+-Browser.propTypes = {
+-  url: PropTypes.string.isRequired,
+-  cookie: PropTypes.string,
+-  modal: PropTypes.bool.isRequired,
+-};
+-
+-const WITH_USER_COOKIE = gql`
+-  query currentUserCookie {
+-    currentUser {
+-      id
+-      rockToken
+-    }
+-  }
+-`;
+-
+-const BrowserWithUserCookie = ({ url, navigation, modal = true }) => {
+-  // get the url from the navigation param or default to the url prop;
+-  const uri = navigation.getParam('url', url);
+-  return (
+-    <Query query={WITH_USER_COOKIE}>
+-      {({ data, loading }) => {
+-        if (loading) {
+-          return null;
+-        }
+-        const cookie = get(data, 'currentUser.rockToken', '');
+-        return (
+-          <Browser
+-            cookie={cookie}
+-            url={uri}
+-            modal={modal}
+-            navigation={navigation}
+-          />
+-        );
+-      }}
+-    </Query>
+-  );
+-};
+-
+-BrowserWithUserCookie.propTypes = {
+-  url: PropTypes.string,
+-  modal: PropTypes.bool,
+-};
+-
+-export default BrowserWithUserCookie;
+-export { UserWebBrowserProvider, UserWebBrowserConsumer } from './Provider';
