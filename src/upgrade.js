@@ -5,7 +5,7 @@ const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
 
-const logger = { info: console.log, error: console.error, warn: console.warn}
+const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
 const rnDiffPurgeUrl =
   'https://github.com/ApollosProject/apollos-upgrade';
@@ -16,9 +16,10 @@ const getPatch = async (currentVersion, newVersion, config) => {
   logger.info(`Fetching diff between v${currentVersion} and v${newVersion}...`);
 
   try {
-    patch = await fetch(
-      `${rnDiffPurgeUrl}/compare/version/${currentVersion}...version/${newVersion}.diff`
+    const patchResponse = await fetch(
+      `${rnDiffPurgeUrl}/compare/release/${currentVersion}...release/${newVersion}.diff`
     );
+    patch = await patchResponse.text();
   } catch (error) {
     logger.error(
       `Failed to fetch diff for react-native@${newVersion}. Maybe it's not released yet?`
@@ -178,6 +179,7 @@ const applyPatch = async (
       ]);
     }
   } catch (error) {
+    console.log(error)
     if (error.stderr) {
       logger.log(`${chalk.dim(error.stderr.trim())}`);
     }
@@ -216,12 +218,14 @@ async function upgrade() {
 
   try {
     fs.writeFileSync(tmpPatchFile, patch);
+    console.log(tmpPatchFile);
     patchSuccess = await applyPatch(currentVersion, newVersion, tmpPatchFile);
   } catch (error) {
+    console.log(error, 'HERE PATCH ERROR');
     throw new Error(error.stderr || error);
   } finally {
     try {
-      fs.unlinkSync(tmpPatchFile);
+      // fs.unlinkSync(tmpPatchFile);
     } catch (e) {
       // ignore
     }
