@@ -1,37 +1,14 @@
+const path = require('path');
+const fs = require('fs');
+const chalk = require('chalk');
+const semver = require('semver');
+const execa = require('execa');
+const fetch = require('node-fetch');
 
-import path from 'path';
-import fs from 'fs';
-import chalk from 'chalk';
-import semver from 'semver';
-import execa from 'execa';
-import { logger } from '@react-native-community/cli-tools';
-import * as PackageManager from '../../tools/packageManager';
-import { fetch } from '../../tools/fetch';
-import legacyUpgrade from './legacyUpgrade';
+const logger = { info: console.log, error: console.error, warn: console.warn}
 
 const rnDiffPurgeUrl =
-  'https://github.com/react-native-community/rn-diff-purge';
-
-const getLatestRNVersion = async (): Promise<string> => {
-  logger.info('No version passed. Fetching latest...');
-  // $FlowFixMe - this is public API
-  const { stdout } = await execa('npm', ['info', 'react-native', 'version']);
-  return stdout;
-};
-
-const getRNPeerDeps = async (
-  version: string
-): Promise<{ [key: string]: string }> => {
-  // $FlowFixMe - this is public API
-  const { stdout } = await execa('npm', [
-    'info',
-    `react-native@${version}`,
-    'peerDependencies',
-    '--json',
-  ]);
-
-  return JSON.parse(stdout);
-};
+  'https://github.com/ApollosProject/apollos-upgrade';
 
 const getPatch = async (currentVersion, newVersion, config) => {
   let patch;
@@ -61,19 +38,16 @@ const getPatch = async (currentVersion, newVersion, config) => {
     if (platform === 'ios') {
       patchWithRenamedProjects = patchWithRenamedProjects.replace(
         new RegExp('RnDiffApp', 'g'),
-        // $FlowFixMe - poor typings of ProjectConfigIOST
         config.project[platform].projectName.replace('.xcodeproj', '')
       );
     } else if (platform === 'android') {
       patchWithRenamedProjects = patchWithRenamedProjects
         .replace(
           new RegExp('com\\.rndiffapp', 'g'),
-          // $FlowFixMe - poor typings of ProjectConfigAndroidT
           config.project[platform].packageName
         )
         .replace(
           new RegExp('com\\.rndiffapp'.split('.').join('/'), 'g'),
-          // $FlowFixMe - poor typings of ProjectConfigAndroidT
           config.project[platform].packageName.split('.').join('/')
         );
     } else {
@@ -128,37 +102,37 @@ const getVersionToUpgradeTo = async (argv, currentVersion, projectDir) => {
 };
 
 const installDeps = async (newVersion, projectDir) => {
-  logger.info(
-    `Installing "react-native@${newVersion}" and its peer dependencies...`
-  );
-  const peerDeps = await getRNPeerDeps(newVersion);
-  const deps = [
-    `react-native@${newVersion}`,
-    ...Object.keys(peerDeps).map((module) => `${module}@${peerDeps[module]}`),
-  ];
-  await PackageManager.install(deps, {
-    silent: true,
-  });
-  await execa('git', ['add', 'package.json']);
-  try {
-    await execa('git', ['add', 'yarn.lock']);
-  } catch (error) {
-    // ignore
-  }
-  try {
-    await execa('git', ['add', 'package-lock.json']);
-  } catch (error) {
-    // ignore
-  }
+  // logger.info(
+  //   `Installing "react-native@${newVersion}" and its peer dependencies...`
+  // );
+  // const peerDeps = await getRNPeerDeps(newVersion);
+  // const deps = [
+  //   `react-native@${newVersion}`,
+  //   ...Object.keys(peerDeps).map((module) => `${module}@${peerDeps[module]}`),
+  // ];
+  // await PackageManager.install(deps, {
+  //   silent: true,
+  // });
+  // await execa('git', ['add', 'package.json']);
+  // try {
+  //   await execa('git', ['add', 'yarn.lock']);
+  // } catch (error) {
+  //   // ignore
+  // }
+  // try {
+  //   await execa('git', ['add', 'package-lock.json']);
+  // } catch (error) {
+  //   // ignore
+  // }
 };
 
 const applyPatch = async (
-  currentVersion: string,
-  newVersion: string,
-  tmpPatchFile: string
+  currentVersion,
+  newVersion,
+  tmpPatchFile,
 ) => {
   let filesToExclude = ['package.json'];
-  // $FlowFixMe ThenableChildProcess is incompatible with Promise
+
   const { stdout: relativePathFromRoot } = await execa('git', [
     'rev-parse',
     '--show-prefix',
@@ -217,20 +191,14 @@ const applyPatch = async (
  * Upgrade application to a new version of React Native.
  */
 async function upgrade() {
-  if (args.legacy) {
-    return legacyUpgrade.func(argv, ctx);
-  }
   const tmpPatchFile = 'tmp-upgrade-rn.patch';
-  const projectDir = ctx.root;
-  const { version: currentVersion } = require(path.join(
-    projectDir,
-    'node_modules/react-native/package.json'
-  ));
+  const projectDir = '.';
 
-  const newVersion 'v0.8.1'
+  const currentVersion = '0.8.0';
+  const newVersion = '0.8.1';
 
 
-  const patch = await getPatch(currentVersion, newVersion);
+  const patch = await getPatch(currentVersion, newVersion, { project: {}});
 
   if (patch === null) {
     return;
@@ -240,7 +208,7 @@ async function upgrade() {
     logger.info('Diff has no changes to apply, proceeding further');
     await installDeps(newVersion, projectDir);
     logger.success(
-      `Upgraded React Native to v${newVersion} 🎉. Now you can review and commit the changes`
+      `Upgraded Apollo to v${newVersion} 🎉. Now you can review and commit the changes`
     );
     return;
   }
@@ -316,4 +284,5 @@ const upgradeCommand = {
     },
   ],
 };
-export default upgradeCommand;
+
+module.exports = upgradeCommand;
