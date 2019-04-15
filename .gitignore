@@ -87,4 +87,7 @@ storyLoader.js
 
 **/lib
 
+# Snapshots
+*.snap
+
 .watchmanconfig
