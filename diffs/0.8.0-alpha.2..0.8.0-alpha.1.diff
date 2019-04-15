@@ -1,0 +1,69 @@
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index f50748c..a2c9cad 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0-alpha.2",
++  "version": "0.8.0-alpha.1",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -28,16 +28,16 @@
+     "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-bible": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-people": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-rock-auth": "^0.8.0-alpha.2",
+-    "@apollosproject/data-connector-rock-content": "^0.8.0-alpha.2",
+-    "@apollosproject/rock-apollo-data-source": "^0.8.0-alpha.2",
+-    "@apollosproject/server-core": "^0.8.0-alpha.2",
++    "@apollosproject/config": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-bible": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-people": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-rock-auth": "^0.8.0-alpha.1",
++    "@apollosproject/data-connector-rock-content": "^0.8.0-alpha.1",
++    "@apollosproject/rock-apollo-data-source": "^0.8.0-alpha.1",
++    "@apollosproject/server-core": "^0.8.0-alpha.1",
+     "apollo-datasource-rest": "0.1.1",
+     "apollo-server": "^2.0.5",
+     "casual": "1.5.19",
+@@ -54,7 +54,7 @@
+     "with-query": "1.0.2"
+   },
+   "devDependencies": {
+-    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.2",
++    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.1",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index d992510..597948a 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.0-alpha.2",
++  "version": "0.8.0-alpha.1",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -62,7 +62,7 @@
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.8.0-alpha.2",
++    "@apollosproject/ui-kit": "^0.8.0-alpha.1",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
