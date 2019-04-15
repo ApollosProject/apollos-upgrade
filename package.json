@@ -1,0 +1,23 @@
+{
+  "name": "@apollosproject/upgrade-tools",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "get-stdin": "^6.0.0",
+    "markdown-table": "^1.1.2",
+    "markdown-to-html": "^0.0.13",
+    "ramda": "^0.26.1",
+    "semver": "^6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}
+
+
