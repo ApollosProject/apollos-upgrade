@@ -54,7 +54,6 @@ function generateNewReleaseBranch () {
     unzip ApollosProject.zip
     mv apollos-prototype-*/packages/"$AppName" .
     mv apollos-prototype-*/packages/"$ApiName" .
-    mv apollos-prototype-*/.gitignore .
 
     # commit and push branch
     git add "$AppName"
