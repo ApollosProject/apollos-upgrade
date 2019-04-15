@@ -13,9 +13,10 @@ See table below for the complete list.
 
 ## Diff table
 
-| From->To | R   | E   | A   | C   | T   |     | N   | A   | T   | I   | V   | E   |
-| -------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0.6.0    | X   |     |     |     |     |     |     |     |     |     |     |     |
+| From->To | T                                                                                                 | H   | I   | S   |     | I   | S   |     | C   | O   | O   | L   |
+| -------- | ------------------------------------------------------------------------------------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.6.1    | X                                                                                                 | -   |     |     |     |     |     |     |     |     |     |     |
+| 0.6.0    | [->0.6.1](https://github.com/ApollosProject/apollos-upgrade/compare/release/0.6.0..release/0.6.1) | X   |     |     |     |     |     |     |     |     |     |     |
 
 ## To see the full table containing all releases, check back soon :)
 
