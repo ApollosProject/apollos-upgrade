@@ -153,14 +153,14 @@ guardExisting
 
 prepare
 generateNewReleaseBranch
-addReleaseToList
-generateDiffs
+# addReleaseToList
+# generateDiffs
 
-generateTable
-generateReadme
+# generateTable
+# generateReadme
 
-generateBigTable
-generateGHPages
+# generateBigTable
+# generateGHPages
 
-cleanUp
-pushMaster
+# cleanUp
+# pushMaster
