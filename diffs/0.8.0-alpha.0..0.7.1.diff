@@ -1,0 +1,785 @@
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 0ff084f..6745712 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -52,12 +52,6 @@ ROCK_MAPPINGS:
+   DEVOTIONAL_TYPE_IDS:
+     - 1
+ 
+-  # The apollos app will use the content channel types as "Content Series" types. A Content Series
+-  # is any content item that represents a series of content - Sermon Series, Devotional Series, Podcast Series etc
+-  SERIES_CONTENT_CHANNEL_TYPE_IDS:
+-    - 6
+-    - 7
+-
+ # Default mapping of field types -> ids. There's probably no reason to edit this.
+ ROCK_CONSTANTS:
+   TEXT: 1
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index a909d9e..a67f89a 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0-alpha.0",
++  "version": "0.7.1",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -28,14 +28,14 @@
+     "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0-alpha.0",
+-    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.0",
+-    "@apollosproject/data-connector-bible": "^0.8.0-alpha.0",
+-    "@apollosproject/data-connector-people": "^0.8.0-alpha.0",
+-    "@apollosproject/data-connector-rock-auth": "^0.8.0-alpha.0",
+-    "@apollosproject/data-connector-rock-content": "^0.8.0-alpha.0",
+-    "@apollosproject/rock-apollo-data-source": "^0.8.0-alpha.0",
+-    "@apollosproject/server-core": "^0.8.0-alpha.0",
++    "@apollosproject/config": "^0.7.1",
++    "@apollosproject/data-connector-analytics": "^0.7.1",
++    "@apollosproject/data-connector-bible": "^0.7.1",
++    "@apollosproject/data-connector-people": "^0.7.1",
++    "@apollosproject/data-connector-rock-auth": "^0.7.1",
++    "@apollosproject/data-connector-rock-content": "^0.7.1",
++    "@apollosproject/rock-apollo-data-source": "^0.7.1",
++    "@apollosproject/server-core": "^0.7.1",
+     "apollo-datasource-rest": "0.1.1",
+     "apollo-server": "^2.0.5",
+     "casual": "1.5.19",
+@@ -46,7 +46,6 @@
+     "graphql": "0.13.2",
+     "isomorphic-fetch": "2.2.1",
+     "lodash": "4.17.10",
+-    "natural": "^0.6.2",
+     "prettier": "1.12.1",
+     "randomcolor": "0.5.3",
+     "sanitize-html": "1.18.2",
+@@ -54,7 +53,7 @@
+     "with-query": "1.0.2"
+   },
+   "devDependencies": {
+-    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.0",
++    "@apollosproject/babel-preset-apollos": "^0.7.1",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 93e97f9..ef59907 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -39,12 +39,6 @@ const data = {
+   DevotionalContentItem: {
+     dataSource: ContentItem.dataSource,
+   }, // alias
+-  ContentSeriesContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+-  MediaContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+ };
+ 
+ const { dataSources, resolvers, schema, context } = createApolloServerConfig(
+diff --git a/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js b/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js
+index c961a9a..52448a3 100644
+--- a/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js
++++ b/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js
+@@ -14,9 +14,6 @@ ApollosConfig.loadJs({
+     API_TOKEN: 'some-rock-token',
+     IMAGE_URL: 'https://apollosrock.newspring.cc/GetImage.ashx',
+   },
+-  ROCK_MAPPINGS: {
+-    SERIES_CONTENT_CHANNEL_TYPE_IDS: [6, 7],
+-  },
+ });
+ 
+ describe('Interactions', () => {
+diff --git a/apollos-church-api/src/data/interactions/data-source.js b/apollos-church-api/src/data/interactions/data-source.js
+index 3bc6411..9729abe 100644
+--- a/apollos-church-api/src/data/interactions/data-source.js
++++ b/apollos-church-api/src/data/interactions/data-source.js
+@@ -24,31 +24,7 @@ export default class Interactions extends RockApolloDataSource {
+     return this.get(`/Interactions/${interactionId}`);
+   }
+ 
+-  async getCountByOperationForContentItem({ contentItemId, operation }) {
+-    const { dataSources } = this.context;
+-    const contentItemType = await dataSources.RockConstants.modelTypeId(
+-      'ContentItem'
+-    );
+-    try {
+-      return (await this.request('Interactions')
+-        .filter(
+-          // eslint-disable-next-line prettier/prettier
+-          `(RelatedEntityId eq ${contentItemId}) and (Operation eq '${operation}') and (RelatedEntityTypeId eq ${
+-            contentItemType.id
+-          })`
+-        )
+-        .select('Id') // $count not supported, next best thing to make efficient
+-        .cache({ ttl: 1800 }) // TODO: whats the right way to do this?
+-        .get()).length;
+-    } catch (e) {
+-      if (e instanceof AuthenticationError) {
+-        return [];
+-      }
+-      throw e;
+-    }
+-  }
+-
+-  async getByCurrentUserForContentItem({ contentItemId }) {
++  async getForContentItem({ contentItemId }) {
+     const { dataSources } = this.context;
+     const contentItemType = await dataSources.RockConstants.modelTypeId(
+       'ContentItem'
+@@ -71,7 +47,7 @@ export default class Interactions extends RockApolloDataSource {
+     }
+   }
+ 
+-  async getByCurrentUserForContentItems() {
++  async getForContentItems() {
+     const { dataSources } = this.context;
+     const contentItemType = await dataSources.RockConstants.modelTypeId(
+       'ContentItem'
+diff --git a/apollos-church-api/src/index.js b/apollos-church-api/src/index.js
+index a7f0ca1..8704c6d 100644
+--- a/apollos-church-api/src/index.js
++++ b/apollos-church-api/src/index.js
+@@ -1,4 +1,3 @@
+-import dotenv from 'dotenv/config'; // eslint-disable-line
+ import config from './config'; // eslint-disable-line
+ import server from './server';
+ 
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+index 4dde734..d3b0b34 100644
+--- a/apolloschurchapp/.env.production
++++ b/apolloschurchapp/.env.production
+@@ -1,3 +1,2 @@
+ APP_DATA_URL=https://apollos-church-api.now.sh
+ ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+-ANDROID_URL=doesnotmatter
+\ No newline at end of file
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index e0b9480..86d1d22 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.0-alpha.0",
++  "version": "0.7.1",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -33,7 +33,7 @@
+     "ios": "react-native run-ios --simulator=\"iPhone X\"",
+     "lint": "eslint ./src --ext .js",
+     "postversion": "react-native-version --never-amend --android android/app/build.gradle --ios ios/",
+-    "prestart": "babel-node ./scripts/get-introspection-data.js",
++    "prestart": "node ./scripts/get-introspection-data.js",
+     "start": "react-native start",
+     "storybook": "rnstl --searchDir ./storybook ./src --pattern \"**/*.stories.js\" && storybook start -p 7007 --root ../../",
+     "test": "jest",
+@@ -62,7 +62,7 @@
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.8.0-alpha.0",
++    "@apollosproject/ui-kit": "^0.7.1",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
+@@ -85,7 +85,6 @@
+     "memoize-one": "4.0.0",
+     "moment": "2.22.2",
+     "node-fetch": "2.2.0",
+-    "numeral": "^2.0.6",
+     "prettier": "1.14.2",
+     "querystring": "^0.2.0",
+     "react": "16.6.1",
+diff --git a/apolloschurchapp/scripts/get-introspection-data.js b/apolloschurchapp/scripts/get-introspection-data.js
+index f2c7e28..8acfcf3 100755
+--- a/apolloschurchapp/scripts/get-introspection-data.js
++++ b/apolloschurchapp/scripts/get-introspection-data.js
+@@ -1,15 +1,11 @@
+-import fs from 'fs';
+-import Path from 'path';
+-import { APP_DATA_URL } from 'react-native-dotenv';
+-import fetch from 'node-fetch';
++const fs = require('fs');
++const Path = require('path');
+ 
+-const attempts = 0;
+-const maxAttempts = 3;
+-const timeBetweenAttempts = 5 * 1000;
++const fetch = require('node-fetch');
+ 
+-const getIntrospectionData = async () => {
++(async () => {
+   try {
+-    const query = await fetch(APP_DATA_URL, {
++    const query = await fetch(`https://apollos-church-api.now.sh/graphql`, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({
+@@ -40,20 +36,7 @@ const getIntrospectionData = async () => {
+       Path.resolve(__dirname, '../src/client/fragmentTypes.json'),
+       JSON.stringify(data)
+     );
+-
+-    console.log('Successfully wrote fragmentTypes!');
+   } catch (e) {
+-    if (attempts < maxAttempts) {
+-      console.log(
+-        `Error writing fragmentTypes (-api probably hasn't started yet). Trying again after wait. Attempt: ${attempts +
+-          1} of ${maxAttempts}`
+-      );
+-      await new Promise((resolve) => setTimeout(resolve, timeBetweenAttempts)); // try again after waiting
+-      getIntrospectionData();
+-    } else {
+-      // throw new Error('Error writing fragmentTypes file', e);
+-    }
++    throw new Error('Error writing fragmentTypes file', e);
+   }
+-};
+-
+-getIntrospectionData();
++})();
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 8d96fc0..8b9885f 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Interaction"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Interaction"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/content-feed/getContentFeed.js b/apolloschurchapp/src/content-feed/getContentFeed.js
+index 2e47d19..5bc3bc6 100644
+--- a/apolloschurchapp/src/content-feed/getContentFeed.js
++++ b/apolloschurchapp/src/content-feed/getContentFeed.js
+@@ -1,6 +1,5 @@
+ import gql from 'graphql-tag';
+ 
+-import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ import { contentItemFragment } from '../content-single/getContentItem';
+ 
+ export default gql`
+@@ -11,7 +10,21 @@ export default gql`
+           edges {
+             node {
+               ...contentItemFragment
+-              ...largeCardFragment
++              __typename
++              id
++              coverImage {
++                name
++                sources {
++                  uri
++                }
++              }
++              isLiked
++              parentChannel {
++                id
++                name
++                iconName
++              }
++              title
+             }
+           }
+         }
+@@ -19,5 +32,4 @@ export default gql`
+     }
+   }
+   ${contentItemFragment}
+-  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/content-feed/index.js b/apolloschurchapp/src/content-feed/index.js
+index 8662d8a..006b15c 100644
+--- a/apolloschurchapp/src/content-feed/index.js
++++ b/apolloschurchapp/src/content-feed/index.js
+@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
+ 
+ import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+ 
+-import ContentCardConnected from 'apolloschurchapp/src/ui/ContentCardConnected';
+-
+ import getContentFeed from './getContentFeed';
+ /**
+  * This is where the component description lives
+@@ -52,7 +50,6 @@ class ContentFeed extends PureComponent {
+         >
+           {({ loading, error, data, refetch }) => (
+             <FeedView
+-              ListItemComponent={ContentCardConnected}
+               content={get(
+                 data,
+                 'node.childContentItemsConnection.edges',
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
+index c0a236f..fd8d149 100644
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
++++ b/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
+@@ -7,11 +7,17 @@ import { Query } from 'react-apollo';
+ import {
+   CardTile,
+   HorizontalTileFeed,
++  PaddedView,
++  styled,
+   TouchableScale,
+ } from '@apollosproject/ui-kit';
+ 
+ import getHorizontalContent from './getHorizontalContent';
+ 
++const FeedContainer = styled({
++  paddingHorizontal: 0,
++})(PaddedView);
++
+ const loadingStateObject = {
+   node: {
+     id: 'fakeId0',
+@@ -67,12 +73,14 @@ class HorizontalContentFeed extends Component {
+     const content = siblingContent.length ? siblingContent : childContent;
+ 
+     return (content && content.length) || loading ? (
+-      <HorizontalTileFeed
+-        content={content}
+-        isLoading={loading}
+-        loadingStateObject={loadingStateObject}
+-        renderItem={this.renderItem}
+-      />
++      <FeedContainer>
++        <HorizontalTileFeed
++          content={content}
++          isLoading={loading}
++          loadingStateObject={loadingStateObject}
++          renderItem={this.renderItem}
++        />
++      </FeedContainer>
+     ) : null;
+   };
+ 
+diff --git a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js b/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
+index 2fd7fda..f4d0d90 100644
+--- a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
++++ b/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
+@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
+ import { Query } from 'react-apollo';
+ 
+ import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+-import ContentCardConnected from '../../../ui/ContentCardConnected';
+ 
+ import getLikedContent from '../getLikedContent';
+ /** A FeedView wrapped in a query to pull content data. */
+@@ -38,7 +37,6 @@ class LikedContentList extends PureComponent {
+         <Query query={getLikedContent} fetchPolicy="cache-and-network">
+           {({ loading, error, data: { getAllLikedContent = [] }, refetch }) => (
+             <FeedView
+-              ListItemComponent={ContentCardConnected}
+               initialNumToRender={5}
+               content={getAllLikedContent}
+               isLoading={loading}
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
+index 8b4437d..09ff5a2 100644
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
++++ b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
+@@ -11,17 +11,16 @@ import {
+   styled,
+   ButtonLink,
+   withIsLoading,
+-  TouchableScale,
+ } from '@apollosproject/ui-kit';
+ 
+-import ContentCard from 'apolloschurchapp/src/ui/ContentCardConnected';
++import TileImageItem from '../../discover/TileImageItem';
+ 
+-const RowHeader = styled({
++const RowHeader = styled(({ theme }) => ({
+   flexDirection: 'row',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+-  paddingVertical: 0,
+-})(PaddedView);
++  paddingVertical: theme.sizing.baseUnit,
++}))(PaddedView);
+ 
+ const Name = styled({
+   flexGrow: 1,
+@@ -50,20 +49,11 @@ class RecentlyLikedTileFeed extends Component {
+   };
+ 
+   titleImageItem = ({ item }) => (
+-    <TouchableScale
+-      onPress={() => {
+-        this.props.navigation.push('ContentSingle', {
+-          itemId: item.id,
+-        });
+-      }}
+-    >
+-      <ContentCard
+-        isLoading={item.isLoading}
+-        tile
+-        contentId={item.id}
+-        inHorizontalList
+-      />
+-    </TouchableScale>
++    <TileImageItem
++      item={item}
++      isLoading={this.props.isLoading}
++      navigation={this.props.navigation}
++    />
+   );
+ 
+   render() {
+diff --git a/apolloschurchapp/src/tabs/connect/getLikedContent.js b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+index 0252dd1..53ab5e7 100644
+--- a/apolloschurchapp/src/tabs/connect/getLikedContent.js
++++ b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+@@ -1,6 +1,5 @@
+ import gql from 'graphql-tag';
+ 
+-import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
+ 
+ export default gql`
+@@ -8,10 +7,8 @@ export default gql`
+     getAllLikedContent {
+       ... on ContentItem {
+         ...contentItemFragment
+-        ...largeCardFragment
+       }
+     }
+   }
+   ${contentItemFragment}
+-  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/discover/TileContentFeed.js b/apolloschurchapp/src/tabs/discover/TileContentFeed.js
+index 4470a03..aeab3ef 100644
+--- a/apolloschurchapp/src/tabs/discover/TileContentFeed.js
++++ b/apolloschurchapp/src/tabs/discover/TileContentFeed.js
+@@ -8,24 +8,16 @@ import {
+   HorizontalTileFeed,
+   styled,
+   ButtonLink,
+-  TouchableScale,
+ } from '@apollosproject/ui-kit';
+-
+-import ContentCardConnected from '../../ui/ContentCardConnected';
++import TileImageItem from './TileImageItem';
+ 
+ const RowHeader = styled({
+   flexDirection: 'row',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+-  paddingBottom: 0,
++  paddingVertical: 0,
+ })(PaddedView);
+ 
+-const loadingStateObject = {
+-  id: 'fake_id',
+-  title: '',
+-  coverImage: [],
+-};
+-
+ const TileContentFeed = ({ isLoading, id, name, navigation, content = [] }) => (
+   <PaddedView horizontal={false}>
+     <RowHeader>
+@@ -46,22 +38,17 @@ const TileContentFeed = ({ isLoading, id, name, navigation, content = [] }) => (
+     <HorizontalTileFeed
+       content={content}
+       renderItem={({ item }) => (
+-        <TouchableScale
+-          onPress={() => {
+-            navigation.push('ContentSingle', {
+-              itemId: item.id,
+-            });
+-          }}
+-        >
+-          <ContentCardConnected
+-            contentId={item.id}
+-            isLoading={isLoading}
+-            tile
+-            inHorizontalList
+-          />
+-        </TouchableScale>
++        <TileImageItem
++          item={item}
++          isLoading={isLoading}
++          navigation={navigation}
++        />
+       )}
+-      loadingStateObject={loadingStateObject}
++      loadingStateObject={{
++        id: 'fake_id',
++        title: '',
++        coverImage: [],
++      }}
+       isLoading={isLoading}
+     />
+   </PaddedView>
+diff --git a/apolloschurchapp/src/tabs/discover/getContentChannels.js b/apolloschurchapp/src/tabs/discover/getContentChannels.js
+index bc9c243..d39573a 100644
+--- a/apolloschurchapp/src/tabs/discover/getContentChannels.js
++++ b/apolloschurchapp/src/tabs/discover/getContentChannels.js
+@@ -1,7 +1,6 @@
+ import gql from 'graphql-tag';
+ 
+ import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { tileCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getContentChannels {
+@@ -13,12 +12,21 @@ export default gql`
+           node {
+             id
+             ...contentItemFragment
+-            ...tileCardFragment
++            title
++            coverImage {
++              sources {
++                uri
++              }
++            }
++            sharing {
++              title
++              message
++              url
++            }
+           }
+         }
+       }
+     }
+   }
+   ${contentItemFragment}
+-  ${tileCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index bb09a97..2505121 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -6,7 +6,6 @@ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+ import { styled, FeedView, BackgroundView } from '@apollosproject/ui-kit';
+-import ContentCardConnected from '../../ui/ContentCardConnected';
+ 
+ import { LiveButton } from '../../live';
+ 
+@@ -45,7 +44,6 @@ class Home extends PureComponent {
+           <Query query={getUserFeed} fetchPolicy="cache-and-network">
+             {({ loading, error, data, refetch }) => (
+               <FeedView
+-                ListItemComponent={ContentCardConnected}
+                 content={get(data, 'userFeed.edges', []).map(
+                   (edge) => edge.node
+                 )}
+diff --git a/apolloschurchapp/src/tabs/home/getUserFeed.js b/apolloschurchapp/src/tabs/home/getUserFeed.js
+index 2d7cb9a..34ed66c 100644
+--- a/apolloschurchapp/src/tabs/home/getUserFeed.js
++++ b/apolloschurchapp/src/tabs/home/getUserFeed.js
+@@ -1,19 +1,40 @@
+ import gql from 'graphql-tag';
+ 
+ import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getUserFeed {
+     userFeed {
+       edges {
+         node {
+-          ...largeCardFragment
+           ...contentItemFragment
++          __typename
++          id
++          coverImage {
++            name
++            sources {
++              uri
++            }
++          }
++          parentChannel {
++            id
++            name
++            iconName
++          }
++          theme {
++            type
++            colors {
++              primary
++              secondary
++              screen
++              paper
++            }
++          }
++          isLiked
++          title
+         }
+       }
+     }
+   }
+   ${contentItemFragment}
+-  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/index.js b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+deleted file mode 100644
+index b64bdc6..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/index.js
++++ /dev/null
+@@ -1,55 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-
+-import { ContentCard, ErrorCard } from '@apollosproject/ui-kit';
+-import getContentCard from './query';
+-
+-export { tileCardFragment, largeCardFragment } from './query';
+-
+-const ContentCardConnected = ({
+-  contentId,
+-  isLoading,
+-  tile,
+-  ...otherProps
+-}) => {
+-  if (!contentId || isLoading)
+-    return <ContentCard {...otherProps} isLoading tile={tile} />;
+-
+-  return (
+-    <Query query={getContentCard} variables={{ contentId, tile: !!tile }}>
+-      {({ data: { node = {} } = {}, loading, error }) => {
+-        if (error) return <ErrorCard error={error} />;
+-
+-        const metrics = [
+-          {
+-            icon: node.isLiked ? 'like-solid' : 'like',
+-            value: node.likedCount,
+-          },
+-        ];
+-
+-        const coverImage = get(node, 'coverImage.sources', undefined);
+-
+-        return (
+-          <ContentCard
+-            {...node}
+-            {...otherProps}
+-            coverImage={coverImage}
+-            metrics={metrics}
+-            tile={tile}
+-            isLoading={loading}
+-          />
+-        );
+-      }}
+-    </Query>
+-  );
+-};
+-
+-ContentCardConnected.propTypes = {
+-  isLoading: PropTypes.bool,
+-  contentId: PropTypes.string,
+-  tile: PropTypes.bool,
+-};
+-
+-export default ContentCardConnected;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/query.js b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+deleted file mode 100644
+index abefc12..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/query.js
++++ /dev/null
+@@ -1,93 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export const coverImageFragment = gql`
+-  fragment coverImageFragment on ContentItem {
+-    coverImage {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
+-
+-export const themeFragment = gql`
+-  fragment themeFragment on ContentItem {
+-    theme {
+-      type
+-      colors {
+-        primary
+-        secondary
+-        screen
+-        paper
+-      }
+-    }
+-  }
+-`;
+-
+-export const contentCardMetricsFragment = gql`
+-  fragment contentCardMetricsFragment on ContentItem {
+-    isLiked
+-    likedCount
+-  }
+-`;
+-
+-export const baseCardFragment = gql`
+-  fragment baseCardFragment on ContentItem {
+-    id
+-    __typename
+-    ...contentCardMetricsFragment
+-    ...coverImageFragment
+-    ...themeFragment
+-    title
+-    summary
+-  }
+-  ${contentCardMetricsFragment}
+-  ${coverImageFragment}
+-  ${themeFragment}
+-`;
+-
+-export const tileCardFragment = gql`
+-  fragment tileCardFragment on ContentItem {
+-    ... on ContentSeriesContentItem {
+-      id
+-      ...themeFragment
+-      ...coverImageFragment
+-      ...contentCardMetricsFragment
+-    }
+-    ... on UniversalContentItem {
+-      ...baseCardFragment
+-    }
+-    ... on DevotionalContentItem {
+-      ...baseCardFragment
+-    }
+-    ... on MediaContentItem {
+-      ...baseCardFragment
+-    }
+-  }
+-  ${baseCardFragment}
+-  ${themeFragment}
+-  ${coverImageFragment}
+-  ${contentCardMetricsFragment}
+-`;
+-
+-export const largeCardFragment = gql`
+-  fragment largeCardFragment on ContentItem {
+-    ...baseCardFragment
+-  }
+-  ${baseCardFragment}
+-`;
+-
+-const getContentCard = gql`
+-  query getContentCard($contentId: ID!, $tile: Boolean!) {
+-    node(id: $contentId) {
+-      id
+-      __typename
+-      ...tileCardFragment @include(if: $tile)
+-      ...largeCardFragment @skip(if: $tile)
+-    }
+-  }
+-  ${tileCardFragment}
+-  ${largeCardFragment}
+-`;
+-
+-export default getContentCard;
