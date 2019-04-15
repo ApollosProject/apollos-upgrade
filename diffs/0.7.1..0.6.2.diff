@@ -1,0 +1,376 @@
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index a67f89a..c4b568f 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.7.1",
++  "version": "0.6.0",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -28,14 +28,14 @@
+     "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.7.1",
+-    "@apollosproject/data-connector-analytics": "^0.7.1",
+-    "@apollosproject/data-connector-bible": "^0.7.1",
+-    "@apollosproject/data-connector-people": "^0.7.1",
+-    "@apollosproject/data-connector-rock-auth": "^0.7.1",
+-    "@apollosproject/data-connector-rock-content": "^0.7.1",
+-    "@apollosproject/rock-apollo-data-source": "^0.7.1",
+-    "@apollosproject/server-core": "^0.7.1",
++    "@apollosproject/data-connector-rock-content": "^0.6.0",
++    "@apollosproject/server-core": "^0.6.0",
++    "@apollosproject/config": "^0.6.0",
++    "@apollosproject/data-connector-analytics": "^0.6.0",
++    "@apollosproject/data-connector-people": "^0.6.0",
++    "@apollosproject/data-connector-rock-auth": "^0.6.0",
++    "@apollosproject/rock-apollo-data-source": "^0.6.0",
++    "@apollosproject/server-core": "^0.6.0",
+     "apollo-datasource-rest": "0.1.1",
+     "apollo-server": "^2.0.5",
+     "casual": "1.5.19",
+@@ -53,7 +53,7 @@
+     "with-query": "1.0.2"
+   },
+   "devDependencies": {
+-    "@apollosproject/babel-preset-apollos": "^0.7.1",
++    "@apollosproject/babel-preset-apollos": "^0.6.0",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/bible/_tests_/resolver.tests.js b/apollos-church-api/src/data/bible/_tests_/resolver.tests.js
+new file mode 100644
+index 0000000..d445602
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/_tests_/resolver.tests.js
+@@ -0,0 +1,34 @@
++import { graphql } from 'graphql';
++import { fetch } from 'apollo-server-env';
++import { makeExecutableSchema } from 'apollo-server';
++import { testSchema as typeDefs, resolvers } from '../..';
++import { getTestContext } from '../../../utils/testUtils';
++
++describe('Scripture', () => {
++  let schema;
++  let context;
++  beforeEach(() => {
++    schema = makeExecutableSchema({ typeDefs, resolvers });
++    context = getTestContext();
++
++    fetch.resetMocks();
++    fetch.mockLiveDataSourceApis();
++  });
++
++  it('returns', async () => {
++    const query = `
++      query {
++        scripture (query: "SNG.1.1") {
++          id
++          html
++          reference
++          copyright
++        }
++      }
++    `;
++    const rootValue = {};
++
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++});
+diff --git a/apollos-church-api/src/data/bible/data-source.js b/apollos-church-api/src/data/bible/data-source.js
+new file mode 100644
+index 0000000..d0ef9f7
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/data-source.js
+@@ -0,0 +1,28 @@
++import { RESTDataSource } from 'apollo-datasource-rest';
++import ApollosConfig from '@apollosproject/config';
++
++const { BIBLE_API } = ApollosConfig;
++
++export default class Scripture extends RESTDataSource {
++  resource = 'Scripture';
++
++  baseURL = 'https://api.scripture.api.bible/v1/bibles/';
++
++  token = BIBLE_API.KEY;
++
++  willSendRequest(request) {
++    request.headers.set('api-key', `${this.token}`);
++  }
++
++  async getScripture(query) {
++    const bibleId = BIBLE_API.BIBLE_ID;
++    return this.get(`${bibleId}/search?query=${query}`);
++  }
++
++  // In the future, we can use this field to handle content that returns multiple
++  // "scriptures". Like references across several different books of the bible.
++  async getScriptures(query) {
++    const scripture = await this.getScripture(query);
++    return [scripture];
++  }
++}
+diff --git a/apollos-church-api/src/data/bible/index.js b/apollos-church-api/src/data/bible/index.js
+new file mode 100644
+index 0000000..61a10a8
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/index.js
+@@ -0,0 +1,5 @@
++import schema from './schema';
++import resolver from './resolver';
++import dataSource from './data-source';
++
++export { schema, resolver, dataSource };
+diff --git a/apollos-church-api/src/data/bible/resolver.js b/apollos-church-api/src/data/bible/resolver.js
+new file mode 100644
+index 0000000..01d6711
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/resolver.js
+@@ -0,0 +1,14 @@
++import { get } from 'lodash';
++
++export default {
++  Query: {
++    scripture: (root, { query }, { dataSources }) =>
++      dataSources.Scripture.getScripture(query),
++  },
++  Scripture: {
++    id: ({ data: { passages } = {} }) => get(passages, '[0].id'),
++    html: ({ data: { passages } = {} }) => get(passages, '[0].content'),
++    reference: ({ data: { passages } = {} }) => get(passages, '[0].reference'),
++    copyright: ({ data: { passages } = {} }) => get(passages, '[0].copyright'),
++  },
++};
+diff --git a/apollos-church-api/src/data/bible/schema.js b/apollos-church-api/src/data/bible/schema.js
+new file mode 100644
+index 0000000..82e3fe7
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/schema.js
+@@ -0,0 +1,14 @@
++import { gql } from 'apollo-server';
++
++export default gql`
++  type Scripture {
++    id: String
++    html: String
++    reference: String
++    copyright: String
++  }
++
++  extend type Query {
++    scripture(query: String!): Scripture
++  }
++`;
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index ef59907..655c759 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -10,13 +10,13 @@ import {
+ } from '@apollosproject/data-connector-rock-content';
+ import * as Analytics from '@apollosproject/data-connector-analytics';
+ import { Person, Family } from '@apollosproject/data-connector-people';
+-import * as Scripture from '@apollosproject/data-connector-bible';
+ 
+ import RockConstants from '../connectors/rock/rock-constants';
+ 
+ import * as Media from './media';
+ import * as LiveStream from './live';
+ import * as Theme from './theme';
++import * as Scripture from './bible';
+ import * as Interactions from './interactions';
+ 
+ const data = {
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 6be0c59..46787c7 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -111,8 +111,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 5
+-        versionName "0.7.0"
++        versionCode 4
++        versionName "0.6.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index aed24ed..097d689 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,13 +15,13 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.6.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>4</string>
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true />
++	<true/>
+ 	<key>UILaunchStoryboardName</key>
+ 	<string>LaunchScreen</string>
+ 	<key>UIRequiredDeviceCapabilities</key>
+@@ -35,9 +35,9 @@
+ 		<string>UIInterfaceOrientationLandscapeRight</string>
+ 	</array>
+ 	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false />
++	<false/>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string />
++	<string/>
+ 	<key>NSAppTransportSecurity</key>
+ 	<dict>
+ 		<key>NSExceptionDomains</key>
+@@ -45,7 +45,7 @@
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true />
++				<true/>
+ 			</dict>
+ 		</dict>
+ 	</dict>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index e358b6d..ae0bb6d 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.6.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>4</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index a1d174c..5e6fdda 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1796,7 +1796,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "iPhone Developer";
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 4;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -1831,7 +1831,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "iPhone Developer";
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 4;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 0d5c926..dd3a74d 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -26,15 +26,15 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.6.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>4</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+-	<false />
++	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true />
++	<true/>
+ 	<key>NSAppTransportSecurity</key>
+ 	<dict>
+ 		<key>NSExceptionDomains</key>
+@@ -42,17 +42,17 @@
+ 			<key>embed.wistia.com</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true />
++				<true/>
+ 			</dict>
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true />
++				<true/>
+ 			</dict>
+ 		</dict>
+ 	</dict>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string />
++	<string/>
+ 	<key>UIAppFonts</key>
+ 	<array>
+ 		<string>DroidSerif-Bold.ttf</string>
+@@ -88,7 +88,7 @@
+ 		<string>UIInterfaceOrientationLandscapeRight</string>
+ 	</array>
+ 	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false />
++	<false/>
+ 	<key>NSPhotoLibraryUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+ 	<key>NSCameraUsageDescription</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index e358b6d..ae0bb6d 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.6.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>4</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 86d1d22..09ac766 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.7.1",
++  "version": "0.6.0",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.0.7",
+@@ -62,7 +62,7 @@
+     }
+   },
+   "dependencies": {
+-    "@apollosproject/ui-kit": "^0.7.1",
++    "@apollosproject/ui-kit": "^0.6.0",
+     "apollo-cache-inmemory": "1.3.5",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.4.2",
