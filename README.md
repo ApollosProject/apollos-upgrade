@@ -13,7 +13,9 @@ See table below for the complete list.
 
 ## Diff table
 
-
+| From->To | R   | E   | A   | C   | T   |     | N   | A   | T   | I   | V   | E   |
+| -------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0.6.0    | X   |     |     |     |     |     |     |     |     |     |     |     |
 
 ## To see the full table containing all releases, check back soon :)
 

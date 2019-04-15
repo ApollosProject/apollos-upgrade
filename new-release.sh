@@ -87,7 +87,7 @@ function generateDiffs () {
     fi
 
     cd wt-diffs
-    git pull
+    git pull origin diffs
     cd ..
 
     IFS=$'\n' GLOBIGNORE='*' command eval 'releases=($(cat "$ReleasesFile"))'
@@ -100,7 +100,7 @@ function generateDiffs () {
     cd wt-diffs
     git add .
     git commit -m "Add release $newRelease diffs"
-    git push
+    git push --set-upstream diffs
     cd ..
 }
 
@@ -148,12 +148,12 @@ function cleanUp () {
 guardMissingArg $*
 newRelease=$1
 
-guardExisting
+# guardExisting
 
-prepare
-generateNewReleaseBranch
-addReleaseToList
-generateDiffs
+# prepare
+# generateNewReleaseBranch
+# addReleaseToList
+# generateDiffs
 
 generateTable
 generateReadme
