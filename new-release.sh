@@ -189,18 +189,18 @@ function cleanUp () {
 guardMissingArg $*
 newRelease=$1
 
-guardExisting
+# guardExisting
 
 prepare
-generateNewReleaseBranch
+# generateNewReleaseBranch
 addReleaseToList
-generateDiffs
+# generateDiffs
 
 generateTable
 generateReadme
 
-generateBigTable
-generateGHPages
+# generateBigTable
+# generateGHPages
 
 cleanUp
 pushMaster
