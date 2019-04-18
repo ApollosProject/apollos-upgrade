@@ -56,7 +56,7 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    mv ../tmp/apollos-prototype-*/packages/"$AppName" .
+    cp -r ../tmp/apollos-prototype-*/packages/"$AppName" .
 
     # commit and push branch
     git add "$AppName"
@@ -75,7 +75,7 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    mv ../tmp/apollos-prototype-*/packages/"$ApiName" .
+    cp -r ../tmp/apollos-prototype-*/packages/"$ApiName" .
 
     # commit and push branch
     git add "$ApiName"
