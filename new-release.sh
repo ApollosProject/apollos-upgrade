@@ -193,7 +193,7 @@ newRelease=$1
 
 # prepare
 # generateNewReleaseBranch
-# addReleaseToList
+addReleaseToList
 # generateDiffs
 
 generateTable
