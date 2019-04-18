@@ -191,9 +191,9 @@ newRelease=$1
 
 # guardExisting
 
-prepare
+# prepare
 # generateNewReleaseBranch
-addReleaseToList
+# addReleaseToList
 # generateDiffs
 
 generateTable
