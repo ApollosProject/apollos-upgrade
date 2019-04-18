@@ -132,7 +132,7 @@ const applyPatch = async (
   newVersion,
   tmpPatchFile,
 ) => {
-  let filesToExclude = ['package.json'];
+  let filesToExclude = ['package.json', '**/*.png', '**/*.otf', '**/*.webp', '**/*.ttf', '**/*.jar', '**/*.env.production'];
 
   const { stdout: relativePathFromRoot } = await execa('git', [
     'rev-parse',
@@ -148,7 +148,6 @@ const applyPatch = async (
         '--check',
         tmpPatchFile,
         ...excludes,
-        '-p2',
         '--3way',
         `--directory=${relativePathFromRoot}`,
       ]);
@@ -173,7 +172,6 @@ const applyPatch = async (
         'apply',
         tmpPatchFile,
         ...excludes,
-        '-p2',
         '--3way',
         `--directory=${relativePathFromRoot}`,
       ]);
@@ -196,7 +194,7 @@ async function upgrade() {
   const tmpPatchFile = 'tmp-upgrade-rn.patch';
   const projectDir = '.';
 
-  const currentVersion = '0.8.0';
+  const currentVersion = '0.8.0-alpha.4';
   const newVersion = '0.8.1';
 
 
