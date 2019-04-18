@@ -189,10 +189,10 @@ function cleanUp () {
 guardMissingArg $*
 newRelease=$1
 
-# guardExisting
+guardExisting
 
-# prepare
-# generateNewReleaseBranch
+prepare
+generateNewReleaseBranch
 addReleaseToList
 # generateDiffs
 
