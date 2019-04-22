@@ -2,13 +2,14 @@
   "name": "@apollosproject/upgrade-tools",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
     "apollos-upgrade": "./src/index.js"
   },
+  "files": ["src"],
   "author": "",
   "license": "ISC",
   "dependencies": {
