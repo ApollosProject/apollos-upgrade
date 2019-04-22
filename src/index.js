@@ -8,35 +8,40 @@ commander.on('command:*', () => {
   process.exit(1);
 });
 
-const addCommand = (command) => {
-  const options = command.options || [];
 
-  const cmd = commander
-    .command(command.name)
-    .description(command.description)
-    .action(function handleAction(...args) {
-      const passedOptions = this.opts();
-      const argv = Array.from(args).slice(0, -1);
+const cmd = commander
+  .command('upgrade')
+  .description("Upgrade your app's template files to the specified or latest npm version using `apollos-upgrade` project. Only valid semver versions are allowed.")
+  .action(function (...args) {
+    console.log(args)
+    const passedOptions = this.opts();
+    console.log(this.opts())
+    return upgrade(passedOptions);
+  })
 
-      Promise.resolve()
-        .then(() => {
-          return command.func(argv, {}, passedOptions);
-        })
-        .catch((e) => console.error(e));
-    });
+const options = [{
+    command: '--from [string]',
+  },
+  {
+    command: '--to [string]',
+  },
+  {
+    command: '--platform [api|client]'
+  },
+  {
+    command: '--projectName [string]'
+  },
+  {
+    command: '--packageName [string]'
+  }];
 
-  options.forEach(opt =>
-    cmd.option(
-      opt.command,
-      opt.description,
-      opt.default,
-    ),
-  );
-}
+options.forEach((opt) => {
+  cmd.option(
+    opt.command
+  )
+})
 
 function setupAndRun() {
-  [upgrade].forEach(command => addCommand(command));
-  console.log(process.argv)
   commander.parse(process.argv);
 }
 

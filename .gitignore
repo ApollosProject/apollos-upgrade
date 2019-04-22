@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 coverage*
 
+tmp/
+
 # operating system files
 .DS_Store
 .DS_Store?
