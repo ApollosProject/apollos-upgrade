@@ -14,7 +14,7 @@ const cmd = commander
   .description("Upgrade your app's template files to the specified or latest npm version using `apollos-upgrade` project. Only valid semver versions are allowed.")
   .action(function (...args) {
     const passedOptions = this.opts();
-    return upgrade(passedOptions);
+    return Promise.resolve(upgrade(passedOptions)).catch(e => console.warn(e));
   })
 
 const options = [{
