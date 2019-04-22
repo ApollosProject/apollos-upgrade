@@ -37,33 +37,74 @@ function prepare () {
 
 function generateNewReleaseBranch () {
     # go to the base app branch
+
+    mkdir -p tmp
+    cd tmp
+    gitUrl=https://github.com/ApollosProject/apollos-prototype/archive/v${newRelease}.zip
+    curl -o ApollosProject.zip -L "$gitUrl"
+    unzip ApollosProject.zip
+    cd ../
+
     git worktree add wt-app "$AppBaseBranch"
     cd wt-app
 
     # clear any existing stuff
     rm -rf "$AppName"
+
+    # make a new branch
+    branchName=release/client/"$newRelease"
+    git checkout -b "$branchName"
+
+    # generate app
+    cp -r ../tmp/apollos-prototype-*/packages/"$AppName" .
+
+    # commit and push branch
+    git add "$AppName"
+    git commit -m "Release Client $newRelease"
+    git push --set-upstream origin "$branchName"
+
+    # Go back to master
+    rm -rf "$AppName"
+    git checkout "$AppBaseBranch"
+
+    # clear any existing stuff
     rm -rf "$ApiName"
+
+    # make a new branch
+    branchName=release/api/"$newRelease"
+    git checkout -b "$branchName"
+
+    # generate app
+    cp -r ../tmp/apollos-prototype-*/packages/"$ApiName" .
+
+    # commit and push branch
+    git add "$ApiName"
+    git commit -m "Release Api $newRelease"
+    git push --set-upstream origin "$branchName"
+
+    # Go back to master
+    rm -rf "$ApiName"
+    git checkout "$AppBaseBranch"
 
     # make a new branch
     branchName=release/"$newRelease"
     git checkout -b "$branchName"
 
     # generate app
-    gitUrl=https://github.com/ApollosProject/apollos-prototype/archive/v${newRelease}.zip
-    curl -o ApollosProject.zip -L "$gitUrl"
-    unzip ApollosProject.zip
-    mv apollos-prototype-*/packages/"$AppName" .
-    mv apollos-prototype-*/packages/"$ApiName" .
+    mv ../tmp/apollos-prototype-*/packages/"$ApiName" .
+    mv ../tmp/apollos-prototype-*/packages/"$AppName" .
 
     # commit and push branch
-    git add "$AppName"
     git add "$ApiName"
+    git add "$AppName"
     git commit -m "Release $newRelease"
     git push --set-upstream origin "$branchName"
 
     # go back to master
     cd ..
     rm -rf wt-app
+
+    rm -rf tmp
     git worktree prune
 }
 
@@ -153,7 +194,7 @@ guardExisting
 prepare
 generateNewReleaseBranch
 addReleaseToList
-generateDiffs
+# generateDiffs
 
 generateTable
 generateReadme
