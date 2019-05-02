@@ -31,10 +31,7 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
   }
 
   let patchWithRenamedProjects = patch;
-  patchWithRenamedProjects = patchWithRenamedProjects.replace(
-      new RegExp('apolloschurchapp', 'g'),
-      projectName
-    )
+  patchWithRenamedProjects = patchWithRenamedProjects
     .replace(
       new RegExp('com\\.apolloschurchapp', 'g'),
       packageName
@@ -46,6 +43,9 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
     .replace(
       new RegExp('com\\.apolloschurchapp'.split('.').join('/'), 'g'),
       packageName.split('.').join('/')
+    ).replace(
+      new RegExp('apolloschurchapp', 'g'),
+      projectName
     );
 
   return patchWithRenamedProjects;
