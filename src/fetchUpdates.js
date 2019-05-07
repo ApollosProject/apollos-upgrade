@@ -1,19 +1,19 @@
 const fetch = require('node-fetch');
 
-export const versions = (async () => {
+module.exports.versions = (async () => {
   try {
     const headers = {
       headers: { Accept: 'application/vnd.github.v3.raw' },
     };
 
     const response = await fetch(
-      `https://api.github.com/repos/ApollosProject/apollos-prototype/contents/version.json`,
+      `https://api.github.com/repos/ApollosProject/apollos-prototype/contents/lerna.json`,
       headers,
     );
 
-    const { previousVersion, newVersion } = await response.json();
+    const { version } = await response.json();
     
-    return { previousVersion, newVersion };
+    return { newVersion: version };
   } catch (e) {
     throw new Error(e)
   }
