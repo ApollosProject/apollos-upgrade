@@ -1,11 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
-const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
 
-const { getVersion } = require('./fetchUpdates');
+const { getNewVersion } = require('./fetchUpdates');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
@@ -116,10 +115,10 @@ const applyPatch = async (
 /**
  * Upgrade application to a new version of Apollos.
  */
-async function upgrade({ to, from: fromVersion, platform, projectName, packageName }) {
+async function upgrade({ to: toVersion, from: fromVersion, platform, projectName, packageName }) {
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
 
-  const newVersion = to || await getVersion();
+  const newVersion = toVersion || await getNewVersion();
 
   const currentVersion = fromVersion;
 
@@ -140,7 +139,7 @@ async function upgrade({ to, from: fromVersion, platform, projectName, packageNa
 
   try {
     fs.writeFileSync(tmpPatchFile, patch);
-    patchSuccess = await applyPatch(currentVersion, newVersion, tmpPatchFile);
+    patchSuccess = await applyPatch(tmpPatchFile);
   } catch (error) {
     throw new Error(error.stderr || error);
   } finally {
