@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-module.exports.versions = (async () => {
+module.exports.getVersion = async () => {
   try {
     const headers = {
       headers: { Accept: 'application/vnd.github.v3.raw' },
@@ -12,9 +12,9 @@ module.exports.versions = (async () => {
     );
 
     const { version } = await response.json();
-    
-    return { newVersion: version };
+
+    return version;
   } catch (e) {
     throw new Error(e)
   }
-})();
+};

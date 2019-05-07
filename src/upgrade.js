@@ -4,8 +4,8 @@ const chalk = require('chalk');
 const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
-const { newVersion } = require('fetchUpdates');
-const semver = require('semver');
+
+const getVersion = require('./fetchUpdates');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
@@ -121,6 +121,7 @@ async function upgrade({ from: fromVersion, platform, projectName, packageName }
 
   const currentVersion = semver.ltr(previousVersion, fromVersion) ? fromVersion : previousVersion;
 
+  const newVersion = await getVersion();
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
 
