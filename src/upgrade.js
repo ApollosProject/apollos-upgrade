@@ -4,6 +4,8 @@ const chalk = require('chalk');
 const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
+const { mostRecentVersion, toVersion } = require('fetchUpdates');
+const semver = require('semver');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
@@ -116,13 +118,12 @@ const applyPatch = async (
 /**
  * Upgrade application to a new version of Apollos.
  */
-async function upgrade({ from: fromVersion, to: toVersion, platform, projectName, packageName }) {
+async function upgrade({ from: fromVersion, platform, projectName, packageName }) {
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
-  const projectDir = '.';
+  const projectDir = '.'; 
 
-  // todo, figure this out automatically
-  const currentVersion = fromVersion || '0.8.0-alpha.4';
-  const newVersion = toVersion || '0.8.1';
+  const currentVersion = semver.ltr(mostRecentVersion, fromVersion) ? fromVersion : mostRecentVersion;
+  const newVersion = toVersion;
 
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
