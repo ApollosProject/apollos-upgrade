@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-(async () => {
+export const versions = (async () => {
   try {
     const headers = {
       headers: { Accept: 'application/vnd.github.v3.raw' },
@@ -11,9 +11,9 @@ const fetch = require('node-fetch');
       headers,
     );
 
-    const { mostRecentVersion, newestVersion } = await response.json();
+    const { previousVersion, newVersion } = await response.json();
     
-    return { mostRecentVersion, newestVersion };
+    return { previousVersion, newVersion };
   } catch (e) {
     throw new Error(e)
   }

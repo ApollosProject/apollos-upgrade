@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
-const { mostRecentVersion, toVersion } = require('fetchUpdates');
+const { previousVersion, newVersion } = require('fetchUpdates');
 const semver = require('semver');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
@@ -55,8 +55,6 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
 
 
 const applyPatch = async (
-  currentVersion,
-  newVersion,
   tmpPatchFile,
 ) => {
   let filesToExclude = ['package.json', '**/*.png', '**/*.otf', '**/*.webp', '**/*.ttf', '**/*.jar', '**/*.env.production'];
@@ -122,8 +120,7 @@ async function upgrade({ from: fromVersion, platform, projectName, packageName }
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
   const projectDir = '.'; 
 
-  const currentVersion = semver.ltr(mostRecentVersion, fromVersion) ? fromVersion : mostRecentVersion;
-  const newVersion = toVersion;
+  const currentVersion = semver.ltr(previousVersion, fromVersion) ? fromVersion : previousVersion;
 
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
