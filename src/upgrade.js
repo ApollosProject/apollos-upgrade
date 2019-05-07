@@ -119,9 +119,9 @@ const applyPatch = async (
 async function upgrade({ from: fromVersion, platform, projectName, packageName }) {
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
 
-  const currentVersion = semver.ltr(previousVersion, fromVersion) ? fromVersion : previousVersion;
-
   const newVersion = await getVersion();
+
+  const currentVersion = semver.ltr(newVersion, fromVersion) ? fromVersion : newVersion;
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
 
