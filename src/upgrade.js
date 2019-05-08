@@ -1,9 +1,10 @@
 const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
-const semver = require('semver');
 const execa = require('execa');
 const fetch = require('node-fetch');
+
+const { getNewVersion } = require('./fetchUpdates');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
@@ -53,8 +54,6 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
 
 
 const applyPatch = async (
-  currentVersion,
-  newVersion,
   tmpPatchFile,
 ) => {
   let filesToExclude = ['package.json', '**/*.png', '**/*.otf', '**/*.webp', '**/*.ttf', '**/*.jar', '**/*.env.production'];
@@ -116,14 +115,12 @@ const applyPatch = async (
 /**
  * Upgrade application to a new version of Apollos.
  */
-async function upgrade({ from: fromVersion, to: toVersion, platform, projectName, packageName }) {
+async function upgrade({ to: toVersion, from: fromVersion, platform, projectName, packageName }) {
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
-  const projectDir = '.';
 
-  // todo, figure this out automatically
-  const currentVersion = fromVersion || '0.8.0-alpha.4';
-  const newVersion = toVersion || '0.8.1';
+  const newVersion = toVersion || await getNewVersion();
 
+  const currentVersion = fromVersion;
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
 
@@ -142,7 +139,7 @@ async function upgrade({ from: fromVersion, to: toVersion, platform, projectName
 
   try {
     fs.writeFileSync(tmpPatchFile, patch);
-    patchSuccess = await applyPatch(currentVersion, newVersion, tmpPatchFile);
+    patchSuccess = await applyPatch(tmpPatchFile);
   } catch (error) {
     throw new Error(error.stderr || error);
   } finally {
