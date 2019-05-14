@@ -1,0 +1,768 @@
+diff --git a/apolloschurchapp/.env.dev.storybook b/apolloschurchapp/.env.dev.storybook
+new file mode 100644
+index 0000000..3ef3926
+--- /dev/null
++++ b/apolloschurchapp/.env.dev.storybook
+@@ -0,0 +1,2 @@
++# This file inherits values from .env
++STORYBOOK=true
+\ No newline at end of file
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+index 435f922..60ab693 100644
+--- a/apolloschurchapp/.env.production
++++ b/apolloschurchapp/.env.production
+@@ -1,4 +1,5 @@
+ APP_DATA_URL=https://apollos-church-api-herokuapp-com.global.ssl.fastly.net/
+ ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+ GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
++STORYBOOK=$STORYBOOK
+ ANDROID_URL=doesnotmatter
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index bb27535..3154a54 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -117,8 +117,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 9
+-        versionName "0.8.4"
++        versionCode 10
++        versionName "0.8.5"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+new file mode 100644
+index 0000000..614d45e
+--- /dev/null
++++ b/apolloschurchapp/apollos.json
+@@ -0,0 +1,4 @@
++{
++    "version": "0.8.6",
++    "environment": "client"
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/appcenter-pre-build.sh b/apolloschurchapp/appcenter-pre-build.sh
+index c666ab2..a9348f2 100644
+--- a/apolloschurchapp/appcenter-pre-build.sh
++++ b/apolloschurchapp/appcenter-pre-build.sh
+@@ -6,3 +6,4 @@ cp $droid_dir/gradle.properties.appcenter $droid_dir/gradle.properties
+ 
+ cd ../../
+ yarn
++yarn lerna run generate-stories
+\ No newline at end of file
+diff --git a/apolloschurchapp/index.js b/apolloschurchapp/index.js
+index f9ec2cf..6bfaa01 100644
+--- a/apolloschurchapp/index.js
++++ b/apolloschurchapp/index.js
+@@ -1,7 +1,17 @@
++import './polyfill'; // this can be removed when we upgrade to react-native 59
+ import { AppRegistry, YellowBox } from 'react-native';
+ import SplashScreen from 'react-native-splash-screen';
+ 
+-import App from './src';
++import Config from 'react-native-config';
++import Storybook from './storybook';
++import MainApp from './src';
++
++const useStorybook = Config.STORYBOOK === 'true';
++
++let App = MainApp;
++if (useStorybook) {
++  App = Storybook;
++}
+ 
+ // If there's an error before the splash screen goes away, you never see that error.
+ // This tries to hide the splash screen so you can see the error.
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 6d14b73..c24983e 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,11 +15,11 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.5</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>10</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 2e3a4e3..d84e362 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.5</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>10</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 632eda5..209fd52 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1945,7 +1945,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 6;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -1985,7 +1985,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 6;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index ec83de8..44d7b82 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.5</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>10</string>
++	<string>11</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index d235470..b4de62d 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.5</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>10</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 2f3ddb3..2c11343 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,12 +1,8 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.5",
++  "version": "0.8.6",
+   "private": true,
+   "devDependencies": {
+-    "@storybook/addon-actions": "4.1.16",
+-    "@storybook/addon-links": "4.1.16",
+-    "@storybook/addons": "4.1.16",
+-    "@storybook/react-native": "4.1.1",
+     "codecov": "3.0.2",
+     "get-dev-paths": "^0.1.0",
+     "jest": "23.6.0",
+@@ -30,11 +26,15 @@
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "fixlint": "eslint ./src --fix",
+     "ios": "react-native run-ios --simulator=\"iPhone X\"",
++    "storybook:enable": "sed -i '' 's/STORYBOOK=false/STORYBOOK=true/g' .env",
++    "storybook:disable": "sed -i '' 's/STORYBOOK=true/STORYBOOK=false/g' .env",
++    "build-storybook-env": "cat .env .env.dev.storybook > .env.storybook",
++    "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
++    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json",
+     "postversion": "react-native-version --never-amend --android android/app/build.gradle --ios ios/",
+-    "prestart": "node ./scripts/get-introspection-data.js",
++    "prestart": "lerna run generate-stories & node ./scripts/get-introspection-data.js",
+     "start": "react-native start",
+-    "storybook": "rnstl --searchDir ../ --pattern \"apollos*/src/**/*.stories.js\" && storybook start -p 7007  | react-native start --projectRoot $PWD/storybook",
+     "test": "jest",
+     "release": "standard-version --release-as minor"
+   },
+@@ -61,11 +61,12 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-analytics": "^0.8.5",
+-    "@apollosproject/ui-auth": "^0.8.5",
+-    "@apollosproject/ui-htmlview": "^0.8.5",
+-    "@apollosproject/ui-kit": "^0.8.5",
+-    "@apollosproject/ui-passes": "^0.8.5",
++    "@apollosproject/ui-analytics": "^0.8.6",
++    "@apollosproject/ui-auth": "^0.8.6",
++    "@apollosproject/ui-htmlview": "^0.8.6",
++    "@apollosproject/ui-kit": "^0.8.6",
++    "@apollosproject/ui-passes": "^0.8.6",
++    "@apollosproject/ui-storybook": "^0.8.6",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.5.1",
+diff --git a/apolloschurchapp/polyfill.js b/apolloschurchapp/polyfill.js
+new file mode 100644
+index 0000000..e2e1ede
+--- /dev/null
++++ b/apolloschurchapp/polyfill.js
+@@ -0,0 +1,10 @@
++// this can be removed when we upgrade to react-native 59
++
++// symbol polyfills
++global.Symbol = require('core-js/es6/symbol');
++require('core-js/fn/symbol/iterator');
++
++// collection fn polyfills
++require('core-js/fn/map');
++require('core-js/fn/set');
++require('core-js/fn/array/find');
+diff --git a/apolloschurchapp/rn-cli.config.js b/apolloschurchapp/rn-cli.config.js
+index b69ca32..4d8de40 100644
+--- a/apolloschurchapp/rn-cli.config.js
++++ b/apolloschurchapp/rn-cli.config.js
+@@ -7,6 +7,7 @@ const localDeps = [
+   path.resolve('..', 'apollos-ui-auth'),
+   path.resolve('..', 'apollos-ui-htmlview'),
+   path.resolve('..', 'apollos-ui-analytics'),
++  path.resolve('..', 'apollos-ui-storybook'),
+   path.resolve('..', 'apollos-ui-onboarding'),
+ ];
+ 
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.stories.js b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.stories.js
+index 109a669..8bf3ffd 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.stories.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.stories.js
+@@ -1,60 +1,62 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Devotional from '.';
+-
+-const scripture = [
+-  {
+-    id: '1CO.15.57',
+-    reference: '1 Corinthians 15:57',
+-    html:
+-      '<p class="p"><span data-number="57" class="v">57</span>But thanks be to God, who gives us the victory through our Lord Jesus Christ. </p>',
+-  },
+-  {
+-    id: 'EXO.17.8-EXO.17.15',
+-    reference: 'Exodus 17:8-15',
+-    html:
+-      '<p class="p"><span data-number="8" class="v">8</span>Then Amalek came and fought with Israel in Rephidim. <span data-number="9" class="v">9</span>Moses said to Joshua, “Choose men for us, and go out to fight with Amalek. Tomorrow I will stand on the top of the hill with God’s rod in my hand.” <span data-number="10" class="v">10</span>So Joshua did as Moses had told him, and fought with Amalek; and Moses, Aaron, and Hur went up to the top of the hill. <span data-number="11" class="v">11</span>When Moses held up his hand, Israel prevailed. When he let down his hand, Amalek prevailed. <span data-number="12" class="v">12</span>But Moses’ hands were heavy; so they took a stone, and put it under him, and he sat on it. Aaron and Hur held up his hands, the one on the one side, and the other on the other side. His hands were steady until sunset. <span data-number="13" class="v">13</span>Joshua defeated Amalek and his people with the edge of the sword. <span data-number="14" class="v">14</span>Yahweh said to Moses, “Write this for a memorial in a book, and rehearse it in the ears of Joshua: that I will utterly blot out the memory of Amalek from under the sky.” <span data-number="15" class="v">15</span>Moses built an altar, and called its name “Yahweh our Banner”.</p>',
+-  },
+-];
+-
+-const content = {
+-  body:
+-    '<p>Sometimes God&rsquo;s promises to us involve a fight. We have to fight to keep our focus on Him, fight to move towards the promise we know God has laid on our hearts. We have a real enemy that would love nothing more than to get us sidetracked and doubt God&rsquo;s promises. So we fight saying that we are going to believe God will do what He says He will do, and we keep fighting until we see that promise come to life.</p><p>In Exodus 17:8-15 the nation of Israel, freed from great oppression in Egypt was traveling to the land God promised them. Yet, Israel was fighting, again.&nbsp;<br />&nbsp;<br />As the Israelites were fighting in the valley,&nbsp;Moses was on the hill top lifting his hands in prayer for these great fighters. Israel fought hard, and with the prayers of Moses and the help of his companions, Aaron and Hur, the Amalekites were defeated. Moses knew that it was solely because of the Lord&rsquo;s hand of protection and blessing on the Israelites that they won the battle. &ldquo;Moses built an altar and called it The Lord is my banner&rdquo; (Exodus 17:15).</p><p>In battle opposing nations would fly their own flag on a pole at each of their respective front lines. This was to give their soldiers a feeling of hope and a focal point. This is what God is to us: a banner of encouragement to give us hope and a focal point.</p><blockquote><p>The Lord protects us, covers us with love, and&nbsp;blesses us continually.</p></blockquote><p>The Lord is our banner. He protects us; He covers us with love; He blesses us continually. The Lord gives us hope and a place to focus during the tough fights when the enemy is trying to make us doubt God&rsquo;s promises.&nbsp;</p><p>When was the last time you sat and thanked Jesus for all the ways he is a banner in your life?&nbsp;</p><p>Reflect:</p><ul><li>What is one way the Lord has been your banner?</li><li>How can you focus more today on the Lord and all the things He does for you throughout the day?</li></ul>',
+-  route: { jumpTo: () => {} },
+-  title: 'God is Our Banner',
+-};
+-
+-const renderItem = () => {};
+-
+-const loadingStateObject = {
+-  node: {
+-    id: 'fakeId0',
+-    title: '',
+-    isLoading: true,
+-  },
+-};
+-
+-const stories = storiesOf('Devotional', module);
+-
+-stories.add('Example', () => (
+-  <Devotional
+-    body={content.body}
+-    title={content.title}
+-    isLoading={false}
+-    scripture={scripture}
+-    renderItem={renderItem}
+-    loadingStateObject={loadingStateObject}
+-  />
+-));
+-
+-stories.add('isLoading', () => (
+-  <Devotional
+-    body={content.body}
+-    title={content.title}
+-    isLoading
+-    scripture={scripture}
+-    renderItem={renderItem}
+-    loadingStateObject={loadingStateObject}
+-  />
+-));
++// TODO: fix story
++
++// import React from 'react';
++// import { storiesOf } from '@apollosproject/ui-storybook';
++
++// import Devotional from '.';
++
++// const scripture = [
++//   {
++//     id: '1CO.15.57',
++//     reference: '1 Corinthians 15:57',
++//     html:
++//       '<p class="p"><span data-number="57" class="v">57</span>But thanks be to God, who gives us the victory through our Lord Jesus Christ. </p>',
++//   },
++//   {
++//     id: 'EXO.17.8-EXO.17.15',
++//     reference: 'Exodus 17:8-15',
++//     html:
++//       '<p class="p"><span data-number="8" class="v">8</span>Then Amalek came and fought with Israel in Rephidim. <span data-number="9" class="v">9</span>Moses said to Joshua, “Choose men for us, and go out to fight with Amalek. Tomorrow I will stand on the top of the hill with God’s rod in my hand.” <span data-number="10" class="v">10</span>So Joshua did as Moses had told him, and fought with Amalek; and Moses, Aaron, and Hur went up to the top of the hill. <span data-number="11" class="v">11</span>When Moses held up his hand, Israel prevailed. When he let down his hand, Amalek prevailed. <span data-number="12" class="v">12</span>But Moses’ hands were heavy; so they took a stone, and put it under him, and he sat on it. Aaron and Hur held up his hands, the one on the one side, and the other on the other side. His hands were steady until sunset. <span data-number="13" class="v">13</span>Joshua defeated Amalek and his people with the edge of the sword. <span data-number="14" class="v">14</span>Yahweh said to Moses, “Write this for a memorial in a book, and rehearse it in the ears of Joshua: that I will utterly blot out the memory of Amalek from under the sky.” <span data-number="15" class="v">15</span>Moses built an altar, and called its name “Yahweh our Banner”.</p>',
++//   },
++// ];
++
++// const content = {
++//   body:
++//     '<p>Sometimes God&rsquo;s promises to us involve a fight. We have to fight to keep our focus on Him, fight to move towards the promise we know God has laid on our hearts. We have a real enemy that would love nothing more than to get us sidetracked and doubt God&rsquo;s promises. So we fight saying that we are going to believe God will do what He says He will do, and we keep fighting until we see that promise come to life.</p><p>In Exodus 17:8-15 the nation of Israel, freed from great oppression in Egypt was traveling to the land God promised them. Yet, Israel was fighting, again.&nbsp;<br />&nbsp;<br />As the Israelites were fighting in the valley,&nbsp;Moses was on the hill top lifting his hands in prayer for these great fighters. Israel fought hard, and with the prayers of Moses and the help of his companions, Aaron and Hur, the Amalekites were defeated. Moses knew that it was solely because of the Lord&rsquo;s hand of protection and blessing on the Israelites that they won the battle. &ldquo;Moses built an altar and called it The Lord is my banner&rdquo; (Exodus 17:15).</p><p>In battle opposing nations would fly their own flag on a pole at each of their respective front lines. This was to give their soldiers a feeling of hope and a focal point. This is what God is to us: a banner of encouragement to give us hope and a focal point.</p><blockquote><p>The Lord protects us, covers us with love, and&nbsp;blesses us continually.</p></blockquote><p>The Lord is our banner. He protects us; He covers us with love; He blesses us continually. The Lord gives us hope and a place to focus during the tough fights when the enemy is trying to make us doubt God&rsquo;s promises.&nbsp;</p><p>When was the last time you sat and thanked Jesus for all the ways he is a banner in your life?&nbsp;</p><p>Reflect:</p><ul><li>What is one way the Lord has been your banner?</li><li>How can you focus more today on the Lord and all the things He does for you throughout the day?</li></ul>',
++//   route: { jumpTo: () => {} },
++//   title: 'God is Our Banner',
++// };
++
++// const renderItem = () => {};
++
++// const loadingStateObject = {
++//   node: {
++//     id: 'fakeId0',
++//     title: '',
++//     isLoading: true,
++//   },
++// };
++
++// const stories = storiesOf('Devotional', module);
++
++// stories.add('Example', () => (
++//   <Devotional
++//     body={content.body}
++//     title={content.title}
++//     isLoading={false}
++//     scripture={scripture}
++//     renderItem={renderItem}
++//     loadingStateObject={loadingStateObject}
++//   />
++// ));
++
++// stories.add('isLoading', () => (
++//   <Devotional
++//     body={content.body}
++//     title={content.title}
++//     isLoading
++//     scripture={scripture}
++//     renderItem={renderItem}
++//     loadingStateObject={loadingStateObject}
++//   />
++// ));
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+index 59ed7e1..efaffbd 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+@@ -1,7 +1,7 @@
+ import React from 'react';
+ import renderer from 'react-test-renderer';
+-import wait from 'waait';
+ import Providers from 'apolloschurchapp/src/Providers';
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+ import getContentItemContent from '../HTMLContent/getContentItemContent';
+ import getScripture from './getScripture';
+ import Devotional from '.';
+@@ -66,7 +66,7 @@ const navigation = {
+ 
+ describe('the Devotional component', () => {
+   it('renders a devotional', async () => {
+-    const tree = renderer.create(
++    const tree = await renderWithApolloData(
+       <Providers mocks={mocks}>
+         <Devotional
+           id="1"
+@@ -76,16 +76,19 @@ describe('the Devotional component', () => {
+         />
+       </Providers>
+     );
+-    await wait(0); // wait for response
+     expect(tree).toMatchSnapshot();
+   });
+   it('renders even with empty scripture array', async () => {
+-    const tree = renderer.create(
++    const tree = await renderWithApolloData(
+       <Providers mocks={mocks}>
+-        <Devotional id="1" content={content} loading navigation={navigation} />
++        <Devotional
++          id="1"
++          content={content}
++          loading={false}
++          navigation={navigation}
++        />
+       </Providers>
+     );
+-    await wait(0); // wait for response
+     expect(tree).toMatchSnapshot();
+   });
+   it('renders a loading state', async () => {
+@@ -94,7 +97,6 @@ describe('the Devotional component', () => {
+         <Devotional id="1" content={content} loading navigation={navigation} />
+       </Providers>
+     );
+-    await wait(0); // wait for response
+     expect(tree).toMatchSnapshot();
+   });
+ });
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+index 32cd53c..088bbdc 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+@@ -86,10 +86,11 @@ class DevotionalContentItem extends PureComponent {
+     loading,
+   }) => {
+     if (error) return <ErrorCard error={error} />;
++
+     // only include scriptures where the references are not null
+-    const validScriptures = scriptures.filter(
+-      (scripture) => scripture.reference != null
+-    );
++    const validScriptures = scriptures
++      ? scriptures.filter((scripture) => scripture.reference != null)
++      : [];
+ 
+     const hasScripture = loading || validScriptures.length;
+     const tabRoutes = [{ title: 'Devotional', key: 'content' }];
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js
+index 30bf74a..9287554 100644
+--- a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js
++++ b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ import { H3 } from '@apollosproject/ui-kit';
+ import ContentTableCard from '.';
+ 
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js
+index b7ba6d2..6a0d4cb 100644
+--- a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js
++++ b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ 
+ import ContentTableCardItem from './ContentTableCardItem';
+ 
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+index 1d3c6e1..d9ebd3c 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ import { GradientOverlayImage } from '@apollosproject/ui-kit';
+ 
+ import LandingScreen from '.';
+diff --git a/apolloschurchapp/src/ui/MediaPlayer/FullscreenPlayer.stories.js b/apolloschurchapp/src/ui/MediaPlayer/FullscreenPlayer.stories.js
+index 6c889cc..30eb140 100644
+--- a/apolloschurchapp/src/ui/MediaPlayer/FullscreenPlayer.stories.js
++++ b/apolloschurchapp/src/ui/MediaPlayer/FullscreenPlayer.stories.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ import { Mutation } from 'react-apollo';
+ 
+ import {
+diff --git a/apolloschurchapp/src/ui/Scripture/ScriptureItem.stories.js b/apolloschurchapp/src/ui/Scripture/ScriptureItem.stories.js
+index c51b7ed..4018ce3 100644
+--- a/apolloschurchapp/src/ui/Scripture/ScriptureItem.stories.js
++++ b/apolloschurchapp/src/ui/Scripture/ScriptureItem.stories.js
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ import { ScrollView } from 'react-native';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ import { PaddedView } from '@apollosproject/ui-kit';
+ 
+ import ScriptureItem from './ScriptureItem';
+diff --git a/apolloschurchapp/src/ui/Scripture/typography/ScriptureText/ScriptureText.stories.js b/apolloschurchapp/src/ui/Scripture/typography/ScriptureText/ScriptureText.stories.js
+index 33ea0d2..ddaa3c7 100644
+--- a/apolloschurchapp/src/ui/Scripture/typography/ScriptureText/ScriptureText.stories.js
++++ b/apolloschurchapp/src/ui/Scripture/typography/ScriptureText/ScriptureText.stories.js
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ import { View } from 'react-native';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ 
+ import ScriptureText from '.';
+ 
+diff --git a/apolloschurchapp/src/ui/UserAvatarView/UserAvatarView.stories.js b/apolloschurchapp/src/ui/UserAvatarView/UserAvatarView.stories.js
+index 76cf42a..f32c776 100644
+--- a/apolloschurchapp/src/ui/UserAvatarView/UserAvatarView.stories.js
++++ b/apolloschurchapp/src/ui/UserAvatarView/UserAvatarView.stories.js
+@@ -1,5 +1,5 @@
+ import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ 
+ import UserAvatarView from '.';
+ 
+diff --git a/apolloschurchapp/storybook/.babelrc b/apolloschurchapp/storybook/.babelrc
+deleted file mode 100644
+index cfb9634..0000000
+--- a/apolloschurchapp/storybook/.babelrc
++++ /dev/null
+@@ -1 +0,0 @@
+-{ "presets": ["module:metro-react-native-babel-preset"] }
+diff --git a/apolloschurchapp/storybook/Welcome/Intro.js b/apolloschurchapp/storybook/Welcome/Intro.js
+new file mode 100644
+index 0000000..2e8b8d7
+--- /dev/null
++++ b/apolloschurchapp/storybook/Welcome/Intro.js
+@@ -0,0 +1,43 @@
++import React from 'react';
++import { Paragraph, BodyText } from '@apollosproject/ui-kit';
++
++import { Slide, SlideContent } from '@apollosproject/ui-onboarding';
++
++const Intro = () => (
++  <Slide>
++    <SlideContent title={`Welcome to ${'\n'}Apollos Storybook!`} icon>
++      <Paragraph>
++        <BodyText>
++          Storybook is the component workshop for the Apollos app platform.
++        </BodyText>
++      </Paragraph>
++      <Paragraph>
++        <BodyText>
++          A story is a single state of one or more UI components. You can have
++          as many stories as you want.
++        </BodyText>
++      </Paragraph>
++      <Paragraph>
++        <BodyText>
++          We use Storybook to help document UI and to serve as visual test cases
++          for different states.
++        </BodyText>
++      </Paragraph>
++      <Paragraph>
++        <BodyText>
++          Open the navigator using the navigation bar at the bottom of the
++          screen to navigate the available stories.
++        </BodyText>
++      </Paragraph>
++      <Paragraph>
++        <BodyText>
++          The stories defined inside of your app will be listed first, with
++          Apollos UI stories below them. If you setup a theme, all of the
++          stories will reflect your theme.
++        </BodyText>
++      </Paragraph>
++    </SlideContent>
++  </Slide>
++);
++
++export default Intro;
+diff --git a/apolloschurchapp/storybook/Welcome/Welcome.stories.js b/apolloschurchapp/storybook/Welcome/Welcome.stories.js
+deleted file mode 100644
+index f1c9a65..0000000
+--- a/apolloschurchapp/storybook/Welcome/Welcome.stories.js
++++ /dev/null
+@@ -1,9 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-import { linkTo } from '@storybook/addon-links';
+-
+-import Welcome from '.';
+-
+-storiesOf('Welcome', module).add('to Storybook', () => (
+-  <Welcome showApp={linkTo('Button')} />
+-));
+diff --git a/apolloschurchapp/storybook/Welcome/index.js b/apolloschurchapp/storybook/Welcome/index.js
+index 78f7086..6c1e852 100644
+--- a/apolloschurchapp/storybook/Welcome/index.js
++++ b/apolloschurchapp/storybook/Welcome/index.js
+@@ -1,57 +1,9 @@
+ import React from 'react';
+-import PropTypes from 'prop-types';
+-import { View, Text } from 'react-native';
++import { storiesOf } from '@apollosproject/ui-storybook';
+ 
+-export default class Welcome extends React.Component {
+-  styles = {
+-    wrapper: {
+-      flex: 1,
+-      padding: 24,
+-      justifyContent: 'center',
+-    },
+-    header: {
+-      fontSize: 18,
+-      marginBottom: 18,
+-    },
+-    content: {
+-      fontSize: 12,
+-      marginBottom: 10,
+-      lineHeight: 18,
+-    },
+-  };
++import App from '../../src';
++import Intro from './Intro';
+ 
+-  showApp(event) {
+-    event.preventDefault();
+-    if (this.props.showApp) this.props.showApp();
+-  }
+-
+-  render() {
+-    return (
+-      <View style={this.styles.wrapper}>
+-        <Text style={this.styles.header}>
+-          Welcome to React Native Storybook
+-        </Text>
+-        <Text style={this.styles.content}>
+-          This is a UI Component development environment for your React Native
+-          app. Here you can display and interact with your UI components as
+-          stories. A story is a single state of one or more UI components. You
+-          can have as many stories as you want. In other words a story is like a
+-          visual test case.
+-        </Text>
+-        <Text style={this.styles.content}>
+-          We have added some stories inside the &quot;storybook/stories&quot;
+-          directory for examples. Try editing the
+-          &quot;storybook/stories/Welcome.js&quot; file to edit this message.
+-        </Text>
+-      </View>
+-    );
+-  }
+-}
+-
+-Welcome.defaultProps = {
+-  showApp: null,
+-};
+-
+-Welcome.propTypes = {
+-  showApp: PropTypes.func,
+-};
++storiesOf('Storybook', module)
++  .add('Welcome', () => <Intro />)
++  .add('App', () => <App />);
+diff --git a/apolloschurchapp/storybook/addons.js b/apolloschurchapp/storybook/addons.js
+deleted file mode 100644
+index 6aed412..0000000
+--- a/apolloschurchapp/storybook/addons.js
++++ /dev/null
+@@ -1,2 +0,0 @@
+-import '@storybook/addon-actions/register';
+-import '@storybook/addon-links/register';
+diff --git a/apolloschurchapp/storybook/index.android.js b/apolloschurchapp/storybook/index.android.js
+deleted file mode 100644
+index f0513c5..0000000
+--- a/apolloschurchapp/storybook/index.android.js
++++ /dev/null
+@@ -1,3 +0,0 @@
+-import StorybookUI from './storybook';
+-
+-export default StorybookUI;
+diff --git a/apolloschurchapp/storybook/index.ios.js b/apolloschurchapp/storybook/index.ios.js
+deleted file mode 100644
+index f0513c5..0000000
+--- a/apolloschurchapp/storybook/index.ios.js
++++ /dev/null
+@@ -1,3 +0,0 @@
+-import StorybookUI from './storybook';
+-
+-export default StorybookUI;
+diff --git a/apolloschurchapp/storybook/index.js b/apolloschurchapp/storybook/index.js
+index f0513c5..bcb07cf 100644
+--- a/apolloschurchapp/storybook/index.js
++++ b/apolloschurchapp/storybook/index.js
+@@ -1,3 +1,21 @@
+-import StorybookUI from './storybook';
++import StorybookUI, {
++  loadApollosStories,
++  addApollosProviderDecorator,
++  configure,
++} from '@apollosproject/ui-storybook';
++import SplashScreen from 'react-native-splash-screen';
++import Providers from '../src/Providers';
++
++import { loadStories } from './storyLoader';
++
++addApollosProviderDecorator(Providers);
++
++configure(() => {
++  require('./Welcome');
++  loadStories();
++  loadApollosStories();
++
++  SplashScreen.hide();
++}, module);
+ 
+ export default StorybookUI;
+diff --git a/apolloschurchapp/storybook/storybook.js b/apolloschurchapp/storybook/storybook.js
+deleted file mode 100644
+index 19be073..0000000
+--- a/apolloschurchapp/storybook/storybook.js
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import React, { Component } from 'react';
+-import { AppRegistry } from 'react-native';
+-import {
+-  getStorybookUI,
+-  configure,
+-  addDecorator,
+-} from '@storybook/react-native';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-// storyLoader.js is generated on storybook start. next line disabled for CI test.
+-import { loadStories } from './storyLoader'; // eslint-disable-line
+-
+-addDecorator((renderStorybook) => <Providers>{renderStorybook()}</Providers>);
+-
+-// import stories
+-configure(() => {
+-  loadStories();
+-}, module);
+-
+-// This assumes that storybook is running on the same host as your RN packager,
+-// to set manually use, e.g. host: 'localhost' option
+-const StorybookUIRoot = getStorybookUI({ port: 7007, onDeviceUI: true });
+-
+-// react-native hot module loader must take in a Class - https://github.com/facebook/react-native/issues/10991
+-// https://github.com/storybooks/storybook/issues/2081
+-// eslint-disable-next-line react/prefer-stateless-function
+-class StorybookUIHMRRoot extends Component {
+-  render() {
+-    return <StorybookUIRoot />;
+-  }
+-}
+-
+-AppRegistry.registerComponent('apolloschurchapp', () => StorybookUIHMRRoot);
+-export default StorybookUIHMRRoot;
