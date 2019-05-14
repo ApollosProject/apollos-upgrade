@@ -1,0 +1,442 @@
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index c755a9e..ed55c5e 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.2",
++  "version": "0.8.3",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -34,15 +34,15 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.2",
+-    "@apollosproject/data-connector-analytics": "^0.8.2",
+-    "@apollosproject/data-connector-bible": "^0.8.2",
+-    "@apollosproject/data-connector-church-online": "^0.8.2",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.2",
+-    "@apollosproject/data-connector-onesignal": "^0.8.2",
+-    "@apollosproject/data-connector-passes": "^0.8.2",
+-    "@apollosproject/data-connector-rock": "^0.8.2",
+-    "@apollosproject/server-core": "^0.8.2",
++    "@apollosproject/config": "^0.8.3",
++    "@apollosproject/data-connector-analytics": "^0.8.3",
++    "@apollosproject/data-connector-bible": "^0.8.3",
++    "@apollosproject/data-connector-church-online": "^0.8.3",
++    "@apollosproject/data-connector-cloudinary": "^0.8.3",
++    "@apollosproject/data-connector-onesignal": "^0.8.3",
++    "@apollosproject/data-connector-passes": "^0.8.3",
++    "@apollosproject/data-connector-rock": "^0.8.3",
++    "@apollosproject/server-core": "^0.8.3",
+     "apollo-server": "^2.0.5",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+@@ -51,8 +51,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.2",
+-    "@apollosproject/babel-preset-apollos": "^0.8.2",
++    "@apollosproject/apollo-server-env-mock": "^0.8.3",
++    "@apollosproject/babel-preset-apollos": "^0.8.3",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 65ba95e..1581d1b 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -117,8 +117,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 6
+-        versionName "0.8.1"
++        versionCode 7
++        versionName "0.8.2"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 0bbf896..e5afa57 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,11 +15,11 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.1</string>
++	<string>0.8.2</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>6</string>
++	<string>7</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 8d51f57..159f9b5 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.1</string>
++	<string>0.8.2</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>6</string>
++	<string>7</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 576d919..dbbdb16 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1172,6 +1172,10 @@
+ 						CreatedOnToolsVersion = 6.2;
+ 						TestTargetID = 13B07F861A680F5B00A75B9A;
+ 					};
++					13B07F861A680F5B00A75B9A = {
++						DevelopmentTeam = 7TM8C6252Z;
++						ProvisioningStyle = Automatic;
++					};
+ 					2D02E47A1E0B4A5D006451C7 = {
+ 						CreatedOnToolsVersion = 8.2.1;
+ 						ProvisioningStyle = Automatic;
+@@ -1188,6 +1192,7 @@
+ 			developmentRegion = English;
+ 			hasScannedForEncodings = 0;
+ 			knownRegions = (
++				English,
+ 				en,
+ 				Base,
+ 			);
+@@ -1976,8 +1981,9 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 2;
++				CURRENT_PROJECT_VERSION = 3;
+ 				DEAD_CODE_STRIPPING = NO;
++				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+@@ -2007,6 +2013,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+ 				PRODUCT_NAME = apolloschurchapp;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Debug;
+@@ -2015,7 +2022,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 2;
++				CURRENT_PROJECT_VERSION = 3;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+@@ -2045,6 +2052,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+ 				PRODUCT_NAME = apolloschurchapp;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Release;
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib b/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
+index 035b378..4ca705c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
++++ b/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
++<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+     <device id="retina5_5" orientation="portrait">
+         <adaptation id="fullscreen"/>
+     </device>
+     <dependencies>
+         <deployment identifier="iOS"/>
+-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
++        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+     </dependencies>
+     <objects>
+@@ -15,18 +15,22 @@
+             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+             <subviews>
++                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash_bg" translatesAutoresizingMaskIntoConstraints="NO" id="iGM-E3-lqn">
++                    <rect key="frame" x="-12" y="-10" width="437" height="758"/>
++                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
++                </imageView>
+                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash-icon" translatesAutoresizingMaskIntoConstraints="NO" id="6Je-Yv-1Zj">
+                     <rect key="frame" x="157" y="288" width="100" height="100"/>
+                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                 </imageView>
+             </subviews>
+-            <color key="backgroundColor" red="0.0" green="0.40392156862745099" blue="0.42745098039215684" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+             <nil key="simulatedStatusBarMetrics"/>
+             <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+-            <point key="canvasLocation" x="546" y="454"/>
++            <point key="canvasLocation" x="544.92753623188412" y="453.26086956521743"/>
+         </view>
+     </objects>
+     <resources>
+         <image name="splash-icon" width="94" height="99"/>
++        <image name="splash_bg" width="721" height="721"/>
+     </resources>
+-</document>
+\ No newline at end of file
++</document>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
+index 2d92bd5..da4a164 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
++++ b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
+@@ -3,4 +3,4 @@
+     "version" : 1,
+     "author" : "xcode"
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json
+new file mode 100644
+index 0000000..8939b14
+--- /dev/null
++++ b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "idiom" : "universal",
++      "filename" : "splash_bg.png",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "version" : 1,
++    "author" : "xcode"
++  }
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/splash_bg.png b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/splash_bg.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..315d8e09ac4fd5f51176da24982baad2115fa027
+GIT binary patch
+literal 11471
+zcmeAS@N?(olHy`uVBq!ia0y~yV7dsx9Be?5xhMa#GcYJHc)B=-RK&f#rYOYZDB^tZ
+z=H*2eyj_=_M49$pT<`AhvTNUo(sMs$`WYCRSU3a}92yuJZ!=xbcd?(ho!L$Z#0N`w
+zaPNsf-r*PD@CmAlk!f>-pzUN%uojS#E37>)ezCsrhiXtT;Fh>(JQHrLL+pW$b@2`V
+zMzsTjWHjhTlg((B87(fLrQ>K(Ia*BsYueE&a<q8>Zf}h?4@R2@qs@cS=D}$5V6+!G
+z+Jgqw1*1))(WcR8(`a<S4K^M*I@mZm&<Yw!9vwLu9XT0o9*j<`KxVE+Css!1<G|(N
+zX!BsSc`({MK+L~8to{|vz`)Z5S_?2*U5-|lqt)eTQ(?5JFxpfYU9vU0Ty1m|WptS$
+xWKrhmB+KX|3r!|j{weR`TWF71VC?vS+x%;O<pqA37~n!>22WQ%mvv4FO#m9H?QQ@7
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 372eb80..dc4f505 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -2,15 +2,6 @@
+ <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+ <plist version="1.0">
+ <dict>
+-	<key>CFBundleURLTypes</key>
+-	<array>
+-		<dict>
+-			<key>CFBundleURLSchemes</key>
+-			<array>
+-				<string>apolloschurchapp</string>
+-			</array>
+-		</dict>
+-	</array>
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>en</string>
+ 	<key>CFBundleDisplayName</key>
+@@ -26,51 +17,52 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.1</string>
++	<string>0.8.2</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
++	<key>CFBundleURLTypes</key>
++	<array>
++		<dict>
++			<key>CFBundleURLSchemes</key>
++			<array>
++				<string>apolloschurchapp</string>
++			</array>
++		</dict>
++	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>7</string>
++	<string>8</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+-	<false />
++	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true />
+-	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string />
+-	<key>UILaunchStoryboardName</key>
+-	<string>LaunchScreen</string>
+-	<key>UIRequiredDeviceCapabilities</key>
+-	<array>
+-		<string>armv7</string>
+-	</array>
+-	<key>UIStatusBarStyle</key>
+-	<string>UIStatusBarStyleLightContent</string>
+-	<key>UISupportedInterfaceOrientations</key>
+-	<array>
+-		<string>UIInterfaceOrientationPortrait</string>
+-		<string>UIInterfaceOrientationLandscapeLeft</string>
+-		<string>UIInterfaceOrientationLandscapeRight</string>
+-	</array>
+-	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false />
++	<true/>
+ 	<key>NSAppTransportSecurity</key>
+ 	<dict>
+ 		<key>NSAllowsArbitraryLoads</key>
+-		<true />
++		<true/>
+ 		<key>NSExceptionDomains</key>
+ 		<dict>
+ 			<key>embed.wistia.com</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true />
++				<true/>
+ 			</dict>
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true />
++				<true/>
+ 			</dict>
+ 		</dict>
+ 	</dict>
++	<key>NSCameraUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
++	<key>NSLocationWhenInUseUsageDescription</key>
++	<string></string>
++	<key>NSMicrophoneUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
++	<key>NSPhotoLibraryAddUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery (for uploading profile pictures)</string>
++	<key>NSPhotoLibraryUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+ 	<key>UIAppFonts</key>
+ 	<array>
+ 		<string>DroidSerif-Bold.ttf</string>
+@@ -86,13 +78,21 @@
+ 		<string>Inter-UI-MediumItalic.otf</string>
+ 		<string>Inter-UI-Regular.otf</string>
+ 	</array>
+-	<key>NSPhotoLibraryUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+-	<key>NSCameraUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
+-	<key>NSPhotoLibraryAddUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery (for uploading profile pictures)</string>
+-	<key>NSMicrophoneUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
++	<key>UILaunchStoryboardName</key>
++	<string>LaunchScreen</string>
++	<key>UIRequiredDeviceCapabilities</key>
++	<array>
++		<string>armv7</string>
++	</array>
++	<key>UIStatusBarStyle</key>
++	<string>UIStatusBarStyleLightContent</string>
++	<key>UISupportedInterfaceOrientations</key>
++	<array>
++		<string>UIInterfaceOrientationPortrait</string>
++		<string>UIInterfaceOrientationLandscapeLeft</string>
++		<string>UIInterfaceOrientationLandscapeRight</string>
++	</array>
++	<key>UIViewControllerBasedStatusBarAppearance</key>
++	<false/>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 6addde1..309f16c 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.1</string>
++	<string>0.8.2</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>6</string>
++	<string>7</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 864c3cb..2e36400 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.2",
++  "version": "0.8.3",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.1.16",
+@@ -61,10 +61,10 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-analytics": "^0.8.2",
+-    "@apollosproject/ui-auth": "^0.8.2",
+-    "@apollosproject/ui-kit": "^0.8.2",
+-    "@apollosproject/ui-passes": "^0.8.2",
++    "@apollosproject/ui-analytics": "^0.8.3",
++    "@apollosproject/ui-auth": "^0.8.3",
++    "@apollosproject/ui-kit": "^0.8.3",
++    "@apollosproject/ui-passes": "^0.8.3",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.5.1",
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index 14319d1..2f9bd73 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -13,7 +13,7 @@ const AppProviders = (props) => (
+         navigateToAuth={() => NavigationService.navigate('Auth')}
+         closeAuth={() => NavigationService.navigate('Onboarding')}
+       >
+-        <AnalyticsProvider trackFunctions={[console.warn]}>
++        <AnalyticsProvider>
+           <Providers {...props} />
+         </AnalyticsProvider>
+       </AuthProvider>
