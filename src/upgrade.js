@@ -9,28 +9,12 @@ const { getNewVersion } = require('./fetchUpdates');
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
 
 const apollosDiffUrl =
+  'https://raw.githubusercontent.com/ApollosProject/apollos-upgrade/diffs/diffs';
+const apollosFullDiffUrl =
   'https://github.com/ApollosProject/apollos-upgrade';
 
-const getPatch = async (currentVersion, newVersion, platform, projectName, packageName) => {
-  let patch;
 
-  logger.info(`Fetching diff between v${currentVersion} and v${newVersion}...`);
-
-  try {
-    const patchResponse = await fetch(
-      `${apollosDiffUrl}/compare/release/${platform}/${currentVersion}...release/${platform}/${newVersion}.diff`
-    );
-    patch = await patchResponse.text();
-  } catch (error) {
-    logger.error(
-      `Failed to fetch diff for apollos ${newVersion}. Maybe it's not released yet?`
-    );
-    logger.info(
-      'For available releases to diff see: https://github.com/ApollosProject/apollos-upgrade'
-    );
-    return null;
-  }
-
+const cleanPatch = (patch, projectName, packageName) => {
   let patchWithRenamedProjects = patch;
   patchWithRenamedProjects = patchWithRenamedProjects
     .replace(
@@ -50,13 +34,61 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
     );
 
   return patchWithRenamedProjects;
+}
+
+const getPatch = async (currentVersion, newVersion, platform, projectName, packageName) => {
+  let patch;
+
+  logger.info(`Fetching diff between v${currentVersion} and v${newVersion}...`);
+
+  try {
+    const patchResponse = await fetch(
+      `${apollosDiffUrl}/${platform}/${currentVersion}..${newVersion}.diff`
+    );
+    patch = await patchResponse.text();
+  } catch (error) {
+    logger.error(
+      `Failed to fetch diff for apollos ${newVersion}. Maybe it's not released yet?`
+    );
+    logger.info(
+      'For available releases to diff see: https://github.com/ApollosProject/apollos-upgrade'
+    );
+    return null;
+  }
+
+  return cleanPatch(patch, projectName, packageName);
+};
+
+const getFullDiff = async (currentVersion, newVersion, platform, projectName, packageName) => {
+  let patch;
+
+  logger.info(`Fetching diff between v${currentVersion} and v${newVersion}...`);
+
+  try {
+    const patchResponse = await fetch(
+      `${apollosFullDiffUrl}/compare/release/${platform}/${currentVersion}...release/${platform}/${newVersion}.diff`
+    );
+    patch = await patchResponse.text();
+  } catch (error) {
+    logger.error(
+      `Failed to fetch diff for apollos ${newVersion}. Maybe it's not released yet?`
+    );
+    logger.info(
+      'For available releases to diff see: https://github.com/ApollosProject/apollos-upgrade'
+    );
+    return null;
+  }
+
+  return cleanPatch(patch, projectName, packageName);
 };
 
 
 const applyPatch = async (
   tmpPatchFile,
+  tmpFullDiff
 ) => {
   let filesToExclude = ['package.json', '**/*.png', '**/*.otf', '**/*.webp', '**/*.ttf', '**/*.jar', '**/*.env.production'];
+  let filesToFullDiff = [];
 
   const { stdout: relativePathFromRoot } = await execa('git', [
     'rev-parse',
@@ -73,7 +105,7 @@ const applyPatch = async (
         tmpPatchFile,
         ...excludes,
         '--3way',
-        '-p2',z
+        '-p2',
         `--directory=${relativePathFromRoot}`,
       ]);
       logger.info('Applying diff...');
@@ -84,8 +116,23 @@ const applyPatch = async (
           .split('\n')
           .filter((x) => x.includes('does not exist in index'))
           .map((x) =>
-            x.replace(/^error: (.*): does not exist in index$/, '$1')
+            x.replace(/^error: (.*): does not exist in index$/, '$1').replace(relativePathFromRoot, '')
           ),
+      ].filter(Boolean);
+
+      filesToFullDiff = [
+        ...error.stderr
+          .split('\n')
+          .filter((x) => x.includes('patch does not apply'))
+          .map((x) =>
+            x.replace(/^error: (.*): patch does not apply$/, '$1').replace(relativePathFromRoot, '')
+          ),
+      ].filter(Boolean);
+
+
+      filesToExclude = [
+        ...filesToExclude,
+        ...filesToFullDiff,
       ].filter(Boolean);
 
       logger.info(`Applying diff (excluding: ${filesToExclude.join(', ')})...`);
@@ -93,6 +140,28 @@ const applyPatch = async (
       const excludes = filesToExclude.map(
         (e) => `--exclude=${path.join(relativePathFromRoot, e)}`
       );
+
+      const diffIncludes = filesToFullDiff.map(
+        (e) => `--include=${path.join(relativePathFromRoot, e)}`
+      );
+
+      if (diffIncludes.length){
+        try {
+          logger.log(chalk.underline('Applying patch against full diff for the hard files. \n\nYou may need to consult the example apps for help merging these files'))
+          logger.log(chalk.bgRed(filesToFullDiff.join('\n')))
+          await execa('git', [
+            'apply',
+            tmpFullDiff,
+            ...diffIncludes,
+            '--3way',
+            '-p2',
+            `--directory=${relativePathFromRoot}`,
+          ]);
+        } catch (e) {
+
+        }
+      }
+
       await execa('git', [
         'apply',
         tmpPatchFile,
@@ -101,6 +170,7 @@ const applyPatch = async (
         '-p2',
         `--directory=${relativePathFromRoot}`,
       ]);
+
     }
   } catch (error) {
     if (error.stderr) {
@@ -117,12 +187,14 @@ const applyPatch = async (
  */
 async function upgrade({ to: toVersion, from: fromVersion, platform, projectName, packageName }) {
   const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
+  const tmpFullDiff = `tmp-full-diff-apollos-${platform}.patch`;
 
   const newVersion = toVersion || await getNewVersion();
 
   const currentVersion = fromVersion;
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
+  const fullDiff = await getFullDiff(currentVersion, newVersion, platform, projectName, packageName);
 
   if (patch === null) {
     return;
@@ -139,12 +211,14 @@ async function upgrade({ to: toVersion, from: fromVersion, platform, projectName
 
   try {
     fs.writeFileSync(tmpPatchFile, patch);
-    patchSuccess = await applyPatch(tmpPatchFile);
+    fs.writeFileSync(tmpFullDiff, fullDiff);
+    patchSuccess = await applyPatch(tmpPatchFile, tmpFullDiff);
   } catch (error) {
     throw new Error(error.stderr || error);
   } finally {
     try {
-      fs.unlinkSync(tmpPatchFile);
+    fs.unlinkSync(tmpPatchFile);
+    fs.unlinkSync(tmpFullDiff);
     } catch (e) {
       // ignore
     }
