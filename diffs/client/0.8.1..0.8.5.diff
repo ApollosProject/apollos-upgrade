@@ -1,0 +1,4324 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 597d14c..bb27535 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -117,8 +117,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 5
+-        versionName "0.8.0"
++        versionCode 9
++        versionName "0.8.4"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+@@ -151,11 +151,19 @@ android {
+             }
+         }
+     }
++    compileOptions {
++        targetCompatibility JavaVersion.VERSION_1_8
++    }
+ }
+ 
+ dependencies {
+-    implementation project(':react-native-passkit-wallet')
+-    implementation project(':react-native-maps')
++       // added this and the two google play packages below when upgraded rn-maps to 0.24.2
++    implementation(project(':react-native-maps')){
++      exclude group: 'com.google.android.gms', module: 'play-services-base'
++      exclude group: 'com.google.android.gms', module: 'play-services-maps'
++    }
++    implementation 'com.google.android.gms:play-services-base:10.0.1'
++    implementation 'com.google.android.gms:play-services-maps:10.0.1'
+     implementation project(':rn-fetch-blob')
+     implementation project(':react-native-webview')
+     implementation project(':react-native-video')
+@@ -167,7 +175,6 @@ dependencies {
+     implementation project(':react-native-linear-gradient')
+     implementation project(':react-native-image-picker')
+     implementation project(':react-native-device-info')
+-    implementation project(':react-native-custom-tabs')
+     implementation project(':react-native-config')
+     implementation fileTree(dir: "libs", include: ["*.jar"])
+     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index 7e91940..209e70c 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -21,7 +21,7 @@
+       <activity
+         android:name=".LaunchActivity"
+         android:theme="@style/LaunchTheme"
+-        android:label="Apollos Church">
++        android:label="@string/app_name">
+         <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+diff --git a/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+index dbaf07b..aa318e0 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
++++ b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+@@ -3,20 +3,18 @@ package com.apolloschurchapp;
+ import android.app.Application;
+ 
+ import com.facebook.react.ReactApplication;
+-import com.mybdesign.RNPassKit.RNPassKitPackage;
+ import com.airbnb.android.react.maps.MapsPackage;
+ import com.RNFetchBlob.RNFetchBlobPackage;
+ import com.reactnativecommunity.webview.RNCWebViewPackage;
+ import com.brentvatne.react.ReactVideoPackage;
+ import com.horcrux.svg.SvgPackage;
+ import org.devio.rn.splashscreen.SplashScreenReactPackage;
+-import com.swmansion.rnscreens.RNScreenPackage;
++import com.swmansion.rnscreens.RNScreensPackage;
+ import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+ import com.tanguyantoine.react.MusicControl;
+ import com.BV.LinearGradient.LinearGradientPackage;
+ import com.imagepicker.ImagePickerPackage;
+ import com.learnium.RNDeviceInfo.RNDeviceInfo;
+-import com.github.droibit.android.reactnative.customtabs.CustomTabsPackage;
+ import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+ import com.facebook.react.ReactNativeHost;
+ import com.facebook.react.ReactPackage;
+@@ -38,20 +36,18 @@ public class MainApplication extends Application implements ReactApplication {
+     protected List<ReactPackage> getPackages() {
+       return Arrays.<ReactPackage>asList(
+           new MainReactPackage(),
+-            new RNPassKitPackage(),
+             new MapsPackage(),
+             new RNFetchBlobPackage(),
+             new RNCWebViewPackage(),
+             new ReactVideoPackage(),
+             new SvgPackage(),
+             new SplashScreenReactPackage(),
+-            new RNScreenPackage(),
++            new RNScreensPackage(),
+             new ReactNativeOneSignalPackage(),
+             new MusicControl(),
+             new LinearGradientPackage(),
+             new ImagePickerPackage(),
+             new RNDeviceInfo(),
+-            new CustomTabsPackage(),
+             new ReactNativeConfigPackage()
+       );
+     }
+diff --git a/apolloschurchapp/android/app/src/main/res/drawable/background_splash.xml b/apolloschurchapp/android/app/src/main/res/drawable/background_splash.xml
+index 4f85728..19383f0 100644
+--- a/apolloschurchapp/android/app/src/main/res/drawable/background_splash.xml
++++ b/apolloschurchapp/android/app/src/main/res/drawable/background_splash.xml
+@@ -2,7 +2,7 @@
+ <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+     <item
+-        android:drawable="@color/deep_water"/>
++        android:drawable="@color/primary"/>
+ 
+     <item
+         android:width="95.28dp"
+diff --git a/apolloschurchapp/android/app/src/main/res/layout/launch_screen.xml b/apolloschurchapp/android/app/src/main/res/layout/launch_screen.xml
+index 0009481..6e78d8b 100644
+--- a/apolloschurchapp/android/app/src/main/res/layout/launch_screen.xml
++++ b/apolloschurchapp/android/app/src/main/res/layout/launch_screen.xml
+@@ -3,7 +3,7 @@
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    android:background="@color/deep_water"
++    android:background="@color/primary"
+     android:gravity="center">
+ 
+     <ImageView
+diff --git a/apolloschurchapp/android/app/src/main/res/values-v21/styles.xml b/apolloschurchapp/android/app/src/main/res/values-v21/styles.xml
+index 5a4019d..8cfc536 100644
+--- a/apolloschurchapp/android/app/src/main/res/values-v21/styles.xml
++++ b/apolloschurchapp/android/app/src/main/res/values-v21/styles.xml
+@@ -7,12 +7,12 @@
+ 
+     <style name="LaunchTheme" parent="Theme.AppCompat.Light.NoActionBar">
+         <item name="android:windowBackground">@drawable/background_splash</item>
+-        <item name="android:statusBarColor">@color/deep_water</item>
++        <item name="android:statusBarColor">@color/primary</item>
+     </style>
+ 
+     <style name="SplashScreenTheme" parent="SplashScreen_SplashTheme">
+-        <item name="android:statusBarColor">@color/deep_water</item>
+-        <item name="colorPrimaryDark">@color/deep_water</item>
++        <item name="android:statusBarColor">@color/primary</item>
++        <item name="colorPrimaryDark">@color/primary</item>
+     </style>
+ 
+ </resources>
+diff --git a/apolloschurchapp/android/app/src/main/res/values/colors.xml b/apolloschurchapp/android/app/src/main/res/values/colors.xml
+index 348fc25..62a0e92 100644
+--- a/apolloschurchapp/android/app/src/main/res/values/colors.xml
++++ b/apolloschurchapp/android/app/src/main/res/values/colors.xml
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <color name="deep_water">#00676D</color>
+-</resources>
+\ No newline at end of file
++    <color name="primary">#00676D</color>
++</resources>
+diff --git a/apolloschurchapp/android/settings.gradle b/apolloschurchapp/android/settings.gradle
+index 60d41e3..d705770 100644
+--- a/apolloschurchapp/android/settings.gradle
++++ b/apolloschurchapp/android/settings.gradle
+@@ -1,8 +1,4 @@
+ rootProject.name = 'apolloschurchapp'
+-include ':react-native-passkit-wallet'
+-project(':react-native-passkit-wallet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-passkit-wallet/android')
+-include ':react-native-maps'
+-project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
+ include ':react-native-maps'
+ project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
+ include ':rn-fetch-blob'
+@@ -27,8 +23,6 @@ include ':react-native-image-picker'
+ project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
+ include ':react-native-device-info'
+ project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
+-include ':react-native-custom-tabs'
+-project(':react-native-custom-tabs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-custom-tabs/android')
+ include ':react-native-config'
+ project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
+ 
+diff --git a/apolloschurchapp/index.js b/apolloschurchapp/index.js
+index d009549..f9ec2cf 100644
+--- a/apolloschurchapp/index.js
++++ b/apolloschurchapp/index.js
+@@ -1,7 +1,14 @@
+ import { AppRegistry, YellowBox } from 'react-native';
++import SplashScreen from 'react-native-splash-screen';
+ 
+ import App from './src';
+ 
++// If there's an error before the splash screen goes away, you never see that error.
++// This tries to hide the splash screen so you can see the error.
++// Shouldnt't do anything in Prod.
++// Depending on the error, splash screen might not go away ;)
++global.ErrorUtils.setGlobalHandler(() => SplashScreen.hide());
++
+ YellowBox.ignoreWarnings([
+   'Warning: isMounted(...) is deprecated',
+   'Module RCTImageLoader',
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index b0737ef..6d14b73 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,13 +15,13 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.8.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>9</string>
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true/>
++	<true />
+ 	<key>UILaunchStoryboardName</key>
+ 	<string>LaunchScreen</string>
+ 	<key>UIRequiredDeviceCapabilities</key>
+@@ -35,18 +35,17 @@
+ 		<string>UIInterfaceOrientationLandscapeRight</string>
+ 	</array>
+ 	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false/>
++	<false />
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string></string>
++	<string />
+ 	<key>NSAppTransportSecurity</key>
+-	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
+ 	<dict>
+ 		<key>NSExceptionDomains</key>
+ 		<dict>
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true/>
++				<true />
+ 			</dict>
+ 		</dict>
+ 	</dict>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index e358b6d..2e3a4e3 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.8.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>9</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index df3e4a6..632eda5 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -5,7 +5,6 @@
+ 	};
+ 	objectVersion = 46;
+ 	objects = {
+-
+ /* Begin PBXBuildFile section */
+ 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
+ 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
+@@ -41,7 +40,6 @@
+ 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
+ 		2DCD954D1E0B4F2C00145EB5 /* apolloschurchappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* apolloschurchappTests.m */; };
+ 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+-		470A7E49F0A8424780FFAE7B /* libDBCustomTabs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DA3750D49B0422F9A4B45BE /* libDBCustomTabs.a */; };
+ 		4994C0DA2471456ABE1D0174 /* libRNAirplay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BE434FF7E9549F392208DEF /* libRNAirplay.a */; };
+ 		4C19EE32F0B441CD93BB0172 /* libRCTOneSignal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D480D95FC7F4569B8B934E3 /* libRCTOneSignal.a */; };
+ 		578FFEC1D7D54C9B871A9E5B /* Inter-UI-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5A5A2BC2998547F4816B82E4 /* Inter-UI-BlackItalic.otf */; };
+@@ -356,13 +354,6 @@
+ 			remoteGlobalIDString = 3DF7F6AC203AA09B00D0EAB7;
+ 			remoteInfo = "ReactNativeConfig-tvOS";
+ 		};
+-		79CEBFEF223011FE00D8F685 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 6F1D5B192D1D4948B39D4BFE /* ReactNativeCustomTabs.xcodeproj */;
+-			proxyType = 2;
+-			remoteGlobalIDString = DA7118681CC9158A0087DF95;
+-			remoteInfo = DBCustomTabs;
+-		};
+ 		79CEBFF2223011FE00D8F685 /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+ 			containerPortal = 3923D6EFF26D4A53B8BDF8C6 /* RNAirplay.xcodeproj */;
+@@ -563,14 +554,12 @@
+ 		63998175DB3B4506ACF27B92 /* ReactNativeConfig.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeConfig.xcodeproj; path = "../node_modules/react-native-config/ios/ReactNativeConfig.xcodeproj"; sourceTree = "<group>"; };
+ 		63F6EE53A9B44B4388B5F1C2 /* Inter-UI-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Italic.otf"; path = "../assets/fonts/Inter-UI-Italic.otf"; sourceTree = "<group>"; };
+ 		67356E00D116467DA58DF3CC /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; };
+-		6F1D5B192D1D4948B39D4BFE /* ReactNativeCustomTabs.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeCustomTabs.xcodeproj; path = "../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs.xcodeproj"; sourceTree = "<group>"; };
+ 		74625A1E54234FB7BE12070D /* libMusicControl-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libMusicControl-tvOS.a"; sourceTree = "<group>"; };
+ 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+ 		7A505BEDA0674A7F9DD875ED /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
+ 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+ 		97222E2EB5E54C7FA6104218 /* libReactNativeConfig-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libReactNativeConfig-tvOS.a"; sourceTree = "<group>"; };
+ 		9862436C289A498D8B2E6201 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
+-		9DA3750D49B0422F9A4B45BE /* libDBCustomTabs.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libDBCustomTabs.a; sourceTree = "<group>"; };
+ 		9F0EC3F23A3F4FFBBBC6583A /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+ 		A44246D0E44E48C4B8335DBD /* libRNScreens.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNScreens.a; sourceTree = "<group>"; };
+ 		A460FD7884FD4574A818005A /* Inter-UI-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-MediumItalic.otf"; path = "../assets/fonts/Inter-UI-MediumItalic.otf"; sourceTree = "<group>"; };
+@@ -621,7 +610,6 @@
+ 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+ 				4994C0DA2471456ABE1D0174 /* libRNAirplay.a in Frameworks */,
+ 				A975E0B94A5D44AEB410E546 /* libReactNativeConfig.a in Frameworks */,
+-				470A7E49F0A8424780FFAE7B /* libDBCustomTabs.a in Frameworks */,
+ 				CFE4716D4F6D4ABF9ED485AC /* libRNDeviceInfo.a in Frameworks */,
+ 				62BCE95D7F6B4F37B3CB4265 /* libRNImagePicker.a in Frameworks */,
+ 				1E6618B697C649BB9FCD362E /* libBVLinearGradient.a in Frameworks */,
+@@ -912,14 +900,6 @@
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		79CEBFD1223011FE00D8F685 /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				79CEBFF0223011FE00D8F685 /* libDBCustomTabs.a */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+ 		79CEBFD3223011FE00D8F685 /* Products */ = {
+ 			isa = PBXGroup;
+ 			children = (
+@@ -1004,7 +984,6 @@
+ 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+ 				3923D6EFF26D4A53B8BDF8C6 /* RNAirplay.xcodeproj */,
+ 				63998175DB3B4506ACF27B92 /* ReactNativeConfig.xcodeproj */,
+-				6F1D5B192D1D4948B39D4BFE /* ReactNativeCustomTabs.xcodeproj */,
+ 				39E16D6487A34F4D9B8C6EC1 /* RNDeviceInfo.xcodeproj */,
+ 				629FCAAD128E41B4BAE2BCF4 /* RNImagePicker.xcodeproj */,
+ 				43F1D28CACD04757A0FB29A6 /* BVLinearGradient.xcodeproj */,
+@@ -1172,6 +1151,10 @@
+ 						CreatedOnToolsVersion = 6.2;
+ 						TestTargetID = 13B07F861A680F5B00A75B9A;
+ 					};
++					13B07F861A680F5B00A75B9A = {
++						DevelopmentTeam = 7TM8C6252Z;
++						ProvisioningStyle = Automatic;
++					};
+ 					2D02E47A1E0B4A5D006451C7 = {
+ 						CreatedOnToolsVersion = 8.2.1;
+ 						ProvisioningStyle = Automatic;
+@@ -1188,6 +1171,7 @@
+ 			developmentRegion = English;
+ 			hasScannedForEncodings = 0;
+ 			knownRegions = (
++				English,
+ 				en,
+ 				Base,
+ 			);
+@@ -1267,10 +1251,6 @@
+ 					ProductGroup = 79CEBFCF223011FE00D8F685 /* Products */;
+ 					ProjectRef = 63998175DB3B4506ACF27B92 /* ReactNativeConfig.xcodeproj */;
+ 				},
+-				{
+-					ProductGroup = 79CEBFD1223011FE00D8F685 /* Products */;
+-					ProjectRef = 6F1D5B192D1D4948B39D4BFE /* ReactNativeCustomTabs.xcodeproj */;
+-				},
+ 				{
+ 					ProductGroup = 79CEBFCD223011FE00D8F685 /* Products */;
+ 					ProjectRef = 3923D6EFF26D4A53B8BDF8C6 /* RNAirplay.xcodeproj */;
+@@ -1589,13 +1569,6 @@
+ 			remoteRef = 79CEBFEC223011FE00D8F685 /* PBXContainerItemProxy */;
+ 			sourceTree = BUILT_PRODUCTS_DIR;
+ 		};
+-		79CEBFF0223011FE00D8F685 /* libDBCustomTabs.a */ = {
+-			isa = PBXReferenceProxy;
+-			fileType = archive.ar;
+-			path = libDBCustomTabs.a;
+-			remoteRef = 79CEBFEF223011FE00D8F685 /* PBXContainerItemProxy */;
+-			sourceTree = BUILT_PRODUCTS_DIR;
+-		};
+ 		79CEBFF3223011FE00D8F685 /* libRNAirplay.a */ = {
+ 			isa = PBXReferenceProxy;
+ 			fileType = archive.ar;
+@@ -1897,7 +1870,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -1918,7 +1890,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -1939,7 +1910,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -1960,7 +1930,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -1976,13 +1945,13 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 1;
++				CURRENT_PROJECT_VERSION = 5;
+ 				DEAD_CODE_STRIPPING = NO;
++				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2007,6 +1976,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+ 				PRODUCT_NAME = apolloschurchapp;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Debug;
+@@ -2015,12 +1985,11 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 1;
++				CURRENT_PROJECT_VERSION = 5;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2045,6 +2014,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+ 				PRODUCT_NAME = apolloschurchapp;
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Release;
+@@ -2065,7 +2035,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2085,7 +2054,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2115,7 +2083,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2135,7 +2102,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2164,7 +2130,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2184,7 +2149,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+@@ -2213,7 +2177,6 @@
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
+-					"$(SRCROOT)/../node_modules/react-native-custom-tabs/ios/ReactNativeCustomTabs",
+ 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
+ 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
+ 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+@@ -2233,7 +2196,6 @@
+ 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+ 				LIBRARY_SEARCH_PATHS = (
+ 					"$(inherited)",
+-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+ 				);
+ 				OTHER_LDFLAGS = (
+ 					"-ObjC",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib b/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
+index 035b378..4ca705c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
++++ b/apolloschurchapp/ios/apolloschurchapp/Base.lproj/LaunchScreen.xib
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
++<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES">
+     <device id="retina5_5" orientation="portrait">
+         <adaptation id="fullscreen"/>
+     </device>
+     <dependencies>
+         <deployment identifier="iOS"/>
+-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
++        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+     </dependencies>
+     <objects>
+@@ -15,18 +15,22 @@
+             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+             <subviews>
++                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash_bg" translatesAutoresizingMaskIntoConstraints="NO" id="iGM-E3-lqn">
++                    <rect key="frame" x="-12" y="-10" width="437" height="758"/>
++                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
++                </imageView>
+                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="splash-icon" translatesAutoresizingMaskIntoConstraints="NO" id="6Je-Yv-1Zj">
+                     <rect key="frame" x="157" y="288" width="100" height="100"/>
+                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                 </imageView>
+             </subviews>
+-            <color key="backgroundColor" red="0.0" green="0.40392156862745099" blue="0.42745098039215684" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+             <nil key="simulatedStatusBarMetrics"/>
+             <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+-            <point key="canvasLocation" x="546" y="454"/>
++            <point key="canvasLocation" x="544.92753623188412" y="453.26086956521743"/>
+         </view>
+     </objects>
+     <resources>
+         <image name="splash-icon" width="94" height="99"/>
++        <image name="splash_bg" width="721" height="721"/>
+     </resources>
+-</document>
+\ No newline at end of file
++</document>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
+index 2d92bd5..da4a164 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
++++ b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/Contents.json
+@@ -3,4 +3,4 @@
+     "version" : 1,
+     "author" : "xcode"
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json
+new file mode 100644
+index 0000000..8939b14
+--- /dev/null
++++ b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/Contents.json
+@@ -0,0 +1,21 @@
++{
++  "images" : [
++    {
++      "idiom" : "universal",
++      "filename" : "splash_bg.png",
++      "scale" : "1x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "2x"
++    },
++    {
++      "idiom" : "universal",
++      "scale" : "3x"
++    }
++  ],
++  "info" : {
++    "version" : 1,
++    "author" : "xcode"
++  }
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/splash_bg.png b/apolloschurchapp/ios/apolloschurchapp/Images.xcassets/splash_bg.imageset/splash_bg.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..315d8e09ac4fd5f51176da24982baad2115fa027
+GIT binary patch
+literal 11471
+zcmeAS@N?(olHy`uVBq!ia0y~yV7dsx9Be?5xhMa#GcYJHc)B=-RK&f#rYOYZDB^tZ
+z=H*2eyj_=_M49$pT<`AhvTNUo(sMs$`WYCRSU3a}92yuJZ!=xbcd?(ho!L$Z#0N`w
+zaPNsf-r*PD@CmAlk!f>-pzUN%uojS#E37>)ezCsrhiXtT;Fh>(JQHrLL+pW$b@2`V
+zMzsTjWHjhTlg((B87(fLrQ>K(Ia*BsYueE&a<q8>Zf}h?4@R2@qs@cS=D}$5V6+!G
+z+Jgqw1*1))(WcR8(`a<S4K^M*I@mZm&<Yw!9vwLu9XT0o9*j<`KxVE+Css!1<G|(N
+zX!BsSc`({MK+L~8to{|vz`)Z5S_?2*U5-|lqt)eTQ(?5JFxpfYU9vU0Ty1m|WptS$
+xWKrhmB+KX|3r!|j{weR`TWF71VC?vS+x%;O<pqA37~n!>22WQ%mvv4FO#m9H?QQ@7
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index c091996..ec83de8 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -2,15 +2,6 @@
+ <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+ <plist version="1.0">
+ <dict>
+-	<key>CFBundleURLTypes</key>
+-	<array>
+-		<dict>
+-			<key>CFBundleURLSchemes</key>
+-			<array>
+-				<string>apolloschurchapp</string>
+-			</array>
+-		</dict>
+-	</array>
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>en</string>
+ 	<key>CFBundleDisplayName</key>
+@@ -26,51 +17,52 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.0</string>
++	<string>0.8.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
++	<key>CFBundleURLTypes</key>
++	<array>
++		<dict>
++			<key>CFBundleURLSchemes</key>
++			<array>
++				<string>apolloschurchapp</string>
++			</array>
++		</dict>
++	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>6</string>
++	<string>10</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+-	<false/>
++	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+-	<true/>
+-	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string/>
+-	<key>UILaunchStoryboardName</key>
+-	<string>LaunchScreen</string>
+-	<key>UIRequiredDeviceCapabilities</key>
+-	<array>
+-		<string>armv7</string>
+-	</array>
+-	<key>UIStatusBarStyle</key>
+-	<string>UIStatusBarStyleLightContent</string>
+-	<key>UISupportedInterfaceOrientations</key>
+-	<array>
+-		<string>UIInterfaceOrientationPortrait</string>
+-		<string>UIInterfaceOrientationLandscapeLeft</string>
+-		<string>UIInterfaceOrientationLandscapeRight</string>
+-	</array>
+-	<key>UIViewControllerBasedStatusBarAppearance</key>
+-	<false/>
++	<true />
+ 	<key>NSAppTransportSecurity</key>
+ 	<dict>
+ 		<key>NSAllowsArbitraryLoads</key>
+-		<true/>
++		<true />
+ 		<key>NSExceptionDomains</key>
+ 		<dict>
+ 			<key>embed.wistia.com</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true/>
++				<true />
+ 			</dict>
+ 			<key>localhost</key>
+ 			<dict>
+ 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+-				<true/>
++				<true />
+ 			</dict>
+ 		</dict>
+ 	</dict>
++	<key>NSCameraUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
++	<key>NSLocationWhenInUseUsageDescription</key>
++	<string />
++	<key>NSMicrophoneUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
++	<key>NSPhotoLibraryAddUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery (for uploading profile pictures)</string>
++	<key>NSPhotoLibraryUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+ 	<key>UIAppFonts</key>
+ 	<array>
+ 		<string>DroidSerif-Bold.ttf</string>
+@@ -86,13 +78,21 @@
+ 		<string>Inter-UI-MediumItalic.otf</string>
+ 		<string>Inter-UI-Regular.otf</string>
+ 	</array>
+-	<key>NSPhotoLibraryUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
+-	<key>NSCameraUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
+-	<key>NSPhotoLibraryAddUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery (for uploading profile pictures)</string>
+-	<key>NSMicrophoneUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
++	<key>UILaunchStoryboardName</key>
++	<string>LaunchScreen</string>
++	<key>UIRequiredDeviceCapabilities</key>
++	<array>
++		<string>armv7</string>
++	</array>
++	<key>UIStatusBarStyle</key>
++	<string>UIStatusBarStyleLightContent</string>
++	<key>UISupportedInterfaceOrientations</key>
++	<array>
++		<string>UIInterfaceOrientationPortrait</string>
++		<string>UIInterfaceOrientationLandscapeLeft</string>
++		<string>UIInterfaceOrientationLandscapeRight</string>
++	</array>
++	<key>UIViewControllerBasedStatusBarAppearance</key>
++	<false />
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 6ed8754..d235470 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.7.0</string>
++	<string>0.8.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>5</string>
++	<string>9</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 59ba7e7..fcdc84a 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -1,33 +1,33 @@
++// We ran into an issue where SafeAreaView would break jest tests.
++jest.mock('react-navigation', () => {
++  const ActualNavigation = require.requireActual('react-navigation');
++  return {
++    ...ActualNavigation,
++    SafeAreaView: require.requireActual('SafeAreaView'),
++  };
++});
++
+ jest.mock('react-native-config', () => ({
+   ONE_SIGNAL_KEY: 'doesntmatter',
+ }));
+-jest.mock('react-native-custom-tabs', () => ({
+-  CustomTabs: {
+-    openURL: jest.fn(),
+-  },
+-}));
+ jest.mock('Animated', () => {
+   const ActualAnimated = require.requireActual('Animated');
+   return {
+     ...ActualAnimated,
+-    timing: (value, config) => {
+-      return {
+-        start: (callback) => {
+-          value.setValue(config.toValue);
+-          callback && callback()
+-        },
+-        stop: () => ({}),
+-      };
+-    },
+-    spring: (value, config) => {
+-      return {
+-        start: (callback) => {
+-          value.setValue(config.toValue);
+-          callback && callback()
+-        },
+-        stop: () => ({}),
+-      };
+-    },
++    timing: (value, config) => ({
++      start: (callback) => {
++        value.setValue(config.toValue);
++        callback && callback();
++      },
++      stop: () => ({}),
++    }),
++    spring: (value, config) => ({
++      start: (callback) => {
++        value.setValue(config.toValue);
++        callback && callback();
++      },
++      stop: () => ({}),
++    }),
+   };
+ });
+ 
+@@ -66,9 +66,16 @@ jest.mock(
+   () => 'Fetch'
+ );
+ 
++jest.mock('@apollosproject/ui-analytics', () => ({
++  track: () => '',
++  AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
++  AnalyticsProvider: ({ children }) => children,
++}));
++
+ jest.mock('react-native-video', () => 'Video');
+ 
+ jest.mock('NativeEventEmitter');
+ 
+ jest.mock('react-native-maps');
++jest.mock('DatePickerIOS', () => 'DatePicker');
+ jest.mock('./src/client/index');
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 1f552df..2f3ddb3 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.1",
++  "version": "0.8.5",
+   "private": true,
+   "devDependencies": {
+-    "@storybook/addon-actions": "4.0.7",
+-    "@storybook/addon-links": "4.0.7",
+-    "@storybook/addons": "4.0.7",
+-    "@storybook/react-native": "4.0.7",
++    "@storybook/addon-actions": "4.1.16",
++    "@storybook/addon-links": "4.1.16",
++    "@storybook/addons": "4.1.16",
++    "@storybook/react-native": "4.1.1",
+     "codecov": "3.0.2",
+     "get-dev-paths": "^0.1.0",
+     "jest": "23.6.0",
+@@ -26,7 +26,7 @@
+     "src"
+   ],
+   "scripts": {
+-    "android": "react-native run-android",
++    "android": "SIM=\"$($HOME/Library/Android/sdk/emulator/emulator -list-avds | sed -n 1p)\" && $HOME/Library/Android/sdk/emulator/emulator -avd \"${SIM}\" & react-native run-android --appId com.apolloschurch.app --main-activity LaunchActivity",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "fixlint": "eslint ./src --fix",
+     "ios": "react-native run-ios --simulator=\"iPhone X\"",
+@@ -61,9 +61,11 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-auth": "^0.8.1",
+-    "@apollosproject/ui-kit": "^0.8.1",
+-    "@apollosproject/ui-passes": "^0.8.1",
++    "@apollosproject/ui-analytics": "^0.8.5",
++    "@apollosproject/ui-auth": "^0.8.5",
++    "@apollosproject/ui-htmlview": "^0.8.5",
++    "@apollosproject/ui-kit": "^0.8.5",
++    "@apollosproject/ui-passes": "^0.8.5",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.5.1",
+@@ -77,7 +79,7 @@
+     "dotenv": "^6.2.0",
+     "entities": "1.1.1",
+     "events": "^3.0.0",
+-    "formik": "0.11.11",
++    "formik": "^1.5.2",
+     "graphql": "0.13.2",
+     "graphql-tag": "2.9.2",
+     "graphql-tools": "3.1.1",
+@@ -90,29 +92,27 @@
+     "prettier": "1.14.2",
+     "querystring": "^0.2.0",
+     "react": "16.6.3",
+-    "react-apollo": "2.5.1",
++    "react-apollo": "2.5.5",
+     "react-native": "0.58.5",
+     "react-native-airplay-btn": "^1.0.6",
+     "react-native-config": "^0.11.7",
+-    "react-native-custom-tabs": "0.1.7",
+     "react-native-device-info": "0.22.5",
+-    "react-native-image-picker": "0.26.10",
++    "react-native-image-picker": "0.28.0",
+     "react-native-keyboard-aware-scroll-view": "0.7.0",
+     "react-native-linear-gradient": "2.5.3",
+-    "react-native-maps": "^0.23.0",
+-    "react-native-music-control": "0.7.3",
++    "react-native-maps": "^0.24.2",
++    "react-native-music-control": "^0.10.2",
+     "react-native-onesignal": "3.2.7",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-view": "0.13.1",
+-    "react-native-screens": "1.0.0-alpha.12",
++    "react-native-screens": "^1.0.0-alpha.22",
+     "react-native-splash-screen": "^3.1.1",
+     "react-native-svg": "9.2.4",
+-    "react-native-swiper": "^1.5.14",
+-    "react-native-video": "3.2.0",
++    "react-native-video": "^4.4.1",
+     "react-native-video-controls": "2.2.3",
+     "react-native-webview": "^5.2.0",
+-    "react-navigation": "2.11.2",
++    "react-navigation": "2.14.0",
+     "react-navigation-tabs": "0.6.0",
+     "recompose": "^0.30.0",
+     "rn-fetch-blob": "^0.10.15",
+diff --git a/apolloschurchapp/rn-cli.config.js b/apolloschurchapp/rn-cli.config.js
+index efc06fe..b69ca32 100644
+--- a/apolloschurchapp/rn-cli.config.js
++++ b/apolloschurchapp/rn-cli.config.js
+@@ -6,6 +6,8 @@ const localDeps = [
+   path.resolve('..', 'apollos-ui-passes'),
+   path.resolve('..', 'apollos-ui-auth'),
+   path.resolve('..', 'apollos-ui-htmlview'),
++  path.resolve('..', 'apollos-ui-analytics'),
++  path.resolve('..', 'apollos-ui-onboarding'),
+ ];
+ 
+ module.exports = {
+diff --git a/apolloschurchapp/src/LandingScreen.js b/apolloschurchapp/src/LandingScreen.js
+new file mode 100644
+index 0000000..52dde4b
+--- /dev/null
++++ b/apolloschurchapp/src/LandingScreen.js
+@@ -0,0 +1,33 @@
++import React from 'react';
++import PropTypes from 'prop-types';
++import { styled, GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import ApollosLandingScreen from './ui/LandingScreen';
++
++const FullScreenImage = styled({
++  resizeMode: 'cover',
++  position: 'absolute',
++})(GradientOverlayImage);
++
++const LandingScreen = ({ navigation }) => (
++  <ApollosLandingScreen
++    onPressPrimary={() => navigation.push('Auth')}
++    textColor={'white'}
++    BackgroundComponent={
++      <FullScreenImage source={'https://picsum.photos/375/812/?random'} />
++    }
++    primaryNavText={"Let's go!"}
++  />
++);
++
++LandingScreen.navigationOptions = {
++  header: null,
++};
++
++LandingScreen.propTypes = {
++  navigation: PropTypes.shape({
++    push: PropTypes.func,
++  }),
++};
++
++export default LandingScreen;
+diff --git a/apolloschurchapp/src/NavigationService.js b/apolloschurchapp/src/NavigationService.js
+index a5d758b..a2a5348 100644
+--- a/apolloschurchapp/src/NavigationService.js
++++ b/apolloschurchapp/src/NavigationService.js
+@@ -2,22 +2,30 @@ import { NavigationActions } from 'react-navigation';
+ 
+ let _navigator;
+ 
+-function setTopLevelNavigator(navigatorRef) {
++const setTopLevelNavigator = (navigatorRef) => {
+   _navigator = navigatorRef;
+-}
++};
+ 
+-function navigate(routeName, params) {
++const navigate = (routeName, params) => {
+   _navigator.dispatch(
+     NavigationActions.navigate({
+       routeName,
+       params,
+     })
+   );
+-}
++};
+ 
+-// add other navigation functions that you need and export them
++const goBack = (from) => {
++  let key;
++  if (from) {
++    const route = _navigator.state.nav.routes.find((r) => r.routeName === from);
++    if (route) ({ key } = route);
++  }
++  _navigator.dispatch(NavigationActions.back({ key }));
++};
+ 
+ export default {
+-  navigate,
+   setTopLevelNavigator,
++  navigate,
++  goBack,
+ };
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index f66ae36..2f9bd73 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -1,6 +1,7 @@
+ import React from 'react';
+ import { Providers } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
++import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import NavigationService from './NavigationService';
+ import { NotificationsManager } from './notifications';
+ import ClientProvider from './client';
+@@ -8,8 +9,13 @@ import ClientProvider from './client';
+ const AppProviders = (props) => (
+   <ClientProvider {...props}>
+     <NotificationsManager>
+-      <AuthProvider navigateToAuth={() => NavigationService.navigate('Auth')}>
+-        <Providers {...props} />
++      <AuthProvider
++        navigateToAuth={() => NavigationService.navigate('Auth')}
++        closeAuth={() => NavigationService.navigate('Onboarding')}
++      >
++        <AnalyticsProvider>
++          <Providers {...props} />
++        </AnalyticsProvider>
+       </AuthProvider>
+     </NotificationsManager>
+   </ClientProvider>
+diff --git a/apolloschurchapp/src/analytics/TrackEventWhenLoaded.js b/apolloschurchapp/src/analytics/TrackEventWhenLoaded.js
+deleted file mode 100644
+index 113408e..0000000
+--- a/apolloschurchapp/src/analytics/TrackEventWhenLoaded.js
++++ /dev/null
+@@ -1,49 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import { ApolloConsumer } from 'react-apollo';
+-import PropTypes from 'prop-types';
+-import { track } from './index';
+-
+-class TrackEventWhenLoaded extends PureComponent {
+-  componentDidMount() {
+-    if (this.props.loaded) {
+-      this.track();
+-    }
+-  }
+-
+-  componentDidUpdate(prevProps) {
+-    if (!prevProps.loaded && this.props.loaded) {
+-      this.track();
+-    }
+-  }
+-
+-  get trackClient() {
+-    return this.props.track || track;
+-  }
+-
+-  track() {
+-    const { eventName, properties, client } = this.props;
+-    return this.trackClient({ eventName, properties, client });
+-  }
+-
+-  render() {
+-    return null;
+-  }
+-}
+-
+-TrackEventWhenLoaded.propTypes = {
+-  loaded: PropTypes.bool.isRequired,
+-  eventName: PropTypes.string.isRequired,
+-  // eslint-disable-next-line react/forbid-prop-types
+-  properties: PropTypes.any,
+-  // eslint-disable-next-line react/forbid-prop-types
+-  client: PropTypes.any,
+-  track: PropTypes.func,
+-};
+-
+-const TrackEventWhenLoadedConnected = (props) => (
+-  <ApolloConsumer>
+-    {(client) => <TrackEventWhenLoaded {...props} client={client} />}
+-  </ApolloConsumer>
+-);
+-
+-export default TrackEventWhenLoadedConnected;
+diff --git a/apolloschurchapp/src/analytics/TrackEventWhenLoaded.tests.js b/apolloschurchapp/src/analytics/TrackEventWhenLoaded.tests.js
+deleted file mode 100644
+index 0572c72..0000000
+--- a/apolloschurchapp/src/analytics/TrackEventWhenLoaded.tests.js
++++ /dev/null
+@@ -1,53 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-import TrackEventWhenLoaded from './TrackEventWhenLoaded';
+-
+-const trackMock = jest.fn();
+-
+-describe('The TrackEventWhenLoaded component', () => {
+-  afterEach(() => {
+-    trackMock.mockClear();
+-  });
+-  it('should track an event if mounted with loaded=true', () => {
+-    renderer.create(
+-      <Providers>
+-        <TrackEventWhenLoaded
+-          loaded
+-          eventName="Track Something"
+-          properties={{ ThingId: '1234' }}
+-          track={trackMock}
+-        />
+-      </Providers>
+-    );
+-    expect(trackMock.mock.calls).toMatchSnapshot();
+-  });
+-
+-  it('should track an event if mounted with loaded=false and then switching to true', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <TrackEventWhenLoaded
+-          loaded={false}
+-          eventName="Track Something"
+-          properties={{ ThingId: '1234' }}
+-          track={trackMock}
+-          key="tracker"
+-        />
+-      </Providers>
+-    );
+-    expect(trackMock.mock.calls).toMatchSnapshot();
+-    tree.update(
+-      <Providers>
+-        <TrackEventWhenLoaded
+-          loaded
+-          eventName="Track Something"
+-          properties={{ ThingId: '1234' }}
+-          track={trackMock}
+-          key="tracker"
+-        />
+-      </Providers>
+-    );
+-    expect(trackMock.mock.calls).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/analytics/index.js b/apolloschurchapp/src/analytics/index.js
+deleted file mode 100644
+index 491e985..0000000
+--- a/apolloschurchapp/src/analytics/index.js
++++ /dev/null
+@@ -1,77 +0,0 @@
+-import gql from 'graphql-tag';
+-import DeviceInfo from 'react-native-device-info';
+-import { Platform } from 'react-native';
+-
+-const anonymousId = DeviceInfo.getUniqueID();
+-
+-const deviceInfo = {
+-  platform: Platform.OS === 'ios' ? 'iOS' : 'Android',
+-  deviceId: anonymousId,
+-  deviceModel: DeviceInfo.getModel(),
+-  osVersion: DeviceInfo.getSystemVersion(),
+-  appVersion: DeviceInfo.getVersion(),
+-};
+-
+-const trackMutation = gql`
+-  mutation track($input: AnalyticsTrackInput!) {
+-    trackEvent(input: $input) {
+-      success
+-    }
+-  }
+-`;
+-
+-const identifyMutation = gql`
+-  mutation identify($input: AnalyticsIdentifyInput!) {
+-    identifySelf(input: $input) {
+-      success
+-    }
+-  }
+-`;
+-
+-const propertiesToGqlInput = (props = []) =>
+-  Object.keys(props).map((key) => ({
+-    field: key,
+-    value: props[key],
+-  }));
+-
+-export const track = ({ eventName, properties, client }) =>
+-  client.mutate({
+-    mutation: trackMutation,
+-    variables: {
+-      input: {
+-        anonymousId,
+-        deviceInfo,
+-        eventName,
+-        properties: propertiesToGqlInput(properties),
+-      },
+-    },
+-  });
+-
+-export const identify = ({ client }) =>
+-  client.mutate({
+-    mutation: identifyMutation,
+-    variables: {
+-      input: {
+-        anonymousId,
+-        deviceInfo,
+-      },
+-    },
+-  });
+-
+-export const events = {
+-  LikeContent: 'Like Content',
+-  UnlikeContent: 'Unlike Content',
+-  ViewContent: 'View Content',
+-  ShareContent: 'Share Content',
+-  UserLogin: 'User Login',
+-  UserSignup: 'User Signup',
+-  UserLogout: 'UserLogout',
+-  UserForgotPassword: 'User Forgot Password',
+-  UserPlayedMedia: 'User Played Media',
+-};
+-
+-export default {
+-  track,
+-  identify,
+-  events,
+-};
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 4a13cb8..c473190 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
+ import { ApolloProvider } from 'react-apollo';
+ import { ApolloClient } from 'apollo-client';
+ import { ApolloLink } from 'apollo-link';
+-import SplashScreen from 'react-native-splash-screen';
+ 
+ import { authLink } from '@apollosproject/ui-auth';
+ import { resolvers, schema, defaults } from '../store';
+@@ -42,7 +41,6 @@ class ClientProvider extends PureComponent {
+     } catch (e) {
+       throw e;
+     } finally {
+-      if (SplashScreen && SplashScreen.hide) SplashScreen.hide();
+       client.mutate({ mutation: MARK_CACHE_LOADED });
+     }
+   }
+diff --git a/apolloschurchapp/src/content-single/ContentSingle.js b/apolloschurchapp/src/content-single/ContentSingle.js
+index f5b2709..eaaf244 100644
+--- a/apolloschurchapp/src/content-single/ContentSingle.js
++++ b/apolloschurchapp/src/content-single/ContentSingle.js
+@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
+ 
+ import { ErrorCard, ThemeMixin } from '@apollosproject/ui-kit';
+ 
+-import TrackEventWhenLoaded from 'apolloschurchapp/src/analytics/TrackEventWhenLoaded';
+-import { events } from 'apolloschurchapp/src/analytics';
++import { TrackEventWhenLoaded } from '@apollosproject/ui-analytics';
+ 
+ import ActionContainer from './ActionContainer';
+ import getContentItem from './getContentItem';
+@@ -80,7 +79,7 @@ class ContentSingle extends PureComponent {
+       >
+         <TrackEventWhenLoaded
+           loaded={!!(!loading && content.title)}
+-          eventName={events.ViewContent}
++          eventName={'View Contentx'}
+           properties={{
+             title: content.title,
+             itemId: this.itemId,
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index b3714ea..630be1e 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -1,13 +1,13 @@
+ import React from 'react';
+ import { StatusBar } from 'react-native';
+ import { createStackNavigator } from 'react-navigation';
+-// import { Sentry } from 'react-native-sentry';
++import SplashScreen from 'react-native-splash-screen';
+ 
+ import { BackgroundView, withTheme } from '@apollosproject/ui-kit';
+ import Passes from '@apollosproject/ui-passes';
+-
+ import MediaPlayer from 'apolloschurchapp/src/ui/MediaPlayer';
+-import Auth from '@apollosproject/ui-auth';
++import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
++
+ import Providers from './Providers';
+ import NavigationService from './NavigationService';
+ import ContentSingle from './content-single';
+@@ -15,20 +15,24 @@ import Tabs from './tabs';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+ import Location from './user-settings/Locations';
++import LandingScreen from './LandingScreen';
+ import UserWebBrowser from './user-web-browser';
+-import Onboarding from './onboarding';
+-
+-// Sentry.config(
+-//   'https://5908fa19ed37447f86b2717423cadec5:45dd3b58792b413cb67109c5e63a0bb7@sentry.io/1241658'
+-// ).install();
++import Onboarding from './ui/Onboarding';
+ 
+ const AppStatusBar = withTheme(({ theme }) => ({
+   barStyle: 'dark-content',
+   backgroundColor: theme.colors.paper,
+ }))(StatusBar);
+ 
++const ProtectedRouteWithSplashScreen = (props) => {
++  const handleOnRouteChange = () => SplashScreen.hide();
++
++  return <ProtectedRoute {...props} onRouteChange={handleOnRouteChange} />;
++};
++
+ const AppNavigator = createStackNavigator(
+   {
++    ProtectedRoute: ProtectedRouteWithSplashScreen,
+     Tabs,
+     ContentSingle,
+     Auth,
+@@ -38,9 +42,10 @@ const AppNavigator = createStackNavigator(
+     Passes,
+     UserWebBrowser,
+     Onboarding,
++    LandingScreen,
+   },
+   {
+-    initialRouteName: 'Tabs',
++    initialRouteName: 'ProtectedRoute',
+     mode: 'modal',
+     headerMode: 'screen',
+   }
+diff --git a/apolloschurchapp/src/notifications/NotificationManager.js b/apolloschurchapp/src/notifications/NotificationManager.js
+index 47e204c..bdeb95d 100644
+--- a/apolloschurchapp/src/notifications/NotificationManager.js
++++ b/apolloschurchapp/src/notifications/NotificationManager.js
+@@ -35,7 +35,7 @@ class NotificationsInit extends Component {
+ 
+   componentDidMount() {
+     OneSignal.init(Config.ONE_SIGNAL_KEY, {
+-      kOSSettingsKeyAutoPrompt: true,
++      kOSSettingsKeyAutoPrompt: false,
+     });
+     OneSignal.addEventListener('received', this.onReceived);
+     OneSignal.addEventListener('opened', this.onOpened);
+diff --git a/apolloschurchapp/src/onboarding/index.js b/apolloschurchapp/src/onboarding/index.js
+deleted file mode 100644
+index 6396965..0000000
+--- a/apolloschurchapp/src/onboarding/index.js
++++ /dev/null
+@@ -1,13 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import Onboarding from 'apolloschurchapp/src/ui/Onboarding';
+-
+-export default class TestingControlPanel extends PureComponent {
+-  static navigationOptions = () => ({
+-    title: 'Onboarding',
+-    header: null,
+-  });
+-
+-  render() {
+-    return <Onboarding />;
+-  }
+-}
+diff --git a/apolloschurchapp/src/store/index.js b/apolloschurchapp/src/store/index.js
+index 1ff8038..cee2356 100644
+--- a/apolloschurchapp/src/store/index.js
++++ b/apolloschurchapp/src/store/index.js
+@@ -1,7 +1,7 @@
+ import { merge, get } from 'lodash';
+ import gql from 'graphql-tag';
+ 
+-import { track, events } from 'apolloschurchapp/src/analytics';
++import { track } from '@apollosproject/ui-analytics';
+ import { Platform } from 'react-native';
+ import { CACHE_LOADED } from '../client/cache'; // eslint-disable-line
+ 
+@@ -152,13 +152,13 @@ export const resolvers = {
+         },
+       });
+       track({
+-        eventName: events.UserPlayedMedia,
++        client,
++        eventName: 'UserPlayedMedia',
+         properties: {
+           uri: mediaTrack.uri,
+           title: mediaTrack.title,
+           type: mediaTrack.isVideo ? 'Video' : 'Audio',
+         },
+-        client,
+       });
+       return null;
+     },
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+index 1ab8d26..397a879 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+@@ -1,6 +1,7 @@
+ import React from 'react';
+ import { Query } from 'react-apollo';
+ import PropTypes from 'prop-types';
++import { get } from 'lodash';
+ 
+ import getUserProfile from '../getUserProfile';
+ import UserAvatarHeader from './UserAvatarHeader';
+@@ -10,9 +11,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+     {({
+       data: {
+         currentUser: {
+-          profile: { photo, firstName, lastName, campus: { name } } = {
+-            campus: {},
+-          },
++          profile: { photo, firstName, lastName, campus } = {},
+         } = {},
+       } = {},
+       refetch,
+@@ -20,7 +19,7 @@ const UserAvatarHeaderConnected = ({ navigation }) => (
+       <UserAvatarHeader
+         firstName={firstName}
+         lastName={lastName}
+-        location={name}
++        location={get(campus, 'name')}
+         photo={photo}
+         refetch={refetch}
+         navigation={navigation}
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
+index e0a8488..b4bad0c 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
+@@ -1,6 +1,5 @@
+ import React from 'react';
+-import renderer from 'react-test-renderer';
+-import wait from 'waait';
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+@@ -16,16 +15,37 @@ describe('user avatar header connect', () => {
+       result: {
+         data: {
+           currentUser: {
+-            id: 'AuthenticatedUser:057b0758543270d1cb21784cac4d3f5c',
++            __typename: 'AuthenticatedUser',
++            id: 'AuthenticatedUser:123',
+             profile: {
++              id: 'Person:123',
++              __typename: 'Person',
++              gender: 'Male',
++              birthDate: '1980-02-10T00:00:00',
+               firstName: 'Isaac',
+               lastName: 'Hardy',
+-              location: 'Anderson, SC',
++              campus: {
++                __typename: 'Campus',
++                id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++                name: 'Chicago Campus',
++                latitude: 42.09203,
++                longitude: -88.13289,
++                distanceFromLocation: null,
++                street1: '67 Algonquin Rd',
++                street2: '',
++                city: 'South Barrington',
++                state: 'IL',
++                postalCode: '60010-6143',
++                image: {
++                  __typename: 'ImageMediaSource',
++                  uri: 'https://picsum.photos/300/300/?random',
++                },
++              },
+               email: 'isaac.hardy@newspring.cc',
+-              nickName: 'Ike',
++              nickName: 'Batman',
+               photo: {
+-                uri:
+-                  'https://apollosrock.newspring.cc:443/GetImage.ashx?guid=60fd5f35-3167-4c26-9a30-d44937287b87',
++                __typename: 'ImageMediaSource',
++                uri: 'https://some-uri.com/test.jpg',
+               },
+             },
+           },
+@@ -33,12 +53,11 @@ describe('user avatar header connect', () => {
+       },
+     };
+     const navigation = { navigate: jest.fn(), getParam: jest.fn() };
+-    const tree = renderer.create(
++    const tree = await renderWithApolloData(
+       <Providers mocks={[mock]}>
+         <UserAvatarHeaderConnected navigation={navigation} />
+       </Providers>
+     );
+-    await wait(0); // wait for response from graphql
+     expect(tree).toMatchSnapshot();
+   });
+ });
+diff --git a/apolloschurchapp/src/tabs/connect/getUserProfile.js b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+index 54c0f77..ef3b2c8 100644
+--- a/apolloschurchapp/src/tabs/connect/getUserProfile.js
++++ b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+@@ -1,21 +1,26 @@
+ import gql from 'graphql-tag';
++import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
+ 
+ export default gql`
+   query getCurrentUserProfile {
+     currentUser {
+       id
+       profile {
++        id
+         firstName
+         lastName
+         campus {
+-          name
++          ...CampusParts
+         }
+         email
+         nickName
++        gender
++        birthDate
+         photo {
+           uri
+         }
+       }
+     }
+   }
++  ${CampusParts}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index bb09a97..57abba0 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -5,12 +5,21 @@ import SafeAreaView from 'react-native-safe-area-view';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+-import { styled, FeedView, BackgroundView } from '@apollosproject/ui-kit';
++import {
++  styled,
++  FeedView,
++  BackgroundView,
++  H3,
++  H6,
++} from '@apollosproject/ui-kit';
+ import ContentCardConnected from '../../ui/ContentCardConnected';
+ 
+ import { LiveButton } from '../../live';
+ 
++import ContentTableCard from '../../ui/ContentTableCard';
+ import getUserFeed from './getUserFeed';
++import getPersonaFeed from './getPersonaFeed';
++import getCampaignContentItem from './getCampaignContentItem';
+ 
+ const LogoTitle = styled(({ theme }) => ({
+   height: theme.sizing.baseUnit,
+@@ -19,6 +28,10 @@ const LogoTitle = styled(({ theme }) => ({
+   resizeMode: 'contain',
+ }))(Image);
+ 
++const StyledH6 = styled(({ theme }) => ({
++  color: theme.colors.text.tertiary,
++}))(H6);
++
+ class Home extends PureComponent {
+   static navigationOptions = () => ({
+     header: null,
+@@ -56,6 +69,64 @@ class Home extends PureComponent {
+                   <>
+                     <LogoTitle source={require('./wordmark.png')} />
+                     <LiveButton />
++                    <Query
++                      query={getCampaignContentItem}
++                      fetchPolicy="cache-and-network"
++                    >
++                      {({ data: featuredData, loading: isFeaturedLoading }) => {
++                        const featuredContent = get(
++                          featuredData,
++                          'campaigns.edges',
++                          []
++                        ).map((edge) => edge.node);
++
++                        const featuredItem = get(
++                          featuredContent[0],
++                          'childContentItemsConnection.edges[0].node',
++                          {}
++                        );
++
++                        return (
++                          <ContentCardConnected
++                            contentId={featuredItem.id}
++                            isLoading={isFeaturedLoading}
++                          />
++                        );
++                      }}
++                    </Query>
++                    <Query
++                      query={getPersonaFeed}
++                      fetchPolicy="cache-and-network"
++                    >
++                      {({
++                        data: personaData,
++                        loading: isContentTableLoading,
++                      }) => (
++                        <ContentTableCard
++                          isLoading={isContentTableLoading}
++                          onPress={this.handleOnPress}
++                          header={
++                            <>
++                              <StyledH6 isLoading={isContentTableLoading}>
++                                FOR YOU
++                              </StyledH6>
++                              <H3
++                                isLoading={isContentTableLoading}
++                                numberOfLines={3}
++                                ellipsizeMode="tail"
++                              >
++                                Explore what God calls you to today
++                              </H3>
++                            </>
++                          }
++                          content={get(
++                            personaData,
++                            'personaFeed.edges',
++                            []
++                          ).map((edge) => edge.node)}
++                        />
++                      )}
++                    </Query>
+                   </>
+                 }
+                 onPressItem={this.handleOnPress}
+diff --git a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+new file mode 100644
+index 0000000..5bdb082
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+@@ -0,0 +1,25 @@
++import gql from 'graphql-tag';
++
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
++
++export default gql`
++  query campaigns {
++    campaigns {
++      edges {
++        node {
++          childContentItemsConnection {
++            edges {
++              node {
++                ...largeCardFragment
++                ...contentItemFragment
++              }
++            }
++          }
++        }
++      }
++    }
++  }
++  ${contentItemFragment}
++  ${largeCardFragment}
++`;
+diff --git a/apolloschurchapp/src/tabs/home/getPersonaFeed.js b/apolloschurchapp/src/tabs/home/getPersonaFeed.js
+new file mode 100644
+index 0000000..b8130e0
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/getPersonaFeed.js
+@@ -0,0 +1,19 @@
++import gql from 'graphql-tag';
++
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
++
++export default gql`
++  query getPersonaFeed {
++    personaFeed(first: 4) {
++      edges {
++        node {
++          ...largeCardFragment
++          ...contentItemFragment
++        }
++      }
++    }
++  }
++  ${contentItemFragment}
++  ${largeCardFragment}
++`;
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js
+new file mode 100644
+index 0000000..30bf74a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCard.stories.js
+@@ -0,0 +1,86 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++import { H3 } from '@apollosproject/ui-kit';
++import ContentTableCard from '.';
++
++const content = [
++  {
++    id: 'UniversalContentItem:9d06423a8908b7cc1e1f2db6156c1bfb',
++    title: 'Hello 1',
++    parentChannel: {
++      id: 'ContentChannel:be35f49307d7297989d3514be788ef2d',
++      name: 'NewSpring - Articles',
++    },
++    coverImage: {
++      sources: {
++        uri: 'https://picsum.photos/600/400/?image=63',
++      },
++    },
++  },
++  {
++    id: 'UniversalContentItem:9d06423a8908b7cc1e1f2db6156c1bfb',
++    title: 'Hello 2',
++    parentChannel: {
++      id: 'ContentChannel:be35f49307d7297989d3514be788ef2d',
++      name: 'NewSpring - Articles',
++    },
++    coverImage: {
++      sources: {
++        uri: 'https://picsum.photos/600/400/?image=63',
++      },
++    },
++  },
++  {
++    id: 'UniversalContentItem:9d06423a8908b7cc1e1f2db6156c1bfb',
++    title: 'Hello 3',
++    parentChannel: {
++      id: 'ContentChannel:be35f49307d7297989d3514be788ef2d',
++      name: 'NewSpring - Articles',
++    },
++    coverImage: {
++      sources: {
++        uri: 'https://picsum.photos/600/400/?image=63',
++      },
++    },
++  },
++  {
++    id: 'UniversalContentItem:9d06423a8908b7cc1e1f2db6156c1bfb',
++    title: 'Hello 4',
++    parentChannel: {
++      id: 'ContentChannel:be35f49307d7297989d3514be788ef2d',
++      name: 'NewSpring - Articles',
++    },
++    coverImage: {
++      sources: {
++        uri: 'https://picsum.photos/600/400/?image=63',
++      },
++    },
++  },
++];
++
++storiesOf('ContentTableCard', module)
++  .add('simple', () => (
++    <ContentTableCard
++      label={'FOR YOU'}
++      onPress={() => {}}
++      content={content}
++      DynamicHeader={
++        <H3 numberOfLines={3} ellipsizeMode="tail">
++          Some random text that encourages you
++        </H3>
++      }
++    />
++  ))
++  .add('isLoading', () => (
++    <ContentTableCard
++      label={'FOR YOU'}
++      onPress={() => {}}
++      isLoading
++      content={content}
++      DynamicHeader={
++        <H3 isLoading numberOfLines={3} ellipsizeMode="tail">
++          Some random text that encourages you
++        </H3>
++      }
++    />
++  ));
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.js b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.js
+new file mode 100644
+index 0000000..f387a41
+--- /dev/null
++++ b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.js
+@@ -0,0 +1,78 @@
++import React, { PureComponent } from 'react';
++import { View } from 'react-native';
++import PropTypes from 'prop-types';
++
++import {
++  H6,
++  H4,
++  styled,
++  TouchableScale,
++  withIsLoading,
++  ConnectedImage,
++  FlexedView,
++} from '@apollosproject/ui-kit';
++
++const CellImage = styled(({ theme }) => ({
++  width: theme.sizing.baseUnit * 4,
++  height: theme.sizing.baseUnit * 4,
++  borderRadius: theme.sizing.baseUnit,
++  overflow: 'hidden',
++  marginRight: theme.sizing.baseUnit,
++}))(View);
++
++const StyledH6 = styled(({ theme }) => ({
++  color: theme.colors.text.tertiary,
++}))(H6);
++
++const TextContainer = styled(({ theme }) => ({
++  marginTop: theme.sizing.baseUnit / 2.5,
++  borderBottomWidth: 0.5,
++  height: theme.sizing.baseUnit * 4.25,
++  borderColor: theme.colors.shadows.default,
++}))(FlexedView);
++
++const Cell = styled(({ theme }) => ({
++  paddingHorizontal: theme.sizing.baseUnit,
++  paddingVertical: theme.sizing.baseUnit / 4,
++  backgroundColor: theme.colors.background.paper,
++  flexDirection: 'row',
++  justifyContent: 'flex-start',
++  alignItems: 'center',
++}))(View);
++
++class ContentTableCardItem extends PureComponent {
++  static propTypes = {
++    onPress: PropTypes.func,
++    imageSource: PropTypes.any, // eslint-disable-line
++    label: PropTypes.string,
++    title: PropTypes.string,
++    id: PropTypes.string,
++  };
++
++  render() {
++    return (
++      <TouchableScale
++        onPress={() =>
++          this.props.onPress({
++            id: this.props.id,
++            transitionKey: 2,
++          })
++        }
++      >
++        <Cell>
++          <CellImage>
++            <ConnectedImage source={this.props.imageSource} isLoading />
++          </CellImage>
++          <TextContainer>
++            <StyledH6>{this.props.label}</StyledH6>
++            <H4 numberOfLines={2} ellipsizeMode="tail">
++              {this.props.title}
++            </H4>
++          </TextContainer>
++        </Cell>
++      </TouchableScale>
++    );
++  }
++}
++
++export default withIsLoading(ContentTableCardItem);
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js
+new file mode 100644
+index 0000000..b7ba6d2
+--- /dev/null
++++ b/apolloschurchapp/src/ui/ContentTableCard/ContentTableCardItem.stories.js
+@@ -0,0 +1,28 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++
++import ContentTableCardItem from './ContentTableCardItem';
++
++const item = {
++  id: 'UniversalContentItem:9d06423a8908b7cc1e1f2db6156c1bfb',
++  title: 'Hello 1',
++  parentChannel: {
++    id: 'ContentChannel:be35f49307d7297989d3514be788ef2d',
++    name: 'NewSpring - Articles',
++  },
++  coverImage: {
++    sources: {
++      uri: 'https://picsum.photos/600/400/?image=63',
++    },
++  },
++};
++
++storiesOf('ContentTableCardItem', module).add('simple', () => (
++  <ContentTableCardItem
++    onPress={() => {}}
++    imageSource={item.coverImage.sources}
++    label={item.parentChannel.name}
++    title={item.title}
++    id={item.id}
++  />
++));
+diff --git a/apolloschurchapp/src/ui/ContentTableCard/index.js b/apolloschurchapp/src/ui/ContentTableCard/index.js
+new file mode 100644
+index 0000000..646b394
+--- /dev/null
++++ b/apolloschurchapp/src/ui/ContentTableCard/index.js
+@@ -0,0 +1,56 @@
++import React, { PureComponent } from 'react';
++// import { View } from 'react-native';
++import PropTypes from 'prop-types';
++
++import {
++  TableView,
++  Card,
++  CardContent,
++  styled,
++  withIsLoading,
++} from '@apollosproject/ui-kit';
++
++import ContentTableCardItem from './ContentTableCardItem';
++
++const Header = styled(({ theme }) => ({
++  backgroundColor: theme.colors.background.paper,
++}))(CardContent);
++
++const Content = styled(() => ({
++  borderBottomWidth: 0,
++  borderTopWidth: 0,
++}))(TableView);
++
++class ContentTableCard extends PureComponent {
++  static propTypes = {
++    onPress: PropTypes.func,
++    isLoading: PropTypes.bool, // eslint-disable-line
++    content: PropTypes.array, // eslint-disable-line
++    header: PropTypes.element,
++  };
++
++  render() {
++    const { onPress, isLoading, content, header: headerContent } = this.props;
++
++    return (
++      <Card>
++        <Header>{headerContent}</Header>
++        <Content>
++          {content.map((item) => (
++            <ContentTableCardItem
++              isLoading={isLoading}
++              key={item.id}
++              id={item.id}
++              onPress={onPress}
++              label={item.parentChannel ? item.parentChannel.name : ''}
++              title={item.title || ''}
++              imageSource={item.coverImage ? item.coverImage.sources : ''}
++            />
++          ))}
++        </Content>
++      </Card>
++    );
++  }
++}
++
++export default withIsLoading(ContentTableCard);
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+new file mode 100644
+index 0000000..1d3c6e1
+--- /dev/null
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+@@ -0,0 +1,23 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import LandingScreen from '.';
++
++storiesOf('LandingScreen', module)
++  .add('default', () => <LandingScreen />)
++  .add('slideTitle', () => <LandingScreen slideTitle={'Custom title text'} />)
++  .add('description', () => (
++    <LandingScreen description={'Custom description text'} />
++  ))
++  .add('textColor', () => <LandingScreen textColor={'salmon'} />)
++  .add('ImageComponent', () => (
++    <LandingScreen
++      BackgroundComponent={
++        <GradientOverlayImage
++          source={'https://picsum.photos/375/812/?random'}
++        />
++      }
++    />
++  ))
++  .add('Slide props', () => <LandingScreen onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+similarity index 59%
+rename from apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js
+rename to apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+index 8ff8bf6..13e64f1 100644
+--- a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+@@ -1,48 +1,54 @@
+ import React from 'react';
+ import renderer from 'react-test-renderer';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import Features from '.';
++import LandingScreen from '.';
+ 
+-describe('The Onboarding SlideWrapper component', () => {
++describe('The Onboarding LandingScreen component', () => {
+   it('should render', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features />
++        <LandingScreen />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+   });
+-  it('should render a custom image', () => {
++  it('should render a custom title', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }} />
++        <LandingScreen slideTitle={'Custom title text'} />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+   });
+-
+-  it('should render a custom first name', () => {
++  it('should render a custom description', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features firstName={'firstName'} />
++        <LandingScreen description={'Custom description text'} />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+   });
+-  it('should render a custom title', () => {
++  it('should render with a custom text color', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features slideTitle={'Custom title text'} />
++        <LandingScreen textColor={'salmon'} />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+   });
+-  it('should render a custom description', () => {
++  it('should render with an ImageComponent', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features description={'Custom description text'} />
++        <LandingScreen
++          BackgroundComponent={
++            <GradientOverlayImage
++              source={'https://picsum.photos/375/812/?random'}
++            />
++          }
++        />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+@@ -50,7 +56,7 @@ describe('The Onboarding SlideWrapper component', () => {
+   it('should pass additional props to Slide', () => {
+     const tree = renderer.create(
+       <Providers>
+-        <Features onPressPrimary={jest.fn()} />
++        <LandingScreen onPressPrimary={jest.fn()} />
+       </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+diff --git a/apolloschurchapp/src/ui/LandingScreen/index.js b/apolloschurchapp/src/ui/LandingScreen/index.js
+new file mode 100644
+index 0000000..f929f81
+--- /dev/null
++++ b/apolloschurchapp/src/ui/LandingScreen/index.js
+@@ -0,0 +1,86 @@
++import React from 'react';
++import PropTypes from 'prop-types';
++
++import {
++  styled,
++  withTheme,
++  Icon,
++  H1,
++  H4,
++  PaddedView,
++  BackgroundView,
++} from '@apollosproject/ui-kit';
++
++import { Slide } from '@apollosproject/ui-onboarding';
++
++const Content = styled({
++  flex: 1,
++  justifyContent: 'center',
++})(PaddedView);
++
++const BrandIcon = withTheme(({ theme, color }) => ({
++  name: 'brand-icon',
++  size: theme.sizing.baseUnit * 3,
++  ...(color ? { fill: color } : {}),
++  style: {
++    marginBottom: theme.sizing.baseUnit,
++  },
++}))(Icon);
++
++const Title = styled(({ theme, color }) => ({
++  marginBottom: theme.sizing.baseUnit * 2,
++  ...(color ? { color } : {}),
++}))(H1);
++
++const StyledH4 = styled(({ color }) => ({
++  ...(color ? { color } : {}),
++}))(H4);
++
++const LandingScreen = ({
++  slideTitle,
++  description,
++  textColor,
++  BackgroundComponent,
++  ...props
++}) => (
++  <BackgroundView>
++    <Slide {...props} scrollEnabled={false}>
++      {BackgroundComponent}
++      <Content>
++        <BrandIcon color={textColor} />
++        <Title color={textColor}>{slideTitle}</Title>
++        <StyledH4 color={textColor}>{description}</StyledH4>
++      </Content>
++    </Slide>
++  </BackgroundView>
++);
++
++LandingScreen.propTypes = {
++  /* The `Swiper` component used in `<onBoarding>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use more unique name.
++   */
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  textColor: PropTypes.string, // Use for custom text and `BrandIcon` color when overlaying text on an image or video needs more clarity. Defaults to theme driven colors.
++  /* Recommended usage:
++   * - `Image` (react-native)
++   * - `GradientOverlayImage` (@apollosproject/ui-kit) for increased readability
++   * - `Video` (react-native-video) because moving pictures!
++   */
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++};
++
++LandingScreen.defaultProps = {
++  slideTitle: "We're glad you're here.",
++  description:
++    "We're not just a building you go to, but a family to belong to.",
++};
++
++LandingScreen.navigationOptions = {
++  header: null,
++};
++
++export default LandingScreen;
+diff --git a/apolloschurchapp/src/ui/LikeButton/index.js b/apolloschurchapp/src/ui/LikeButton/index.js
+index 681b055..b6592b7 100644
+--- a/apolloschurchapp/src/ui/LikeButton/index.js
++++ b/apolloschurchapp/src/ui/LikeButton/index.js
+@@ -2,10 +2,10 @@ import React from 'react';
+ 
+ import PropTypes from 'prop-types';
+ import { get } from 'lodash';
+-import { Query, Mutation, ApolloConsumer } from 'react-apollo';
++import { Query, Mutation } from 'react-apollo';
+ 
+ import Like from 'apolloschurchapp/src/ui/Like';
+-import { track, events } from 'apolloschurchapp/src/analytics';
++import { AnalyticsConsumer } from '@apollosproject/ui-analytics';
+ 
+ import updateLikeEntity from './updateLikeEntity';
+ import getLikedContentItem from './getLikedContentItem';
+@@ -31,8 +31,8 @@ const UpdateLikeStatus = ({
+   isLiked,
+   children,
+ }) => (
+-  <ApolloConsumer>
+-    {(client) => (
++  <AnalyticsConsumer>
++    {({ track }) => (
+       <Mutation
+         mutation={updateLikeEntity}
+         optimisticResponse={{
+@@ -71,13 +71,10 @@ const UpdateLikeStatus = ({
+                   try {
+                     await createNewInteraction({ variables });
+                     track({
+-                      eventName: isLiked
+-                        ? events.UnlikeContent
+-                        : events.LikeContent,
++                      eventName: isLiked ? 'UnlikeContent' : 'LikeContent',
+                       properties: {
+                         id: itemId,
+                       },
+-                      client,
+                     });
+                   } catch (e) {
+                     throw e.message;
+@@ -88,7 +85,7 @@ const UpdateLikeStatus = ({
+         }
+       </Mutation>
+     )}
+-  </ApolloConsumer>
++  </AnalyticsConsumer>
+ );
+ 
+ UpdateLikeStatus.propTypes = {
+diff --git a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js b/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
+deleted file mode 100644
+index d304b28..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Onboarding.stories.js
++++ /dev/null
+@@ -1,6 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Onboarding from '.';
+-
+-storiesOf('Onboarding', module).add('Example', () => <Onboarding />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
+deleted file mode 100644
+index 10ca9e6..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
++++ /dev/null
+@@ -1,49 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Slide from '.';
+-
+-storiesOf('Onboarding/Slide', module)
+-  .add('default', () => (
+-    <Slide>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('onPressPrimary', () => (
+-    <Slide onPressPrimary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavText', () => (
+-    <Slide onPressPrimary={() => {}} primaryNavText={'Custom button text'}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('primaryNavIcon', () => (
+-    <Slide
+-      onPressPrimary={() => {}}
+-      primaryNavText={'Custom icon'}
+-      primaryNavIcon={'umbrella'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('onPressSecondary', () => (
+-    <Slide onPressSecondary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('secondaryNavText', () => (
+-    <Slide
+-      onPressSecondary={() => {}}
+-      secondaryNavText={'Custom skip button text'}
+-    >
+-      <Text>Boom</Text>
+-    </Slide>
+-  ))
+-  .add('With Navigation', () => (
+-    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}}>
+-      <Text>Boom</Text>
+-    </Slide>
+-  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
+deleted file mode 100644
+index 451c794..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
++++ /dev/null
+@@ -1,87 +0,0 @@
+-import React from 'react';
+-import { Text } from 'react-native';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import Slide from '.';
+-
+-describe('The Onboarding Slide component', () => {
+-  it('should render children', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding next button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} primaryNavText={'Custom nav text'}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render primary navigation button with a custom icon', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressPrimary={jest.fn()}
+-          primaryNavText={'Custom nav text with custom icon'}
+-          primaryNavIcon={'umbrella'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button navigation', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressSecondary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render onboarding skip button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide
+-          onPressSecondary={jest.fn()}
+-          secondaryNavText={'Custom skip button text'}
+-        >
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render both slide navigation buttons', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Slide onPressPrimary={jest.fn()} onPressSecondary={jest.fn()}>
+-          <Text>Boom</Text>
+-        </Slide>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/index.js b/apolloschurchapp/src/ui/Onboarding/Slide/index.js
+deleted file mode 100644
+index f9456d3..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Slide/index.js
++++ /dev/null
+@@ -1,89 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  FlexedView,
+-  PaddedView,
+-  H5,
+-  ButtonLink,
+-  Button,
+-  Icon,
+-} from '@apollosproject/ui-kit';
+-
+-const NavWrapper = styled(({ theme }) => ({
+-  flexDirection: 'row-reverse', // reversed so the primary action is always on the right
+-  alignItems: 'center', // centers optional back button with dots/next button
+-  justifyContent: 'space-between',
+-  marginBottom: theme.sizing.baseUnit * 0.5, // centers nav/button with pager dots
+-}))(PaddedView);
+-
+-const PrimaryNavIcon = withTheme(({ theme }) => ({
+-  size: theme.helpers.rem(1.25),
+-  style: {
+-    marginLeft: theme.sizing.baseUnit * 0.5,
+-    marginRight: theme.sizing.baseUnit * -0.5,
+-  },
+-}))(Icon);
+-
+-const SkipButton = styled(({ theme }) => ({
+-  color: theme.colors.text.tertiary, // this is probably not the right color
+-  paddingVertical: theme.sizing.baseUnit * 0.9375, // optically centered on typographic baseline
+-  paddingHorizontal: theme.sizing.baseUnit, // improves tappability
+-  marginLeft: theme.sizing.baseUnit * -1, // adjusts for paddingHorizontal
+-}))(ButtonLink);
+-
+-// memo = sfc PureComponent 💥
+-// eslint-disable-next-line react/display-name
+-const Slide = memo(
+-  ({
+-    children,
+-    onPressPrimary,
+-    onPressSecondary,
+-    primaryNavText,
+-    primaryNavIcon,
+-    secondaryNavText,
+-  }) => (
+-    <>
+-      <FlexedView>{children}</FlexedView>
+-      {onPressPrimary || onPressSecondary ? (
+-        <NavWrapper vertical={false}>
+-          {onPressPrimary ? (
+-            <Button onPress={onPressPrimary}>
+-              <>
+-                <H5>{primaryNavText}</H5>
+-                <PrimaryNavIcon name={primaryNavIcon} />
+-              </>
+-            </Button>
+-          ) : null}
+-          {onPressSecondary ? (
+-            <SkipButton onPress={onPressSecondary}>
+-              {secondaryNavText}
+-            </SkipButton>
+-          ) : null}
+-        </NavWrapper>
+-      ) : null}
+-    </>
+-  )
+-);
+-
+-Slide.propTypes = {
+-  children: PropTypes.oneOfType([
+-    PropTypes.arrayOf(PropTypes.node),
+-    PropTypes.node,
+-  ]),
+-  onPressPrimary: PropTypes.func,
+-  onPressSecondary: PropTypes.func,
+-  primaryNavText: PropTypes.string, // colored button text
+-  primaryNavIcon: PropTypes.string, // optional custom icon name
+-  secondaryNavText: PropTypes.string, // text link
+-};
+-
+-Slide.defaultProps = {
+-  primaryNavText: 'Next',
+-  primaryNavIcon: 'arrow-next',
+-  secondaryNavText: 'Skip',
+-};
+-
+-export default Slide;
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 0e67071..54a0382 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,104 +1,80 @@
+-import React, { Component } from 'react';
+-import { Text } from 'react-native';
+-// import PropTypes from 'prop-types';
+-import Swiper from 'react-native-swiper';
+-import {
+-  withTheme,
+-  styled,
+-  BackgroundView,
+-  FlexedView,
+-  GradientOverlayImage,
+-} from '@apollosproject/ui-kit';
++import React from 'react';
++
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++import { ApolloConsumer } from 'react-apollo';
+ 
+ import {
+-  AskName,
+-  Features,
+-  AboutYou,
+   AskNotificationsConnected,
+-} from './slides';
+-
+-// Provides themed colors to Swiper dots
+-const ThemedSwiper = withTheme(({ theme }) => ({
+-  dotColor: theme.colors.background.inactive, // theme.colors.lightSecondary looks the best.
+-  activeDotColor: theme.colors.action.primary,
+-}))(({ swiperRef, ...props }) => <Swiper ref={swiperRef} {...props} />);
+-
+-const Boom = styled(({ bgcolor }) => ({
+-  backgroundColor: bgcolor,
+-}))(FlexedView);
+-
+-class Onboarding extends Component {
+-  constructor() {
+-    super();
+-
+-    this.swiper = null;
+-    this.state = { pagination: true };
+-  }
+-
+-  handleOnIndexChanged = (index) => {
+-    this.currentIndex = index;
++  AskNameConnected,
++  FeaturesConnected,
++  AboutYouConnected,
++  LocationFinderConnected,
++  OnboardingSwiper,
++} from '@apollosproject/ui-onboarding';
+ 
+-    this.togglePagination();
++import { requestPushPermissions } from 'apolloschurchapp/src/notifications';
+ 
+-    return this.currentIndex;
+-  };
+-
+-  togglePagination = () => {
+-    if (this.currentIndex === 4 || this.state.pagination === false) {
+-      this.setState((state) => ({
+-        pagination: !state.pagination,
+-      }));
+-    }
+-  };
+-
+-  // Creates ref to Swiper to be passed as a prop to children.
+-  setSwiperRef = (r) => {
+-    this.swiper = r;
+-
+-    return this.swiper;
+-  };
+-
+-  // Advance swiper 1 slide. See Swiper documentation for scrollBy details. https://github.com/leecade/react-native-swiper#methods
+-  handleOnPressPrimary = () => this.swiper.scrollBy(1);
+-
+-  render() {
+-    return (
+-      <BackgroundView>
+-        <ThemedSwiper
+-          showsPagination={this.state.pagination}
+-          onIndexChanged={this.handleOnIndexChanged}
+-          loop={false}
+-          /* Disables swipe gestures. We currently we don't display a back button so this is our
+-           * only back navigation option. */
+-          // scrollEnabled={false}
+-          showsButtons={false}
+-          swiperRef={this.setSwiperRef}
+-        >
+-          <AskName onPressPrimary={this.handleOnPressPrimary} />
+-          <Features
+-            imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }}
+-            onPressPrimary={this.handleOnPressPrimary}
++function Onboarding({ navigation }) {
++  return (
++    <OnboardingSwiper>
++      {({ swipeForward }) => (
++        <>
++          <AskNameConnected onPressPrimary={swipeForward} />
++          <FeaturesConnected
++            onPressPrimary={swipeForward}
++            BackgroundComponent={
++              <GradientOverlayImage
++                source={'https://picsum.photos/640/640/?random'}
++              />
++            }
++          />
++          <AboutYouConnected
++            onPressPrimary={swipeForward}
++            BackgroundComponent={
++              <GradientOverlayImage
++                source={'https://picsum.photos/640/640/?random'}
++              />
++            }
+           />
+-          <AboutYou
+-            imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }}
+-            onPressPrimary={this.handleOnPressPrimary}
++          <LocationFinderConnected
++            onPressPrimary={swipeForward}
++            onNavigate={() => {
++              navigation.navigate('Location', {
++                onFinished: swipeForward,
++              });
++            }}
++            BackgroundComponent={
++              <GradientOverlayImage
++                source={'https://picsum.photos/640/640/?random'}
++              />
++            }
+           />
+-          <AskNotificationsConnected
+-            onPressSecondary={this.handleOnPressPrimary}
+-          >
+-            <GradientOverlayImage
+-              source={'https://picsum.photos/640/640/?random'}
+-            />
+-          </AskNotificationsConnected>
+-          <Boom bgcolor={'lightgreen'}>
+-            <Text>Hello World 2</Text>
+-            <Text onPress={() => this.swiper.scrollBy(1)}>Next!</Text>
+-            <Text onPress={() => this.swiper.scrollBy(-1)}>Previous!</Text>
+-          </Boom>
+-        </ThemedSwiper>
+-      </BackgroundView>
+-    );
+-  }
++          <ApolloConsumer>
++            {(client) => (
++              <AskNotificationsConnected
++                onPressPrimary={() => navigation.navigate('Home')}
++                onRequestPushPermissions={() =>
++                  requestPushPermissions({ client })
++                }
++                primaryNavText={'Finish'}
++                BackgroundComponent={
++                  <GradientOverlayImage
++                    source={'https://picsum.photos/640/640/?random'}
++                  />
++                }
++              />
++            )}
++          </ApolloConsumer>
++        </>
++      )}
++    </OnboardingSwiper>
++  );
+ }
+ 
++Onboarding.navigationOptions = {
++  title: 'Onboarding',
++  header: null,
++  gesturesEnabled: false,
++};
++
+ export default Onboarding;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js
+deleted file mode 100644
+index cccacd6..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js
++++ /dev/null
+@@ -1,18 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import AboutYou from '.';
+-
+-storiesOf('Onboarding/slides/AboutYou', module)
+-  .add('default', () => <AboutYou />)
+-  .add('withImg', () => (
+-    <AboutYou imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }} />
+-  ))
+-  .add('slideTitle', () => <AboutYou slideTitle={'Custom title text'} />)
+-  .add('description', () => (
+-    <AboutYou description={'Custom description text'} />
+-  ))
+-  .add('userDOB', () => <AboutYou userDOB={new Date('02/14/1989')} />)
+-  .add('userGender', () => <AboutYou userGender={'Male'} />)
+-  .add('genderList', () => <AboutYou genderList={['M', 'F']} />)
+-  .add('Slide props', () => <AboutYou onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js
+deleted file mode 100644
+index 279c73c..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js
++++ /dev/null
+@@ -1,106 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import moment from 'moment';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import AboutYou from '.';
+-
+-describe('The Onboarding AboutYou component', () => {
+-  it('should render', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou defaultDate={moment.utc('2019-02-14').toDate()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom image', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          slideTitle={'Custom title text'}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          description={'Custom description text'}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom gender list', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          genderList={['M', 'F']}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render the selected gender', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          userGender={'Male'}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom date picker', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou userDOB={moment.utc('1989-02-14').toDate()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to Slide', () => {
+-    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
+-     * object and invalidate the snapshots every time. */
+-    const tree = renderer.create(
+-      <Providers>
+-        <AboutYou
+-          onPressPrimary={jest.fn()}
+-          defaultDate={moment.utc('2019-02-14').toDate()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js
+deleted file mode 100644
+index 7dcb94c..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js
++++ /dev/null
+@@ -1,138 +0,0 @@
+-import React, { memo } from 'react';
+-import { Image, View } from 'react-native';
+-import PropTypes from 'prop-types';
+-import moment from 'moment';
+-
+-import {
+-  styled,
+-  H2,
+-  H5,
+-  Radio,
+-  RadioButton,
+-  H6,
+-  DateInput,
+-  FlexedView,
+-  PaddedView,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const Content = styled({
+-  justifyContent: 'center',
+-})(FlexedView);
+-
+-const StyledImage = styled(({ theme }) => ({
+-  flex: 2,
+-  resizeMode: 'contain',
+-  marginBottom: theme.sizing.baseUnit * 2,
+-}))(Image);
+-
+-const TextContent = styled({
+-  flex: 1,
+-  justifyContent: 'center',
+-})(PaddedView);
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-  marginBottom: theme.sizing.baseUnit * 0.5,
+-}))(H2);
+-
+-const Description = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-  marginBottom: theme.sizing.baseUnit,
+-}))(H5);
+-
+-const Label = styled({
+-  color: 'gray',
+-  opacity: 0.7,
+-})(H6);
+-
+-const StyledDate = styled(({ theme }) => ({
+-  marginTop: 0,
+-  marginBottom: theme.sizing.baseUnit,
+-}))(DateInput);
+-
+-const StyledRadio = styled(({ theme }) => ({
+-  marginBottom: theme.sizing.baseUnit,
+-  flexDirection: 'row',
+-}))(Radio);
+-
+-const RadioLabel = styled(({ theme }) => ({
+-  marginLeft: theme.sizing.baseUnit * 0.5,
+-}))(H5);
+-
+-const AboutYou = memo(
+-  ({
+-    imgSrc,
+-    slideTitle,
+-    description,
+-    defaultDate,
+-    userDOB,
+-    userGender,
+-    genderList,
+-    ...props
+-  }) => (
+-    <Slide {...props}>
+-      <Content>
+-        {imgSrc ? <StyledImage source={imgSrc} /> : null}
+-        <TextContent>
+-          <Title>{slideTitle}</Title>
+-          <Description>{description}</Description>
+-          <View>
+-            <Label>Gender</Label>
+-            <StyledRadio value={userGender}>
+-              {genderList.map((gender) => [
+-                <RadioButton
+-                  key={gender}
+-                  value={gender}
+-                  label={() => <RadioLabel>{gender}</RadioLabel>}
+-                  underline={false}
+-                />,
+-              ])}
+-            </StyledRadio>
+-          </View>
+-          {/* TODO: getting some warning with this DateInput */}
+-          <View>
+-            <Label>Birthday</Label>
+-            {userDOB ? (
+-              <StyledDate
+-                value={moment.utc(userDOB).toDate()}
+-                displayValue={moment.utc(userDOB).format('MM/DD/YYYY')}
+-              />
+-            ) : (
+-              <StyledDate
+-                placeholder={'Select a date...'}
+-                value={defaultDate}
+-              />
+-            )}
+-          </View>
+-        </TextContent>
+-      </Content>
+-    </Slide>
+-  )
+-);
+-
+-AboutYou.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-  imgSrc: Image.propTypes,
+-  userDOB: PropTypes.instanceOf(Date),
+-  defaultDate: PropTypes.instanceOf(Date),
+-  userGender: PropTypes.string,
+-  genderList: PropTypes.arrayOf(PropTypes.number),
+-};
+-
+-AboutYou.defaultProps = {
+-  slideTitle: "This one's easy.",
+-  description:
+-    'Help us understand who you are so we can connect you with the best ministries and events.',
+-  genderList: ['Male', 'Female'],
+-  defaultDate: new Date(),
+-};
+-
+-AboutYou.displayName = 'AboutYou';
+-
+-export default AboutYou;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
+deleted file mode 100644
+index dc7a07b..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
++++ /dev/null
+@@ -1,10 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import AskName from '.';
+-
+-storiesOf('Onboarding/slides/AskName', module)
+-  .add('default', () => <AskName />)
+-  .add('slideTitle', () => <AskName slideTitle={'Custom title text'} />)
+-  .add('description', () => <AskName description={'Custom description text'} />)
+-  .add('SlideWrapper props', () => <AskName onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
+deleted file mode 100644
+index 2feb35e..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
++++ /dev/null
+@@ -1,41 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import AskName from '.';
+-
+-describe('The Onboarding AskName component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName slideTitle={'Custom title text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName description={'Custom description text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to Slide component', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskName onPressPrimary={jest.fn()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
+deleted file mode 100644
+index 77a480c..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
++++ /dev/null
+@@ -1,79 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  Icon,
+-  H2,
+-  H5,
+-  PaddedView,
+-  TextInput,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const BrandIcon = withTheme(({ theme }) => ({
+-  name: 'brand-icon',
+-  size: theme.sizing.baseUnit * 3.0,
+-  fill: theme.colors.primary,
+-  style: {
+-    marginTop: theme.sizing.baseUnit * 2,
+-    marginBottom: theme.sizing.baseUnit * 0.5,
+-  },
+-}))(Icon);
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-}))(H2);
+-
+-const StyledH5 = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-}))(H5);
+-
+-// memo = sfc PureComponent 💥
+-// eslint-disable-next-line react/display-name
+-const AskName = memo(({ slideTitle, description, ...props }) => {
+-  let LastNameInput = null;
+-
+-  return (
+-    <Slide {...props}>
+-      <PaddedView vertical={false}>
+-        <BrandIcon />
+-        <Title>{slideTitle}</Title>
+-        <StyledH5>{description}</StyledH5>
+-        <TextInput
+-          label="First Name"
+-          type="text"
+-          returnKeyType="next"
+-          onSubmitEditing={() => LastNameInput.focus()}
+-          enzblesReturnKeyAutomatically
+-        />
+-        <TextInput
+-          label="Last Name"
+-          type="text"
+-          returnKeyType="next"
+-          enablesReturnKeyAutomatically
+-          inputRef={(r) => {
+-            LastNameInput = r;
+-          }}
+-        />
+-      </PaddedView>
+-    </Slide>
+-  );
+-});
+-
+-AskName.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-};
+-
+-AskName.defaultProps = {
+-  slideTitle: 'Welcome!',
+-  description: "Every relationship starts with a name. What's yours?",
+-};
+-
+-export default AskName;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js
+deleted file mode 100644
+index 035a0e8..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js
++++ /dev/null
+@@ -1,87 +0,0 @@
+-import React, { memo } from 'react';
+-import { View } from 'react-native';
+-import PropTypes from 'prop-types';
+-import {
+-  PaddedView,
+-  FlexedView,
+-  styled,
+-  H2,
+-  H5,
+-  Button,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const ContentWrapper = styled({
+-  height: '100%',
+-})(View);
+-
+-const Content = styled({
+-  justifyContent: 'flex-end',
+-})(PaddedView);
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-}))(H2);
+-
+-const StyledH5 = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-  paddingBottom: theme.sizing.baseUnit * 1.5,
+-}))(H5);
+-
+-// memo = sfc PureComponent 💥
+-// eslint-disable-next-line react/display-name
+-const AskNotifications = memo(
+-  ({
+-    children,
+-    slideTitle,
+-    description,
+-    buttonText,
+-    buttonDisabled,
+-    onPressButton,
+-    ...props
+-  }) => (
+-    <Slide {...props}>
+-      <ContentWrapper>
+-        <FlexedView>{children}</FlexedView>
+-        <Content>
+-          <Title>{slideTitle}</Title>
+-          <StyledH5>{description}</StyledH5>
+-          {buttonDisabled || onPressButton ? (
+-            <Button
+-              title={buttonText}
+-              onPress={onPressButton}
+-              disabled={buttonDisabled}
+-              pill={false}
+-            />
+-          ) : null}
+-        </Content>
+-      </ContentWrapper>
+-    </Slide>
+-  )
+-);
+-
+-AskNotifications.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use a more unique name.
+-   */
+-  children: PropTypes.oneOfType([
+-    PropTypes.arrayOf(PropTypes.node),
+-    PropTypes.node,
+-  ]),
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-  buttonText: PropTypes.string,
+-  buttonDisabled: PropTypes.bool,
+-  onPressButton: PropTypes.func,
+-};
+-
+-AskNotifications.defaultProps = {
+-  slideTitle: 'Can we keep you informed?',
+-  description:
+-    "We'll let you know when important things are happening and keep you in the loop",
+-  buttonText: 'Yes, enable notifications',
+-  buttonDisabled: false,
+-};
+-
+-export default AskNotifications;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js
+deleted file mode 100644
+index 0506b87..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-import { GradientOverlayImage } from '@apollosproject/ui-kit';
+-
+-import AskNotifications from './AskNotifications';
+-
+-storiesOf('Onboarding/slides/AskNotifications', module)
+-  .add('default', () => <AskNotifications />)
+-  .add('children (image)', () => (
+-    <AskNotifications>
+-      <GradientOverlayImage source={'https://picsum.photos/640/640/?random'} />
+-    </AskNotifications>
+-  ))
+-  .add('slideTitle', () => (
+-    <AskNotifications slideTitle={'Custom title text'} />
+-  ))
+-  .add('description', () => (
+-    <AskNotifications description={'Custom description text'} />
+-  ))
+-  .add('buttonDisabled', () => <AskNotifications buttonDisabled />)
+-  .add('buttonText', () => (
+-    <AskNotifications
+-      onPressButton={() => {}}
+-      buttonText={'Custom button text'}
+-    />
+-  ))
+-  .add('SlideWrapper props', () => (
+-    <AskNotifications onPressSecondary={() => {}} />
+-  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js
+deleted file mode 100644
+index 1e411d8..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js
++++ /dev/null
+@@ -1,84 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import { GradientOverlayImage } from '@apollosproject/ui-kit';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import AskNotifications from './AskNotifications';
+-
+-describe('The Onboarding AskNotifications component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render children (image)', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications>
+-          <GradientOverlayImage
+-            source={'https://picsum.photos/640/640/?random'}
+-          />
+-        </AskNotifications>
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications slideTitle={'Custom title text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications description={'Custom description text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render with a button', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications onPressButton={jest.fn()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render the button disabled', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications onPressButton={jest.fn()} buttonDisabled />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a button with custom text', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications
+-          onPressButton={jest.fn()}
+-          buttonText={'Custom button text'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to Slide component', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotifications
+-          onPressSecondary={jest.fn()}
+-          secondaryNavText={'Later'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js
+deleted file mode 100644
+index 43b3e03..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js
++++ /dev/null
+@@ -1,33 +0,0 @@
+-import React, { memo } from 'react';
+-import { Query, ApolloConsumer } from 'react-apollo';
+-
+-import {
+-  requestPushPermissions,
+-  getNotificationsEnabled,
+-} from 'apolloschurchapp/src/notifications';
+-
+-import AskNotifications from '.';
+-
+-// eslint-disable-next-line react/display-name
+-const AskNotificationsConnected = memo((props) => (
+-  <ApolloConsumer>
+-    {(client) => (
+-      <Query query={getNotificationsEnabled}>
+-        {({ data: { notificationsEnabled = false } = {} }) => (
+-          <AskNotifications
+-            onPressButton={() => requestPushPermissions({ client })}
+-            buttonDisabled={notificationsEnabled}
+-            buttonText={
+-              notificationsEnabled
+-                ? 'Notifications Enabled!'
+-                : 'Yes, enable notifications'
+-            }
+-            {...props}
+-          />
+-        )}
+-      </Query>
+-    )}
+-  </ApolloConsumer>
+-));
+-
+-export default AskNotificationsConnected;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js
+deleted file mode 100644
+index c693656..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js
++++ /dev/null
+@@ -1,53 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import Providers from 'apolloschurchapp/src/Providers';
+-import { getNotificationsEnabled } from 'apolloschurchapp/src/notifications';
+-import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+-
+-import AskNotificationsConnected from './AskNotificationsConnected';
+-
+-describe('The Onboarding AskNotificationsConnected component', () => {
+-  it('should render with a user not having granted push notifications permissions', async () => {
+-    const mocks = [
+-      {
+-        request: {
+-          query: getNotificationsEnabled,
+-        },
+-        result: {
+-          data: { notificationsEnabled: false },
+-        },
+-      },
+-    ];
+-
+-    const component = (
+-      <Providers mocks={mocks} addTypename={false}>
+-        <AskNotificationsConnected />
+-      </Providers>
+-    );
+-
+-    const tree = await renderWithApolloData(component);
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render with a user having granted push notifications permissions', async () => {
+-    const component = (
+-      <Providers
+-        resolvers={{ Query: { notificationsEnabled: Promise.resolve(true) } }}
+-        addTypename={false}
+-      >
+-        <AskNotificationsConnected />
+-      </Providers>
+-    );
+-
+-    const tree = await renderWithApolloData(component);
+-    expect(tree).toMatchSnapshot();
+-  });
+-
+-  it('should render with no data in the cache', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <AskNotificationsConnected />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js
+deleted file mode 100644
+index 865e500..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js
++++ /dev/null
+@@ -1,4 +0,0 @@
+-import AskNotifications from './AskNotifications';
+-
+-export AskNotificationsConnected from './AskNotificationsConnected';
+-export default AskNotifications;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js
+deleted file mode 100644
+index dfe3aa8..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js
++++ /dev/null
+@@ -1,16 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Features from '.';
+-
+-storiesOf('Onboarding/slides/Features', module)
+-  .add('default', () => <Features />)
+-  .add('withImg', () => (
+-    <Features imgSrc={{ uri: 'https://picsum.photos/1200/1200?random' }} />
+-  ))
+-  .add('firstName', () => <Features firstName={'firstName'} />)
+-  .add('slideTitle', () => <Features slideTitle={'Custom title text'} />)
+-  .add('description', () => (
+-    <Features description={'Custom description text'} />
+-  ))
+-  .add('Slide props', () => <Features onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js
+deleted file mode 100644
+index 1e8a529..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js
++++ /dev/null
+@@ -1,62 +0,0 @@
+-import React, { memo } from 'react';
+-import { Image, View } from 'react-native';
+-import PropTypes from 'prop-types';
+-
+-import { styled, H2, H5, PaddedView } from '@apollosproject/ui-kit';
+-
+-import Slide from '../../Slide';
+-
+-const Title = styled(({ theme }) => ({
+-  color: theme.colors.primary,
+-  marginBottom: theme.sizing.baseUnit * 0.5,
+-}))(H2);
+-
+-const StyledH5 = styled(({ theme }) => ({
+-  color: theme.colors.text.secondary,
+-}))(H5);
+-
+-const StyledImage = styled(({ theme }) => ({
+-  flex: 3,
+-  resizeMode: 'contain',
+-  marginBottom: theme.sizing.baseUnit,
+-}))(Image);
+-
+-const Content = styled({
+-  flex: 1,
+-  justifyContent: 'center',
+-})(View);
+-
+-const TextContent = styled({
+-  flex: 1,
+-  justifyContent: 'center',
+-})(PaddedView);
+-
+-// eslint-disable-next-line react/display-name
+-const Features = memo(({ firstName, description, imgSrc, ...props }) => (
+-  <Slide {...props}>
+-    <Content>
+-      {imgSrc ? <StyledImage source={imgSrc} /> : null}
+-      <TextContent>
+-        <Title>{`Hey ${firstName}!`}</Title>
+-        <StyledH5>{description}</StyledH5>
+-      </TextContent>
+-    </Content>
+-  </Slide>
+-));
+-
+-Features.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  firstName: PropTypes.string,
+-  description: PropTypes.string,
+-  imgSrc: PropTypes.string,
+-};
+-
+-Features.defaultProps = {
+-  firstName: 'friend',
+-  description:
+-    "We'd like to help personalize your mobile experience so we can help you with every step on your journey.",
+-};
+-
+-export default Features;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/index.js b/apolloschurchapp/src/ui/Onboarding/slides/index.js
+deleted file mode 100644
+index 16e69f0..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/slides/index.js
++++ /dev/null
+@@ -1,6 +0,0 @@
+-export AboutYou from './AboutYou';
+-export AskName from './AskName';
+-export AskNotifications, {
+-  AskNotificationsConnected,
+-} from './AskNotifications';
+-export Features from './Features';
+diff --git a/apolloschurchapp/src/ui/Share/index.js b/apolloschurchapp/src/ui/Share/index.js
+index 667f1e6..2f979c5 100644
+--- a/apolloschurchapp/src/ui/Share/index.js
++++ b/apolloschurchapp/src/ui/Share/index.js
+@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
+ import { compose, pure } from 'recompose';
+ import share from 'apolloschurchapp/src/utils/content/share';
+ import { Touchable, Icon, withTheme } from '@apollosproject/ui-kit';
++import { AnalyticsConsumer } from '@apollosproject/ui-analytics';
+ 
+ const enhance = compose(
+   pure,
+@@ -10,9 +11,22 @@ const enhance = compose(
+ );
+ 
+ const Share = enhance(({ content, theme }) => (
+-  <Touchable onPress={() => share(content)}>
+-    <Icon name={'share'} fill={theme.colors.secondary} />
+-  </Touchable>
++  <AnalyticsConsumer>
++    {({ track }) => {
++      const onPress = () => {
++        share(content);
++        track({
++          eventName: 'ShareContent',
++          properties: { id: content.id, title: content.title },
++        });
++      };
++      return (
++        <Touchable onPress={onPress}>
++          <Icon name={'share'} fill={theme.colors.secondary} />
++        </Touchable>
++      );
++    }}
++  </AnalyticsConsumer>
+ ));
+ 
+ Share.propTypes = {
+diff --git a/apolloschurchapp/src/ui/Splash/Splash.stories.js b/apolloschurchapp/src/ui/Splash/Splash.stories.js
+deleted file mode 100644
+index a39677a..0000000
+--- a/apolloschurchapp/src/ui/Splash/Splash.stories.js
++++ /dev/null
+@@ -1,20 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@storybook/react-native';
+-
+-import Splash from '.';
+-
+-storiesOf('Splash', module)
+-  .add('default', () => <Splash />)
+-  .add('imgSrc & !isLight', () => (
+-    <Splash
+-      imgSrc={{
+-        uri: 'https://picsum.photos/1200/1200?random',
+-        height: 1200,
+-        width: 1200,
+-      }}
+-      isLight={false}
+-    />
+-  ))
+-  .add('slideTitle', () => <Splash slideTitle={'Custom title text'} />)
+-  .add('description', () => <Splash description={'Custom description text'} />)
+-  .add('Slide props', () => <Splash onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Splash/Splash.tests.js b/apolloschurchapp/src/ui/Splash/Splash.tests.js
+deleted file mode 100644
+index 2fa2cdd..0000000
+--- a/apolloschurchapp/src/ui/Splash/Splash.tests.js
++++ /dev/null
+@@ -1,56 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import Splash from '.';
+-
+-describe('The Onboarding Splash component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Splash />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render light text on a dark background', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Splash
+-          imgSrc={{
+-            uri: 'https://picsum.photos/1200/1200?random',
+-            height: 1200,
+-            width: 1200,
+-          }}
+-          isLight={false}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Splash slideTitle={'Custom title text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a custom description', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Splash description={'Custom description text'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should pass additional props to Slide', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Splash onPressPrimary={jest.fn()} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/Splash/index.js b/apolloschurchapp/src/ui/Splash/index.js
+deleted file mode 100644
+index 9f68279..0000000
+--- a/apolloschurchapp/src/ui/Splash/index.js
++++ /dev/null
+@@ -1,75 +0,0 @@
+-import React, { memo } from 'react';
+-import { Image } from 'react-native';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  Icon,
+-  H1,
+-  H4,
+-  PaddedView,
+-} from '@apollosproject/ui-kit';
+-
+-import Slide from '../Onboarding/Slide';
+-
+-const Content = styled({
+-  flex: 1,
+-  justifyContent: 'center',
+-})(PaddedView);
+-
+-const BrandIcon = withTheme(({ theme, isLight }) => ({
+-  name: 'brand-icon',
+-  size: theme.sizing.baseUnit * 3.0,
+-  fill: isLight ? theme.colors.text.primary : theme.colors.white,
+-  style: {
+-    marginBottom: theme.sizing.baseUnit,
+-  },
+-}))(Icon);
+-
+-const Title = styled(({ theme, isLight }) => ({
+-  color: isLight ? theme.colors.text.primary : theme.colors.white,
+-  marginBottom: theme.sizing.baseUnit * 2,
+-}))(H1);
+-
+-const CoverImage = styled({
+-  resizeMode: 'cover',
+-  position: 'absolute',
+-})(Image);
+-
+-const StyledH4 = styled(({ theme, isLight }) => ({
+-  color: isLight ? theme.colors.text.primary : theme.colors.white,
+-}))(H4);
+-
+-// eslint-disable-next-line react/display-name
+-const Splash = memo(
+-  ({ slideTitle, description, imgSrc, isLight, ...props }) => (
+-    <Slide {...props}>
+-      {imgSrc ? <CoverImage source={imgSrc} /> : null}
+-      <Content>
+-        <BrandIcon isLight={isLight} />
+-        <Title isLight={isLight}>{slideTitle}</Title>
+-        <StyledH4 isLight={isLight}>{description}</StyledH4>
+-      </Content>
+-    </Slide>
+-  )
+-);
+-
+-Splash.propTypes = {
+-  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-  imgSrc: PropTypes.string,
+-  isLight: PropTypes.boolean,
+-};
+-
+-Splash.defaultProps = {
+-  slideTitle: "We're glad you're here.".toUpperCase(),
+-  description:
+-    "We're not just a building you go to, but a family to belong to.",
+-  isLight: true,
+-};
+-
+-export default Splash;
+diff --git a/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js b/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
+index 684344a..f4a46fe 100644
+--- a/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
++++ b/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
+@@ -28,11 +28,9 @@ GetPhotoData.propTypes = {
+   children: PropTypes.func.isRequired,
+ };
+ 
+-const StyledAvatar = withTheme(({ theme }) => ({
+-  containerStyle: {
+-    marginRight: 0,
+-    marginBottom: theme.sizing.baseUnit / 2,
+-  },
++const StyledAvatar = styled(({ theme }) => ({
++  marginRight: 0,
++  marginBottom: theme.sizing.baseUnit / 2,
+ }))(Avatar);
+ 
+ const RoundTouchable = withTheme(({ theme, size }) => ({
+diff --git a/apolloschurchapp/src/ui/UserAvatarView/index.js b/apolloschurchapp/src/ui/UserAvatarView/index.js
+index 51dd27b..d18a809 100644
+--- a/apolloschurchapp/src/ui/UserAvatarView/index.js
++++ b/apolloschurchapp/src/ui/UserAvatarView/index.js
+@@ -41,7 +41,9 @@ const UserAvatarView = withIsLoading(
+         <H3>
+           {firstName} {lastName}
+         </H3>
+-        <ChannelLabel icon="pin" label={location || ''} isLoading={isLoading} />
++        {location && (
++          <ChannelLabel icon="pin" label={location} isLoading={isLoading} />
++        )}
+       </Content>
+     </Container>
+   )
+diff --git a/apolloschurchapp/src/ui/WebBrowser/Browser.android.js b/apolloschurchapp/src/ui/WebBrowser/Browser.android.js
+index 49dc211..cc7d39d 100644
+--- a/apolloschurchapp/src/ui/WebBrowser/Browser.android.js
++++ b/apolloschurchapp/src/ui/WebBrowser/Browser.android.js
+@@ -1,14 +1,9 @@
+ import { Linking } from 'react-native';
+-import { CustomTabs } from 'react-native-custom-tabs';
+ 
+ const Browser = {
+-  openURL: async (url, options = {}) => {
+-    try {
+-      await CustomTabs.openURL(url, options);
+-    } catch (e) {
+-      if (!Linking.canOpenURL()) throw new Error('URL not supported');
+-      Linking.openURL(url);
+-    }
++  openURL: async (url) => {
++    if (!Linking.canOpenURL(url)) throw new Error('URL not supported');
++    Linking.openURL(url);
+   },
+ };
+ 
+diff --git a/apolloschurchapp/src/ui/WebBrowser/Browser.ios.js b/apolloschurchapp/src/ui/WebBrowser/Browser.ios.js
+index 7de160f..0716bff 100644
+--- a/apolloschurchapp/src/ui/WebBrowser/Browser.ios.js
++++ b/apolloschurchapp/src/ui/WebBrowser/Browser.ios.js
+@@ -10,7 +10,7 @@ const Browser = {
+         ...options,
+       });
+     } catch (e) {
+-      if (!Linking.canOpenURL()) throw new Error('URL not supported');
++      if (!Linking.canOpenURL(url)) throw new Error('URL not supported');
+       Linking.openURL(url);
+     }
+   },
+diff --git a/apolloschurchapp/src/user-settings/Locations/CampusCard.js b/apolloschurchapp/src/user-settings/Locations/CampusCard.js
+deleted file mode 100644
+index f543832..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/CampusCard.js
++++ /dev/null
+@@ -1,96 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { compose, pure } from 'recompose';
+-import { Dimensions, View } from 'react-native';
+-
+-import {
+-  Card,
+-  ConnectedImage,
+-  SideBySideView,
+-  withIsLoading,
+-  styled,
+-  CardContent,
+-  H5,
+-  H6,
+-} from '@apollosproject/ui-kit';
+-
+-const { width } = Dimensions.get('window');
+-
+-export const CARD_WIDTH = width - 24; // todo: remove magic number. `theme.sizing.baseUnit * 1.5`
+-
+-const enhance = compose(
+-  withIsLoading,
+-  pure
+-);
+-
+-const HorizontalLayout = styled({
+-  alignItems: 'center',
+-})(SideBySideView);
+-
+-const HorizontalTextLayout = styled(({ theme }) => ({
+-  height: theme.helpers.verticalRhythm(0.875),
+-}))(SideBySideView);
+-
+-const RightColumn = styled(({ theme }) => ({
+-  paddingVertical: theme.sizing.baseUnit * 0.85,
+-  flex: 1,
+-}))(CardContent);
+-
+-const CampusImage = styled({
+-  aspectRatio: 1,
+-  height: '100%',
+-  alignSelf: 'stretch',
+-  resizeMode: 'cover', // This is to make sure images smaller than the ProgressiveImage size will cover
+-})(ConnectedImage);
+-
+-const CampusImageSizer = styled({
+-  aspectRatio: 1,
+-  height: '100%',
+-  alignSelf: 'stretch',
+-})(View);
+-
+-const CardContainer = styled(({ theme }) => ({
+-  width: CARD_WIDTH,
+-  height: theme.sizing.baseUnit * 6,
+-}))(View);
+-
+-const StyledCard = styled(({ theme }) => ({
+-  marginHorizontal: 0,
+-  marginRight: theme.sizing.baseUnit / 2,
+-}))(Card);
+-
+-const CampusCard = enhance(
+-  ({ title, description, distance, images, isLoading, ...otherProps }) => (
+-    <CardContainer>
+-      <StyledCard isLoading={isLoading} inHorizontalList {...otherProps}>
+-        <HorizontalLayout>
+-          {images ? (
+-            <CampusImageSizer>
+-              <CampusImage source={images} />
+-            </CampusImageSizer>
+-          ) : null}
+-          <RightColumn>
+-            <HorizontalTextLayout>
+-              <H5>{title}</H5>
+-              <H6>
+-                {Math.round(distance)}
+-                mi
+-              </H6>
+-            </HorizontalTextLayout>
+-            {description ? <H6>{description}</H6> : null}
+-          </RightColumn>
+-        </HorizontalLayout>
+-      </StyledCard>
+-    </CardContainer>
+-  )
+-);
+-
+-CampusCard.propTypes = {
+-  title: PropTypes.string.isRequired,
+-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+-  images: PropTypes.any, // eslint-disable-line
+-  category: PropTypes.string,
+-  isLoading: PropTypes.bool,
+-};
+-
+-export default CampusCard;
+diff --git a/apolloschurchapp/src/user-settings/Locations/MapView.js b/apolloschurchapp/src/user-settings/Locations/MapView.js
+index b31e830..b38e1d5 100644
+--- a/apolloschurchapp/src/user-settings/Locations/MapView.js
++++ b/apolloschurchapp/src/user-settings/Locations/MapView.js
+@@ -2,11 +2,20 @@ import React, { Component } from 'react';
+ import PropTypes from 'prop-types';
+ import { View, Animated } from 'react-native';
+ import SafeAreaView from 'react-native-safe-area-view';
+-import RNMapView, { Marker } from 'react-native-maps';
+-import Color from 'color';
++import RNMapView from 'react-native-maps';
+ import { debounce } from 'lodash';
+-import { Button, PaddedView, styled, withTheme } from '@apollosproject/ui-kit';
+-import CampusCard, { CARD_WIDTH } from './CampusCard';
++
++import {
++  Button,
++  PaddedView,
++  styled,
++  withTheme,
++  CampusCard,
++} from '@apollosproject/ui-kit';
++
++import Marker from './Marker';
++
++const { CARD_WIDTH } = CampusCard;
+ 
+ const ContainerView = styled({
+   flex: 1,
+@@ -26,33 +35,6 @@ const ScrollingView = styled({
+   right: 0,
+ })(View);
+ 
+-const MarkerView = styled(({ theme }) => ({
+-  width: 8,
+-  height: 8,
+-  borderRadius: 4,
+-  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-}))(View);
+-
+-const MarkerWrapView = styled({
+-  alignItems: 'center',
+-  justifyContent: 'center',
+-})(View);
+-
+-// This is not good. Is there a better way to prevent cascading styles?
+-
+-const MarkerRingView = styled(({ theme }) => ({
+-  width: 24,
+-  height: 24,
+-  borderRadius: 12,
+-  right: -8,
+-  top: -8,
+-  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.low),
+-  position: 'absolute',
+-  borderWidth: 1,
+-  borderColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-  alignItems: 'stretch',
+-}))(View);
+-
+ class MapView extends Component {
+   static propTypes = {
+     campuses: PropTypes.arrayOf(
+@@ -83,14 +65,13 @@ class MapView extends Component {
+   };
+ 
+   state = {
+-    campus: {},
++    campus: null,
+   };
+ 
+   animation = new Animated.Value(0);
+ 
+   componentDidMount() {
+     this.animation.addListener(debounce(this.updateCoordinates));
+-    this.updateCoordinates({ value: 0 });
+   }
+ 
+   componentDidUpdate(oldProps) {
+@@ -100,7 +81,7 @@ class MapView extends Component {
+   }
+ 
+   get contentContainerStyle() {
+-    return { paddingHorizontal: this.props.theme.sizing.baseUnit };
++    return { paddingHorizontal: this.props.theme.sizing.baseUnit * 0.75 }; // pad cards from edge of screen but account for card margin
+   }
+ 
+   updateCoordinates = ({ value }) => {
+@@ -145,7 +126,7 @@ class MapView extends Component {
+   };
+ 
+   render() {
+-    const { campuses = [] } = this.props;
++    const { campuses = [], onLocationSelect } = this.props;
+     const interpolations = campuses.map((marker, index) => {
+       const inputRange = [
+         (index - 1) * CARD_WIDTH,
+@@ -187,16 +168,13 @@ class MapView extends Component {
+                 opacity: interpolations[index].opacity,
+               };
+               return (
+-                <Marker key={campus.id} coordinate={campus}>
+-                  <MarkerWrapView>
+-                    <Animated.View style={opacityStyle}>
+-                      <MarkerRingView>
+-                        <Animated.View style={scaleStyle} />
+-                      </MarkerRingView>
+-                      <MarkerView />
+-                    </Animated.View>
+-                  </MarkerWrapView>
+-                </Marker>
++                <Marker
++                  key={campus.id}
++                  opacityStyle={opacityStyle}
++                  scaleStyle={scaleStyle}
++                  latitude={campus.latitude}
++                  longitude={campus.longitude}
++                />
+               );
+             })}
+           </FlexedMapView>
+@@ -205,10 +183,11 @@ class MapView extends Component {
+               <Animated.ScrollView
+                 horizontal
+                 showsHorizontalScrollIndicator={false}
+-                snapToInterval={CARD_WIDTH}
+-                snapToAlignment="left"
+-                decelerationRate="fast"
+-                contentContainerStyle={this.contentContainerStyle}
++                snapToInterval={CARD_WIDTH + 8} // account for padding
++                snapToAlignment={'start'}
++                decelerationRate={'fast'}
++                contentContainerStyle={this.contentContainerStyle} // correctly pads cards in ScrollView
++                scrollEventThrottle={16} // roughtly 1000ms/60fps = 16ms
+                 onScroll={Animated.event(
+                   [
+                     {
+@@ -237,7 +216,9 @@ class MapView extends Component {
+                   title="Select Campus"
+                   pill={false}
+                   type="secondary"
+-                  onPress={() => this.props.onLocationSelect(this.state.campus)}
++                  onPress={() =>
++                    onLocationSelect(this.state.campus || campuses[0])
++                  }
+                 />
+               </PaddedView>
+             </SafeAreaView>
+diff --git a/apolloschurchapp/src/user-settings/Locations/Marker.js b/apolloschurchapp/src/user-settings/Locations/Marker.js
+index 6e94c55..b7c10d7 100644
+--- a/apolloschurchapp/src/user-settings/Locations/Marker.js
++++ b/apolloschurchapp/src/user-settings/Locations/Marker.js
+@@ -1,29 +1,60 @@
+-import React, { PureComponent } from 'react';
++import React, { memo } from 'react';
++import { View, Animated } from 'react-native';
+ import PropTypes from 'prop-types';
+-import Marker from 'react-native-maps';
+-
+-import { UIText } from '@apollosproject/ui-kit';
+-
+-class StyledMarker extends PureComponent {
+-  static propTypes = {
+-    latitude: PropTypes.string,
+-    longitude: PropTypes.string,
+-    Name: PropTypes.string,
+-  };
+-
+-  render() {
+-    return (
+-      <Marker
+-        coordinate={{
+-          latitude: this.props.latitude,
+-          longitude: this.props.longitude,
+-        }}
+-        anchor={{ x: 0.69, y: 1 }}
+-      >
+-        <UIText>{this.props.Name}</UIText>
+-      </Marker>
+-    );
+-  }
+-}
++import { Marker } from 'react-native-maps';
++import Color from 'color';
++
++import { styled } from '@apollosproject/ui-kit';
++
++const MarkerView = styled(({ theme }) => ({
++  width: 8,
++  height: 8,
++  borderRadius: 4,
++  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.medium),
++}))(View);
++
++const MarkerWrapView = styled({
++  alignItems: 'center',
++  justifyContent: 'center',
++})(View);
++
++// This is not good. Is there a better way to prevent cascading styles?
++
++const MarkerRingView = styled(({ theme }) => ({
++  width: 24,
++  height: 24,
++  borderRadius: 12,
++  right: -8,
++  top: -8,
++  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.low),
++  position: 'absolute',
++  borderWidth: 1,
++  borderColor: Color(theme.colors.primary).fade(theme.alpha.medium),
++  alignItems: 'stretch',
++}))(View);
++
++const StyledMarker = memo(
++  ({ latitude, longitude, opacityStyle, scaleStyle }) => (
++    <Marker coordinate={{ latitude, longitude }}>
++      <MarkerWrapView>
++        <Animated.View style={opacityStyle}>
++          <MarkerRingView>
++            <Animated.View style={scaleStyle} />
++          </MarkerRingView>
++          <MarkerView />
++        </Animated.View>
++      </MarkerWrapView>
++    </Marker>
++  )
++);
++
++StyledMarker.displayName = 'StyledMarker';
++
++StyledMarker.propTypes = {
++  latitude: PropTypes.number.isRequired,
++  longitude: PropTypes.number.isRequired,
++  opacityStyle: PropTypes.shape({}),
++  scaleStyle: PropTypes.shape({}),
++};
+ 
+ export default StyledMarker;
+diff --git a/apolloschurchapp/src/user-settings/Locations/campusChange.js b/apolloschurchapp/src/user-settings/Locations/campusChange.js
+index 74585ba..e164b7b 100644
+--- a/apolloschurchapp/src/user-settings/Locations/campusChange.js
++++ b/apolloschurchapp/src/user-settings/Locations/campusChange.js
+@@ -1,13 +1,14 @@
+ import gql from 'graphql-tag';
++import CampusFragment from './campusFragment';
+ 
+ export default gql`
+   mutation campusChange($campusId: String!) {
+     updateUserCampus(campusId: $campusId) {
+       id
+       campus {
+-        __typename
+-        name
++        ...CampusParts
+       }
+     }
+   }
++  ${CampusFragment}
+ `;
+diff --git a/apolloschurchapp/src/user-settings/Locations/campusFragment.js b/apolloschurchapp/src/user-settings/Locations/campusFragment.js
+new file mode 100644
+index 0000000..777cce5
+--- /dev/null
++++ b/apolloschurchapp/src/user-settings/Locations/campusFragment.js
+@@ -0,0 +1,19 @@
++import gql from 'graphql-tag';
++
++export default gql`
++  fragment CampusParts on Campus {
++    id
++    name
++    latitude
++    longitude
++    distanceFromLocation
++    street1
++    street2
++    city
++    state
++    postalCode
++    image {
++      uri
++    }
++  }
++`;
+diff --git a/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js b/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js
+index 050f69f..1c98bb8 100644
+--- a/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js
++++ b/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js
+@@ -1,21 +1,11 @@
+ import gql from 'graphql-tag';
++import CampusFragment from './campusFragment';
+ 
+ export default gql`
+   query getAllCampuses($latitude: Float!, $longitude: Float!) {
+     campuses(location: { latitude: $latitude, longitude: $longitude }) {
+-      id
+-      name
+-      latitude
+-      longitude
+-      distanceFromLocation
+-      street1
+-      street2
+-      city
+-      state
+-      postalCode
+-      image {
+-        uri
+-      }
++      ...CampusParts
+     }
+   }
++  ${CampusFragment}
+ `;
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+index 9c81c13..f8517c3 100644
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ b/apolloschurchapp/src/user-settings/Locations/index.js
+@@ -37,6 +37,7 @@ class Location extends PureComponent {
+       latitudeDelta: PropTypes.number,
+       longitudeDelta: PropTypes.number,
+     }),
++    onFinished: PropTypes.func,
+   };
+ 
+   static defaultProps = {
+@@ -77,7 +78,13 @@ class Location extends PureComponent {
+   }
+ 
+   render() {
+-    const { navigation } = this.props;
++    const { navigation, onFinished } = this.props;
++    // we should use the `onFinished` from the navigation param, if it exists.
++    const handleFinished = this.props.navigation.getParam(
++      'onFinished',
++      onFinished
++    );
++
+     return (
+       <Query
+         query={getAllCampuses}
+@@ -102,8 +109,7 @@ class Location extends PureComponent {
+                     profile: {
+                       ...currentUser.profile,
+                       campus: {
+-                        ...currentUser.profile.campus,
+-                        name: updateUserCampus.campus.name,
++                        ...updateUserCampus.campus,
+                       },
+                     },
+                   },
+@@ -126,6 +132,7 @@ class Location extends PureComponent {
+                     },
+                   });
+                   await navigation.goBack();
++                  if (handleFinished) handleFinished();
+                 }}
+               />
+             )}
+diff --git a/apolloschurchapp/src/utils/content/share.js b/apolloschurchapp/src/utils/content/share.js
+index e04063d..7a8efae 100644
+--- a/apolloschurchapp/src/utils/content/share.js
++++ b/apolloschurchapp/src/utils/content/share.js
+@@ -1,19 +1,14 @@
+ import { Platform, Share } from 'react-native';
+ // import { get } from 'lodash';
+-import { track, events } from 'apolloschurchapp/src/analytics';
++// import { track, events } from 'apolloschurchapp/src/analytics';
+ // import getSiteLink from './getSiteLink';
+ 
+-const share = ({ title, url, id = '' }) => {
++const share = ({ title, url }) => {
+   Share.share({
+     title,
+     message: Platform.OS === 'android' ? `${title}\n${url}` : title,
+     url,
+   });
+-
+-  track({
+-    eventName: events.ShareContent,
+-    properties: { title, id },
+-  });
+ };
+ 
+ export default share;
+diff --git a/apolloschurchapp/src/utils/testUtils.js b/apolloschurchapp/src/utils/testUtils.js
+index 89cdffa..38d20f7 100644
+--- a/apolloschurchapp/src/utils/testUtils.js
++++ b/apolloschurchapp/src/utils/testUtils.js
+@@ -1,7 +1,6 @@
+ /* eslint-disable import/prefer-default-export */
+ import renderer from 'react-test-renderer';
+-
+-const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
++import wait from 'waait';
+ 
+ export const renderWithApolloData = async (component) => {
+   const tree = renderer.create(component);
+diff --git a/apolloschurchapp/storybook/.babelrc b/apolloschurchapp/storybook/.babelrc
+new file mode 100644
+index 0000000..cfb9634
+--- /dev/null
++++ b/apolloschurchapp/storybook/.babelrc
+@@ -0,0 +1 @@
++{ "presets": ["module:metro-react-native-babel-preset"] }

@@ -1,0 +1,3158 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index bb27535..30e9267 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -117,8 +117,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 9
+-        versionName "0.8.4"
++        versionCode 8
++        versionName "0.8.3"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+diff --git a/apolloschurchapp/index.js b/apolloschurchapp/index.js
+index f9ec2cf..d009549 100644
+--- a/apolloschurchapp/index.js
++++ b/apolloschurchapp/index.js
+@@ -1,14 +1,7 @@
+ import { AppRegistry, YellowBox } from 'react-native';
+-import SplashScreen from 'react-native-splash-screen';
+ 
+ import App from './src';
+ 
+-// If there's an error before the splash screen goes away, you never see that error.
+-// This tries to hide the splash screen so you can see the error.
+-// Shouldnt't do anything in Prod.
+-// Depending on the error, splash screen might not go away ;)
+-global.ErrorUtils.setGlobalHandler(() => SplashScreen.hide());
+-
+ YellowBox.ignoreWarnings([
+   'Warning: isMounted(...) is deprecated',
+   'Module RCTImageLoader',
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 6d14b73..1cd372b 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,11 +15,11 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.3</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>8</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 2e3a4e3..9712502 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.3</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>8</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 632eda5..73208f4 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1945,7 +1945,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 4;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -1985,7 +1985,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 5;
++				CURRENT_PROJECT_VERSION = 4;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index ec83de8..4129214 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.3</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>10</string>
++	<string>9</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index d235470..11b84fb 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>0.8.4</string>
++	<string>0.8.3</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>9</string>
++	<string>8</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 2f3ddb3..ab1938f 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "0.8.5",
++  "version": "0.8.4",
+   "private": true,
+   "devDependencies": {
+     "@storybook/addon-actions": "4.1.16",
+@@ -61,11 +61,10 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-analytics": "^0.8.5",
+-    "@apollosproject/ui-auth": "^0.8.5",
+-    "@apollosproject/ui-htmlview": "^0.8.5",
+-    "@apollosproject/ui-kit": "^0.8.5",
+-    "@apollosproject/ui-passes": "^0.8.5",
++    "@apollosproject/ui-analytics": "^0.8.4",
++    "@apollosproject/ui-auth": "^0.8.4",
++    "@apollosproject/ui-kit": "^0.8.4",
++    "@apollosproject/ui-passes": "^0.8.4",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.5.1",
+@@ -92,7 +91,7 @@
+     "prettier": "1.14.2",
+     "querystring": "^0.2.0",
+     "react": "16.6.3",
+-    "react-apollo": "2.5.5",
++    "react-apollo": "2.5.1",
+     "react-native": "0.58.5",
+     "react-native-airplay-btn": "^1.0.6",
+     "react-native-config": "^0.11.7",
+@@ -109,6 +108,7 @@
+     "react-native-screens": "^1.0.0-alpha.22",
+     "react-native-splash-screen": "^3.1.1",
+     "react-native-svg": "9.2.4",
++    "react-native-swiper": "^1.5.14",
+     "react-native-video": "^4.4.1",
+     "react-native-video-controls": "2.2.3",
+     "react-native-webview": "^5.2.0",
+diff --git a/apolloschurchapp/rn-cli.config.js b/apolloschurchapp/rn-cli.config.js
+index b69ca32..a604ef0 100644
+--- a/apolloschurchapp/rn-cli.config.js
++++ b/apolloschurchapp/rn-cli.config.js
+@@ -7,7 +7,6 @@ const localDeps = [
+   path.resolve('..', 'apollos-ui-auth'),
+   path.resolve('..', 'apollos-ui-htmlview'),
+   path.resolve('..', 'apollos-ui-analytics'),
+-  path.resolve('..', 'apollos-ui-onboarding'),
+ ];
+ 
+ module.exports = {
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 630be1e..3558249 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -15,6 +15,7 @@ import Tabs from './tabs';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+ import Location from './user-settings/Locations';
++import { LocationFinderMapView } from './ui/Onboarding/slides/LocationFinder';
+ import LandingScreen from './LandingScreen';
+ import UserWebBrowser from './user-web-browser';
+ import Onboarding from './ui/Onboarding';
+@@ -39,6 +40,7 @@ const AppNavigator = createStackNavigator(
+     PersonalDetails,
+     ChangePassword,
+     Location,
++    LocationFinderMapView,
+     Passes,
+     UserWebBrowser,
+     Onboarding,
+diff --git a/apolloschurchapp/src/ui/LandingScreen/index.js b/apolloschurchapp/src/ui/LandingScreen/index.js
+index f929f81..9caed65 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/index.js
++++ b/apolloschurchapp/src/ui/LandingScreen/index.js
+@@ -11,7 +11,7 @@ import {
+   BackgroundView,
+ } from '@apollosproject/ui-kit';
+ 
+-import { Slide } from '@apollosproject/ui-onboarding';
++import Slide from '../Onboarding/Slide';
+ 
+ const Content = styled({
+   flex: 1,
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.js
+new file mode 100644
+index 0000000..2612d10
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.js
+@@ -0,0 +1,120 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++import { StyleSheet, ScrollView } from 'react-native';
++
++import { SafeAreaView } from 'react-navigation';
++
++import {
++  styled,
++  withTheme,
++  PaddedView,
++  H5,
++  ButtonLink,
++  Button,
++  Icon,
++} from '@apollosproject/ui-kit';
++
++const styles = StyleSheet.create({
++  contentContainer: { minHeight: '100%' },
++});
++
++const forceInset = {
++  top: 'never',
++  bottom: 'always',
++};
++
++const NavWrapper = styled(({ theme }) => ({
++  position: 'absolute',
++  bottom: 0,
++  left: 0,
++  right: 0,
++  flexDirection: 'row-reverse', // reversed so the primary action is always on the right
++  alignItems: 'center', // centers optional back button with dots/next button
++  justifyContent: 'space-between',
++  marginVertical: theme.sizing.baseUnit * 0.5, // centers nav/button with pager dots
++}))(PaddedView);
++
++const PrimaryNavIcon = withTheme(({ theme }) => ({
++  size: theme.helpers.rem(1.25),
++  style: {
++    marginLeft: theme.sizing.baseUnit * 0.5,
++    marginRight: theme.sizing.baseUnit * -0.5,
++  },
++}))(Icon);
++
++const SkipButton = styled(({ theme }) => ({
++  color: theme.colors.text.tertiary, // this is probably not the right color
++  paddingVertical: theme.sizing.baseUnit * 0.9375, // optically centered on typographic baseline
++  paddingHorizontal: theme.sizing.baseUnit, // improves tappability
++  marginLeft: theme.sizing.baseUnit * -1, // adjusts for paddingHorizontal
++}))(ButtonLink);
++
++const FlexedScrollView = styled({ flex: 1 })(ScrollView);
++
++/* Slide uses memo = sfc PureComponent 💥 Additionally, this component when rendered in a `Slider`
++ * is automatically rendered in a `View` */
++// eslint-disable-next-line react/display-name
++const Slide = memo(
++  ({
++    children,
++    onPressPrimary,
++    onPressSecondary,
++    primaryNavText,
++    primaryNavIcon,
++    secondaryNavText,
++    isLoading,
++    ...scrollViewProps
++  }) => (
++    <>
++      <FlexedScrollView
++        contentContainerStyle={styles.contentContainer}
++        overScrollMode={'auto'}
++        {...scrollViewProps}
++      >
++        {children}
++      </FlexedScrollView>
++      {onPressPrimary || onPressSecondary ? (
++        <NavWrapper vertical={false}>
++          <SafeAreaView forceInset={forceInset}>
++            {onPressPrimary ? (
++              <Button onPress={onPressPrimary} loading={isLoading}>
++                <>
++                  <H5>{primaryNavText}</H5>
++                  {primaryNavIcon ? (
++                    <PrimaryNavIcon name={primaryNavIcon} />
++                  ) : null}
++                </>
++              </Button>
++            ) : null}
++            {onPressSecondary ? (
++              <SkipButton onPress={onPressSecondary}>
++                {secondaryNavText}
++              </SkipButton>
++            ) : null}
++          </SafeAreaView>
++        </NavWrapper>
++      ) : null}
++    </>
++  )
++);
++
++Slide.propTypes = {
++  children: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++  onPressPrimary: PropTypes.func,
++  onPressSecondary: PropTypes.func,
++  primaryNavText: PropTypes.string, // colored button text
++  primaryNavIcon: PropTypes.string, // optional custom icon name or empty string for no icon at all
++  secondaryNavText: PropTypes.string, // text link
++  isLoading: PropTypes.bool,
++};
++
++Slide.defaultProps = {
++  primaryNavText: 'Next',
++  primaryNavIcon: 'arrow-next',
++  secondaryNavText: 'Skip',
++};
++
++export default Slide;
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
+new file mode 100644
+index 0000000..ae751f1
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.stories.js
+@@ -0,0 +1,63 @@
++import React from 'react';
++import { Text } from 'react-native';
++import { storiesOf } from '@storybook/react-native';
++
++import Slide from '.';
++
++storiesOf('Onboarding/Slide', module)
++  .add('default', () => (
++    <Slide>
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('onPressPrimary', () => (
++    <Slide onPressPrimary={() => {}}>
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('primaryNavText', () => (
++    <Slide onPressPrimary={() => {}} primaryNavText={'Custom button text'}>
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('primaryNavIcon', () => (
++    <Slide
++      onPressPrimary={() => {}}
++      primaryNavText={'Custom icon'}
++      primaryNavIcon={'umbrella'}
++    >
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('no icon', () => (
++    <Slide
++      onPressPrimary={() => {}}
++      primaryNavText={'No Icon!'}
++      primaryNavIcon={''}
++    >
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('onPressSecondary', () => (
++    <Slide onPressSecondary={() => {}}>
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('secondaryNavText', () => (
++    <Slide
++      onPressSecondary={() => {}}
++      secondaryNavText={'Custom skip button text'}
++    >
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('isLoading', () => (
++    <Slide onPressPrimary={() => {}} isLoading>
++      <Text>Boom</Text>
++    </Slide>
++  ))
++  .add('With Navigation', () => (
++    <Slide onPressPrimary={() => {}} onPressSecondary={() => {}}>
++      <Text>Boom</Text>
++    </Slide>
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
+new file mode 100644
+index 0000000..9a1a452
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/Slide.tests.js
+@@ -0,0 +1,111 @@
++import React from 'react';
++import { Text } from 'react-native';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import Slide from '.';
++
++describe('The Onboarding Slide component', () => {
++  it('should render children', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render onboarding next button navigation', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide onPressPrimary={jest.fn()}>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render primary navigation button with custom text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide onPressPrimary={jest.fn()} primaryNavText={'Custom nav text'}>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render primary navigation button with a custom icon', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide
++          onPressPrimary={jest.fn()}
++          primaryNavText={'Custom nav text with custom icon'}
++          primaryNavIcon={'umbrella'}
++        >
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render primary navigation button without a custom icon', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide
++          onPressPrimary={jest.fn()}
++          primaryNavText={'Custom nav text without an icon'}
++          primaryNavIcon={''}
++        >
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render onboarding skip button navigation', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide onPressSecondary={jest.fn()}>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render onboarding skip button with custom text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide
++          onPressSecondary={jest.fn()}
++          secondaryNavText={'Custom skip button text'}
++        >
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render both slide navigation buttons', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide onPressPrimary={jest.fn()} onPressSecondary={jest.fn()}>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a loading indicator', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Slide onPressPrimary={jest.fn()} isLoading>
++          <Text>Boom</Text>
++        </Slide>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.stories.js b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.stories.js
+new file mode 100644
+index 0000000..95a9606
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.stories.js
+@@ -0,0 +1,41 @@
++import React from 'react';
++import { Text } from 'react-native';
++import { storiesOf } from '@storybook/react-native';
++
++import SlideContent from '.';
++
++storiesOf('Onboarding/Slide/SlideContent', module)
++  .add('example', () => (
++    <SlideContent
++      title={'Whoa, this is heavy'}
++      description={
++        'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++      }
++      icon
++    />
++  ))
++  .add('icon', () => <SlideContent icon />)
++  .add('icon (custom name)', () => <SlideContent icon={'umbrella'} />)
++  .add('title', () => <SlideContent title={'Whoa, this is heavy'} />)
++  .add('description', () => (
++    <SlideContent
++      description={
++        'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++      }
++    />
++  ))
++  .add('isLoading', () => (
++    <SlideContent
++      title={'Whoa, this is heavy'}
++      description={
++        'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++      }
++      icon
++      isLoading
++    />
++  ))
++  .add('childen', () => (
++    <SlideContent>
++      <Text>Great Scott!</Text>
++    </SlideContent>
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.tests.js b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.tests.js
+new file mode 100644
+index 0000000..ff42046
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/SlideContent.tests.js
+@@ -0,0 +1,97 @@
++import React from 'react';
++import { Text } from 'react-native';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import SlideContent from '.';
++
++describe('The Onboarding Slide component', () => {
++  it('should render an icon', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent icon />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom icon', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent icon={'umbrella'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a title', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent title={'Whoa, this is heavy'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a description', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent
++          description={
++            'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++          }
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with children', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent
++          title={'Whoa, this is heavy'}
++          description={
++            'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++          }
++        >
++          <Text>Great Scott!</Text>
++        </SlideContent>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render children alone', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent>
++          <Text>Great Scott!</Text>
++        </SlideContent>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a loading state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent
++          title={'Whoa, this is heavy'}
++          description={
++            'There\'s that word again: "heavy." Why are things so heavy in the future? Is there a problem with the Earth\'s gravitational pull?'
++          }
++          icon
++          isLoading
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render accept additionall props', () => {
++    const centeredContent = { flex: 1, justifyContent: 'center' };
++    const tree = renderer.create(
++      <Providers>
++        <SlideContent style={centeredContent}>
++          <Text>Great Scott!</Text>
++        </SlideContent>
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/index.js b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/index.js
+new file mode 100644
+index 0000000..1267c45
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/SlideContent/index.js
+@@ -0,0 +1,85 @@
++import React from 'react';
++import { View } from 'react-native';
++import {
++  styled,
++  withTheme,
++  Icon,
++  H2,
++  H5,
++  withIsLoading,
++} from '@apollosproject/ui-kit';
++import PropTypes from 'prop-types';
++
++import { SafeAreaView } from 'react-navigation';
++
++const IconWrapper = styled(({ theme }) => ({
++  paddingBottom: theme.sizing.baseUnit, // wrapper is used to padd placeholder as well.
++}))(View);
++
++const BrandIcon = withTheme(({ theme, icon }) => ({
++  name: typeof icon === 'string' ? icon : 'brand-icon',
++  fill: theme.colors.primary,
++  size: theme.sizing.baseUnit * 3,
++}))(Icon);
++
++const TitleWrapper = styled(({ theme }) => ({
++  paddingBottom: theme.sizing.baseUnit * 0.5, // wrapper is used to padd placeholder as well.
++}))(View);
++
++const Title = styled(({ theme }) => ({
++  color: theme.colors.primary,
++}))(H2);
++
++const StyledH5 = styled(({ theme }) => ({
++  color: theme.colors.text.secondary,
++}))(H5);
++
++const Wrapper = styled(({ theme }) => ({
++  paddingTop: theme.sizing.baseUnit,
++  paddingHorizontal: theme.sizing.baseUnit,
++  marginBottom: theme.sizing.baseUnit * 3,
++}))(SafeAreaView);
++
++const SlideContent = withIsLoading(
++  ({ icon, title, description, children, isLoading, ...props }) => {
++    if (!icon && !title && !description && !children) {
++      console.warn(
++        `Warning: You need to pass at least one prop for SlideContent to render something cowboy.`
++      );
++    }
++
++    return (
++      <Wrapper forceInset={{ bottom: 'always' }} {...props}>
++        <View>
++          {icon ? (
++            <IconWrapper>
++              <BrandIcon icon={icon} isLoading={isLoading} />
++            </IconWrapper>
++          ) : null}
++          <TitleWrapper>
++            <Title>{title}</Title>
++          </TitleWrapper>
++          <StyledH5>{description}</StyledH5>
++        </View>
++        {children}
++      </Wrapper>
++    );
++  }
++);
++
++SlideContent.displayName = 'SlideContent';
++
++SlideContent.propTypes = {
++  icon: PropTypes.oneOfType([
++    PropTypes.bool, // Use default `brand-icon`
++    PropTypes.string, // Use a custom icon name
++  ]),
++  title: PropTypes.string,
++  description: PropTypes.string,
++  children: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++};
++
++export default SlideContent;
+diff --git a/apolloschurchapp/src/ui/Onboarding/Slide/index.js b/apolloschurchapp/src/ui/Onboarding/Slide/index.js
+new file mode 100644
+index 0000000..568bb2a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/Slide/index.js
+@@ -0,0 +1,4 @@
++import Slide from './Slide';
++
++export default Slide;
++export SlideContent from './SlideContent';
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 54a0382..9314696 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,7 +1,15 @@
+-import React from 'react';
++import React, { Component } from 'react';
++import { View } from 'react-native';
+ 
+-import { GradientOverlayImage } from '@apollosproject/ui-kit';
+-import { ApolloConsumer } from 'react-apollo';
++// import PropTypes from 'prop-types';
++import Swiper from 'react-native-swiper';
++import {
++  BackgroundView,
++  GradientOverlayImage,
++  styled,
++} from '@apollosproject/ui-kit';
++
++import { SafeAreaView } from 'react-navigation';
+ 
+ import {
+   AskNotificationsConnected,
+@@ -9,19 +17,74 @@ import {
+   FeaturesConnected,
+   AboutYouConnected,
+   LocationFinderConnected,
+-  OnboardingSwiper,
+-} from '@apollosproject/ui-onboarding';
++} from './slides';
++
++const dotStyles = ({ theme }) => ({
++  width: theme.sizing.baseUnit / 2,
++  height: theme.sizing.baseUnit / 2,
++  borderRadius: theme.sizing.baseUnit / 4,
++  margin: theme.sizing.baseUnit / 4,
++});
++
++const forceInset = {
++  bottom: 'always',
++};
++
++const PaginationDot = styled(({ theme }) => ({
++  backgroundColor: theme.colors.background.inactive,
++  ...dotStyles({ theme }),
++}))(View);
++
++const PaginationDotActive = styled(({ theme }) => ({
++  backgroundColor: theme.colors.action.primary,
++  ...dotStyles({ theme }),
++}))(View);
++
++class Onboarding extends Component {
++  static navigationOptions = () => ({
++    title: 'Onboarding',
++    header: null,
++    gesturesEnabled: false,
++  });
++
++  swiper = null;
+ 
+-import { requestPushPermissions } from 'apolloschurchapp/src/notifications';
++  // Creates ref to Swiper to be passed as a prop to children.
++  setSwiperRef = (r) => {
++    this.swiper = r;
+ 
+-function Onboarding({ navigation }) {
+-  return (
+-    <OnboardingSwiper>
+-      {({ swipeForward }) => (
+-        <>
+-          <AskNameConnected onPressPrimary={swipeForward} />
++    return this.swiper;
++  };
++
++  // Advance swiper 1 slide. See Swiper documentation for scrollBy details. https://github.com/leecade/react-native-swiper#methods
++  handleOnPressPrimary = () => this.swiper.scrollBy(1);
++
++  render() {
++    return (
++      <BackgroundView>
++        <Swiper
++          loadMinimal
++          loop={false}
++          /* Disables swipe gestures. We currently we dont display a back button so this is our
++           * only back navigation option. */
++          // scrollEnabled={false}
++          showsButtons={false}
++          ref={this.setSwiperRef}
++          renderPagination={this.renderPagination}
++          activeDot={
++            <SafeAreaView forceInset={forceInset}>
++              <PaginationDotActive />
++            </SafeAreaView>
++          }
++          dot={
++            <SafeAreaView forceInset={forceInset}>
++              <PaginationDot forceInset={forceInset} />
++            </SafeAreaView>
++          }
++        >
++          <AskNameConnected onPressPrimary={this.handleOnPressPrimary} />
+           <FeaturesConnected
+-            onPressPrimary={swipeForward}
++            onPressPrimary={this.handleOnPressPrimary}
+             BackgroundComponent={
+               <GradientOverlayImage
+                 source={'https://picsum.photos/640/640/?random'}
+@@ -29,7 +92,7 @@ function Onboarding({ navigation }) {
+             }
+           />
+           <AboutYouConnected
+-            onPressPrimary={swipeForward}
++            onPressPrimary={this.handleOnPressPrimary}
+             BackgroundComponent={
+               <GradientOverlayImage
+                 source={'https://picsum.photos/640/640/?random'}
+@@ -37,44 +100,26 @@ function Onboarding({ navigation }) {
+             }
+           />
+           <LocationFinderConnected
+-            onPressPrimary={swipeForward}
+-            onNavigate={() => {
+-              navigation.navigate('Location', {
+-                onFinished: swipeForward,
+-              });
+-            }}
++            onPressPrimary={this.handleOnPressPrimary}
+             BackgroundComponent={
+               <GradientOverlayImage
+                 source={'https://picsum.photos/640/640/?random'}
+               />
+             }
+           />
+-          <ApolloConsumer>
+-            {(client) => (
+-              <AskNotificationsConnected
+-                onPressPrimary={() => navigation.navigate('Home')}
+-                onRequestPushPermissions={() =>
+-                  requestPushPermissions({ client })
+-                }
+-                primaryNavText={'Finish'}
+-                BackgroundComponent={
+-                  <GradientOverlayImage
+-                    source={'https://picsum.photos/640/640/?random'}
+-                  />
+-                }
++          <AskNotificationsConnected
++            onPressPrimary={() => this.props.navigation.navigate('Home')}
++            primaryNavText={'Finish'}
++            BackgroundComponent={
++              <GradientOverlayImage
++                source={'https://picsum.photos/640/640/?random'}
+               />
+-            )}
+-          </ApolloConsumer>
+-        </>
+-      )}
+-    </OnboardingSwiper>
+-  );
++            }
++          />
++        </Swiper>
++      </BackgroundView>
++    );
++  }
+ }
+ 
+-Onboarding.navigationOptions = {
+-  title: 'Onboarding',
+-  header: null,
+-  gesturesEnabled: false,
+-};
+-
+ export default Onboarding;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.js
+new file mode 100644
+index 0000000..1dc19e7
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.js
+@@ -0,0 +1,135 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++import moment from 'moment';
++import { get } from 'lodash';
++
++import {
++  styled,
++  H5,
++  Radio,
++  RadioButton,
++  H6,
++  DateInput,
++} from '@apollosproject/ui-kit';
++
++import Slide, { SlideContent } from '../../Slide';
++
++const Label = styled(({ theme, padded }) => ({
++  color: 'gray',
++  opacity: 0.7,
++  ...(padded ? { marginTop: theme.sizing.baseUnit } : {}),
++}))(H6);
++
++const StyledDate = styled(({ theme }) => ({
++  marginTop: 0,
++  marginBottom: theme.sizing.baseUnit,
++}))(DateInput);
++
++const StyledRadio = styled(({ theme }) => ({
++  marginBottom: theme.sizing.baseUnit,
++  flexDirection: 'row',
++  alignItems: 'center',
++  flexWrap: 'wrap',
++}))(Radio);
++
++const RadioLabel = styled(({ theme }) => ({
++  marginLeft: theme.sizing.baseUnit * 0.5,
++}))(H5);
++
++const AboutYou = memo(
++  ({
++    slideTitle,
++    description,
++    defaultDate,
++    genderList,
++    values,
++    touched,
++    errors,
++    setFieldValue,
++    BackgroundComponent,
++    ...props
++  }) => (
++    <Slide {...props}>
++      {BackgroundComponent}
++      <SlideContent title={slideTitle} description={description}>
++        <Label padded>Gender</Label>
++        <StyledRadio
++          label="Gender"
++          type="radio"
++          value={get(values, 'gender')}
++          error={get(touched, 'gender') && get(errors, 'gender')}
++          onChange={(value) => setFieldValue('gender', value)}
++        >
++          {genderList.map((gender) => [
++            <RadioButton
++              key={gender}
++              value={gender}
++              label={() => <RadioLabel>{gender}</RadioLabel>}
++              underline={false}
++            />,
++          ])}
++        </StyledRadio>
++        <Label>Birthday</Label>
++        <StyledDate
++          type={'DateInput'}
++          placeholder={'Select a date...'}
++          value={moment
++            .utc(get(values, 'birthDate', defaultDate) || defaultDate)
++            .toDate()}
++          error={get(touched, 'birthDate') && get(errors, 'birthDate')}
++          displayValue={
++            // only show a birthday if we have one.
++            get(values, 'birthDate', '') // DatePicker shows displayValue > placeholder > label in that order
++              ? moment(values.birthDate).format('MM/DD/YYYY')
++              : '' // Pass an empty string if we don't have a birthday to show the placeholder.
++          }
++          onChange={(value) => setFieldValue('birthDate', value)}
++        />
++      </SlideContent>
++    </Slide>
++  )
++);
++
++AboutYou.propTypes = {
++  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use more unique name.
++   */
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  defaultDate: PropTypes.instanceOf(Date),
++  genderList: PropTypes.arrayOf(PropTypes.string),
++  values: PropTypes.shape({
++    gender: PropTypes.bool,
++    birthDate: PropTypes.bool,
++  }),
++  touched: PropTypes.shape({
++    gender: PropTypes.string,
++    birthDate: PropTypes.string,
++  }),
++  errors: PropTypes.shape({
++    gender: PropTypes.string,
++    birthDate: PropTypes.string,
++  }),
++  setFieldValue: PropTypes.func.isRequired,
++  /* Recommended usage:
++   * - `Image` (react-native)
++   * - `GradientOverlayImage` (@apollosproject/ui-kit) for increased readability
++   * - `Video` (react-native-video) because moving pictures!
++   */
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++};
++
++AboutYou.defaultProps = {
++  slideTitle: "This one's easy.",
++  description:
++    'Help us understand who you are so we can connect you with the best ministries and events.',
++  genderList: ['Male', 'Female'],
++  defaultDate: new Date(),
++};
++
++AboutYou.displayName = 'AboutYou';
++
++export default AboutYou;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js
+new file mode 100644
+index 0000000..68d4d96
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.stories.js
+@@ -0,0 +1,39 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import AboutYou from '.';
++
++storiesOf('Onboarding/slides/AboutYou', module)
++  .add('default', () => <AboutYou />)
++  .add('slideTitle', () => (
++    <AboutYou slideTitle={'Custom title text'} setFieldValue={() => {}} />
++  ))
++  .add('description', () => (
++    <AboutYou
++      description={'Custom description text'}
++      setFieldValue={() => {}}
++    />
++  ))
++  .add('genderList', () => (
++    <AboutYou genderList={['M', 'F']} setFieldValue={() => {}} />
++  ))
++  .add('values – birthDate', () => (
++    <AboutYou values={{ birthDate: '1989-02-14' }} setFieldValue={() => {}} />
++  ))
++  .add('values – gender', () => (
++    <AboutYou values={{ gender: 'Male' }} setFieldValue={() => {}} />
++  ))
++  .add('BackgroundComponent', () => (
++    <AboutYou
++      BackgroundComponent={
++        <GradientOverlayImage
++          source={'https://picsum.photos/640/640/?random'}
++        />
++      }
++      setFieldValue={() => {}}
++    />
++  ))
++  .add('Slide props', () => (
++    <AboutYou onPressPrimary={() => {}} setFieldValue={() => {}} />
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js
+new file mode 100644
+index 0000000..d54de79
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYou.tests.js
+@@ -0,0 +1,138 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import AboutYou from '.';
++
++describe('The Onboarding AboutYou component', () => {
++  it('should render', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou defaultDate={'2019-02-14'} setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom title', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          slideTitle={'Custom title text'}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom description', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          description={'Custom description text'}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom gender list', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          genderList={['M', 'F']}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render the selected gender', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          values={{ gender: 'Male' }}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with a selected birthdate', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          values={{ birthDate: '1989-02-14' }}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with errors', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          touched={{
++            gender: true,
++            birthDate: true,
++          }}
++          errors={{
++            gender: 'Gender errors',
++            birthDate: 'BirthDate errors',
++          }}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a BackgroundComponent', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          BackgroundComponent={
++            <GradientOverlayImage
++              source={'https://picsum.photos/640/640/?random'}
++            />
++          }
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should pass additional props to Slide', () => {
++    /* we have to pass in a date via defaultDate or the DateInput component will create a current date
++     * object and invalidate the snapshots every time. */
++    const tree = renderer.create(
++      <Providers>
++        <AboutYou
++          onPressPrimary={jest.fn()}
++          defaultDate={'2019-02-14'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.js
+new file mode 100644
+index 0000000..6d65b6a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.js
+@@ -0,0 +1,100 @@
++import React, { memo } from 'react';
++import { Query, Mutation } from 'react-apollo';
++import { Formik } from 'formik';
++import * as Yup from 'yup';
++import PropTypes from 'prop-types';
++
++import getUserProfile from '../../../../tabs/connect/getUserProfile';
++import AboutYou from './AboutYou';
++
++import updateUserDetails from './updateUserDetails';
++
++// eslint-disable-next-line react/display-name
++const AboutYouConnected = memo(
++  ({ onPressPrimary, onPressSecondary, ...props }) => (
++    <Query query={getUserProfile}>
++      {({ data: { currentUser = { profile: {} } } = {}, loading = false }) => {
++        const { gender, birthDate } = currentUser.profile;
++
++        return (
++          <Mutation mutation={updateUserDetails}>
++            {(updateDetails) => (
++              <Formik
++                initialValues={{ gender, birthDate }}
++                isInitialValid={() =>
++                  !!(['Male', 'Female'].includes(gender) || birthDate)
++                } // isInitialValid defaults to `false` this correctly checks for user data
++                validationSchema={Yup.object().shape({
++                  gender: Yup.string().oneOf(['Male', 'Female']),
++                  birthDate: Yup.string().nullable(),
++                })}
++                enableReinitialize
++                onSubmit={async (
++                  variables,
++                  { setSubmitting, setFieldError }
++                ) => {
++                  try {
++                    await updateDetails({ variables });
++                    onPressPrimary(); // advance to the next slide after submission
++                  } catch (e) {
++                    const { graphQLErrors } = e;
++                    if (
++                      graphQLErrors.length &&
++                      graphQLErrors.find(({ message }) =>
++                        message.includes('Invalid')
++                      )
++                    ) {
++                      setFieldError(
++                        'gender',
++                        'There was a problem sending your request'
++                      );
++                    } else {
++                      setFieldError(
++                        'gender',
++                        'Unknown error. Please try again later.'
++                      );
++                    }
++                  }
++                  setSubmitting(false);
++                }}
++              >
++                {({
++                  isValid,
++                  isSubmitting,
++                  submitForm,
++                  values,
++                  touched,
++                  errors,
++                  setFieldValue,
++                }) => (
++                  <AboutYou
++                    onPressPrimary={isValid ? submitForm : null} // if form `isValid` show the primary nav button (next)
++                    onPressSecondary={
++                      // if form `!isValid` show the secondary nav button (skip)
++                      isValid ? null : onPressSecondary || onPressPrimary // if onPressSecondary exists use it else default onPressPrimary
++                    }
++                    gender={gender}
++                    birthDate={birthDate}
++                    values={values}
++                    touched={touched}
++                    errors={errors}
++                    setFieldValue={setFieldValue}
++                    isLoading={loading || isSubmitting}
++                    {...props}
++                  />
++                )}
++              </Formik>
++            )}
++          </Mutation>
++        );
++      }}
++    </Query>
++  )
++);
++
++AboutYouConnected.propTypes = {
++  onPressPrimary: PropTypes.func,
++  onPressSecondary: PropTypes.func,
++};
++
++export default AboutYouConnected;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.tests.js
+new file mode 100644
+index 0000000..e961e8a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/AboutYouConnected.tests.js
+@@ -0,0 +1,73 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import Providers from 'apolloschurchapp/src/Providers';
++
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
++import getUserProfile from '../../../../tabs/connect/getUserProfile';
++import AboutYouConnected from './AboutYouConnected';
++
++describe('AboutYouConnected component', () => {
++  it('renders in a default state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AboutYouConnected
++          onPressPrimary={jest.fn()}
++          defaultDate={'2019-02-14'}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('renders Gender and BirthDate when logged in', async () => {
++    const mock = {
++      request: {
++        query: getUserProfile,
++      },
++      result: {
++        data: {
++          currentUser: {
++            __typename: 'AuthenticatedUser',
++            id: 'AuthenticatedUser:123',
++            profile: {
++              __typename: 'Person',
++              id: 'Person:123',
++              gender: 'Male',
++              birthDate: '1980-02-10T00:00:00',
++              firstName: 'Isaac',
++              lastName: 'Hardy',
++              campus: {
++                __typename: 'Campus',
++                id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++                name: 'Chicago Campus',
++                latitude: 42.09203,
++                longitude: -88.13289,
++                distanceFromLocation: null,
++                street1: '67 Algonquin Rd',
++                street2: '',
++                city: 'South Barrington',
++                state: 'IL',
++                postalCode: '60010-6143',
++                image: {
++                  __typename: 'ImageMediaSource',
++                  uri: 'https://picsum.photos/300/300/?random',
++                },
++              },
++              email: 'isaac.hardy@newspring.cc',
++              nickName: 'Batman',
++              photo: {
++                __typename: 'ImageMediaSource',
++                uri: 'https://some-uri.com/test.jpg',
++              },
++            },
++          },
++        },
++      },
++    };
++    const tree = await renderWithApolloData(
++      <Providers mocks={[mock]}>
++        <AboutYouConnected setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js
+new file mode 100644
+index 0000000..6b9737d
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/index.js
+@@ -0,0 +1,4 @@
++import AboutYou from './AboutYou';
++
++export AboutYouConnected from './AboutYouConnected';
++export default AboutYou;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/updateUserDetails.js b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/updateUserDetails.js
+new file mode 100644
+index 0000000..d5beb5e
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AboutYou/updateUserDetails.js
+@@ -0,0 +1,16 @@
++import gql from 'graphql-tag';
++
++export default gql`
++  mutation updateDetails($gender: String!, $birthDate: String!) {
++    updateProfileFields(
++      input: [
++        { field: Gender, value: $gender }
++        { field: BirthDate, value: $birthDate }
++      ]
++    ) {
++      gender
++      birthDate
++      id
++    }
++  }
++`;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.js
+new file mode 100644
+index 0000000..a25e8f1
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.js
+@@ -0,0 +1,97 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++import { get } from 'lodash';
++
++import { SafeAreaView } from 'react-navigation';
++
++import { PaddedView, TextInput } from '@apollosproject/ui-kit';
++
++import Slide, { SlideContent } from '../../Slide';
++
++// memo = sfc PureComponent 💥
++const AskName = memo(
++  ({
++    onPressPrimary,
++    slideTitle,
++    description,
++    firstName,
++    lastName,
++    values,
++    touched,
++    errors,
++    setFieldValue,
++    isLoading,
++    ...props
++  }) => {
++    let LastNameInput = null;
++
++    return (
++      <Slide onPressPrimary={onPressPrimary} isLoading={isLoading} {...props}>
++        <SafeAreaView forceInset={{ top: 'always', bottom: 'always' }}>
++          <SlideContent title={slideTitle} description={description} icon>
++            <PaddedView horizontal={false}>
++              <TextInput
++                label={'First Name'}
++                type={'text'}
++                textContentType={'givenName'} // ios autofill
++                returnKeyType={'next'}
++                value={get(values, 'firstName')}
++                error={
++                  get(touched, 'firstName', false) &&
++                  get(errors, 'firstName', null)
++                }
++                onChangeText={(text) => setFieldValue('firstName', text)}
++                onSubmitEditing={() => LastNameInput.focus()}
++                disabled={isLoading}
++                enablesReturnKeyAutomatically
++              />
++              <TextInput
++                label={'Last Name'}
++                type={'text'}
++                textContentType={'familyName'} // ios autofill
++                returnKeyType={'next'}
++                value={get(values, 'lastName')}
++                error={
++                  get(touched, 'lastName', false) &&
++                  get(errors, 'lastName', null)
++                }
++                onChangeText={(text) => setFieldValue('lastName', text)}
++                onSubmitEditing={onPressPrimary}
++                disabled={isLoading}
++                enablesReturnKeyAutomatically
++                inputRef={(r) => {
++                  LastNameInput = r;
++                }}
++              />
++            </PaddedView>
++          </SlideContent>
++        </SafeAreaView>
++      </Slide>
++    );
++  }
++);
++
++AskName.propTypes = {
++  /* The `Swiper` component used in `<Onboading>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use more unique name.
++   */
++  setFieldValue: PropTypes.func.isRequired,
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  firstName: PropTypes.string,
++  lastName: PropTypes.string,
++  touched: PropTypes.shape({}),
++  errors: PropTypes.shape({}),
++  values: PropTypes.shape({}),
++  onPressPrimary: PropTypes.func,
++  isLoading: PropTypes.bool,
++};
++
++AskName.defaultProps = {
++  slideTitle: 'Welcome!',
++  description: "Every relationship starts with a name. What's yours?",
++};
++
++AskName.displayName = 'AskName';
++
++export default AskName;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
+new file mode 100644
+index 0000000..b76ecf4
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.stories.js
+@@ -0,0 +1,29 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++
++import AskName from '.';
++
++storiesOf('Onboarding/slides/AskName', module)
++  .add('default', () => <AskName setFieldValue={() => {}} />)
++  .add('slideTitle', () => (
++    <AskName slideTitle={'Custom title text'} setFieldValue={() => {}} />
++  ))
++  .add('description', () => (
++    <AskName description={'Custom description text'} setFieldValue={() => {}} />
++  ))
++  .add('firstName and lastName', () => (
++    <AskName
++      values={{ firstName: 'Marty', lastName: 'McFly' }}
++      setFieldValue={() => {}}
++    />
++  ))
++  .add('isLoading', () => (
++    <AskName
++      values={{ firstName: 'Marty', lastName: 'McFly' }}
++      setFieldValue={() => {}}
++      isLoading
++    />
++  ))
++  .add('SlideWrapper props', () => (
++    <AskName setFieldValue={() => {}} onPressPrimary={() => {}} />
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
+new file mode 100644
+index 0000000..b9b98e2
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskName.tests.js
+@@ -0,0 +1,68 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import AskName from '.';
++
++describe('The Onboarding AskName component', () => {
++  it('should render', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom title', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName slideTitle={'Custom title text'} setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom description', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName
++          description={'Custom description text'}
++          setFieldValue={jest.fn()}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should accept a firstName', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName values={{ firstName: 'Marty' }} setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should accept a lastName', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName values={{ lastName: 'McFly' }} setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a loading state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName setFieldValue={jest.fn()} isLoading />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should pass additional props to Slide component', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskName onPressPrimary={jest.fn()} setFieldValue={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.js
+new file mode 100644
+index 0000000..b2db1fc
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.js
+@@ -0,0 +1,102 @@
++import React, { memo } from 'react';
++import { Query, Mutation } from 'react-apollo';
++import { Formik } from 'formik';
++import * as Yup from 'yup';
++import PropTypes from 'prop-types';
++
++import getUserProfile from '../../../../tabs/connect/getUserProfile';
++import AskName from './AskName';
++
++import updateUserName from './updateUserName';
++
++// eslint-disable-next-line react/display-name
++const AskNameConnected = memo(
++  ({ onPressPrimary, onPressSecondary, ...props }) => (
++    <Query query={getUserProfile}>
++      {({ loading, data: { currentUser = { profile: {} } } = {} }) => {
++        const { firstName, lastName } = currentUser.profile;
++
++        return (
++          <Mutation mutation={updateUserName}>
++            {(updateName) => (
++              <Formik
++                initialValues={{ firstName, lastName }}
++                isInitialValid={() => !!(firstName && lastName)} // isInitialValid defaults to `false` this correctly checks for user data
++                validationSchema={Yup.object().shape({
++                  firstName: Yup.string().required(
++                    'Your first name is required!'
++                  ),
++                  lastName: Yup.string().required(
++                    'Your last name is required!'
++                  ),
++                })}
++                enableReinitialize
++                onSubmit={async (
++                  variables,
++                  { setSubmitting, setFieldError }
++                ) => {
++                  try {
++                    await updateName({ variables });
++                    onPressPrimary();
++                  } catch (e) {
++                    const { graphQLErrors } = e;
++                    if (
++                      graphQLErrors.length &&
++                      graphQLErrors.find(({ message }) =>
++                        message.includes('User already exists')
++                      )
++                    ) {
++                      setFieldError(
++                        'firstName',
++                        'There was a problem sending your request'
++                      );
++                    } else {
++                      setFieldError(
++                        'firstName',
++                        'Unknown error. Please try again later.'
++                      );
++                    }
++                  }
++                  setSubmitting(false);
++                }}
++              >
++                {({
++                  isValid,
++                  isSubmitting,
++                  submitForm,
++                  values,
++                  touched,
++                  errors,
++                  setFieldValue,
++                }) => (
++                  <AskName
++                    onPressPrimary={loading || isValid ? submitForm : null} // if form `isValid` show the primary nav button (next)
++                    onPressSecondary={
++                      // if form `!isValid` show the secondary nav button (skip)
++                      isValid ? null : onPressSecondary || onPressPrimary // if onPressSecondary exists use it else default onPressPrimary
++                    }
++                    firstName={firstName}
++                    lastName={lastName}
++                    values={values}
++                    touched={touched}
++                    errors={errors}
++                    setFieldValue={setFieldValue}
++                    isLoading={loading || isSubmitting}
++                    {...props}
++                  />
++                )}
++              </Formik>
++            )}
++          </Mutation>
++        );
++      }}
++    </Query>
++  )
++);
++
++AskNameConnected.propTypes = {
++  onPressPrimary: PropTypes.func,
++  onPressSecondary: PropTypes.func,
++};
++
++export default AskNameConnected;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.tests.js
+new file mode 100644
+index 0000000..c6fb08e
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/AskNameConnected.tests.js
+@@ -0,0 +1,79 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
++
++import getUserProfile from '../../../../tabs/connect/getUserProfile';
++import AskNameConnected from './AskNameConnected';
++
++describe('The AskNameConnected component', () => {
++  it('renders in a default state', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNameConnected onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('renders User Name when logged in', async () => {
++    const mock = {
++      request: {
++        query: getUserProfile,
++      },
++      result: {
++        data: {
++          currentUser: {
++            __typename: 'AuthenticatedUser',
++            id: 'AuthenticatedUser:123',
++            profile: {
++              __typename: 'Person',
++              id: 'Person:123',
++              gender: 'Male',
++              birthDate: '1980-02-10T00:00:00',
++              firstName: 'Isaac',
++              lastName: 'Hardy',
++              campus: {
++                __typename: 'Campus',
++                id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++                name: 'Chicago Campus',
++                latitude: 42.09203,
++                longitude: -88.13289,
++                distanceFromLocation: null,
++                street1: '67 Algonquin Rd',
++                street2: '',
++                city: 'South Barrington',
++                state: 'IL',
++                postalCode: '60010-6143',
++                image: {
++                  __typename: 'ImageMediaSource',
++                  uri: 'https://picsum.photos/300/300/?random',
++                },
++              },
++              email: 'isaac.hardy@newspring.cc',
++              nickName: 'Batman',
++              photo: {
++                __typename: 'ImageMediaSource',
++                uri: 'https://some-uri.com/test.jpg',
++              },
++            },
++          },
++        },
++      },
++    };
++    const tree = await renderWithApolloData(
++      <Providers mocks={[mock]}>
++        <AskNameConnected onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('renders loading state when fetching data', () => {
++    const tree = renderer.create(
++      <Providers mocks={[]}>
++        <AskNameConnected onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
+new file mode 100644
+index 0000000..138f0e9
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/index.js
+@@ -0,0 +1,4 @@
++import AskName from './AskName';
++
++export AskNameConnected from './AskNameConnected';
++export default AskName;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskName/updateUserName.js b/apolloschurchapp/src/ui/Onboarding/slides/AskName/updateUserName.js
+new file mode 100644
+index 0000000..70c8d49
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskName/updateUserName.js
+@@ -0,0 +1,16 @@
++import gql from 'graphql-tag';
++
++export default gql`
++  mutation updateName($firstName: String!, $lastName: String!) {
++    updateProfileFields(
++      input: [
++        { field: FirstName, value: $firstName }
++        { field: LastName, value: $lastName }
++      ]
++    ) {
++      firstName
++      lastName
++      id
++    }
++  }
++`;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js
+new file mode 100644
+index 0000000..776c00e
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.js
+@@ -0,0 +1,65 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++import { styled, PaddedView, Button } from '@apollosproject/ui-kit';
++
++import Slide, { SlideContent } from '../../Slide';
++
++const StyledSlideContent = styled({
++  flex: 1,
++  justifyContent: 'space-between',
++})(SlideContent);
++
++// memo = sfc PureComponent 💥
++// eslint-disable-next-line react/display-name
++const AskNotifications = memo(
++  ({
++    BackgroundComponent,
++    slideTitle,
++    description,
++    buttonText,
++    buttonDisabled,
++    onPressButton,
++    ...props
++  }) => (
++    <Slide {...props}>
++      {BackgroundComponent}
++      <StyledSlideContent title={slideTitle} description={description}>
++        {buttonDisabled || onPressButton ? (
++          <PaddedView horizontal={false}>
++            <Button
++              title={buttonText}
++              onPress={onPressButton}
++              disabled={buttonDisabled}
++              pill={false}
++            />
++          </PaddedView>
++        ) : null}
++      </StyledSlideContent>
++    </Slide>
++  )
++);
++
++AskNotifications.propTypes = {
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++  /* The `Swiper` component used in `<onBoarding>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use a more unique name.
++   */
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  buttonText: PropTypes.string,
++  buttonDisabled: PropTypes.bool,
++  onPressButton: PropTypes.func,
++};
++
++AskNotifications.defaultProps = {
++  slideTitle: 'Can we keep you informed?',
++  description:
++    "We'll let you know when important things are happening and keep you in the loop",
++  buttonText: 'Yes, enable notifications',
++  buttonDisabled: false,
++};
++
++export default AskNotifications;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js
+new file mode 100644
+index 0000000..b4bc785
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.stories.js
+@@ -0,0 +1,33 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import AskNotifications from './AskNotifications';
++
++storiesOf('Onboarding/slides/AskNotifications', module)
++  .add('default', () => <AskNotifications />)
++  .add('BackgroundComponent', () => (
++    <AskNotifications
++      BackgroundComponent={
++        <GradientOverlayImage
++          source={'https://picsum.photos/640/640/?random'}
++        />
++      }
++    />
++  ))
++  .add('slideTitle', () => (
++    <AskNotifications slideTitle={'Custom title text'} />
++  ))
++  .add('description', () => (
++    <AskNotifications description={'Custom description text'} />
++  ))
++  .add('buttonDisabled', () => <AskNotifications buttonDisabled />)
++  .add('buttonText', () => (
++    <AskNotifications
++      onPressButton={() => {}}
++      buttonText={'Custom button text'}
++    />
++  ))
++  .add('SlideWrapper props', () => (
++    <AskNotifications onPressSecondary={() => {}} />
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js
+new file mode 100644
+index 0000000..18aa958
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotifications.tests.js
+@@ -0,0 +1,86 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import AskNotifications from './AskNotifications';
++
++describe('The Onboarding AskNotifications component', () => {
++  it('should render', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a BackgroundComponent', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications
++          BackgroundComponent={
++            <GradientOverlayImage
++              source={'https://picsum.photos/640/640/?random'}
++            />
++          }
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom title', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications slideTitle={'Custom title text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom description', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications description={'Custom description text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with a button', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications onPressButton={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render the button disabled', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications onPressButton={jest.fn()} buttonDisabled />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a button with custom text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications
++          onPressButton={jest.fn()}
++          buttonText={'Custom button text'}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should pass additional props to Slide component', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotifications
++          onPressSecondary={jest.fn()}
++          secondaryNavText={'Later'}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js
+new file mode 100644
+index 0000000..cfd6df9
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.js
+@@ -0,0 +1,46 @@
++import React, { memo } from 'react';
++import { Query, ApolloConsumer } from 'react-apollo';
++import PropTypes from 'prop-types';
++
++import {
++  requestPushPermissions,
++  getNotificationsEnabled,
++} from 'apolloschurchapp/src/notifications';
++
++import AskNotifications from '.';
++
++// eslint-disable-next-line react/display-name
++const AskNotificationsConnected = memo(
++  ({ onPressPrimary, onPressSecondary, ...props }) => (
++    <ApolloConsumer>
++      {(client) => (
++        <Query query={getNotificationsEnabled}>
++          {({ data: { notificationsEnabled = false } = {} }) => (
++            <AskNotifications
++              onPressButton={() => requestPushPermissions({ client })}
++              buttonDisabled={notificationsEnabled}
++              buttonText={
++                notificationsEnabled
++                  ? 'Notifications Enabled!'
++                  : 'Yes, enable notifications'
++              }
++              onPressPrimary={notificationsEnabled ? onPressPrimary : null} // if notifications are enabled show the primary nav button (next/finish)
++              onPressSecondary={
++                // if notifications are not enabled show the secondary nav button (skip)
++                notificationsEnabled ? null : onPressSecondary || onPressPrimary // if onPressSecondary exists use it else default onPressPrimary
++              }
++              {...props}
++            />
++          )}
++        </Query>
++      )}
++    </ApolloConsumer>
++  )
++);
++
++AskNotificationsConnected.propTypes = {
++  onPressPrimary: PropTypes.func,
++  onPressSecondary: PropTypes.func,
++};
++
++export default AskNotificationsConnected;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js
+new file mode 100644
+index 0000000..5751dee
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/AskNotificationsConnected.tests.js
+@@ -0,0 +1,53 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import Providers from 'apolloschurchapp/src/Providers';
++import { getNotificationsEnabled } from 'apolloschurchapp/src/notifications';
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
++
++import AskNotificationsConnected from './AskNotificationsConnected';
++
++describe('The Onboarding AskNotificationsConnected component', () => {
++  it('should render with a user not having granted push notifications permissions', async () => {
++    const mocks = [
++      {
++        request: {
++          query: getNotificationsEnabled,
++        },
++        result: {
++          data: { notificationsEnabled: false },
++        },
++      },
++    ];
++
++    const component = (
++      <Providers mocks={mocks} addTypename={false}>
++        <AskNotificationsConnected onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++
++    const tree = await renderWithApolloData(component);
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with a user having granted push notifications permissions', async () => {
++    const component = (
++      <Providers
++        resolvers={{ Query: { notificationsEnabled: Promise.resolve(true) } }}
++        addTypename={false}
++      >
++        <AskNotificationsConnected onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++
++    const tree = await renderWithApolloData(component);
++    expect(tree).toMatchSnapshot();
++  });
++
++  it('should render with no data in the cache', () => {
++    const tree = renderer.create(
++      <Providers>
++        <AskNotificationsConnected />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js
+new file mode 100644
+index 0000000..865e500
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/AskNotifications/index.js
+@@ -0,0 +1,4 @@
++import AskNotifications from './AskNotifications';
++
++export AskNotificationsConnected from './AskNotificationsConnected';
++export default AskNotifications;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.js
+new file mode 100644
+index 0000000..5bc7a91
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.js
+@@ -0,0 +1,42 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++
++import Slide, { SlideContent } from '../../Slide';
++
++const Features = memo(
++  ({ firstName, description, BackgroundComponent, ...props }) => (
++    <Slide {...props}>
++      {BackgroundComponent}
++      <SlideContent
++        title={`Hey ${firstName || 'friend'}!`}
++        description={description}
++      />
++    </Slide>
++  )
++);
++
++Features.displayName = 'Features';
++
++Features.propTypes = {
++  /* The `Swiper` component used in `<onBoarding>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use more unique name.
++   */
++  firstName: PropTypes.string,
++  description: PropTypes.string,
++  /* Recommended usage:
++   * - `Image` (react-native)
++   * - `GradientOverlayImage` (@apollosproject/ui-kit) for increased readability
++   * - `Video` (react-native-video) because moving pictures!
++   */
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++};
++
++Features.defaultProps = {
++  description:
++    "We'd like to help personalize your mobile experience so we can help you with every step on your journey.",
++};
++
++export default Features;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js
+new file mode 100644
+index 0000000..cfb804a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.stories.js
+@@ -0,0 +1,23 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import Features from './Features';
++
++storiesOf('Onboarding/slides/Features', module)
++  .add('default', () => <Features isLoading />)
++  .add('firstName', () => <Features firstName={'firstName'} />)
++  .add('slideTitle', () => <Features slideTitle={'Custom title text'} />)
++  .add('description', () => (
++    <Features description={'Custom description text'} />
++  ))
++  .add('BackgroundComponent', () => (
++    <Features
++      BackgroundComponent={
++        <GradientOverlayImage
++          source={'https://picsum.photos/750/750/?random'}
++        />
++      }
++    />
++  ))
++  .add('Slide props', () => <Features onPressPrimary={() => {}} />);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js
+new file mode 100644
+index 0000000..56b88a5
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/Features.tests.js
+@@ -0,0 +1,64 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import Features from './Features';
++
++describe('The Onboarding Features component', () => {
++  it('should render', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom first name', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features firstName={'firstName'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom title', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features slideTitle={'Custom title text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom description', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features description={'Custom description text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a BackgroundComponent', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features
++          BackgroundComponent={
++            <GradientOverlayImage
++              source={'https://picsum.photos/375/812/?random'}
++            />
++          }
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should pass additional props to Slide', () => {
++    const tree = renderer.create(
++      <Providers>
++        <Features onPressPrimary={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.js
+new file mode 100644
+index 0000000..e38452c
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.js
+@@ -0,0 +1,20 @@
++import React from 'react';
++import { Query } from 'react-apollo';
++
++import getUserFirstName from './getUserFirstName';
++import Features from '.';
++
++const AskNameConnected = (props) => (
++  <Query query={getUserFirstName}>
++    {({
++      loading,
++      data: {
++        currentUser: { profile: { firstName } = { campus: {} } } = {},
++      } = {},
++    }) => <Features firstName={firstName} isLoading={loading} {...props} />}
++  </Query>
++);
++
++AskNameConnected.displayName = AskNameConnected;
++
++export default AskNameConnected;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.tests.js
+new file mode 100644
+index 0000000..adcc821
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/FeaturesConnected.tests.js
+@@ -0,0 +1,34 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import wait from 'waait';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import getUserFirstName from './getUserFirstName';
++import FeaturesConnected from './FeaturesConnected';
++
++describe('The Onboarding FeaturesConnected component', () => {
++  it('renders with a firstName when logged in', async () => {
++    const mock = {
++      request: {
++        query: getUserFirstName,
++      },
++      result: {
++        data: {
++          currentUser: {
++            profile: {
++              firstName: 'Marty',
++            },
++          },
++        },
++      },
++    };
++    const tree = renderer.create(
++      <Providers mocks={[mock]}>
++        <FeaturesConnected />
++      </Providers>
++    );
++    await wait(0); // wait for response from graphql
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/getUserFirstName.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/getUserFirstName.js
+new file mode 100644
+index 0000000..8b0e38c
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/getUserFirstName.js
+@@ -0,0 +1,13 @@
++import gql from 'graphql-tag';
++
++export default gql`
++  query getUserFirstName {
++    currentUser {
++      id
++      profile {
++        id
++        firstName
++      }
++    }
++  }
++`;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js b/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js
+new file mode 100644
+index 0000000..3d442b1
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/Features/index.js
+@@ -0,0 +1,4 @@
++import Features from './Features';
++
++export FeaturesConnected from './FeaturesConnected';
++export default Features;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.js
+new file mode 100644
+index 0000000..53eb8fe
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.js
+@@ -0,0 +1,106 @@
++import React, { memo } from 'react';
++import PropTypes from 'prop-types';
++
++import { PaddedView, styled, Button, Touchable } from '@apollosproject/ui-kit';
++
++import CampusCard from 'apolloschurchapp/src/user-settings/Locations/CampusCard';
++
++import Slide, { SlideContent } from '../../Slide';
++
++const getCampusAddress = (campus) =>
++  `${campus.street1}\n${campus.city}, ${campus.state} ${campus.postalCode}`;
++
++const StyledCampusCard = styled(({ theme }) => ({
++  marginBottom: theme.sizing.baseUnit,
++}))(CampusCard);
++
++const StyledSlideContent = styled({
++  flex: 1,
++  justifyContent: 'space-between',
++})(SlideContent);
++
++// memo = sfc PureComponent 💥
++// eslint-disable-next-line react/display-name
++const LocationFinder = memo(
++  ({
++    onPressPrimary,
++    BackgroundComponent,
++    slideTitle,
++    description,
++    buttonText,
++    buttonDisabled,
++    onPressButton,
++    isCurrentCampus,
++    campus,
++    ...props
++  }) => (
++    <Slide
++      onPressPrimary={
++        campus /* show the primary action button (next) if we have a campus */
++          ? onPressPrimary
++          : null
++      }
++      onPressSecondary={
++        !campus /* show the secondary action button (skip) if we don't have a campus */
++          ? onPressPrimary
++          : null
++      }
++      {...props}
++    >
++      {BackgroundComponent}
++      <StyledSlideContent title={slideTitle} description={description}>
++        {campus ? (
++          <Touchable onPress={onPressButton}>
++            <StyledCampusCard
++              key={campus.id}
++              distance={campus.distanceFromLocation}
++              title={campus.name}
++              description={getCampusAddress(campus)}
++              images={[campus.image]}
++            />
++          </Touchable>
++        ) : (
++          <PaddedView horizontal={false}>
++            <Button
++              title={buttonText}
++              onPress={onPressButton}
++              disabled={buttonDisabled}
++              pill={false}
++            />
++          </PaddedView>
++        )}
++      </StyledSlideContent>
++    </Slide>
++  )
++);
++
++LocationFinder.propTypes = {
++  /* The `Swiper` component used in `<Onboarding>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use a more unique name.
++   */
++  onPressPrimary: PropTypes.func,
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  buttonText: PropTypes.string,
++  buttonDisabled: PropTypes.bool,
++  onPressButton: PropTypes.func,
++  campus: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++  isCurrentCampus: PropTypes.bool,
++};
++
++LocationFinder.defaultProps = {
++  slideTitle: "Let's select your local campus",
++  description:
++    "We'll use your location to connect you with your nearby campus and community",
++  buttonText: 'Yes, find my local campus',
++  buttonDisabled: false,
++};
++
++export default LocationFinder;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.stories.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.stories.js
+new file mode 100644
+index 0000000..e41ed90
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.stories.js
+@@ -0,0 +1,50 @@
++import React from 'react';
++import { storiesOf } from '@storybook/react-native';
++
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++
++import LocationFinder from './LocationFinder';
++
++storiesOf('Onboarding/slides/LocationFinder', module)
++  .add('default', () => <LocationFinder />)
++  .add('BackgroundComponent', () => (
++    <LocationFinder
++      BackgroundComponent={
++        <GradientOverlayImage
++          source={'https://picsum.photos/640/640/?random'}
++        />
++      }
++    />
++  ))
++  .add('slideTitle', () => <LocationFinder slideTitle={'Custom title text'} />)
++  .add('description', () => (
++    <LocationFinder description={'Custom description text'} />
++  ))
++  .add('campus', () => (
++    <LocationFinder
++      campus={{
++        id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++        name: 'Lyon Estates',
++        latitude: 42.09203,
++        longitude: -88.13289,
++        distanceFromLocation: 88,
++        street1: '9303 Lyon Drive',
++        street2: '',
++        city: 'Hill Valley',
++        state: 'CA',
++        postalCode: '95420',
++        image: {
++          uri: 'https://picsum.photos/300/300/?random',
++        },
++      }}
++    />
++  ))
++  .add('buttonText', () => (
++    <LocationFinder
++      onPressButton={() => {}}
++      buttonText={'Custom button text'}
++    />
++  ))
++  .add('SlideWrapper props', () => (
++    <LocationFinder onPressSecondary={() => {}} />
++  ));
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.tests.js
+new file mode 100644
+index 0000000..065ce4c
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinder.tests.js
+@@ -0,0 +1,106 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import { GradientOverlayImage } from '@apollosproject/ui-kit';
++import Providers from 'apolloschurchapp/src/Providers';
++
++import LocationFinder from './LocationFinder';
++
++const campus = {
++  id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++  name: 'Chicago Campus',
++  latitude: 42.09203,
++  longitude: -88.13289,
++  distanceFromLocation: null,
++  street1: '67 Algonquin Rd',
++  street2: '',
++  city: 'South Barrington',
++  state: 'IL',
++  postalCode: '60010-6143',
++  image: {
++    uri: 'https://picsum.photos/300/300/?random',
++  },
++};
++
++describe('The Onboarding LocationFinder component', () => {
++  it('should render', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a BackgroundComponent', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder
++          BackgroundComponent={
++            <GradientOverlayImage
++              source={'https://picsum.photos/640/640/?random'}
++            />
++          }
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom title', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder slideTitle={'Custom title text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a custom description', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder description={'Custom description text'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with a button', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder onPressButton={jest.fn()} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render the button disabled', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder
++          onPressButton={jest.fn()}
++          buttonDisabled
++          campus={campus}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render a button with custom text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder
++          onPressButton={jest.fn()}
++          buttonText={'Custom button text'}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should pass additional props to Slide component', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinder
++          onPressSecondary={jest.fn()}
++          secondaryNavText={'Later'}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.js
+new file mode 100644
+index 0000000..22a66ba
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.js
+@@ -0,0 +1,47 @@
++import React, { PureComponent } from 'react';
++import PropTypes from 'prop-types';
++import { Query } from 'react-apollo';
++import { withNavigation } from 'react-navigation';
++import getUserCampus from './getUserCampus';
++import LocationFinder from '.';
++
++class LocationFinderConnected extends PureComponent {
++  state = { selectedCampus: false };
++
++  render() {
++    return (
++      <Query query={getUserCampus} fetchPolicy="cache-and-network">
++        {({
++          data: {
++            currentUser: {
++              profile: { campus } = {
++                campus: {},
++              },
++            } = {},
++          } = {},
++        }) => (
++          <LocationFinder
++            onPressButton={async () => {
++              this.setState({ selectedCampus: true });
++              this.props.navigation.navigate('LocationFinderMapView', {
++                onFinished: this.props.onPressPrimary,
++              });
++            }}
++            buttonText={'Yes, find my local campus'}
++            campus={this.state.selectedCampus ? campus : null}
++            onPressPrimary={this.props.onPressPrimary}
++            {...this.props}
++          />
++        )}
++      </Query>
++    );
++  }
++}
++
++LocationFinderConnected.propTypes = {
++  onPressPrimary: PropTypes.func,
++};
++
++LocationFinderConnected.displayName = 'LocationFinderConnected';
++
++export default withNavigation(LocationFinderConnected);
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.tests.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.tests.js
+new file mode 100644
+index 0000000..7b2cec6
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderConnected.tests.js
+@@ -0,0 +1,81 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++import Providers from 'apolloschurchapp/src/Providers';
++import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
++
++import LocationFinderConnected from './LocationFinderConnected';
++import getUserCampus from './getUserCampus';
++
++const navigation = { navigate: jest.fn() };
++describe('The Onboarding LocationFinderConnected component', () => {
++  it('should render with a user not having a campus selected', async () => {
++    const mocks = [
++      {
++        request: {
++          query: getUserCampus,
++        },
++        result: {
++          data: { campus: null },
++        },
++      },
++    ];
++
++    const component = (
++      <Providers mocks={mocks} addTypename={false}>
++        <LocationFinderConnected navigation={navigation} />
++      </Providers>
++    );
++
++    const tree = await renderWithApolloData(component);
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render with a user having selected a campus', async () => {
++    const mocks = [
++      {
++        request: {
++          query: getUserCampus,
++        },
++        result: {
++          data: {
++            campus: {
++              campus: {
++                id: 'Campus:a0f64573eabf00a607bec911794d50fb',
++                name: 'Chicago Campus',
++                latitude: 42.09203,
++                longitude: -88.13289,
++                distanceFromLocation: null,
++                street1: '67 Algonquin Rd',
++                street2: '',
++                city: 'South Barrington',
++                state: 'IL',
++                postalCode: '60010-6143',
++                image: {
++                  uri:
++                    'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dede1fb83-968e-4bef-8d77-ad81c96e8a47',
++                },
++              },
++            },
++          },
++        },
++      },
++    ];
++
++    const component = (
++      <Providers mocks={mocks} addTypename={false}>
++        <LocationFinderConnected navigation={navigation} />
++      </Providers>
++    );
++
++    const tree = await renderWithApolloData(component);
++    expect(tree).toMatchSnapshot();
++  });
++
++  it('should render with no data in the cache', () => {
++    const tree = renderer.create(
++      <Providers>
++        <LocationFinderConnected navigation={navigation} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderMapView.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderMapView.js
+new file mode 100644
+index 0000000..3534353
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/LocationFinderMapView.js
+@@ -0,0 +1,27 @@
++import React, { PureComponent } from 'react';
++import PropTypes from 'prop-types';
++
++import MapView from 'apolloschurchapp/src/user-settings/Locations';
++
++class LocationFinderMapView extends PureComponent {
++  static propTypes = {
++    navigation: PropTypes.shape({
++      getParam: PropTypes.func,
++      navigate: PropTypes.func,
++      goBack: PropTypes.func,
++    }),
++  };
++
++  static navigationOptions = () => ({
++    title: 'LocationFinderMapView',
++    header: null,
++  });
++
++  render() {
++    const { navigation } = this.props;
++    const onFinished = this.props.navigation.getParam('onFinished');
++    return <MapView navigation={navigation} onFinished={onFinished} />;
++  }
++}
++
++export default LocationFinderMapView;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/getUserCampus.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/getUserCampus.js
+new file mode 100644
+index 0000000..7d5816a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/getUserCampus.js
+@@ -0,0 +1,16 @@
++import gql from 'graphql-tag';
++import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
++
++export default gql`
++  query getCurrentCampus {
++    currentUser {
++      id
++      profile {
++        campus {
++          ...CampusParts
++        }
++      }
++    }
++  }
++  ${CampusParts}
++`;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/index.js b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/index.js
+new file mode 100644
+index 0000000..5693639
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/LocationFinder/index.js
+@@ -0,0 +1,5 @@
++import LocationFinder from './LocationFinder';
++
++export LocationFinderConnected from './LocationFinderConnected';
++export LocationFinderMapView from './LocationFinderMapView';
++export default LocationFinder;
+diff --git a/apolloschurchapp/src/ui/Onboarding/slides/index.js b/apolloschurchapp/src/ui/Onboarding/slides/index.js
+new file mode 100644
+index 0000000..16c835a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Onboarding/slides/index.js
+@@ -0,0 +1,10 @@
++export AboutYou, { AboutYouConnected } from './AboutYou';
++export AskName, { AskNameConnected } from './AskName';
++export AskNotifications, {
++  AskNotificationsConnected,
++} from './AskNotifications';
++export LocationFinder, {
++  LocationFinderConnected,
++  LocationFinderMapView,
++} from './LocationFinder';
++export Features, { FeaturesConnected } from './Features';
+diff --git a/apolloschurchapp/src/user-settings/Locations/CampusCard.js b/apolloschurchapp/src/user-settings/Locations/CampusCard.js
+new file mode 100644
+index 0000000..d0af97d
+--- /dev/null
++++ b/apolloschurchapp/src/user-settings/Locations/CampusCard.js
+@@ -0,0 +1,92 @@
++import React from 'react';
++import PropTypes from 'prop-types';
++import { compose, pure } from 'recompose';
++import { Dimensions, View } from 'react-native';
++
++import {
++  Card,
++  ConnectedImage,
++  SideBySideView,
++  withIsLoading,
++  styled,
++  CardContent,
++  H5,
++  H6,
++} from '@apollosproject/ui-kit';
++
++const { width } = Dimensions.get('window');
++
++/* TODO: remove magic number. `theme.sizing.baseUnit * 2.25` This width value is a brittle
++ * calculation of width minus `CampusCard` margins */
++export const CARD_WIDTH = width - 36;
++
++const enhance = compose(
++  withIsLoading,
++  pure
++);
++
++const HorizontalLayout = styled({
++  alignItems: 'center',
++})(SideBySideView);
++
++const HorizontalTextLayout = styled(({ theme }) => ({
++  height: theme.helpers.verticalRhythm(0.875),
++}))(SideBySideView);
++
++const RightColumn = styled(({ theme }) => ({
++  paddingVertical: theme.sizing.baseUnit * 0.85,
++  flex: 1,
++}))(CardContent);
++
++const CampusImage = styled({
++  aspectRatio: 1,
++  height: '100%',
++  alignSelf: 'stretch',
++  resizeMode: 'cover', // This is to make sure images smaller than the ProgressiveImage size will cover
++})(ConnectedImage);
++
++const CampusImageSizer = styled({
++  aspectRatio: 1,
++  height: '100%',
++  alignSelf: 'stretch',
++})(View);
++
++const StyledCard = styled(({ theme }) => ({
++  width: CARD_WIDTH,
++  height: theme.sizing.baseUnit * 6,
++  marginHorizontal: theme.sizing.baseUnit / 4,
++}))(Card);
++
++const CampusCard = enhance(
++  ({ title, description, distance, images, isLoading, ...otherProps }) => (
++    <StyledCard isLoading={isLoading} inHorizontalList {...otherProps}>
++      <HorizontalLayout>
++        {images ? (
++          <CampusImageSizer>
++            <CampusImage source={images} />
++          </CampusImageSizer>
++        ) : null}
++        <RightColumn>
++          <HorizontalTextLayout>
++            <H5>{title}</H5>
++            <H6>
++              {Math.round(distance)}
++              mi
++            </H6>
++          </HorizontalTextLayout>
++          {description ? <H6>{description}</H6> : null}
++        </RightColumn>
++      </HorizontalLayout>
++    </StyledCard>
++  )
++);
++
++CampusCard.propTypes = {
++  title: PropTypes.string.isRequired,
++  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
++  images: PropTypes.any, // eslint-disable-line
++  category: PropTypes.string,
++  isLoading: PropTypes.bool,
++};
++
++export default CampusCard;
+diff --git a/apolloschurchapp/src/user-settings/Locations/MapView.js b/apolloschurchapp/src/user-settings/Locations/MapView.js
+index b38e1d5..ededd53 100644
+--- a/apolloschurchapp/src/user-settings/Locations/MapView.js
++++ b/apolloschurchapp/src/user-settings/Locations/MapView.js
+@@ -5,18 +5,11 @@ import SafeAreaView from 'react-native-safe-area-view';
+ import RNMapView from 'react-native-maps';
+ import { debounce } from 'lodash';
+ 
+-import {
+-  Button,
+-  PaddedView,
+-  styled,
+-  withTheme,
+-  CampusCard,
+-} from '@apollosproject/ui-kit';
++import { Button, PaddedView, styled, withTheme } from '@apollosproject/ui-kit';
+ 
++import CampusCard, { CARD_WIDTH } from './CampusCard';
+ import Marker from './Marker';
+ 
+-const { CARD_WIDTH } = CampusCard;
+-
+ const ContainerView = styled({
+   flex: 1,
+ })(View);
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+index f8517c3..b4c03b8 100644
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ b/apolloschurchapp/src/user-settings/Locations/index.js
+@@ -79,12 +79,6 @@ class Location extends PureComponent {
+ 
+   render() {
+     const { navigation, onFinished } = this.props;
+-    // we should use the `onFinished` from the navigation param, if it exists.
+-    const handleFinished = this.props.navigation.getParam(
+-      'onFinished',
+-      onFinished
+-    );
+-
+     return (
+       <Query
+         query={getAllCampuses}
+@@ -132,7 +126,7 @@ class Location extends PureComponent {
+                     },
+                   });
+                   await navigation.goBack();
+-                  if (handleFinished) handleFinished();
++                  if (onFinished) onFinished();
+                 }}
+               />
+             )}
