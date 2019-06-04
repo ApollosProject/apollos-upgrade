@@ -1,0 +1,140 @@
+diff --git a/apollos-church-api/.envExample b/apollos-church-api/.envExample
+index 8a33ffe..8559468 100644
+--- a/apollos-church-api/.envExample
++++ b/apollos-church-api/.envExample
+@@ -1,4 +1,18 @@
+ ROCK_API=
+ ROCK_TOKEN=
+-ESV_KEY=
+-CLOUDINARY_URL=
+\ No newline at end of file
++BIBLE_API_KEY=
++ENGINE_API_KEY=
++CLOUDINARY_URL=
++ONE_SIGNAL_REST_KEY=
++PORT=4000
++ROOT_URL=http://localhost:4000
++
++TWILIO_ACCOUNT_SID=
++TWILIO_AUTH_TOKEN=
++TWILIO_FROM_NUMBER=
++
++
++PASS_WWDR_CERT=
++PASS_SIGNER_CERT=
++PASS_SIGNER_KEY=
++PASS_SIGNER_PASSPHRASE=
+\ No newline at end of file
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+new file mode 100644
+index 0000000..0db6310
+--- /dev/null
++++ b/apollos-church-api/apollos.json
+@@ -0,0 +1,4 @@
++{
++    "version": "0.8.6",
++    "environment": "api"
++}
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index f240612..0f1e38d 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -21,6 +21,8 @@ ROCK:
+ ONE_SIGNAL:
+   APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+   REST_KEY: ${ONE_SIGNAL_REST_KEY}
++CHURCH_ONLINE:
++  URL: https://apollos.churchonline.org/api/v1/
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index cee2178..0351a3d 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,20 +1,18 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.5",
++  "version": "0.8.6",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+-    "start": "if test \"$NOW_ENV\" = \"true\" ; then yarn start:now ; else yarn start:dev ; fi",
++    "start": "yarn start:dev",
+     "start:dev": "nodemon ./src/index.js --exec babel-node --delay 2",
+-    "start:now": "babel-node ./src/index.js",
+     "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
+-    "test:watch": "jest --maxWorkers=2 --watch",
+     "lint": "eslint ./src --ext .js",
+     "fixlint": "eslint ./src --ext .js --fix",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+-    "release": "standard-version --release-as minor"
++    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json"
+   },
+   "engines": {
+     "node": ">=8.11.x"
+@@ -34,25 +32,29 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.5",
+-    "@apollosproject/data-connector-analytics": "^0.8.5",
+-    "@apollosproject/data-connector-bible": "^0.8.5",
+-    "@apollosproject/data-connector-church-online": "^0.8.5",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.5",
+-    "@apollosproject/data-connector-onesignal": "^0.8.5",
+-    "@apollosproject/data-connector-passes": "^0.8.5",
+-    "@apollosproject/data-connector-rock": "^0.8.5",
+-    "@apollosproject/server-core": "^0.8.5",
++    "@apollosproject/config": "^0.8.6",
++    "@apollosproject/data-connector-analytics": "^0.8.6",
++    "@apollosproject/data-connector-bible": "^0.8.6",
++    "@apollosproject/data-connector-church-online": "^0.8.6",
++    "@apollosproject/data-connector-cloudinary": "^0.8.6",
++    "@apollosproject/data-connector-onesignal": "^0.8.6",
++    "@apollosproject/data-connector-passes": "^0.8.6",
++    "@apollosproject/data-connector-rock": "^0.8.6",
++    "@apollosproject/data-connector-twilio": "^0.8.6",
++    "@apollosproject/rock-apollo-data-source": "^0.8.6",
++    "@apollosproject/server-core": "^0.8.6",
+     "apollo-server": "^2.0.5",
++    "apollo-server-express": "2.4.8",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
++    "express": "^4.17.0",
+     "graphql": "0.13.2",
+     "prettier": "1.12.1",
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.5",
+-    "@apollosproject/babel-preset-apollos": "^0.8.5",
++    "@apollosproject/apollo-server-env-mock": "^0.8.6",
++    "@apollosproject/babel-preset-apollos": "^0.8.6",
+     "@babel/cli": "7.1.5",
+     "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 2caa7d8..4bda45e 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -22,6 +22,7 @@ import {
+   Template,
+   AuthSms,
+   Campus,
++  BinaryFiles,
+ } from '@apollosproject/data-connector-rock';
+ import * as Theme from './theme';
+ 
+@@ -51,6 +52,7 @@ const data = {
+   Pass,
+   Template,
+   Campus,
++  BinaryFiles,
+ };
+ 
+ const {
