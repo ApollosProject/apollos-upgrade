@@ -1,0 +1,159 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index d22324f..12def44 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -121,8 +121,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 13
+-        versionName "1.0.0-beta.0"
++        versionCode 11
++        versionName "0.8.6"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index ebc7b5b..614d45e 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.0.0-beta.0",
++    "version": "0.8.6",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 87f387a..9bfe7a7 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,11 +15,11 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0-beta.0</string>
++	<string>0.8.6</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>13</string>
++	<string>11</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 55a93e3..81df5aa 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0-beta.0</string>
++	<string>0.8.6</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>13</string>
++	<string>11</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 54636cf..70fcb47 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1945,7 +1945,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 9;
++				CURRENT_PROJECT_VERSION = 7;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -1985,7 +1985,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 9;
++				CURRENT_PROJECT_VERSION = 7;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index fa8ebf0..37e0ab4 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0-beta.0</string>
++	<string>0.8.6</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>14</string>
++	<string>12</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index b8427df..ea797d5 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0-beta.0</string>
++	<string>0.8.6</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>13</string>
++	<string>11</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 7a8bc08..8de8d0c 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.0.0-beta.0",
++  "version": "0.8.6",
+   "private": true,
+   "devDependencies": {
+     "@apollosproject/ui-storybook": "^0.8.6",
+@@ -59,15 +59,15 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-analytics": "^1.0.0-beta.0",
+-    "@apollosproject/ui-auth": "^1.0.0-beta.0",
+-    "@apollosproject/ui-htmlview": "^1.0.0-beta.0",
+-    "@apollosproject/ui-kit": "^1.0.0-beta.0",
+-    "@apollosproject/ui-media-player": "^1.0.0-beta.0",
+-    "@apollosproject/ui-notifications": "^1.0.0-beta.0",
+-    "@apollosproject/ui-passes": "^1.0.0-beta.0",
+-    "@apollosproject/ui-scripture": "^1.0.0-beta.0",
+-    "@apollosproject/ui-storybook": "^1.0.0-beta.0",
++    "@apollosproject/ui-analytics": "^0.8.6",
++    "@apollosproject/ui-auth": "^0.8.6",
++    "@apollosproject/ui-htmlview": "^0.8.6",
++    "@apollosproject/ui-kit": "^0.8.6",
++    "@apollosproject/ui-passes": "^0.8.6",
++    "@apollosproject/ui-scripture": "^0.8.6",
++    "@apollosproject/ui-storybook": "^0.8.6",
++    "@apollosproject/ui-media-player": "^0.8.6",
++    "@apollosproject/ui-notifications": "^0.8.6",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.5.1",
