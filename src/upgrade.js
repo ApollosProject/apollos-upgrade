@@ -6,13 +6,32 @@ const fetch = require('node-fetch');
 
 const { getNewVersion } = require('./fetchUpdates');
 
-const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn}
+const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn, success: console.log() }
 
 const apollosDiffUrl =
   'https://raw.githubusercontent.com/ApollosProject/apollos-upgrade/diffs/diffs';
 const apollosFullDiffUrl =
   'https://github.com/ApollosProject/apollos-upgrade';
 
+
+const getApollosConfig = () =>
+  JSON.parse(fs.readFileSync('./apollos.json'));
+
+const getProjectName = async () => {
+  try {
+    const { stdout: fileName } = await execa('find', ['./ios', '-name', '*.xcodeproj']);
+    return fileName.match(/ios\/(.*)\.xcodeproj/)[1];
+  } catch (e) {
+    logger.error(e);
+    logger.error('Could not read Xcode Project name. Please pass --projectName')
+  }
+}
+
+const getPackageName = () => {
+  const buildGradle = fs.readFileSync('./android/app/build.gradle', "utf8");
+  const packageName = buildGradle.match(/applicationId "(.*)"/)[1]
+  return packageName;
+};
 
 const cleanPatch = (patch, projectName, packageName) => {
   let patchWithRenamedProjects = patch;
@@ -55,8 +74,10 @@ const getPatch = async (currentVersion, newVersion, platform, projectName, packa
     );
     return null;
   }
-
-  return cleanPatch(patch, projectName, packageName);
+  if (platform === 'client') {
+    return cleanPatch(patch, projectName, packageName);
+  }
+  return patch;
 };
 
 const getFullDiff = async (currentVersion, newVersion, platform, projectName, packageName) => {
@@ -101,6 +122,7 @@ const applyPatch = async (
       );
       await execa('git', [
         'apply',
+        '--binary',
         '--check',
         tmpPatchFile,
         ...excludes,
@@ -185,13 +207,27 @@ const applyPatch = async (
 /**
  * Upgrade application to a new version of Apollos.
  */
-async function upgrade({ to: toVersion, from: fromVersion, platform, projectName, packageName }) {
-  const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
-  const tmpFullDiff = `tmp-full-diff-apollos-${platform}.patch`;
+async function upgrade({ to: toVersion, from: oldVersion, platform: platformArg, projectName: projectArg, packageName: packageArg }) {
+
+  const config = getApollosConfig();
 
   const newVersion = toVersion || await getNewVersion();
 
+  const fromVersion = oldVersion || config.version;
+  const platform = platformArg || config.environment;
+
+  const tmpPatchFile = `tmp-upgrade-apollos-${platform}.patch`;
+  const tmpFullDiff = `tmp-full-diff-apollos-${platform}.patch`;
+
   const currentVersion = fromVersion;
+
+  let packageName;
+  let projectName;
+
+  if (platform === 'client') {
+    projectName = projectArg || await getProjectName();
+    packageName = packageArg || await getPackageName();
+  }
 
   const patch = await getPatch(currentVersion, newVersion, platform, projectName, packageName);
   const fullDiff = await getFullDiff(currentVersion, newVersion, platform, projectName, packageName);
