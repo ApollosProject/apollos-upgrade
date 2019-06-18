@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 
 const { getNewVersion } = require('./fetchUpdates');
 
-const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn, success: console.log() }
+const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn, success: console.log }
 
 const apollosDiffUrl =
   'https://raw.githubusercontent.com/ApollosProject/apollos-upgrade/diffs/diffs';
