@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const mergePackageJson = (ours, theirs) => {
   const newDeps = { ...ours.dependencies };
   const newDevDeps = { ...ours.devDependencies };
-  console.log(theirs);
+
   Object.keys(theirs.dependencies).forEach((depKey) => {
     newDeps[depKey] = theirs.dependencies[depKey];
   })
