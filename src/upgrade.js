@@ -5,6 +5,7 @@ const execa = require('execa');
 const fetch = require('node-fetch');
 
 const { getNewVersion } = require('./fetchUpdates');
+const { mergePackageJson } = require('./mergePackageJson');
 
 const logger = { log: console.log, info: console.log, error: console.error, warn: console.warn, success: console.log }
 
@@ -204,6 +205,13 @@ const applyPatch = async (
   return true;
 };
 
+const updatePackages = async ({ platform, version }) => {
+  const thisPackageJson = JSON.parse(fs.readFileSync('./package.json'));
+  const remotePackageJson = await getRemotePackageJson({ platform, version });
+  const finalPackageJson = mergePackageJson(thisPackageJson, remotePackageJson);
+  fs.writeFileSync('./package.json', JSON.stringify(finalPackageJson, null, 2));
+}
+
 /**
  * Upgrade application to a new version of Apollos.
  */
@@ -221,9 +229,8 @@ async function upgrade({ to: toVersion, from: oldVersion, platform: platformArg,
 
   const currentVersion = fromVersion;
 
-  let packageName;
-  let projectName;
-
+  let packageName = '';
+  let projectName = '';
   if (platform === 'client') {
     projectName = projectArg || await getProjectName();
     packageName = packageArg || await getPackageName();
@@ -248,8 +255,10 @@ async function upgrade({ to: toVersion, from: oldVersion, platform: platformArg,
   try {
     fs.writeFileSync(tmpPatchFile, patch);
     fs.writeFileSync(tmpFullDiff, fullDiff);
+    await updatePackages({ version: newVersion, platform });
     patchSuccess = await applyPatch(tmpPatchFile, tmpFullDiff);
   } catch (error) {
+    console.log(error)
     throw new Error(error.stderr || error);
   } finally {
     try {

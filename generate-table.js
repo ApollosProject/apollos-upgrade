@@ -16,12 +16,11 @@ const generateTable = async () => {
 
     // words or phrases of length 12
     const comments = [
-        'react native',
-        'this is cool',
-        'purge time!!',
+        'try apollos!',
+        'upgrade time',
+        'god is good!',
         'i love diffs',
         'diffs == fun',
-        'rn core team',
     ]
 
     const diffTable = [
