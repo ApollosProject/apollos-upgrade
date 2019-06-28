@@ -1,0 +1,1912 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 245005a..d22324f 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -121,8 +121,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 14
+-        versionName "1.0.0"
++        versionCode 13
++        versionName "1.0.0-beta.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86"
+         }
+@@ -163,8 +163,8 @@ dependencies {
+       exclude group: 'com.google.android.gms', module: 'play-services-base'
+       exclude group: 'com.google.android.gms', module: 'play-services-maps'
+     }
+-    implementation 'com.google.android.gms:play-services-base:16.1.0'
+-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
++    implementation 'com.google.android.gms:play-services-base:10.0.1'
++    implementation 'com.google.android.gms:play-services-maps:10.0.1'
+     implementation project(':rn-fetch-blob')
+     implementation project(':react-native-webview')
+     implementation project(':react-native-video')
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index fd72c6c..5e6aee9 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -5,7 +5,7 @@
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.CAMERA" />
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
++
+ 
+     <application
+       android:name=".MainApplication"
+@@ -30,7 +30,7 @@
+           <action android:name="android.intent.action.VIEW" />
+           <category android:name="android.intent.category.DEFAULT" />
+           <category android:name="android.intent.category.BROWSABLE" />
+-          <data android:scheme="peopleapp" android:host="people" />
++          <data android:scheme="peopleapp" android:host="people" /> // A
+         </intent-filter>
+       </activity>
+       <activity
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index eb28af7..ebc7b5b 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.0.0",
++    "version": "1.0.0-beta.0",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 997f96e..87f387a 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,11 +15,11 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0</string>
++	<string>1.0.0-beta.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>14</string>
++	<string>13</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 90d34c1..55a93e3 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0</string>
++	<string>1.0.0-beta.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>14</string>
++	<string>13</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index c1b6636..54636cf 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -1945,7 +1945,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 10;
++				CURRENT_PROJECT_VERSION = 9;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -1985,7 +1985,7 @@
+ 			isa = XCBuildConfiguration;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 10;
++				CURRENT_PROJECT_VERSION = 9;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-airplay-btn/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index aa3344d..fa8ebf0 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0</string>
++	<string>1.0.0-beta.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>15</string>
++	<string>14</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 689ee53..b8427df 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,10 +15,10 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0</string>
++	<string>1.0.0-beta.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>14</string>
++	<string>13</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index b385877..7a8bc08 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.0.0",
++  "version": "1.0.0-beta.0",
+   "private": true,
+   "devDependencies": {
+     "@apollosproject/ui-storybook": "^0.8.6",
+@@ -59,13 +59,13 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/ui-analytics": "^1.0.0",
+-    "@apollosproject/ui-auth": "^1.0.0",
+-    "@apollosproject/ui-htmlview": "^1.0.0",
+-    "@apollosproject/ui-kit": "^1.0.0",
+-    "@apollosproject/ui-media-player": "^1.0.0",
+-    "@apollosproject/ui-notifications": "^1.0.0",
+-    "@apollosproject/ui-passes": "^1.0.0",
++    "@apollosproject/ui-analytics": "^1.0.0-beta.0",
++    "@apollosproject/ui-auth": "^1.0.0-beta.0",
++    "@apollosproject/ui-htmlview": "^1.0.0-beta.0",
++    "@apollosproject/ui-kit": "^1.0.0-beta.0",
++    "@apollosproject/ui-media-player": "^1.0.0-beta.0",
++    "@apollosproject/ui-notifications": "^1.0.0-beta.0",
++    "@apollosproject/ui-passes": "^1.0.0-beta.0",
+     "@apollosproject/ui-scripture": "^1.0.0-beta.0",
+     "@apollosproject/ui-storybook": "^1.0.0-beta.0",
+     "apollo-cache-inmemory": "1.5.1",
+@@ -91,12 +91,12 @@
+     "react-native": "0.59.8",
+     "react-native-airplay-btn": "^1.0.6",
+     "react-native-config": "^0.11.7",
+-    "react-native-device-info": "^2.1.2",
++    "react-native-device-info": "0.22.5",
+     "react-native-image-picker": "0.28.0",
+     "react-native-linear-gradient": "^2.5.4",
+     "react-native-maps": "^0.24.2",
+     "react-native-music-control": "^0.10.2",
+-    "react-native-onesignal": "3.2.14",
++    "react-native-onesignal": "3.2.7",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-view": "0.13.1",
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 8003403..14cf82b 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"ActionListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/content-feed/content-feed.tests.js b/apolloschurchapp/src/content-feed/content-feed.tests.js
+index 2f7fd1b..544d818 100644
+--- a/apolloschurchapp/src/content-feed/content-feed.tests.js
++++ b/apolloschurchapp/src/content-feed/content-feed.tests.js
+@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_CONTENT_FEED from './getContentFeed';
++import getContentFeed from './getContentFeed';
+ 
+ import ContentFeed from './index';
+ 
+@@ -11,7 +11,7 @@ describe('content feed query component', () => {
+   it('renders a feedview after successful query', () => {
+     const mock = {
+       request: {
+-        query: GET_CONTENT_FEED,
++        query: getContentFeed,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/content-feed/getContentFeed.js b/apolloschurchapp/src/content-feed/getContentFeed.js
+index 40758cb..dbf38d5 100644
+--- a/apolloschurchapp/src/content-feed/getContentFeed.js
++++ b/apolloschurchapp/src/content-feed/getContentFeed.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+-import { CONTENT_ITEM_FRAGMENT } from '../content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from '../content-single/getContentItem';
+ 
+ export default gql`
+   query getContentFeed($itemId: ID!, $after: String, $first: Int) {
+@@ -21,6 +21,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/content-feed/index.js b/apolloschurchapp/src/content-feed/index.js
+index 8443086..831c5f0 100644
+--- a/apolloschurchapp/src/content-feed/index.js
++++ b/apolloschurchapp/src/content-feed/index.js
+@@ -8,7 +8,7 @@ import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+ import ContentCardConnected from 'apolloschurchapp/src/ui/ContentCardConnected';
+ import fetchMoreResolver from 'apolloschurchapp/src/utils/fetchMoreResolver';
+ 
+-import GET_CONTENT_FEED from './getContentFeed';
++import getContentFeed from './getContentFeed';
+ /**
+  * This is where the component description lives
+  * A FeedView wrapped in a query to pull content data.
+@@ -47,7 +47,7 @@ class ContentFeed extends PureComponent {
+     return (
+       <BackgroundView>
+         <Query
+-          query={GET_CONTENT_FEED}
++          query={getContentFeed}
+           variables={{ itemId }}
+           fetchPolicy="cache-and-network"
+         >
+diff --git a/apolloschurchapp/src/content-single/ActionContainer/index.js b/apolloschurchapp/src/content-single/ActionContainer/index.js
+index b10302d..471fe32 100644
+--- a/apolloschurchapp/src/content-single/ActionContainer/index.js
++++ b/apolloschurchapp/src/content-single/ActionContainer/index.js
+@@ -9,7 +9,7 @@ import { SideBySideView, styled } from '@apollosproject/ui-kit';
+ import LikeButton from 'apolloschurchapp/src/ui/LikeButton';
+ import { MediaPlayerSpacer } from '@apollosproject/ui-media-player';
+ 
+-import GET_SHARE_CONTENT from './getShareContent';
++import getShareContent from './getShareContent';
+ 
+ const PositioningView = styled(({ theme }) => ({
+   justifyContent: 'space-around',
+@@ -27,7 +27,7 @@ const ActionContainer = ({ itemId }) => (
+     <MediaPlayerSpacer>
+       <PositioningView>
+         <LikeButton itemId={itemId} />
+-        <Query query={GET_SHARE_CONTENT} variables={{ itemId }}>
++        <Query query={getShareContent} variables={{ itemId }}>
+           {({ data: { node } = {}, error, loading }) => {
+             const sharing = get(node, 'sharing');
+             return loading || error || !sharing ? null : (
+diff --git a/apolloschurchapp/src/content-single/ContentSingle.js b/apolloschurchapp/src/content-single/ContentSingle.js
+index 8bed0fc..70f49fd 100644
+--- a/apolloschurchapp/src/content-single/ContentSingle.js
++++ b/apolloschurchapp/src/content-single/ContentSingle.js
+@@ -8,7 +8,7 @@ import { ErrorCard, ThemeMixin } from '@apollosproject/ui-kit';
+ import { TrackEventWhenLoaded } from '@apollosproject/ui-analytics';
+ 
+ import ActionContainer from './ActionContainer';
+-import GET_CONTENT_ITEM from './getContentItem';
++import getContentItem from './getContentItem';
+ 
+ import DevotionalContentItem from './DevotionalContentItem';
+ import UniversalContentItem from './UniversalContentItem';
+@@ -95,7 +95,7 @@ class ContentSingle extends PureComponent {
+ 
+   render() {
+     return (
+-      <Query query={GET_CONTENT_ITEM} variables={this.queryVariables}>
++      <Query query={getContentItem} variables={this.queryVariables}>
+         {this.renderWithData}
+       </Query>
+     );
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+index 1021514..efaffbd 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+@@ -2,8 +2,8 @@ import React from 'react';
+ import renderer from 'react-test-renderer';
+ import Providers from 'apolloschurchapp/src/Providers';
+ import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+-import GET_CONTENT_ITEM_CONTENT from '../HTMLContent/getContentItemContent';
+-import GET_SCRIPTURE from './getScripture';
++import getContentItemContent from '../HTMLContent/getContentItemContent';
++import getScripture from './getScripture';
+ import Devotional from '.';
+ 
+ const content = {
+@@ -32,7 +32,7 @@ const scriptures = [
+ 
+ const scriptureMock = {
+   request: {
+-    query: GET_SCRIPTURE,
++    query: getScripture,
+     variables: { itemId: '1' },
+   },
+   result: {
+@@ -44,7 +44,7 @@ const scriptureMock = {
+ 
+ const contentItemHTMLMock = {
+   request: {
+-    query: GET_CONTENT_ITEM_CONTENT,
++    query: getContentItemContent,
+     variables: { contentId: '1' },
+   },
+   result: {
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+index 07b4938..088bbdc 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+@@ -13,7 +13,7 @@ import {
+ import ContentTab from './ContentTab';
+ import ScriptureTab from './ScriptureTab';
+ 
+-import GET_SCRIPTURE from './getScripture';
++import getScripture from './getScripture';
+ 
+ const FlexedSafeAreaView = styled({ flex: 1 })(SafeAreaView);
+ 
+@@ -110,7 +110,7 @@ class DevotionalContentItem extends PureComponent {
+     return (
+       <BackgroundView>
+         <FlexedSafeAreaView forceInset={{ top: 'always' }}>
+-          <Query query={GET_SCRIPTURE} variables={{ itemId: this.props.id }}>
++          <Query query={getScripture} variables={{ itemId: this.props.id }}>
+             {this.renderTabs}
+           </Query>
+         </FlexedSafeAreaView>
+diff --git a/apolloschurchapp/src/content-single/HTMLContent/index.js b/apolloschurchapp/src/content-single/HTMLContent/index.js
+index 755af41..39c62bc 100644
+--- a/apolloschurchapp/src/content-single/HTMLContent/index.js
++++ b/apolloschurchapp/src/content-single/HTMLContent/index.js
+@@ -5,13 +5,13 @@ import { Query } from 'react-apollo';
+ import HTMLView from '@apollosproject/ui-htmlview';
+ import { ErrorCard } from '@apollosproject/ui-kit';
+ 
+-import GET_CONTENT_ITEM_CONTENT from './getContentItemContent';
++import getContentItemContent from './getContentItemContent';
+ 
+ const HTMLContent = ({ contentId }) => {
+   if (!contentId) return <HTMLView isLoading />;
+ 
+   return (
+-    <Query query={GET_CONTENT_ITEM_CONTENT} variables={{ contentId }}>
++    <Query query={getContentItemContent} variables={{ contentId }}>
+       {({ data: { node: { htmlContent } = {} } = {}, loading, error }) => {
+         if (error) return <ErrorCard error={error} />;
+         return (
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
+index d9b6aba..c0a236f 100644
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
++++ b/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
+@@ -10,7 +10,7 @@ import {
+   TouchableScale,
+ } from '@apollosproject/ui-kit';
+ 
+-import GET_HORIZONTAL_CONTENT from './getHorizontalContent';
++import getHorizontalContent from './getHorizontalContent';
+ 
+ const loadingStateObject = {
+   node: {
+@@ -81,7 +81,7 @@ class HorizontalContentFeed extends Component {
+ 
+     return (
+       <Query
+-        query={GET_HORIZONTAL_CONTENT}
++        query={getHorizontalContent}
+         variables={{ itemId: this.props.contentId }}
+       >
+         {this.renderFeed}
+diff --git a/apolloschurchapp/src/content-single/MediaControls/index.js b/apolloschurchapp/src/content-single/MediaControls/index.js
+index fdbbe12..96ae490 100644
+--- a/apolloschurchapp/src/content-single/MediaControls/index.js
++++ b/apolloschurchapp/src/content-single/MediaControls/index.js
+@@ -4,9 +4,9 @@ import { Query, Mutation } from 'react-apollo';
+ import { View } from 'react-native';
+ import { get } from 'lodash';
+ 
+-import { PLAY_VIDEO } from '@apollosproject/ui-media-player';
++import { playVideoMutation } from '@apollosproject/ui-media-player';
+ import { Icon, styled, Button } from '@apollosproject/ui-kit';
+-import GET_CONTENT_MEDIA from './getContentMedia';
++import getContentMedia from './getContentMedia';
+ 
+ const buttonSizeDifferential = 4;
+ 
+@@ -58,7 +58,7 @@ class MediaControls extends PureComponent {
+     const coverImageSources = (coverImage && coverImage.sources) || [];
+ 
+     return (
+-      <Mutation mutation={PLAY_VIDEO}>
++      <Mutation mutation={playVideoMutation}>
+         {(play) => (
+           <Container>
+             {videoSource ? (
+@@ -92,7 +92,7 @@ class MediaControls extends PureComponent {
+     if (!this.props.contentId) return null;
+     return (
+       <Query
+-        query={GET_CONTENT_MEDIA}
++        query={getContentMedia}
+         variables={{ contentId: this.props.contentId }}
+       >
+         {this.renderControls}
+diff --git a/apolloschurchapp/src/content-single/getContentItem.js b/apolloschurchapp/src/content-single/getContentItem.js
+index 55676c9..b4ebc19 100644
+--- a/apolloschurchapp/src/content-single/getContentItem.js
++++ b/apolloschurchapp/src/content-single/getContentItem.js
+@@ -1,6 +1,6 @@
+ import gql from 'graphql-tag';
+ 
+-export const CONTENT_ITEM_FRAGMENT = gql`
++export const contentItemFragment = gql`
+   fragment contentItemFragment on ContentItem {
+     id
+     title
+@@ -48,5 +48,5 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
++  ${contentItemFragment}
+ `;
+diff --git a/apolloschurchapp/src/live/LiveButton.js b/apolloschurchapp/src/live/LiveButton.js
+index 6e1fa30..c5760e3 100644
+--- a/apolloschurchapp/src/live/LiveButton.js
++++ b/apolloschurchapp/src/live/LiveButton.js
+@@ -12,7 +12,7 @@ import {
+ } from '@apollosproject/ui-kit';
+ import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+ 
+-import GET_LIVE_STREAM from './getLiveStream';
++import getLiveStream from './getLiveStream';
+ 
+ const LiveCard = styled(({ theme }) => ({
+   backgroundColor: theme.colors.lightSecondary,
+@@ -20,7 +20,7 @@ const LiveCard = styled(({ theme }) => ({
+ 
+ const LiveNowButton = () => (
+   <Query
+-    query={GET_LIVE_STREAM}
++    query={getLiveStream}
+     fetchPolicy="cache-and-network"
+     pollInterval={60000}
+   >
+diff --git a/apolloschurchapp/src/scripture/index.js b/apolloschurchapp/src/scripture/index.js
+index 5b23d5d..4492e5c 100644
+--- a/apolloschurchapp/src/scripture/index.js
++++ b/apolloschurchapp/src/scripture/index.js
+@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ import { ScriptureItem } from '@apollosproject/ui-scripture';
+-import GET_SCRIPTURE from './getScripture';
++import getScripture from './getScripture';
+ 
+ /**
+  * This is the data-bound "connected" scripture component.
+@@ -15,7 +15,7 @@ const ScriptureConnected = ({
+   references,
+ }) =>
+   references.map((query) => (
+-    <Query query={GET_SCRIPTURE} variables={{ query }} key={query}>
++    <Query query={getScripture} variables={{ query }} key={query}>
+       {({ loading, data }) => (
+         <ScriptureComponent
+           reference={get(data, 'scripture.reference', '')}
+diff --git a/apolloschurchapp/src/store/index.js b/apolloschurchapp/src/store/index.js
+index 66fdccb..336839b 100644
+--- a/apolloschurchapp/src/store/index.js
++++ b/apolloschurchapp/src/store/index.js
+@@ -27,7 +27,7 @@ export const defaults = {
+   cacheLoaded: false,
+ };
+ 
+-const GET_LOGGED_IN = gql`
++const getIsLoggedIn = gql`
+   query {
+     isLoggedIn @client
+   }
+@@ -43,7 +43,7 @@ export const resolvers = {
+         },
+       });
+       const { data: { isLoggedIn } = {} } = await client.query({
+-        query: GET_LOGGED_IN,
++        query: getIsLoggedIn,
+       });
+ 
+       const { pushId } = cache.readQuery({
+diff --git a/apolloschurchapp/src/tabs/connect/Connect.js b/apolloschurchapp/src/tabs/connect/Connect.js
+index f3ba0e1..79bb6df 100644
+--- a/apolloschurchapp/src/tabs/connect/Connect.js
++++ b/apolloschurchapp/src/tabs/connect/Connect.js
+@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+-import { LoginButton, GET_LOGIN_STATE } from '@apollosproject/ui-auth';
++import { LoginButton } from '@apollosproject/ui-auth';
+ import {
+   H1,
+   BodyText,
+@@ -19,6 +19,7 @@ import ActionTable from './ActionTable';
+ import Toolbar from './Toolbar';
+ import { UserAvatarHeaderConnected } from './UserAvatarHeader';
+ import { RecentlyLikedTileFeedConnected } from './RecentlyLikedTileFeed';
++import getLoginState from './getLoginState';
+ 
+ const Title = styled(({ theme }) => ({
+   color: theme.colors.primary,
+@@ -62,7 +63,7 @@ class Connect extends PureComponent {
+   render() {
+     return (
+       <BackgroundView>
+-        <Query query={GET_LOGIN_STATE}>
++        <Query query={getLoginState}>
+           {({ data }) => {
+             if (get(data, 'isLoggedIn', false))
+               return (
+diff --git a/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js b/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js
+index 673817c..78a32c7 100644
+--- a/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js
++++ b/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js
+@@ -4,14 +4,14 @@ import wait from 'waait';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_LIKED_CONTENT from '../getLikedContent';
++import getLikedContent from '../getLikedContent';
+ import LikedContentList from '.';
+ 
+ describe('LikedContentList component', () => {
+   it('renders LikedContentList', async () => {
+     const mock = {
+       request: {
+-        query: GET_LIKED_CONTENT,
++        query: getLikedContent,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js b/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
+index 38dedb3..7ef1232 100644
+--- a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
++++ b/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
+@@ -7,7 +7,7 @@ import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+ import fetchMoreResolver from 'apolloschurchapp/src/utils/fetchMoreResolver';
+ import ContentCardConnected from '../../../ui/ContentCardConnected';
+ 
+-import GET_LIKED_CONTENT from '../getLikedContent';
++import getLikedContent from '../getLikedContent';
+ /** A FeedView wrapped in a query to pull content data. */
+ class LikedContentList extends PureComponent {
+   /** Function for React Navigation to set information in the header. */
+@@ -38,7 +38,7 @@ class LikedContentList extends PureComponent {
+     return (
+       <BackgroundView>
+         <Query
+-          query={GET_LIKED_CONTENT}
++          query={getLikedContent}
+           fetchPolicy="cache-and-network"
+           variables={{ first: 20 }}
+         >
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js
+index bfccbe1..7527d53 100644
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js
++++ b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js
+@@ -2,12 +2,12 @@ import React from 'react';
+ import { Query } from 'react-apollo';
+ import PropTypes from 'prop-types';
+ 
+-import GET_LIKED_CONTENT from '../getLikedContent';
++import getLikedContent from '../getLikedContent';
+ import RecentlyLikedTileFeed from './RecentlyLikedTileFeed';
+ 
+ const RecentlyLikedTileFeedConnected = ({ navigation }) => (
+   <Query
+-    query={GET_LIKED_CONTENT}
++    query={getLikedContent}
+     fetchPolicy="cache-and-network"
+     variables={{ first: 3 }}
+   >
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js
+index 8463a14..19c91cf 100644
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js
++++ b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js
+@@ -4,14 +4,14 @@ import wait from 'waait';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_LIKED_CONTENT from '../getLikedContent';
++import getLikedContent from '../getLikedContent';
+ import RecentlyLikedTileFeedConnected from './RecentlyLikedTileFeedConnected';
+ 
+ describe('RecentlyLikedTileFeedConnected', () => {
+   it('renders a RecentlyLikedTileFeedConnected', async () => {
+     const mock = {
+       request: {
+-        query: GET_LIKED_CONTENT,
++        query: getLikedContent,
+       },
+       result: {
+         data: {
+@@ -87,7 +87,7 @@ describe('RecentlyLikedTileFeedConnected', () => {
+   it('renders nothing if no liked content', async () => {
+     const mock = {
+       request: {
+-        query: GET_LIKED_CONTENT,
++        query: getLikedContent,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+index 9b9997c..397a879 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.js
+@@ -3,11 +3,11 @@ import { Query } from 'react-apollo';
+ import PropTypes from 'prop-types';
+ import { get } from 'lodash';
+ 
+-import GET_USER_PROFILE from '../getUserProfile';
++import getUserProfile from '../getUserProfile';
+ import UserAvatarHeader from './UserAvatarHeader';
+ 
+ const UserAvatarHeaderConnected = ({ navigation }) => (
+-  <Query query={GET_USER_PROFILE} fetchPolicy="cache-and-network">
++  <Query query={getUserProfile} fetchPolicy="cache-and-network">
+     {({
+       data: {
+         currentUser: {
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
+index 0395abe..b4bad0c 100644
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeaderConnected.tests.js
+@@ -3,14 +3,14 @@ import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_USER_PROFILE from '../getUserProfile';
++import getUserProfile from '../getUserProfile';
+ import UserAvatarHeaderConnected from './UserAvatarHeaderConnected';
+ 
+ describe('user avatar header connect', () => {
+   it('renders user avatar header if logged in', async () => {
+     const mock = {
+       request: {
+-        query: GET_USER_PROFILE,
++        query: getUserProfile,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/tabs/connect/getLikedContent.js b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+index 67a6720..5e4e1f9 100644
+--- a/apolloschurchapp/src/tabs/connect/getLikedContent.js
++++ b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
+ 
+ export default gql`
+   query getAllLikedContent($first: Int, $after: String) {
+@@ -19,6 +19,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/discover/Discover.js b/apolloschurchapp/src/tabs/discover/Discover.js
+index 210c1a2..76d8b24 100644
+--- a/apolloschurchapp/src/tabs/discover/Discover.js
++++ b/apolloschurchapp/src/tabs/discover/Discover.js
+@@ -5,7 +5,7 @@ import { get } from 'lodash';
+ import { FeedView, BackgroundView } from '@apollosproject/ui-kit';
+ 
+ import TileContentFeed from './TileContentFeed';
+-import GET_CONTENT_CHANNELS from './getContentChannels';
++import getContentChannels from './getContentChannels';
+ 
+ const childContentItemLoadingState = {
+   title: '',
+@@ -33,7 +33,7 @@ class Discover extends PureComponent {
+   render() {
+     return (
+       <BackgroundView>
+-        <Query query={GET_CONTENT_CHANNELS} fetchPolicy="cache-and-network">
++        <Query query={getContentChannels} fetchPolicy="cache-and-network">
+           {({
+             error,
+             loading,
+diff --git a/apolloschurchapp/src/tabs/discover/discover.tests.js b/apolloschurchapp/src/tabs/discover/discover.tests.js
+index 6e8f57b..96f2fde 100644
+--- a/apolloschurchapp/src/tabs/discover/discover.tests.js
++++ b/apolloschurchapp/src/tabs/discover/discover.tests.js
+@@ -5,13 +5,13 @@ import { createStackNavigator } from 'react-navigation';
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+ import Discover from './Discover';
+-import GET_CONTENT_CHANNELS from './getContentChannels';
++import getContentChannels from './getContentChannels';
+ 
+ describe('Test the Discover Component Query', () => {
+   it('Should retrieve the Content Channel Feeds', () => {
+     const mock = {
+       request: {
+-        query: GET_CONTENT_CHANNELS,
++        query: getContentChannels,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/tabs/discover/getContentChannels.js b/apolloschurchapp/src/tabs/discover/getContentChannels.js
+index be21aa9..bc9c243 100644
+--- a/apolloschurchapp/src/tabs/discover/getContentChannels.js
++++ b/apolloschurchapp/src/tabs/discover/getContentChannels.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { TILE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { tileCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getContentChannels {
+@@ -19,6 +19,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${TILE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${tileCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index 9d7b3c8..74f520b 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -20,9 +20,9 @@ import ContentCardConnected from '../../ui/ContentCardConnected';
+ import { LiveButton } from '../../live';
+ 
+ import ContentTableCard from '../../ui/ContentTableCard';
+-import GET_USER_FEED from './getUserFeed';
+-import GET_PERSONA_FEED from './getPersonaFeed';
+-import GET_CAMPAIGN_CONTENT_ITEM from './getCampaignContentItem';
++import getUserFeed from './getUserFeed';
++import getPersonaFeed from './getPersonaFeed';
++import getCampaignContentItem from './getCampaignContentItem';
+ 
+ const LogoTitle = styled(({ theme }) => ({
+   height: theme.sizing.baseUnit,
+@@ -59,7 +59,7 @@ class Home extends PureComponent {
+       <BackgroundView>
+         <SafeAreaView>
+           <Query
+-            query={GET_USER_FEED}
++            query={getUserFeed}
+             variables={{
+               first: 10,
+               after: null,
+@@ -86,7 +86,7 @@ class Home extends PureComponent {
+                     <LogoTitle source={require('./wordmark.png')} />
+                     <LiveButton />
+                     <Query
+-                      query={GET_CAMPAIGN_CONTENT_ITEM}
++                      query={getCampaignContentItem}
+                       fetchPolicy="cache-and-network"
+                     >
+                       {({ data: featuredData, loading: isFeaturedLoading }) => {
+@@ -117,7 +117,7 @@ class Home extends PureComponent {
+                       }}
+                     </Query>
+                     <Query
+-                      query={GET_PERSONA_FEED}
++                      query={getPersonaFeed}
+                       fetchPolicy="cache-and-network"
+                     >
+                       {({
+diff --git a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+index 345463c..5bdb082 100644
+--- a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
++++ b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query campaigns {
+@@ -20,6 +20,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/getPersonaFeed.js b/apolloschurchapp/src/tabs/home/getPersonaFeed.js
+index ac2b87d..b8130e0 100644
+--- a/apolloschurchapp/src/tabs/home/getPersonaFeed.js
++++ b/apolloschurchapp/src/tabs/home/getPersonaFeed.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getPersonaFeed {
+@@ -14,6 +14,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/getUserFeed.js b/apolloschurchapp/src/tabs/home/getUserFeed.js
+index e120403..8ab2b1f 100644
+--- a/apolloschurchapp/src/tabs/home/getUserFeed.js
++++ b/apolloschurchapp/src/tabs/home/getUserFeed.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+-import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
++import { largeCardFragment } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getUserFeed($first: Int, $after: String) {
+@@ -17,6 +17,6 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${contentItemFragment}
++  ${largeCardFragment}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/home.tests.js b/apolloschurchapp/src/tabs/home/home.tests.js
+index 96a5008..e9f98c5 100644
+--- a/apolloschurchapp/src/tabs/home/home.tests.js
++++ b/apolloschurchapp/src/tabs/home/home.tests.js
+@@ -4,13 +4,13 @@ import renderer from 'react-test-renderer';
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+ import Home from './Home';
+-import GET_USER_FEED from './getUserFeed';
++import getUserFeed from './getUserFeed';
+ 
+ describe('User Home Feed Query', () => {
+   it('should return correct query results', () => {
+     const mock = {
+       request: {
+-        query: GET_USER_FEED,
++        query: getUserFeed,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js b/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js
+index 6675653..6723f30 100644
+--- a/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js
++++ b/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js
+@@ -4,12 +4,12 @@ import { Query } from 'react-apollo';
+ import { get } from 'lodash';
+ 
+ import { client } from 'apolloschurchapp/src/client';
+-import GET_LIVE_STREAM from 'apolloschurchapp/src/live/getLiveStream';
++import getLiveStream from 'apolloschurchapp/src/live/getLiveStream';
+ import TouchableCell from './TouchableCell';
+ 
+ const changeLivestream = ({ isLive }) =>
+   client.writeQuery({
+-    query: GET_LIVE_STREAM,
++    query: getLiveStream,
+     data: {
+       liveStream: {
+         __typename: 'LiveStream',
+@@ -19,7 +19,7 @@ const changeLivestream = ({ isLive }) =>
+   });
+ 
+ const ChangeLivestream = () => (
+-  <Query query={GET_LIVE_STREAM}>
++  <Query query={getLiveStream}>
+     {({ data }) => {
+       const isLive = get(data, 'liveStream.isLive', false);
+       return (
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/index.js b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+index 8722331..b64bdc6 100644
+--- a/apolloschurchapp/src/ui/ContentCardConnected/index.js
++++ b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+@@ -4,9 +4,9 @@ import { Query } from 'react-apollo';
+ import { get } from 'lodash';
+ 
+ import { ContentCard, ErrorCard } from '@apollosproject/ui-kit';
+-import GET_CONTENT_CARD from './query';
++import getContentCard from './query';
+ 
+-export { TILE_CARD_FRAGMENT, LARGE_CARD_FRAGMENT } from './query';
++export { tileCardFragment, largeCardFragment } from './query';
+ 
+ const ContentCardConnected = ({
+   contentId,
+@@ -18,7 +18,7 @@ const ContentCardConnected = ({
+     return <ContentCard {...otherProps} isLoading tile={tile} />;
+ 
+   return (
+-    <Query query={GET_CONTENT_CARD} variables={{ contentId, tile: !!tile }}>
++    <Query query={getContentCard} variables={{ contentId, tile: !!tile }}>
+       {({ data: { node = {} } = {}, loading, error }) => {
+         if (error) return <ErrorCard error={error} />;
+ 
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/query.js b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+index eee426a..abefc12 100644
+--- a/apolloschurchapp/src/ui/ContentCardConnected/query.js
++++ b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+@@ -1,6 +1,6 @@
+ import gql from 'graphql-tag';
+ 
+-export const COVER_IMAGE_FRAGMENT = gql`
++export const coverImageFragment = gql`
+   fragment coverImageFragment on ContentItem {
+     coverImage {
+       sources {
+@@ -10,7 +10,7 @@ export const COVER_IMAGE_FRAGMENT = gql`
+   }
+ `;
+ 
+-export const THEME_FRAGMENT = gql`
++export const themeFragment = gql`
+   fragment themeFragment on ContentItem {
+     theme {
+       type
+@@ -24,14 +24,14 @@ export const THEME_FRAGMENT = gql`
+   }
+ `;
+ 
+-export const CONTENT_CARD_METRICS_FRAGMENT = gql`
++export const contentCardMetricsFragment = gql`
+   fragment contentCardMetricsFragment on ContentItem {
+     isLiked
+     likedCount
+   }
+ `;
+ 
+-export const BASE_CARD_FRAGMENT = gql`
++export const baseCardFragment = gql`
+   fragment baseCardFragment on ContentItem {
+     id
+     __typename
+@@ -41,12 +41,12 @@ export const BASE_CARD_FRAGMENT = gql`
+     title
+     summary
+   }
+-  ${CONTENT_CARD_METRICS_FRAGMENT}
+-  ${COVER_IMAGE_FRAGMENT}
+-  ${THEME_FRAGMENT}
++  ${contentCardMetricsFragment}
++  ${coverImageFragment}
++  ${themeFragment}
+ `;
+ 
+-export const TILE_CARD_FRAGMENT = gql`
++export const tileCardFragment = gql`
+   fragment tileCardFragment on ContentItem {
+     ... on ContentSeriesContentItem {
+       id
+@@ -64,20 +64,20 @@ export const TILE_CARD_FRAGMENT = gql`
+       ...baseCardFragment
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
+-  ${THEME_FRAGMENT}
+-  ${COVER_IMAGE_FRAGMENT}
+-  ${CONTENT_CARD_METRICS_FRAGMENT}
++  ${baseCardFragment}
++  ${themeFragment}
++  ${coverImageFragment}
++  ${contentCardMetricsFragment}
+ `;
+ 
+-export const LARGE_CARD_FRAGMENT = gql`
++export const largeCardFragment = gql`
+   fragment largeCardFragment on ContentItem {
+     ...baseCardFragment
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${baseCardFragment}
+ `;
+ 
+-const GET_CONTENT_CARD = gql`
++const getContentCard = gql`
+   query getContentCard($contentId: ID!, $tile: Boolean!) {
+     node(id: $contentId) {
+       id
+@@ -86,8 +86,8 @@ const GET_CONTENT_CARD = gql`
+       ...largeCardFragment @skip(if: $tile)
+     }
+   }
+-  ${TILE_CARD_FRAGMENT}
+-  ${LARGE_CARD_FRAGMENT}
++  ${tileCardFragment}
++  ${largeCardFragment}
+ `;
+ 
+-export default GET_CONTENT_CARD;
++export default getContentCard;
+diff --git a/apolloschurchapp/src/ui/LikeButton/index.js b/apolloschurchapp/src/ui/LikeButton/index.js
+index 8272d96..a7c0c2d 100644
+--- a/apolloschurchapp/src/ui/LikeButton/index.js
++++ b/apolloschurchapp/src/ui/LikeButton/index.js
+@@ -7,12 +7,12 @@ import { Query, Mutation } from 'react-apollo';
+ import Like from 'apolloschurchapp/src/ui/Like';
+ import { AnalyticsConsumer } from '@apollosproject/ui-analytics';
+ 
+-import UPDATE_LIKE_ENTITY from './updateLikeEntity';
+-import GET_LIKED_CONTENT_ITEM from './getLikedContentItem';
++import updateLikeEntity from './updateLikeEntity';
++import getLikedContentItem from './getLikedContentItem';
+ import updateLikedContent from './updateLikedContent';
+ 
+ const GetLikeData = ({ itemId, children }) => (
+-  <Query query={GET_LIKED_CONTENT_ITEM} variables={{ itemId }}>
++  <Query query={getLikedContentItem} variables={{ itemId }}>
+     {({ data: { node = {} } = {}, loading }) => {
+       const isLiked = loading ? false : get(node, 'isLiked') || false;
+       return children({ isLiked, item: node });
+@@ -34,7 +34,7 @@ const UpdateLikeStatus = ({
+   <AnalyticsConsumer>
+     {({ track }) => (
+       <Mutation
+-        mutation={UPDATE_LIKE_ENTITY}
++        mutation={updateLikeEntity}
+         optimisticResponse={{
+           updateLikeEntity: {
+             id: itemId, // unknown at this time
+@@ -53,7 +53,7 @@ const UpdateLikeStatus = ({
+         ) => {
+           updateLikedContent({ liked, cache, item });
+           cache.writeQuery({
+-            query: GET_LIKED_CONTENT_ITEM,
++            query: getLikedContentItem,
+             data: {
+               node: {
+                 ...item,
+diff --git a/apolloschurchapp/src/ui/LikeButton/updateLikedContent.js b/apolloschurchapp/src/ui/LikeButton/updateLikedContent.js
+index 1024864..c0d5978 100644
+--- a/apolloschurchapp/src/ui/LikeButton/updateLikedContent.js
++++ b/apolloschurchapp/src/ui/LikeButton/updateLikedContent.js
+@@ -1,15 +1,15 @@
+-import GET_ALL_LIKED_CONTENT from 'apolloschurchapp/src/tabs/connect/getLikedContent';
+-import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
++import getAllLikedContent from 'apolloschurchapp/src/tabs/connect/getLikedContent';
++import { contentItemFragment } from 'apolloschurchapp/src/content-single/getContentItem';
+ 
+ const addItemToLikedContentList = ({ cache, item, variables }) => {
+   try {
+     const data = cache.readQuery({
+-      query: GET_ALL_LIKED_CONTENT,
++      query: getAllLikedContent,
+       variables,
+     });
+     const fullItem = cache.readFragment({
+       id: `${item.__typename}:${item.id}`,
+-      fragment: CONTENT_ITEM_FRAGMENT,
++      fragment: contentItemFragment,
+     });
+     const newEdges = [
+       fullItem,
+@@ -19,7 +19,7 @@ const addItemToLikedContentList = ({ cache, item, variables }) => {
+       node,
+     }));
+     cache.writeQuery({
+-      query: GET_ALL_LIKED_CONTENT,
++      query: getAllLikedContent,
+       variables,
+       data: {
+         ...data,
+@@ -39,7 +39,7 @@ const addItemToLikedContentList = ({ cache, item, variables }) => {
+ const removeItemFromLikedContentList = ({ cache, item, variables }) => {
+   try {
+     const data = cache.readQuery({
+-      query: GET_ALL_LIKED_CONTENT,
++      query: getAllLikedContent,
+       variables,
+     });
+ 
+@@ -48,7 +48,7 @@ const removeItemFromLikedContentList = ({ cache, item, variables }) => {
+     );
+ 
+     cache.writeQuery({
+-      query: GET_ALL_LIKED_CONTENT,
++      query: getAllLikedContent,
+       variables,
+       data: {
+         ...data,
+diff --git a/apolloschurchapp/src/ui/Onboarding/Onboarding.tests.js b/apolloschurchapp/src/ui/Onboarding/Onboarding.tests.js
+deleted file mode 100644
+index abe9746..0000000
+--- a/apolloschurchapp/src/ui/Onboarding/Onboarding.tests.js
++++ /dev/null
+@@ -1,17 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from '../../Providers';
+-
+-import Onboarding from '.';
+-
+-describe('the Onboarding component', () => {
+-  it('should render Onboarding', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Onboarding />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js b/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
+index 1787f08..49c66b0 100644
+--- a/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
++++ b/apolloschurchapp/src/ui/UserAvatarView/AvatarForm.js
+@@ -12,11 +12,11 @@ import {
+   H5,
+   styled,
+ } from '@apollosproject/ui-kit';
+-import GET_USER_PROFILE from '../../tabs/connect/getUserProfile';
++import getUserProfile from '../../tabs/connect/getUserProfile';
+ import uploadPhoto from './uploadPhoto';
+ 
+ const GetPhotoData = ({ children }) => (
+-  <Query query={GET_USER_PROFILE}>
++  <Query query={getUserProfile}>
+     {({ data: { currentUser = {} } = {} }) => {
+       const photo = get(currentUser, 'profile.photo');
+       return children({ photo });
+diff --git a/apolloschurchapp/src/ui/UserAvatarView/uploadPhoto.js b/apolloschurchapp/src/ui/UserAvatarView/uploadPhoto.js
+index 4c051e5..cf0b4e0 100644
+--- a/apolloschurchapp/src/ui/UserAvatarView/uploadPhoto.js
++++ b/apolloschurchapp/src/ui/UserAvatarView/uploadPhoto.js
+@@ -1,7 +1,7 @@
+ import gql from 'graphql-tag';
+ import ImagePicker from 'react-native-image-picker';
+ import { ReactNativeFile } from 'apollo-upload-client';
+-import GET_USER_PROFILE from '../../tabs/connect/getUserProfile';
++import getUserProfile from '../../tabs/connect/getUserProfile';
+ 
+ const options = {
+   title: 'Select Profile Image',
+@@ -57,10 +57,10 @@ export default async ({ client, onUpload = () => ({}) }) => {
+           },
+         }
+       ) => {
+-        const data = cache.readQuery({ query: GET_USER_PROFILE });
++        const data = cache.readQuery({ query: getUserProfile });
+ 
+         cache.writeQuery({
+-          query: GET_USER_PROFILE,
++          query: getUserProfile,
+           data: {
+             currentUser: {
+               ...data.currentUser,
+diff --git a/apolloschurchapp/src/user-settings/ChangePassword.js b/apolloschurchapp/src/user-settings/ChangePassword.js
+index 6045e31..2938688 100644
+--- a/apolloschurchapp/src/user-settings/ChangePassword.js
++++ b/apolloschurchapp/src/user-settings/ChangePassword.js
+@@ -15,8 +15,8 @@ import {
+   styled,
+ } from '@apollosproject/ui-kit';
+ 
+-import GET_AUTH_TOKEN from '../store/getAuthToken';
+-import CHANGE_PASSWORD from './passwordChange';
++import getAuthToken from '../store/getAuthToken';
++import changePassword from './passwordChange';
+ 
+ const Footer = styled({
+   flex: 1,
+@@ -82,10 +82,10 @@ class ChangePassword extends PureComponent {
+   render() {
+     return (
+       <Mutation
+-        mutation={CHANGE_PASSWORD}
++        mutation={changePassword}
+         update={async (cache, { data: { token } }) => {
+           await cache.writeQuery({
+-            query: GET_AUTH_TOKEN,
++            query: getAuthToken,
+             data: { authToken: token },
+           });
+ 
+diff --git a/apolloschurchapp/src/user-settings/Locations/Locations.tests.js b/apolloschurchapp/src/user-settings/Locations/Locations.tests.js
+index 53a4c91..627fc7f 100644
+--- a/apolloschurchapp/src/user-settings/Locations/Locations.tests.js
++++ b/apolloschurchapp/src/user-settings/Locations/Locations.tests.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+-import GET_CAMPUS_LOCATIONS from './getCampusLocations';
++import getCampusLocations from './getCampusLocations';
+ import Location from './index';
+ 
+ const campuses = [
+@@ -80,10 +80,6 @@ describe('Display Native Map with Locations', () => {
+     latitudeDelta: 100,
+     longitudeDelta: 10,
+   };
+-  const userLocation = {
+-    latitude: 39.104797,
+-    longitude: -84.511959,
+-  };
+   it('Render a native map view', async () => {
+     const navigation = {
+       navigate: jest.fn(),
+@@ -93,10 +89,10 @@ describe('Display Native Map with Locations', () => {
+ 
+     const mock = {
+       request: {
+-        query: GET_CAMPUS_LOCATIONS,
++        query: getCampusLocations,
+         variables: {
+-          latitude: userLocation.latitude,
+-          longitude: userLocation.longitude,
++          latitude: initialRegion.latitude,
++          longitude: initialRegion.longitude,
+         },
+       },
+       result: {
+diff --git a/apolloschurchapp/src/user-settings/Locations/MapView.js b/apolloschurchapp/src/user-settings/Locations/MapView.js
+index 06dddb5..b38e1d5 100644
+--- a/apolloschurchapp/src/user-settings/Locations/MapView.js
++++ b/apolloschurchapp/src/user-settings/Locations/MapView.js
+@@ -1,14 +1,13 @@
+ import React, { Component } from 'react';
+ import PropTypes from 'prop-types';
+ import { View, Animated } from 'react-native';
+-import { SafeAreaView } from 'react-navigation';
++import SafeAreaView from 'react-native-safe-area-view';
+ import RNMapView from 'react-native-maps';
+ import { debounce } from 'lodash';
+ 
+ import {
+   Button,
+   PaddedView,
+-  FlexedView,
+   styled,
+   withTheme,
+   CampusCard,
+@@ -18,6 +17,10 @@ import Marker from './Marker';
+ 
+ const { CARD_WIDTH } = CampusCard;
+ 
++const ContainerView = styled({
++  flex: 1,
++})(View);
++
+ const FlexedMapView = styled({ flex: 1 })(({ mapRef, ...props }) => (
+   <RNMapView ref={mapRef} {...props} />
+ ));
+@@ -25,7 +28,7 @@ const FlexedMapView = styled({ flex: 1 })(({ mapRef, ...props }) => (
+ const getCampusAddress = (campus) =>
+   `${campus.street1}\n${campus.city}, ${campus.state} ${campus.postalCode}`;
+ 
+-const Footer = styled({
++const ScrollingView = styled({
+   position: 'absolute',
+   bottom: 0,
+   left: 0,
+@@ -86,32 +89,40 @@ class MapView extends Component {
+     const cardIndex = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item;
+     const campus = this.props.campuses[cardIndex];
+     this.setState({ campus });
+-    if (!campus) {
+-      this.map.fitToCoordinates(
+-        [...this.props.campuses, this.props.userLocation],
+-        {
+-          edgePadding: {
+-            top: 100,
+-            left: 100,
+-            right: 100,
+-            // This is higher to avoid the campus cards (baseUnit * 6) on the bottom
+-            bottom: 100 + this.props.theme.sizing.baseUnit * 12,
+-          },
+-        }
+-      );
+-      return;
+-    }
++    if (!campus) return;
+ 
+     const { userLocation } = this.props;
+-    this.map.fitToCoordinates([campus, userLocation], {
+-      edgePadding: {
+-        top: 100,
+-        left: 100,
+-        right: 100,
+-        // This is higher to avoid the campus cards (baseUnit * 6) on the bottom
+-        bottom: 100 + this.props.theme.sizing.baseUnit * 12,
++
++    let { latitude } = campus;
++    const { longitude } = campus;
++    let { latitudeDelta, longitudeDelta } = this.props.initialRegion;
++
++    if (userLocation) {
++      // Calculate rectangle that shows user's location in the view with campus at center
++      const minLat = Math.min(campus.latitude, userLocation.latitude);
++      const maxLat = Math.max(campus.latitude, userLocation.latitude);
++      const minLong = Math.min(campus.longitude, userLocation.longitude);
++      const mayLong = Math.max(campus.longitude, userLocation.longitude);
++
++      latitudeDelta = (maxLat - minLat) * 2.5;
++      longitudeDelta = (mayLong - minLong) * 2.5;
++    }
++
++    // Now, we need to transform the given lat/lng/delta up to make room for cards at bottom.
++    // To make this math simpler, we'll assume the cards take up roughly 20% of the vertical space
++    const maxDelta = Math.max(latitudeDelta, longitudeDelta);
++    latitude -= maxDelta * 0.2; // move the view up 20%
++    latitudeDelta *= 1.2; // include 20% more area in the view
++
++    this.map.animateToRegion(
++      {
++        latitude,
++        longitude,
++        latitudeDelta,
++        longitudeDelta,
+       },
+-    });
++      350
++    );
+   };
+ 
+   render() {
+@@ -122,83 +133,98 @@ class MapView extends Component {
+         index * CARD_WIDTH,
+         (index + 1) * CARD_WIDTH,
+       ];
++      const scale = this.animation.interpolate({
++        inputRange,
++        outputRange: [1, 2.5, 1],
++        extrapolate: 'clamp',
++      });
+       const opacity = this.animation.interpolate({
+         inputRange,
+         outputRange: [0.35, 1, 0.35],
+         extrapolate: 'clamp',
+       });
+-      return { opacity };
++      return { scale, opacity };
+     });
+ 
+     return (
+-      <FlexedView>
+-        <FlexedMapView
+-          initialRegion={this.props.initialRegion}
+-          showsUserLocation
+-          mapRef={(map) => {
+-            this.map = map;
+-          }}
+-        >
+-          {campuses.map((campus, index) => {
+-            const campusOpacity = {
+-              opacity: interpolations[index].opacity,
+-            };
+-            return (
+-              <Marker
+-                key={campus.id}
+-                opacityStyle={campusOpacity}
+-                latitude={campus.latitude}
+-                longitude={campus.longitude}
+-              />
+-            );
+-          })}
+-        </FlexedMapView>
+-        <Footer>
+-          <SafeAreaView>
+-            <Animated.ScrollView
+-              horizontal
+-              showsHorizontalScrollIndicator={false}
+-              snapToInterval={CARD_WIDTH + 8} // account for padding
+-              snapToAlignment={'start'}
+-              decelerationRate={'fast'}
+-              contentContainerStyle={this.contentContainerStyle} // correctly pads cards in ScrollView
+-              scrollEventThrottle={16} // roughtly 1000ms/60fps = 16ms
+-              onScroll={Animated.event(
+-                [
++      <ContainerView>
++        <ContainerView>
++          <FlexedMapView
++            initialRegion={this.props.initialRegion}
++            showsUserLocation
++            mapRef={(map) => {
++              this.map = map;
++            }}
++          >
++            {campuses.map((campus, index) => {
++              const scaleStyle = {
++                transform: [
+                   {
+-                    nativeEvent: {
+-                      contentOffset: {
+-                        x: this.animation,
+-                      },
+-                    },
++                    scale: interpolations[index].scale,
+                   },
+                 ],
+-                { useNativeDriver: true }
+-              )}
+-            >
+-              {campuses.map((campus) => (
+-                <CampusCard
++              };
++              const opacityStyle = {
++                opacity: interpolations[index].opacity,
++              };
++              return (
++                <Marker
+                   key={campus.id}
+-                  distance={campus.distanceFromLocation}
+-                  title={campus.name}
+-                  description={getCampusAddress(campus)}
+-                  images={[campus.image]}
++                  opacityStyle={opacityStyle}
++                  scaleStyle={scaleStyle}
++                  latitude={campus.latitude}
++                  longitude={campus.longitude}
++                />
++              );
++            })}
++          </FlexedMapView>
++          <ScrollingView>
++            <SafeAreaView forceInset={{ bottom: 'always', top: 'never' }}>
++              <Animated.ScrollView
++                horizontal
++                showsHorizontalScrollIndicator={false}
++                snapToInterval={CARD_WIDTH + 8} // account for padding
++                snapToAlignment={'start'}
++                decelerationRate={'fast'}
++                contentContainerStyle={this.contentContainerStyle} // correctly pads cards in ScrollView
++                scrollEventThrottle={16} // roughtly 1000ms/60fps = 16ms
++                onScroll={Animated.event(
++                  [
++                    {
++                      nativeEvent: {
++                        contentOffset: {
++                          x: this.animation,
++                        },
++                      },
++                    },
++                  ],
++                  { useNativeDriver: true }
++                )}
++              >
++                {campuses.map((campus) => (
++                  <CampusCard
++                    key={campus.id}
++                    distance={campus.distanceFromLocation}
++                    title={campus.name}
++                    description={getCampusAddress(campus)}
++                    images={[campus.image]}
++                  />
++                ))}
++              </Animated.ScrollView>
++              <PaddedView>
++                <Button
++                  title="Select Campus"
++                  pill={false}
++                  type="secondary"
++                  onPress={() =>
++                    onLocationSelect(this.state.campus || campuses[0])
++                  }
+                 />
+-              ))}
+-            </Animated.ScrollView>
+-            <PaddedView>
+-              <Button
+-                title="Select Campus"
+-                pill={false}
+-                type="secondary"
+-                onPress={() =>
+-                  onLocationSelect(this.state.campus || campuses[0])
+-                }
+-              />
+-            </PaddedView>
+-          </SafeAreaView>
+-        </Footer>
+-      </FlexedView>
++              </PaddedView>
++            </SafeAreaView>
++          </ScrollingView>
++        </ContainerView>
++      </ContainerView>
+     );
+   }
+ }
+diff --git a/apolloschurchapp/src/user-settings/Locations/Marker.js b/apolloschurchapp/src/user-settings/Locations/Marker.js
+index 0c98fa9..b7c10d7 100644
+--- a/apolloschurchapp/src/user-settings/Locations/Marker.js
++++ b/apolloschurchapp/src/user-settings/Locations/Marker.js
+@@ -11,29 +11,42 @@ const MarkerView = styled(({ theme }) => ({
+   height: 8,
+   borderRadius: 4,
+   backgroundColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-  zIndex: 2,
+ }))(View);
+ 
++const MarkerWrapView = styled({
++  alignItems: 'center',
++  justifyContent: 'center',
++})(View);
++
++// This is not good. Is there a better way to prevent cascading styles?
++
+ const MarkerRingView = styled(({ theme }) => ({
+   width: 24,
+   height: 24,
+   borderRadius: 12,
++  right: -8,
++  top: -8,
+   backgroundColor: Color(theme.colors.primary).fade(theme.alpha.low),
++  position: 'absolute',
+   borderWidth: 1,
+   borderColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-  alignItems: 'center',
+-  justifyContent: 'center',
++  alignItems: 'stretch',
+ }))(View);
+ 
+-const StyledMarker = memo(({ latitude, longitude, opacityStyle }) => (
+-  <Marker coordinate={{ latitude, longitude }}>
+-    <Animated.View style={opacityStyle}>
+-      <MarkerRingView>
+-        <MarkerView />
+-      </MarkerRingView>
+-    </Animated.View>
+-  </Marker>
+-));
++const StyledMarker = memo(
++  ({ latitude, longitude, opacityStyle, scaleStyle }) => (
++    <Marker coordinate={{ latitude, longitude }}>
++      <MarkerWrapView>
++        <Animated.View style={opacityStyle}>
++          <MarkerRingView>
++            <Animated.View style={scaleStyle} />
++          </MarkerRingView>
++          <MarkerView />
++        </Animated.View>
++      </MarkerWrapView>
++    </Marker>
++  )
++);
+ 
+ StyledMarker.displayName = 'StyledMarker';
+ 
+@@ -41,6 +54,7 @@ StyledMarker.propTypes = {
+   latitude: PropTypes.number.isRequired,
+   longitude: PropTypes.number.isRequired,
+   opacityStyle: PropTypes.shape({}),
++  scaleStyle: PropTypes.shape({}),
+ };
+ 
+ export default StyledMarker;
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+index bc2b6d6..f8517c3 100644
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ b/apolloschurchapp/src/user-settings/Locations/index.js
+@@ -5,10 +5,13 @@ import { Dimensions } from 'react-native';
+ 
+ import { PaddedView, ButtonLink } from '@apollosproject/ui-kit';
+ 
+-import GET_CAMPUSES from './getCampusLocations';
+-import CHANGE_CAMPUS from './campusChange';
++import getUserProfile from '../../tabs/connect/getUserProfile';
+ import MapView from './MapView';
+ 
++import getAllCampuses from './getCampusLocations';
++
++import campusChange from './campusChange';
++
+ const getCurrentLocation = () =>
+   new Promise((resolve, reject) => {
+     navigator.geolocation.getCurrentPosition(
+@@ -17,6 +20,10 @@ const getCurrentLocation = () =>
+     );
+   });
+ 
++const screen = Dimensions.get('window');
++
++const ASPECT_RATIO = screen.width / screen.height;
++
+ class Location extends PureComponent {
+   static propTypes = {
+     navigation: PropTypes.shape({
+@@ -39,9 +46,7 @@ class Location extends PureComponent {
+       latitude: 39.809734,
+       longitude: -98.555618,
+       latitudeDelta: 100,
+-      longitudeDelta:
+-        (100 * Dimensions.get('window').width) /
+-        Dimensions.get('window').height,
++      longitudeDelta: 100 * ASPECT_RATIO,
+     },
+   };
+ 
+@@ -56,10 +61,7 @@ class Location extends PureComponent {
+   });
+ 
+   state = {
+-    userLocation: {
+-      latitude: 39.104797,
+-      longitude: -84.511959,
+-    },
++    region: this.props.initialRegion,
+   };
+ 
+   componentDidMount() {
+@@ -78,19 +80,43 @@ class Location extends PureComponent {
+   render() {
+     const { navigation, onFinished } = this.props;
+     // we should use the `onFinished` from the navigation param, if it exists.
+-    const handleFinished = navigation.getParam('onFinished', onFinished);
++    const handleFinished = this.props.navigation.getParam(
++      'onFinished',
++      onFinished
++    );
+ 
+     return (
+       <Query
+-        query={GET_CAMPUSES}
++        query={getAllCampuses}
+         variables={{
+-          latitude: this.state.userLocation.latitude,
+-          longitude: this.state.userLocation.longitude,
++          latitude: this.state.region.latitude,
++          longitude: this.state.region.longitude,
+         }}
+         fetchPolicy="cache-and-network"
+       >
+         {({ loading, error, data: { campuses = [] } = {} }) => (
+-          <Mutation mutation={CHANGE_CAMPUS}>
++          <Mutation
++            mutation={campusChange}
++            update={async (cache, { data: { updateUserCampus } }) => {
++              const { currentUser } = await cache.readQuery({
++                query: getUserProfile,
++              });
++              await cache.writeQuery({
++                query: getUserProfile,
++                data: {
++                  currentUser: {
++                    ...currentUser,
++                    profile: {
++                      ...currentUser.profile,
++                      campus: {
++                        ...updateUserCampus.campus,
++                      },
++                    },
++                  },
++                },
++              });
++            }}
++          >
+             {(handlePress) => (
+               <MapView
+                 navigation={navigation}
+diff --git a/apolloschurchapp/src/user-settings/PersonDetails.tests.js b/apolloschurchapp/src/user-settings/PersonDetails.tests.js
+index 5234bf5..b55f57e 100644
+--- a/apolloschurchapp/src/user-settings/PersonDetails.tests.js
++++ b/apolloschurchapp/src/user-settings/PersonDetails.tests.js
+@@ -4,14 +4,14 @@ import wait from 'waait';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_USER_PROFILE from '../tabs/connect/getUserProfile';
++import getUserProfile from '../tabs/connect/getUserProfile';
+ import PersonalDetails from './PersonalDetails';
+ 
+ describe('PersonalDetails component', () => {
+   it('renders PersonalDetails when logged in', async () => {
+     const mock = {
+       request: {
+-        query: GET_USER_PROFILE,
++        query: getUserProfile,
+       },
+       result: {
+         data: {
+diff --git a/apolloschurchapp/src/user-settings/PersonalDetails.js b/apolloschurchapp/src/user-settings/PersonalDetails.js
+index 9404206..e694002 100644
+--- a/apolloschurchapp/src/user-settings/PersonalDetails.js
++++ b/apolloschurchapp/src/user-settings/PersonalDetails.js
+@@ -1,12 +1,6 @@
+ import React, { PureComponent } from 'react';
+ import PropTypes from 'prop-types';
+-import {
+-  KeyboardAvoidingView,
+-  StyleSheet,
+-  StatusBar,
+-  Platform,
+-} from 'react-native';
+-import { SafeAreaView, Header } from 'react-navigation';
++import { SafeAreaView } from 'react-native';
+ import { Query, Mutation } from 'react-apollo';
+ import { Formik } from 'formik';
+ import * as Yup from 'yup';
+@@ -17,11 +11,12 @@ import {
+   FlexedView,
+   Button,
+   ButtonLink,
++  TableView,
+   styled,
+ } from '@apollosproject/ui-kit';
+ 
+-import GET_USER_PROFILE from '../tabs/connect/getUserProfile';
+-import UPDATE_CURRENT_USER from './updateCurrentUser';
++import getUserProfile from '../tabs/connect/getUserProfile';
++import updateCurrentUser from './updateCurrentUser';
+ 
+ const Footer = styled({
+   flex: 1,
+@@ -48,16 +43,8 @@ class PersonalDetails extends PureComponent {
+   };
+ 
+   renderForm = (props) => (
+-    // have to add the offset to account for react-navigation header
+-    <KeyboardAvoidingView
+-      behavior={'padding'}
+-      style={StyleSheet.absoluteFill}
+-      keyboardVerticalOffset={
+-        Header.HEIGHT +
+-        (Platform.OS === 'android' ? StatusBar.currentHeight : 0)
+-      }
+-    >
+-      <FlexedView>
++    <FlexedView>
++      <TableView>
+         <PaddedView>
+           <TextInput
+             label="First Name"
+@@ -73,6 +60,10 @@ class PersonalDetails extends PureComponent {
+             error={props.touched.lastName && props.errors.lastName}
+             onChangeText={(text) => props.setFieldValue('lastName', text)}
+           />
++        </PaddedView>
++      </TableView>
++      <TableView>
++        <PaddedView>
+           <TextInput
+             label="Email"
+             type="email"
+@@ -81,32 +72,32 @@ class PersonalDetails extends PureComponent {
+             onChangeText={(text) => props.setFieldValue('email', text)}
+           />
+         </PaddedView>
+-        <Footer>
+-          <PaddedView>
+-            <Button
+-              disabled={!props.isValid || props.isSubmitting}
+-              onPress={props.handleSubmit}
+-              title="Save"
+-              loading={props.isSubmitting}
+-            />
+-          </PaddedView>
+-        </Footer>
+-      </FlexedView>
+-    </KeyboardAvoidingView>
++      </TableView>
++      <Footer>
++        <PaddedView>
++          <Button
++            disabled={!props.isValid || props.isSubmitting}
++            onPress={props.handleSubmit}
++            title="Save"
++            loading={props.isSubmitting}
++          />
++        </PaddedView>
++      </Footer>
++    </FlexedView>
+   );
+ 
+   render() {
+     return (
+-      <Query query={GET_USER_PROFILE} fetchPolicy="cache-and-network">
++      <Query query={getUserProfile} fetchPolicy="cache-and-network">
+         {({ data: { currentUser = { profile: {} } } = {} }) => {
+           const { firstName, lastName, email } = currentUser.profile;
+ 
+           return (
+             <Mutation
+-              mutation={UPDATE_CURRENT_USER}
++              mutation={updateCurrentUser}
+               update={async (cache, { data: { updateProfileFields } }) => {
+                 await cache.writeQuery({
+-                  query: GET_USER_PROFILE,
++                  query: getUserProfile,
+                   data: {
+                     currentUser: {
+                       ...currentUser,
+diff --git a/apolloschurchapp/src/user-settings/UserSettings.tests.js b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+index 9a1f3d3..5cb5377 100644
+--- a/apolloschurchapp/src/user-settings/UserSettings.tests.js
++++ b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+@@ -4,14 +4,14 @@ import wait from 'waait';
+ 
+ import Providers from 'apolloschurchapp/src/Providers';
+ 
+-import GET_LOGIN_STATE from '../tabs/connect/getLoginState';
++import getLoginState from '../tabs/connect/getLoginState';
+ import UserSettings from '.';
+ 
+ describe('UserSettings component', () => {
+   it('renders UserSettings when logged in', async () => {
+     const mock = {
+       request: {
+-        query: GET_LOGIN_STATE,
++        query: getLoginState,
+       },
+       result: {
+         data: { isLoggedIn: true },
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 30b1044..c386327 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -18,7 +18,7 @@ import {
+ import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+ import AvatarForm from 'apolloschurchapp/src/ui/UserAvatarView/AvatarForm';
+ 
+-import { GET_LOGIN_STATE, LOGOUT } from '@apollosproject/ui-auth';
++import { getLoginState, logout } from '@apollosproject/ui-auth';
+ 
+ const AvatarView = styled({
+   alignItems: 'center',
+@@ -43,7 +43,7 @@ class UserSettings extends PureComponent {
+ 
+   render() {
+     return (
+-      <Query query={GET_LOGIN_STATE} fetchPolicy="cache-and-network">
++      <Query query={getLoginState} fetchPolicy="cache-and-network">
+         {({ data: { isLoggedIn = false, loading } }) => {
+           if (loading) return <ActivityIndicator />;
+           if (!isLoggedIn) return null;
+@@ -129,7 +129,7 @@ class UserSettings extends PureComponent {
+                       </Touchable>
+                     </TableView>
+                     <TableView>
+-                      <Mutation mutation={LOGOUT}>
++                      <Mutation mutation={logout}>
+                         {(handleLogout) => (
+                           <Touchable
+                             onPress={async () => {
