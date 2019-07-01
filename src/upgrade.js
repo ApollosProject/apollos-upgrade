@@ -20,7 +20,7 @@ const getApollosConfig = () =>
 
 const getProjectName = async () => {
   try {
-    const { stdout: fileName } = await execa('find', ['./ios', '-name', '*.xcodeproj']);
+    const { stdout: fileName } = await execa('find', ['./ios', '-name', '*.xcodeproj', '-maxdepth', '1']);
     return fileName.match(/ios\/(.*)\.xcodeproj/)[1];
   } catch (e) {
     logger.error(e);
