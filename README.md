@@ -30,4 +30,6 @@ See table below for the complete list.
 
 ## To see the full table containing all releases, check back soon :)
 
-## Notes
+## Getting Started
+
+run `npx @apollosproject/upgrade-tools upgrade` from inside of the App and API directories and fix merge conflicts.
