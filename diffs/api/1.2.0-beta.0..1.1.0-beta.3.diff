@@ -1,0 +1,330 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index 5c49045..e395a33 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.0-beta.0",
++    "version": "1.1.0-beta.3",
+     "environment": "api"
+ }
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 4a16624..7127f7a 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -16,10 +16,8 @@ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+   IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
+-  SHARE_URL: https://apollosrock.newspring.cc
+   # This should match the timezone of the Rock server
+   TIMEZONE: 'America/New_York'
+-  USE_PLUGIN: true
+ ONE_SIGNAL:
+   APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+   REST_KEY: ${ONE_SIGNAL_REST_KEY}
+@@ -27,11 +25,6 @@ CHURCH_ONLINE:
+   URL: https://apollos.churchonline.org/api/v1/
+   MEDIA_URLS: []
+   WEB_VIEW_URL: https://apollos.churchonline.org/
+-ALGOLIA:
+-  APPLICATION_ID: ${ALGOLIA_APP_ID}
+-  API_KEY: ${ALGOLIA_API_KEY}
+-  # TODO: should we support multiple indices? how?
+-  SEARCH_INDEX: test_ContentItems
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+@@ -100,7 +93,6 @@ ROCK_MAPPINGS:
+     - 8
+   # Apollos will pull content items from these channels and expose them on the user feed
+   # However, it will not expose the channel itself.
+-  # These channels are also pulled when indexing searchable content.
+   FEED_CONTENT_CHANNEL_IDS:
+     - 1
+     - 2
+@@ -115,22 +107,7 @@ ROCK_MAPPINGS:
+ 
+   SERMON_CHANNEL_ID: 5
+ 
+-  SERVING_GROUP_TYPE_ID: 23
+-  COMMUNITY_GROUP_TYPE_ID: 25
+-  FAMILY_GROUP_TYPE_ID: 10
+-
+-HOME_FEATURES:
+-  - title: FOR YOU
+-    algorithms: [SERMON_CHILDREN, PERSONA_FEED]
+-    subtitle: Explore what God calls you to today
+-  - title: BULLETIN
+-    subtitle: What's happening at apollos?
+-    algorithms:
+-      - type: CONTENT_CHANNEL
+-        arguments:
+-          contentChannelId: 13
+-      - type: UPCOMING_EVENTS
+-
++  HOME_FEATURE_CHANNEL_ID: 13
+ 
+ # Default mapping of field types -> ids. There's probably no reason to edit this.
+ ROCK_CONSTANTS:
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+index a146e0a..e387714 100644
+--- a/apollos-church-api/local.graphql
++++ b/apollos-church-api/local.graphql
+@@ -1,6 +1,5 @@
+ enum ACTION_FEATURE_ACTION {
+   READ_CONTENT
+-  READ_EVENT
+ }
+ 
+ type ActionListAction {
+@@ -95,7 +94,6 @@ type Campus implements Node {
+   longitude: Float
+   image: ImageMediaSource
+   distanceFromLocation(location: CampusLocationInput): Float
+-  events: [Event]
+ }
+ 
+ input CampusLocationInput {
+@@ -187,14 +185,6 @@ type DevotionalContentItem implements ContentItem & Node {
+   sharing: SharableContentItem
+ }
+ 
+-type Event implements Node {
+-  id: ID!
+-  name: String
+-  location: String
+-  start: String
+-  end: String
+-}
+-
+ interface Feature {
+   id: ID!
+   order: Int
+@@ -206,19 +196,6 @@ enum GENDER {
+   Unknown
+ }
+ 
+-type Group implements Node {
+-  id: ID!
+-  name: String
+-  leader: Person
+-  members: [Person]
+-}
+-
+-enum GROUP_TYPE {
+-  Serving
+-  Community
+-  Family
+-}
+-
+ type ImageMedia implements Media {
+   name: String
+   key: String
+@@ -351,7 +328,6 @@ type Person implements Node {
+   birthDate: String
+   photo: ImageMediaSource
+   campus: Campus
+-  groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
+ }
+ 
+ input PushSettingsInput {
+@@ -372,7 +348,6 @@ type Query {
+   scripture(query: String!): Scripture
+   scriptures(query: String!): [Scripture]
+   userPass: Pass
+-  search(query: String!, first: Int, after: String): SearchResultsConnection
+   campuses(location: CampusLocationInput): [Campus]
+   userFeedFeatures: [Feature]
+ }
+@@ -388,38 +363,18 @@ type ScriptureFeature implements Feature & Node {
+   id: ID!
+   order: Int
+   scriptures: [Scripture]
+-  sharing: SharableFeature
+-}
+-
+-type SearchResult {
+-  cursor: String
+-  title: String
+-  summary: String
+-  coverImage: ImageMedia
+-  node: Node
+-}
+-
+-type SearchResultsConnection {
+-  edges: [SearchResult]
+-  pageInfo: PaginationInfo
+ }
+ 
+ interface Sharable {
++  url: String
+   message: String
+   title: String
+-  url: String @deprecated(reason: "Not supported on the interface")
+ }
+ 
+ type SharableContentItem implements Sharable {
+-  message: String
+-  title: String
+   url: String
+-}
+-
+-type SharableFeature implements Sharable {
+   message: String
+   title: String
+-  url: String @deprecated(reason: "Not supported on a feature")
+ }
+ 
+ type SmsPinResult {
+@@ -430,7 +385,6 @@ type TextFeature implements Feature & Node {
+   id: ID!
+   order: Int
+   body: String
+-  sharing: SharableFeature
+ }
+ 
+ type Theme {
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 8c33796..a4d5d88 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "1.2.0-beta.0",
++  "version": "1.1.0-beta.3",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -34,18 +34,17 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-algolia-search": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-analytics": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-bible": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-church-online": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-cloudinary": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-onesignal": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-passes": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-rock": "^1.2.0-beta.0",
+-    "@apollosproject/data-connector-twilio": "^1.2.0-beta.0",
+-    "@apollosproject/rock-apollo-data-source": "^1.2.0-beta.0",
+-    "@apollosproject/server-core": "^1.2.0-beta.0",
++    "@apollosproject/config": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-analytics": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-bible": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-church-online": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-cloudinary": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-onesignal": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-passes": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-rock": "^1.1.0-beta.3",
++    "@apollosproject/data-connector-twilio": "^1.1.0-beta.3",
++    "@apollosproject/rock-apollo-data-source": "^1.1.0-beta.3",
++    "@apollosproject/server-core": "^1.1.0-beta.3",
+     "apollo-server": "^2.0.5",
+     "apollo-server-express": "2.4.8",
+     "color": "3.0.0",
+@@ -56,8 +55,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.2.0-beta.0",
+-    "@apollosproject/babel-preset-apollos": "^1.2.0-beta.0",
++    "@apollosproject/apollo-server-env-mock": "^1.1.0-beta.3",
++    "@apollosproject/babel-preset-apollos": "^1.1.0-beta.3",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@entria/graphql-findbreakingchanges": "^1.0.1",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 0cc46b7..60ee373 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -7,7 +7,6 @@ import * as Scripture from '@apollosproject/data-connector-bible';
+ import * as LiveStream from '@apollosproject/data-connector-church-online';
+ import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+ import * as OneSignal from '@apollosproject/data-connector-onesignal';
+-import * as Search from '@apollosproject/data-connector-algolia-search';
+ import * as Pass from '@apollosproject/data-connector-passes';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+@@ -23,10 +22,8 @@ import {
+   Template,
+   AuthSms,
+   Campus,
+-  Group,
+   BinaryFiles,
+   Features,
+-  Events,
+ } from '@apollosproject/data-connector-rock';
+ import * as Theme from './theme';
+ 
+@@ -54,13 +51,10 @@ const data = {
+   PersonalDevice,
+   OneSignalWithRock,
+   Pass,
+-  Search,
+   Template,
+   Campus,
+-  Group,
+   BinaryFiles,
+   Features,
+-  Events,
+ };
+ 
+ const {
+@@ -69,17 +63,9 @@ const {
+   schema,
+   context,
+   applyServerMiddleware,
+-  setupJobs,
+ } = createApolloServerConfig(data);
+ 
+-export {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-};
++export { dataSources, resolvers, schema, context, applyServerMiddleware };
+ 
+ // the upload Scalar is added
+ export const testSchema = [
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 8d7efa4..74a305e 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -9,7 +9,6 @@ import {
+   context,
+   dataSources,
+   applyServerMiddleware,
+-  setupJobs,
+ } from './data';
+ 
+ export { resolvers, schema, testSchema };
+@@ -45,8 +44,6 @@ const apolloServer = new ApolloServer({
+ const app = express();
+ 
+ applyServerMiddleware({ app, dataSources, context });
+-setupJobs({ app, dataSources, context });
+-
+ apolloServer.applyMiddleware({ app });
+ apolloServer.applyMiddleware({ app, path: '/' });
+ 
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/pass.json b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+index a3916b3..8909bd1 100644
+--- a/apollos-church-api/wallet-passes/checkin.pass/pass.json
++++ b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+@@ -7,7 +7,6 @@
+   "logoText": "Apollos Church",
+   "backgroundColor": "rgb(0,103,109)",
+   "foregroundColor": "rgb(248,247,244)",
+-  "labelColor": "rgb(248,247,244)",
+   "serialNumber": "checkinpass-{{ person | GetPersonAlternateId }}",
+   "thumbnail": {
+     "uri": "{{ person.Photo.Url }}&format=png&height=200"
