@@ -1,0 +1,709 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index c1cab2b..2ff1813 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -146,7 +146,7 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 22
++        versionCode 20
+         versionName "1.2.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index b501ef1..6a4e273 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.0-beta.2",
++    "version": "1.2.0-beta.0",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 0c86a55..8bf013d 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -1,6 +1,6 @@
+ PODS:
+   - boost-for-react-native (1.63.0)
+-  - BVLinearGradient (2.5.4):
++  - BVLinearGradient (2.5.6):
+     - React
+   - DoubleConversion (1.1.6)
+   - Folly (2018.10.22.00):
+@@ -76,16 +76,14 @@ PODS:
+     - React
+   - react-native-safari-view (1.0.0):
+     - React
+-  - react-native-safe-area-context (0.3.6):
+-    - React
+   - react-native-splash-screen (3.2.0):
+     - React
+-  - react-native-video (5.0.0):
++  - react-native-video (5.0.2):
+     - React
+-    - react-native-video/Video (= 5.0.0)
+-  - react-native-video/Video (5.0.0):
++    - react-native-video/Video (= 5.0.2)
++  - react-native-video/Video (5.0.2):
+     - React
+-  - react-native-webview (5.10.0):
++  - react-native-webview (5.12.1):
+     - React
+   - React-RCTActionSheet (0.60.5):
+     - React-Core (= 0.60.5)
+@@ -114,17 +112,17 @@ PODS:
+     - React-Core
+   - RNAirplay (1.0.0):
+     - React
+-  - RNCAsyncStorage (1.5.1):
++  - RNCAsyncStorage (1.6.1):
+     - React
+-  - RNDeviceInfo (2.1.2):
++  - RNDeviceInfo (2.3.2):
+     - React
+-  - RNGestureHandler (1.3.0):
++  - RNGestureHandler (1.4.1):
+     - React
+   - RNInAppBrowser (3.1.0):
+     - React
+   - RNScreens (1.0.0-alpha.23):
+     - React
+-  - RNSVG (9.4.0):
++  - RNSVG (9.9.3):
+     - React
+   - yoga (0.60.5.React)
+ 
+@@ -148,7 +146,6 @@ DEPENDENCIES:
+   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+   - react-native-passkit-wallet (from `../node_modules/react-native-passkit-wallet`)
+   - react-native-safari-view (from `../node_modules/react-native-safari-view`)
+-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+   - react-native-video (from `../node_modules/react-native-video`)
+   - react-native-webview (from `../node_modules/react-native-webview`)
+@@ -216,8 +213,6 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-passkit-wallet"
+   react-native-safari-view:
+     :path: "../node_modules/react-native-safari-view"
+-  react-native-safe-area-context:
+-    :path: "../node_modules/react-native-safe-area-context"
+   react-native-splash-screen:
+     :path: "../node_modules/react-native-splash-screen"
+   react-native-video:
+@@ -265,7 +260,7 @@ EXTERNAL SOURCES:
+ 
+ SPEC CHECKSUMS:
+   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+-  BVLinearGradient: 8cbc5155c978f2e43098818c91d206d07aae6d30
++  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
+   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+@@ -285,10 +280,9 @@ SPEC CHECKSUMS:
+   react-native-onesignal: 8958311abbd9125f26e600914e48833b57321cbf
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+   react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
+-  react-native-safe-area-context: e380a6f783ccaec848e2f3cc8eb205a62362950d
+   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+-  react-native-video: 6555881252c8ca039760e1cd6df28ac28ffb2baf
+-  react-native-webview: 3c79685b61a68d1fe99136f98f2f34b04dce2e02
++  react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
++  react-native-webview: 5036ed4a973ad1deeeff118262d2df7b60b3419d
+   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
+   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e
+   React-RCTBlob: 5e2b55f76e9a1c7ae52b826923502ddc3238df24
+@@ -301,12 +295,12 @@ SPEC CHECKSUMS:
+   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
+   rn-fetch-blob: 651b8d076b43d0d7aa294a3d9ec16c00aab8bef9
+   RNAirplay: 75777dd55dafbd3687703c3eb9c290ea6cc43248
+-  RNCAsyncStorage: b63d6e83fc629b01df6b624688f17944cea5637f
+-  RNDeviceInfo: 75dac2d7cd6b638b512cc9266ce48a39661fed0e
+-  RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
++  RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
++  RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
++  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+   RNInAppBrowser: 9d1ffb9db0d0cbdf03f528f1f0624b2c533b93fd
+   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+-  RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
++  RNSVG: 2a15d0d14d171ba610db927190604d1ab223f413
+   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+ 
+ PODFILE CHECKSUM: d235853c2d054909a0114df39a2529360918990d
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index c1fe931..8b8dba9 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>22</string>
++	<string>20</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 29bddee..261aeea 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>22</string>
++	<string>20</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index a24c843..b75c22e 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -672,7 +672,7 @@
+ 			baseConfigurationReference = 54F271B8EB67A4997A2C7D96 /* Pods-apolloschurchapp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 18;
++				CURRENT_PROJECT_VERSION = 16;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -698,7 +698,7 @@
+ 			baseConfigurationReference = 1F8F5BC4745C8F22C695573D /* Pods-apolloschurchapp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 18;
++				CURRENT_PROJECT_VERSION = 16;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index f4cd92d..7f789f7 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>23</string>
++	<string>21</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+@@ -55,10 +55,8 @@
+ 	</dict>
+ 	<key>NSCameraUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
+-	<key>NSLocationAlwaysUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
++	<string />
+ 	<key>NSMicrophoneUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
+ 	<key>NSPhotoLibraryAddUsageDescription</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 0475493..dab023f 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>22</string>
++	<string>20</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 4b67053..946e5e0 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -1,12 +1,6 @@
+ import React from 'react';
+ import { NativeModules } from 'react-native';
+ // We ran into an issue where SafeAreaView would break jest tests.
+-
+-jest.mock('../apollos-ui-kit/node_modules/react-native-safe-area-context/', () => ({
+-  SafeAreaConsumer: ({ children }) => children({ top: 0, bottom: 0, left: 0, right: 0 }),
+-  SafeAreaProvider: ({ children }) => children,
+-}));
+-
+ jest.mock('react-navigation', () => {
+   const ActualNavigation = require.requireActual('react-navigation');
+   return {
+@@ -72,7 +66,6 @@ jest.mock('@apollosproject/ui-analytics', () => ({
+   track: () => '',
+   AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
+   AnalyticsProvider: ({ children }) => children,
+-  TrackEventWhenLoaded: () => null,
+   withTrackOnPress: (Component) => (props) => <Component {...props} />,
+ }));
+ 
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+index f833f5a..a5d875a 100644
+--- a/apolloschurchapp/metro.config.js
++++ b/apolloschurchapp/metro.config.js
+@@ -26,7 +26,6 @@ const localDeps = [
+ 
+ const sharedNativeModules = [
+   'react-native-linear-gradient',
+-  'react-native-safe-area-context',
+   'react-native-svg',
+   'react-native-onesignal',
+   'react-native-music-control',
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index f2ce36d..90f80d2 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.0-beta.2",
++  "version": "1.2.0-beta.0",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -40,7 +40,7 @@
+     "postinstall": "jetify",
+     "pods": "./scripts/install_pods.sh",
+     "start": "react-native start",
+-    "test": "TZ=UTC jest"
++    "test": "jest"
+   },
+   "jest": {
+     "preset": "react-native",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.0-beta.2",
+-    "@apollosproject/ui-auth": "^1.2.0-beta.2",
+-    "@apollosproject/ui-htmlview": "^1.2.0-beta.2",
+-    "@apollosproject/ui-kit": "^1.2.0-beta.2",
+-    "@apollosproject/ui-media-player": "^1.2.0-beta.2",
+-    "@apollosproject/ui-notifications": "^1.2.0-beta.2",
+-    "@apollosproject/ui-onboarding": "^1.2.0-beta.2",
+-    "@apollosproject/ui-passes": "^1.2.0-beta.2",
+-    "@apollosproject/ui-scripture": "^1.2.0-beta.2",
+-    "@apollosproject/ui-storybook": "^1.2.0-beta.2",
++    "@apollosproject/ui-analytics": "^1.2.0-beta.0",
++    "@apollosproject/ui-auth": "^1.2.0-beta.0",
++    "@apollosproject/ui-htmlview": "^1.2.0-beta.0",
++    "@apollosproject/ui-kit": "^1.2.0-beta.0",
++    "@apollosproject/ui-media-player": "^1.2.0-beta.0",
++    "@apollosproject/ui-notifications": "^1.2.0-beta.0",
++    "@apollosproject/ui-onboarding": "^1.2.0-beta.0",
++    "@apollosproject/ui-passes": "^1.2.0-beta.0",
++    "@apollosproject/ui-scripture": "^1.2.0-beta.0",
++    "@apollosproject/ui-storybook": "^1.2.0-beta.0",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+@@ -108,7 +108,6 @@
+     "react-native-onesignal": "3.3.2",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-safari-view": "2.1.0",
+-    "react-native-safe-area-context": "^0.3.6",
+     "react-native-safe-area-view": "0.13.1",
+     "react-native-screens": "^1.0.0-alpha.23",
+     "react-native-splash-screen": "3.2.0",
+diff --git a/apolloschurchapp/src/event/Event.js b/apolloschurchapp/src/event/Event.js
+deleted file mode 100644
+index 270a48f..0000000
+--- a/apolloschurchapp/src/event/Event.js
++++ /dev/null
+@@ -1,65 +0,0 @@
+-import React from 'react';
+-import { get } from 'lodash';
+-import PropTypes from 'prop-types';
+-import moment from 'moment';
+-import {
+-  GradientOverlayImage,
+-  BackgroundView,
+-  PaddedView,
+-  H2,
+-  Paragraph,
+-  StretchyView,
+-} from '@apollosproject/ui-kit';
+-
+-import { FlexedScrollView, EventInfoItem } from './components';
+-
+-const Event = ({ event, loading }) => {
+-  const coverImageSources = get(event, 'image.sources', []);
+-  return (
+-    <BackgroundView>
+-      <StretchyView>
+-        {({ Stretchy, ...scrollViewProps }) => (
+-          <FlexedScrollView {...scrollViewProps}>
+-            {coverImageSources.length || loading ? (
+-              <Stretchy>
+-                <GradientOverlayImage
+-                  isLoading={!coverImageSources.length && loading}
+-                  source={coverImageSources}
+-                />
+-              </Stretchy>
+-            ) : null}
+-            <PaddedView vertical={false}>
+-              <H2 padded isLoading={!event.name && loading}>
+-                {event.name}
+-              </H2>
+-              <Paragraph>
+-                <EventInfoItem
+-                  icon={'time'}
+-                  title={moment(event.start).format('ddd, MMMM Do, YYYY')}
+-                  subtitle={`${moment(event.start).format('LT')} — ${moment(
+-                    event.end
+-                  ).format('LT')}`}
+-                />
+-                <EventInfoItem icon={'pin'} title={event.location} />
+-              </Paragraph>
+-            </PaddedView>
+-          </FlexedScrollView>
+-        )}
+-      </StretchyView>
+-    </BackgroundView>
+-  );
+-};
+-
+-Event.propTypes = {
+-  event: PropTypes.shape({
+-    __typename: PropTypes.string,
+-    id: PropTypes.string,
+-    name: PropTypes.string,
+-    start: PropTypes.string,
+-    end: PropTypes.string,
+-    location: PropTypes.string,
+-  }),
+-  loading: PropTypes.bool,
+-};
+-
+-export default Event;
+diff --git a/apolloschurchapp/src/event/Event.tests.js b/apolloschurchapp/src/event/Event.tests.js
+deleted file mode 100644
+index 10cf33d..0000000
+--- a/apolloschurchapp/src/event/Event.tests.js
++++ /dev/null
+@@ -1,31 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import moment from 'moment';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import Event from './Event';
+-
+-describe('The Event component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <Event
+-          event={{
+-            __typename: 'Event',
+-            id: 'Event:123',
+-            start: moment('2019-09-26T15:10:51.200Z')
+-              .utc()
+-              .toJSON(),
+-            end: moment('2019-09-26T17:10:51.200Z')
+-              .utc()
+-              .toJSON(),
+-            location: 'Willow Creek, Chicago',
+-            image: { sources: [{ url: 'https://url.com/image.jpg' }] },
+-          }}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/event/EventConnected.js b/apolloschurchapp/src/event/EventConnected.js
+deleted file mode 100644
+index 71f0a3b..0000000
+--- a/apolloschurchapp/src/event/EventConnected.js
++++ /dev/null
+@@ -1,81 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-import PropTypes from 'prop-types';
+-
+-import { ErrorCard, ThemeMixin } from '@apollosproject/ui-kit';
+-
+-import { TrackEventWhenLoaded } from '@apollosproject/ui-analytics';
+-
+-import NavigationHeader from '../content-single/NavigationHeader';
+-import Event from './Event';
+-import GET_EVENT from './getEvent';
+-
+-class EventConnected extends PureComponent {
+-  static propTypes = {
+-    navigation: PropTypes.shape({
+-      getParam: PropTypes.func,
+-      push: PropTypes.func,
+-    }),
+-  };
+-
+-  static navigationOptions = {
+-    header: NavigationHeader,
+-    headerTransparent: true,
+-    headerMode: 'float',
+-  };
+-
+-  get eventId() {
+-    return this.props.navigation.getParam('eventId', []);
+-  }
+-
+-  get queryVariables() {
+-    return { eventId: this.eventId };
+-  }
+-
+-  renderWithData = ({ loading, error, data }) => {
+-    if (error) return <ErrorCard error={error} />;
+-
+-    const event = data.node || {};
+-
+-    const { theme = {} } = event;
+-
+-    return (
+-      <ThemeMixin
+-        mixin={{
+-          type: get(theme, 'type', 'light').toLowerCase(),
+-          colors: get(theme, 'colors'),
+-        }}
+-      >
+-        <TrackEventWhenLoaded
+-          loaded={!!(!loading && event.name)}
+-          eventName={'View Event'}
+-          properties={{
+-            title: event.name,
+-            eventId: this.eventId,
+-          }}
+-        />
+-        <Event
+-          id={this.eventId}
+-          event={event}
+-          loading={loading}
+-          error={error}
+-        />
+-      </ThemeMixin>
+-    );
+-  };
+-
+-  render() {
+-    return (
+-      <Query
+-        query={GET_EVENT}
+-        fetchPolicy="network-only"
+-        variables={this.queryVariables}
+-      >
+-        {this.renderWithData}
+-      </Query>
+-    );
+-  }
+-}
+-
+-export default EventConnected;
+diff --git a/apolloschurchapp/src/event/EventConnected.tests.js b/apolloschurchapp/src/event/EventConnected.tests.js
+deleted file mode 100644
+index ca7abcd..0000000
+--- a/apolloschurchapp/src/event/EventConnected.tests.js
++++ /dev/null
+@@ -1,52 +0,0 @@
+-import React from 'react';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import moment from 'moment';
+-import { renderWithApolloData } from '../utils/testUtils';
+-import getEvent from './getEvent';
+-import EventConnected from './EventConnected';
+-
+-const mocks = {
+-  request: {
+-    query: getEvent,
+-    variables: { eventId: 'Event:123' },
+-  },
+-  result: {
+-    data: {
+-      node: {
+-        __typename: 'Event',
+-        id: 'Event:123',
+-        start: moment('2019-09-26T15:10:51.200Z')
+-          .utc()
+-          .toJSON(),
+-        end: moment('2019-09-26T17:10:51.200Z')
+-          .utc()
+-          .toJSON(),
+-        location: 'Willow Creek, Chicago',
+-        name: 'Cookout',
+-        image: {
+-          __typename: 'ImageMedia',
+-          sources: [
+-            {
+-              uri: 'https://url.com/image.jpg',
+-              __typename: 'ImageMediaSource',
+-            },
+-          ],
+-        },
+-      },
+-    },
+-  },
+-};
+-
+-describe('EventConnected component', () => {
+-  it('renders without errors', async () => {
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={[mocks]}>
+-        <EventConnected navigation={{ getParam: () => 'Event:123' }} />
+-      </Providers>
+-    );
+-
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/event/components.js b/apolloschurchapp/src/event/components.js
+deleted file mode 100644
+index 509e400..0000000
+--- a/apolloschurchapp/src/event/components.js
++++ /dev/null
+@@ -1,44 +0,0 @@
+-import React from 'react';
+-import { ScrollView, View } from 'react-native';
+-import PropTypes from 'prop-types';
+-import { styled, withTheme, H6, H4, Icon } from '@apollosproject/ui-kit';
+-
+-const FlexedScrollView = styled({ flex: 1 })(ScrollView);
+-
+-const StyledIcon = withTheme(({ theme: { colors, sizing } }) => ({
+-  fill: colors.text.tertiary,
+-  size: sizing.baseUnit * 1.5,
+-  style: {
+-    marginRight: 8,
+-  },
+-}))(Icon);
+-
+-const StyledH6 = styled(({ theme: { colors, sizing } }) => ({
+-  color: colors.text.tertiary,
+-  fontSize: sizing.baseUnit * 0.875,
+-  marginTop: sizing.baseUnit / 4,
+-}))(H6);
+-
+-const EventInfoContainer = styled({ marginBottom: 24, flexDirection: 'row' })(
+-  View
+-);
+-
+-const TextContainer = styled({ flexDirection: 'column' })(View);
+-
+-const EventInfoItem = ({ icon, title, subtitle }) => (
+-  <EventInfoContainer>
+-    <StyledIcon name={icon} />
+-    <TextContainer>
+-      <H4 bold>{title}</H4>
+-      <StyledH6>{subtitle}</StyledH6>
+-    </TextContainer>
+-  </EventInfoContainer>
+-);
+-
+-EventInfoItem.propTypes = {
+-  icon: PropTypes.string.isRequired,
+-  title: PropTypes.string,
+-  subtitle: PropTypes.string,
+-};
+-
+-export { FlexedScrollView, EventInfoItem };
+diff --git a/apolloschurchapp/src/event/getEvent.js b/apolloschurchapp/src/event/getEvent.js
+deleted file mode 100644
+index 7035e1b..0000000
+--- a/apolloschurchapp/src/event/getEvent.js
++++ /dev/null
+@@ -1,28 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export const EVENT_FRAGMENT = gql`
+-  fragment eventFragment on Event {
+-    id
+-    name
+-    location
+-    start
+-    end
+-    image {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
+-
+-export default gql`
+-  query getEvent($eventId: ID!) {
+-    node(id: $eventId) {
+-      __typename
+-      ... on Event {
+-        ...eventFragment
+-      }
+-    }
+-  }
+-  ${EVENT_FRAGMENT}
+-`;
+diff --git a/apolloschurchapp/src/event/index.js b/apolloschurchapp/src/event/index.js
+deleted file mode 100644
+index b065c4c..0000000
+--- a/apolloschurchapp/src/event/index.js
++++ /dev/null
+@@ -1,17 +0,0 @@
+-import { createStackNavigator } from 'react-navigation';
+-
+-import Event from './EventConnected';
+-
+-const EventNavigator = createStackNavigator(
+-  {
+-    Event,
+-  },
+-  {
+-    initialRouteName: 'Event',
+-    headerMode: 'float',
+-    headerTransitionPreset: 'fade-in-place',
+-    navigationOptions: { header: null },
+-  }
+-);
+-
+-export default EventNavigator;
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 114240e..3d63ed2 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -12,7 +12,6 @@ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
+ import Providers from './Providers';
+ import NavigationService from './NavigationService';
+ import ContentSingle from './content-single';
+-import Event from './event';
+ import Tabs from './tabs';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+@@ -42,7 +41,6 @@ const AppNavigator = createStackNavigator(
+     ProtectedRoute: ProtectedRouteWithSplashScreen,
+     Tabs,
+     ContentSingle,
+-    Event,
+     Auth: EnhancedAuth,
+     PersonalDetails,
+     ChangePassword,
+diff --git a/apolloschurchapp/src/tabs/home/Features/index.js b/apolloschurchapp/src/tabs/home/Features/index.js
+index 80aebcb..87878f3 100644
+--- a/apolloschurchapp/src/tabs/home/Features/index.js
++++ b/apolloschurchapp/src/tabs/home/Features/index.js
+@@ -109,12 +109,6 @@ const Features = memo(({ navigation }) => (
+                       transitionKey: 2,
+                     });
+                   }
+-                  if (action === 'READ_EVENT') {
+-                    navigation.navigate('Event', {
+-                      eventId: relatedNode.id,
+-                      transitionKey: 2,
+-                    });
+-                  }
+                 }}
+                 onPressCardActionButton={() =>
+                   navigation.navigate('ContentFeed', {

@@ -1,0 +1,944 @@
+diff --git a/apollos-church-api/.envExample b/apollos-church-api/.envExample
+index 8a33ffe..8559468 100644
+--- a/apollos-church-api/.envExample
++++ b/apollos-church-api/.envExample
+@@ -1,4 +1,18 @@
+ ROCK_API=
+ ROCK_TOKEN=
+-ESV_KEY=
+-CLOUDINARY_URL=
+\ No newline at end of file
++BIBLE_API_KEY=
++ENGINE_API_KEY=
++CLOUDINARY_URL=
++ONE_SIGNAL_REST_KEY=
++PORT=4000
++ROOT_URL=http://localhost:4000
++
++TWILIO_ACCOUNT_SID=
++TWILIO_AUTH_TOKEN=
++TWILIO_FROM_NUMBER=
++
++
++PASS_WWDR_CERT=
++PASS_SIGNER_CERT=
++PASS_SIGNER_KEY=
++PASS_SIGNER_PASSPHRASE=
+\ No newline at end of file
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+new file mode 100644
+index 0000000..6302f78
+--- /dev/null
++++ b/apollos-church-api/apollos.json
+@@ -0,0 +1,4 @@
++{
++    "version": "1.2.0-beta.2",
++    "environment": "api"
++}
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 564a740..38a692d 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -16,11 +16,22 @@ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+   IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
++  SHARE_URL: https://apollosrock.newspring.cc
+   # This should match the timezone of the Rock server
+   TIMEZONE: 'America/New_York'
++  USE_PLUGIN: true
+ ONE_SIGNAL:
+   APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+   REST_KEY: ${ONE_SIGNAL_REST_KEY}
++CHURCH_ONLINE:
++  URL: https://apollos.churchonline.org/api/v1/
++  MEDIA_URLS: []
++  WEB_VIEW_URL: https://apollos.churchonline.org/
++ALGOLIA:
++  APPLICATION_ID: ${ALGOLIA_APP_ID}
++  API_KEY: ${ALGOLIA_API_KEY}
++  # TODO: should we support multiple indices? how?
++  SEARCH_INDEX: test_ContentItems
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+@@ -46,6 +57,9 @@ CLOUDINARY:
+   # value should look something like
+   # cloudinary://123123123:adkfnla_adASDv_adAS@test
+   URL: ${CLOUDINARY_URL}
++ENGINE:
++  API_KEY: ${ENGINE_API_KEY}
++  SCHEMA_TAG: ${ENGINE_SCHEMA_TAG}
+ 
+ # This key holds various properties that allow our GraphQL server to map to your Rock Instance
+ ROCK_MAPPINGS:
+@@ -70,9 +84,16 @@ ROCK_MAPPINGS:
+       EntityType: ContentChannelItem
+     UniversalContentItem:
+       EntityType: ContentChannelItem
++    WeekendContentItem:
++      ContentChannelId: [5]
++      EntityType: ContentChannelItem
+     ContentItem:
+       EntityType: ContentChannelItem
+ 
++  DATAVIEW_CATEGORIES:
++    # Id of the category used to store all persona dataviews
++    PersonaId: 210
++
+   # Apollos will pull these content channels and expose them in the app on the discover screen.
+   DISCOVER_CONTENT_CHANNEL_IDS:
+     - 2
+@@ -82,6 +103,7 @@ ROCK_MAPPINGS:
+     - 8
+   # Apollos will pull content items from these channels and expose them on the user feed
+   # However, it will not expose the channel itself.
++  # These channels are also pulled when indexing searchable content.
+   FEED_CONTENT_CHANNEL_IDS:
+     - 1
+     - 2
+@@ -91,6 +113,28 @@ ROCK_MAPPINGS:
+     - 6
+     - 8
+ 
++  CAMPAIGN_CHANNEL_IDS:
++    - 11
++
++  SERMON_CHANNEL_ID: 5
++
++  SERVING_GROUP_TYPE_ID: 23
++  COMMUNITY_GROUP_TYPE_ID: 25
++  FAMILY_GROUP_TYPE_ID: 10
++
++HOME_FEATURES:
++  - title: FOR YOU
++    algorithms: [SERMON_CHILDREN, PERSONA_FEED]
++    subtitle: Explore what God calls you to today
++  - title: BULLETIN
++    subtitle: What's happening at apollos?
++    algorithms:
++      - type: CONTENT_CHANNEL
++        arguments:
++          contentChannelId: 13
++      - type: UPCOMING_EVENTS
++
++
+ # Default mapping of field types -> ids. There's probably no reason to edit this.
+ ROCK_CONSTANTS:
+   TEXT: 1
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+new file mode 100644
+index 0000000..2d2b05c
+--- /dev/null
++++ b/apollos-church-api/local.graphql
+@@ -0,0 +1,521 @@
++enum ACTION_FEATURE_ACTION {
++  READ_CONTENT
++  READ_EVENT
++}
++
++type ActionListAction {
++  id: ID!
++  title: String
++  subtitle: String
++  image: ImageMedia
++  relatedNode: Node
++  action: ACTION_FEATURE_ACTION
++}
++
++type ActionListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  actions: [ActionListAction]
++}
++
++input AnalyticsDeviceInfo {
++  platform: AnalyticsPlatform
++  deviceId: String
++  deviceModel: String
++  osVersion: String
++  appVersion: String
++}
++
++input AnalyticsIdentifyInput {
++  traits: [AnalyticsMetaField]
++  anonymousId: String!
++  deviceInfo: AnalyticsDeviceInfo
++}
++
++input AnalyticsMetaField {
++  field: String!
++  value: AnalyticsValue
++}
++
++enum AnalyticsPlatform {
++  iOS
++  Android
++}
++
++type AnalyticsResult {
++  success: Boolean
++}
++
++input AnalyticsTrackInput {
++  eventName: String!
++  properties: [AnalyticsMetaField]
++  anonymousId: String
++  deviceInfo: AnalyticsDeviceInfo
++}
++
++scalar AnalyticsValue
++
++type AudioMedia implements Media {
++  name: String
++  key: String
++  sources: [AudioMediaSource]
++}
++
++type AudioMediaSource implements MediaSource {
++  uri: String
++}
++
++type AuthenticatedUser {
++  id: ID!
++  profile: Person
++  rockToken: String
++}
++
++type Authentication {
++  user: AuthenticatedUser
++  token: String
++}
++
++enum CacheControlScope {
++  PUBLIC
++  PRIVATE
++}
++
++type Campus implements Node {
++  id: ID!
++  name: String
++  street1: String
++  street2: String
++  city: String
++  state: String
++  postalCode: String
++  latitude: Float
++  longitude: Float
++  image: ImageMediaSource
++  distanceFromLocation(location: CampusLocationInput): Float
++  events: [Event]
++}
++
++input CampusLocationInput {
++  latitude: Float!
++  longitude: Float!
++}
++
++"""A rgb color string"""
++scalar Color
++
++type ContentChannel implements Node {
++  id: ID!
++  name: String
++  description: String
++  childContentChannels: [ContentChannel]
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  iconName: String
++}
++
++interface ContentItem {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++type ContentItemsConnection {
++  edges: [ContentItemsConnectionEdge]
++  pageInfo: PaginationInfo
++}
++
++type ContentItemsConnectionEdge {
++  node: ContentItem
++  cursor: String
++}
++
++input ContentItemsConnectionInput {
++  first: Int
++  after: String
++}
++
++type ContentSeriesContentItem implements ContentItem & Node {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++  features: [Feature]
++}
++
++type DevotionalContentItem implements ContentItem & Node {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++type Event implements Node {
++  id: ID!
++  name: String
++  location: String
++  start: String
++  end: String
++  image: ImageMedia
++}
++
++interface Feature {
++  id: ID!
++  order: Int
++}
++
++enum GENDER {
++  Male
++  Female
++  Unknown
++}
++
++type Group implements Node {
++  id: ID!
++  name: String
++  leader: Person @deprecated(reason: "No longer used, use 'leaders' instead")
++  leaders: [Person]
++  members: [Person]
++}
++
++enum GROUP_TYPE {
++  Serving
++  Community
++  Family
++}
++
++type ImageMedia implements Media {
++  name: String
++  key: String
++  sources: [ImageMediaSource]
++}
++
++type ImageMediaSource implements MediaSource {
++  uri: String
++}
++
++enum LIKE_OPERATION {
++  Like
++  Unlike
++}
++
++input LikeEntityInput {
++  nodeId: ID!
++  operation: LIKE_OPERATION!
++}
++
++type LiveStream {
++  isLive: Boolean
++  eventStartTime: String
++  media: VideoMedia
++  webViewUrl: String
++}
++
++interface Media {
++  name: String
++  key: String
++  sources: [MediaSource]
++}
++
++type MediaContentItem implements ContentItem & Node {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++enum MediaInputType {
++  IMAGE
++  VIDEO
++  AUDIO
++}
++
++interface MediaSource {
++  uri: String
++}
++
++type Mutation {
++  _placeholder: Boolean
++  updateLikeEntity(input: LikeEntityInput!): ContentItem
++  updateProfileField(input: UpdateProfileInput!): Person
++  updateProfileFields(input: [UpdateProfileInput]!): Person
++  uploadProfileImage(file: Upload!, size: Int!): Person
++  authenticate(identity: String!, password: String!): Authentication
++  changePassword(password: String!): Authentication
++  registerPerson(email: String!, password: String!): Authentication
++  requestSmsLoginPin(phoneNumber: String!): SmsPinResult
++  authenticateWithSms(phoneNumber: String!, pin: String!): Authentication
++  identifySelf(input: AnalyticsIdentifyInput!): AnalyticsResult
++  trackEvent(input: AnalyticsTrackInput!): AnalyticsResult
++  updateUserPushSettings(input: PushSettingsInput!): Person
++  updateUserCampus(campusId: String!): Person
++}
++
++interface Node {
++  id: ID!
++}
++
++type PaginationInfo {
++  startCursor: String
++  endCursor: String
++}
++
++type Pass implements Node {
++  id: ID!
++  type: PassType
++  description: String
++  logo: ImageMediaSource
++  thumbnail: ImageMediaSource
++  barcode: ImageMediaSource
++  primaryFields: [PassField]
++  secondaryFields: [PassField]
++  backgroundColor: Color
++  foregroundColor: Color
++  labelColor: Color
++  logoText: String
++  passkitFileUrl: String
++}
++
++type PassField {
++  key: String!
++  label: String
++  value: String!
++  textAlignment: PassFieldTextAlignment
++}
++
++enum PassFieldTextAlignment {
++  LEFT
++  CENTER
++  RIGHT
++  NATURAL
++}
++
++enum PassType {
++  GENERIC
++}
++
++type Person implements Node {
++  id: ID!
++  firstName: String
++  lastName: String
++  nickName: String
++  email: String
++  gender: GENDER
++  birthDate: String
++  photo: ImageMediaSource
++  campus: Campus
++  groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
++}
++
++input PushSettingsInput {
++  enabled: Boolean
++  pushProviderUserId: String
++}
++
++type Query {
++  _placeholder: Boolean
++  node(id: ID!): Node
++  likedContent(first: Int, after: String): ContentItemsConnection
++  contentChannels: [ContentChannel]
++  campaigns: ContentItemsConnection
++  userFeed(first: Int, after: String): ContentItemsConnection
++  personaFeed(first: Int, after: String): ContentItemsConnection
++  currentUser: AuthenticatedUser
++  liveStream: LiveStream
++  scripture(query: String!): Scripture
++  scriptures(query: String!): [Scripture]
++  userPass: Pass
++  search(query: String!, first: Int, after: String): SearchResultsConnection
++  campuses(location: CampusLocationInput): [Campus]
++  userFeedFeatures: [Feature]
++}
++
++type Scripture implements Node {
++  id: ID!
++  html: String
++  reference: String
++  copyright: String
++}
++
++type ScriptureFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  scriptures: [Scripture]
++  sharing: SharableFeature
++}
++
++type SearchResult {
++  cursor: String
++  title: String
++  summary: String
++  coverImage: ImageMedia
++  node: Node
++}
++
++type SearchResultsConnection {
++  edges: [SearchResult]
++  pageInfo: PaginationInfo
++}
++
++interface Sharable {
++  message: String
++  title: String
++  url: String @deprecated(reason: "Not supported on the interface")
++}
++
++type SharableContentItem implements Sharable {
++  message: String
++  title: String
++  url: String
++}
++
++type SharableFeature implements Sharable {
++  message: String
++  title: String
++  url: String @deprecated(reason: "Not supported on a feature")
++}
++
++type SmsPinResult {
++  success: Boolean
++}
++
++type TextFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  body: String
++  sharing: SharableFeature
++}
++
++type Theme {
++  type: ThemeType
++  colors: ThemeColors
++}
++
++type ThemeColors {
++  primary: Color
++  secondary: Color
++  screen: Color
++  paper: Color
++  alert: Color
++}
++
++enum ThemeType {
++  LIGHT
++  DARK
++}
++
++type UniversalContentItem implements ContentItem & Node {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++enum UPDATEABLE_PROFILE_FIELDS {
++  FirstName
++  LastName
++  Email
++  NickName
++  Gender
++  BirthDate
++}
++
++input UpdateProfileInput {
++  field: UPDATEABLE_PROFILE_FIELDS!
++  value: String!
++}
++
++"""The `Upload` scalar type represents a file upload."""
++scalar Upload
++
++type VideoMedia implements Media {
++  name: String
++  key: String
++  sources: [VideoMediaSource]
++  embedHtml: String
++}
++
++type VideoMediaSource implements MediaSource {
++  uri: String
++}
++
++type WeekendContentItem implements ContentItem & Node {
++  id: ID!
++  title: String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  liveStream: LiveStream
++  sharing: SharableContentItem
++  features: [Feature]
++}
++
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index da832ec..244a590 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,20 +1,20 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "0.8.0-alpha.8",
++  "version": "1.2.0-beta.2",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+-    "start": "if test \"$NOW_ENV\" = \"true\" ; then yarn start:now ; else yarn start:dev ; fi",
++    "start": "./scripts/generateLocalSchema.sh & yarn start:dev",
+     "start:dev": "nodemon ./src/index.js --exec babel-node --delay 2",
+-    "start:now": "babel-node ./src/index.js",
+     "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
+-    "test:watch": "jest --maxWorkers=2 --watch",
+     "lint": "eslint ./src --ext .js",
+     "fixlint": "eslint ./src --ext .js --fix",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+-    "release": "standard-version --release-as minor"
++    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json",
++    "schema-diff": "./scripts/schemaDiff.sh",
++    "schema-lint": "graphql-schema-linter local.graphql"
+   },
+   "engines": {
+     "node": ">=8.11.x"
+@@ -34,28 +34,36 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-bible": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-onesignal": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-passes": "^0.8.0-alpha.8",
+-    "@apollosproject/data-connector-rock": "^0.8.0-alpha.8",
+-    "@apollosproject/server-core": "^0.8.0-alpha.8",
++    "@apollosproject/config": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-algolia-search": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-analytics": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-bible": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-church-online": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-cloudinary": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-onesignal": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-passes": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-rock": "^1.2.0-beta.2",
++    "@apollosproject/data-connector-twilio": "^1.2.0-beta.2",
++    "@apollosproject/rock-apollo-data-source": "^1.2.0-beta.2",
++    "@apollosproject/server-core": "^1.2.0-beta.2",
+     "apollo-server": "^2.0.5",
++    "apollo-server-express": "2.4.8",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
++    "express": "^4.17.0",
+     "graphql": "0.13.2",
+     "prettier": "1.12.1",
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.8",
+-    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.8",
+-    "@babel/cli": "7.1.5",
+-    "@babel/core": "7.1.6",
++    "@apollosproject/apollo-server-env-mock": "^1.2.0-beta.2",
++    "@apollosproject/babel-preset-apollos": "^1.2.0-beta.2",
++    "@babel/cli": "^7.4.5",
++    "@babel/core": "^7.4.5",
++    "@entria/graphql-findbreakingchanges": "^1.0.1",
+     "codecov": "3.0.2",
++    "get-graphql-schema": "^2.1.2",
++    "graphql-schema-linter": "^0.2.0",
+     "nodemon": "1.18.7"
+   }
+ }
+diff --git a/apollos-church-api/scripts/generateLocalSchema.sh b/apollos-church-api/scripts/generateLocalSchema.sh
+new file mode 100755
+index 0000000..869e5a8
+--- /dev/null
++++ b/apollos-church-api/scripts/generateLocalSchema.sh
+@@ -0,0 +1,28 @@
++PING_SERVER="curl 'http://localhost:4000/graphql' -H 'content-type: application/json' -H 'accept: application/json' --data-binary '{\"query\":\"{_placeholder}\"}' > /dev/null 2>&1"
++
++if eval "$PING_SERVER"; then
++  echo 'Server running, downloading schema from localhost:4000'
++  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
++  echo 'Done. Check local.graphql'
++else
++  echo $*
++  if [ "$*" = "--start-server" ]; then
++    echo 'Server not running, starting server'
++    PORT=4000 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX npm run start:prod > /tmp/server-log.txt &
++    SERVER_PID=$!
++    echo "Server running... (PID $SERVER_PID)"
++  fi
++  sleep 1
++  until eval "$PING_SERVER"; do
++      sleep 1
++      echo 'Waiting for server to boot....'
++  done
++  echo 'Curling Server for most recent schema.'
++  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
++  echo 'Publishing Schema to Apollo Engine.'
++  npx apollo server:publish --endpoint=http://localhost:4000
++  if [ "$*" = "--start-server" ]; then
++    echo "Killing Server (PID $SERVER_PID)"
++    kill -9 $SERVER_PID
++  fi
++fi
+diff --git a/apollos-church-api/scripts/schemaDiff.sh b/apollos-church-api/scripts/schemaDiff.sh
+new file mode 100755
+index 0000000..67404e4
+--- /dev/null
++++ b/apollos-church-api/scripts/schemaDiff.sh
+@@ -0,0 +1,13 @@
++#!/usr/bin/env bash
++sh ./scripts/generateLocalSchema.sh --start-server
++./node_modules/.bin/get-graphql-schema https://apollos-church-api-herokuapp-com.global.ssl.fastly.net > prod.graphql
++DIFF=$(graphql-findbreakingchanges prod.graphql local.graphql)
++rm prod.graphql
++echo "$DIFF"
++
++if [[ ! $DIFF = *"NO BREAKING CHANGES"* ]]
++then
++  exit 1
++else
++  exit 0
++fi
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 51ab647..a22d28c 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -7,13 +7,13 @@ import * as Scripture from '@apollosproject/data-connector-bible';
+ import * as LiveStream from '@apollosproject/data-connector-church-online';
+ import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+ import * as OneSignal from '@apollosproject/data-connector-onesignal';
++import * as Search from '@apollosproject/data-connector-algolia-search';
+ import * as Pass from '@apollosproject/data-connector-passes';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+   Interactions,
+   RockConstants,
+-  Family,
+   Person,
+   ContentItem,
+   ContentChannel,
+@@ -22,6 +22,11 @@ import {
+   PersonalDevice,
+   Template,
+   AuthSms,
++  Campus,
++  Group,
++  BinaryFiles,
++  Features,
++  Event,
+ } from '@apollosproject/data-connector-rock';
+ import * as Theme from './theme';
+ 
+@@ -45,24 +50,17 @@ const data = {
+   RockConstants,
+   Sharable,
+   Analytics,
+-  Family,
+   OneSignal,
+-  UniversalContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+-  DevotionalContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+-  ContentSeriesContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+-  MediaContentItem: {
+-    dataSource: ContentItem.dataSource,
+-  }, // alias
+   PersonalDevice,
+   OneSignalWithRock,
+   Pass,
++  Search,
+   Template,
++  Campus,
++  Group,
++  BinaryFiles,
++  Features,
++  Event,
+ };
+ 
+ const {
+@@ -71,9 +69,17 @@ const {
+   schema,
+   context,
+   applyServerMiddleware,
++  setupJobs,
+ } = createApolloServerConfig(data);
+ 
+-export { dataSources, resolvers, schema, context, applyServerMiddleware };
++export {
++  dataSources,
++  resolvers,
++  schema,
++  context,
++  applyServerMiddleware,
++  setupJobs,
++};
+ 
+ // the upload Scalar is added
+ export const testSchema = [
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 6eb9d17..8652945 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,4 +1,5 @@
+ import { ApolloServer } from 'apollo-server-express';
++import ApollosConfig from '@apollosproject/config';
+ import express from 'express';
+ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+ 
+@@ -9,6 +10,7 @@ import {
+   context,
+   dataSources,
+   applyServerMiddleware,
++  setupJobs,
+ } from './data';
+ 
+ export { resolvers, schema, testSchema };
+@@ -18,6 +20,18 @@ const isDev =
+ 
+ const extensions = isDev ? [() => new RockLoggingExtension()] : [];
+ 
++const cacheOptions = isDev
++  ? {}
++  : {
++      cacheControl: {
++        stripFormattedExtensions: false,
++        calculateHttpHeaders: true,
++        defaultMaxAge: 600,
++      },
++    };
++
++const { ENGINE } = ApollosConfig;
++
+ const apolloServer = new ApolloServer({
+   typeDefs: schema,
+   resolvers,
+@@ -34,16 +48,19 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
+-  cacheControl: {
+-    stripFormattedExtensions: false,
+-    calculateHttpHeaders: true,
+-    defaultMaxAge: 600,
++  ...cacheOptions,
++  engine: {
++    apiKey: ENGINE.API_KEY,
++    schemaTag: ENGINE.SCHEMA_TAG,
+   },
+ });
+ 
+ const app = express();
+ 
+-apolloServer.applyMiddleware({ app });
+ applyServerMiddleware({ app, dataSources, context });
++setupJobs({ app, dataSources, context });
++
++apolloServer.applyMiddleware({ app });
++apolloServer.applyMiddleware({ app, path: '/' });
+ 
+ export default app;
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/pass.json b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+index 8909bd1..a3916b3 100644
+--- a/apollos-church-api/wallet-passes/checkin.pass/pass.json
++++ b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+@@ -7,6 +7,7 @@
+   "logoText": "Apollos Church",
+   "backgroundColor": "rgb(0,103,109)",
+   "foregroundColor": "rgb(248,247,244)",
++  "labelColor": "rgb(248,247,244)",
+   "serialNumber": "checkinpass-{{ person | GetPersonAlternateId }}",
+   "thumbnail": {
+     "uri": "{{ person.Photo.Url }}&format=png&height=200"
