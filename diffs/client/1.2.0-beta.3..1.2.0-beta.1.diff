@@ -1,0 +1,361 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 77d8bc8..ef0d6be 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -146,7 +146,7 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 23
++        versionCode 21
+         versionName "1.2.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 0267479..7c9b986 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.0-beta.3",
++    "version": "1.2.0-beta.1",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 0c86a55..dbc0341 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -76,8 +76,6 @@ PODS:
+     - React
+   - react-native-safari-view (1.0.0):
+     - React
+-  - react-native-safe-area-context (0.3.6):
+-    - React
+   - react-native-splash-screen (3.2.0):
+     - React
+   - react-native-video (5.0.0):
+@@ -120,8 +118,6 @@ PODS:
+     - React
+   - RNGestureHandler (1.3.0):
+     - React
+-  - RNInAppBrowser (3.1.0):
+-    - React
+   - RNScreens (1.0.0-alpha.23):
+     - React
+   - RNSVG (9.4.0):
+@@ -148,7 +144,6 @@ DEPENDENCIES:
+   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+   - react-native-passkit-wallet (from `../node_modules/react-native-passkit-wallet`)
+   - react-native-safari-view (from `../node_modules/react-native-safari-view`)
+-  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+   - react-native-video (from `../node_modules/react-native-video`)
+   - react-native-webview (from `../node_modules/react-native-webview`)
+@@ -167,7 +162,6 @@ DEPENDENCIES:
+   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+-  - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
+   - RNScreens (from `../node_modules/react-native-screens`)
+   - RNSVG (from `../node_modules/react-native-svg`)
+   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+@@ -216,8 +210,6 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-passkit-wallet"
+   react-native-safari-view:
+     :path: "../node_modules/react-native-safari-view"
+-  react-native-safe-area-context:
+-    :path: "../node_modules/react-native-safe-area-context"
+   react-native-splash-screen:
+     :path: "../node_modules/react-native-splash-screen"
+   react-native-video:
+@@ -254,8 +246,6 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-device-info"
+   RNGestureHandler:
+     :path: "../node_modules/react-native-gesture-handler"
+-  RNInAppBrowser:
+-    :path: "../node_modules/react-native-inappbrowser-reborn"
+   RNScreens:
+     :path: "../node_modules/react-native-screens"
+   RNSVG:
+@@ -285,7 +275,6 @@ SPEC CHECKSUMS:
+   react-native-onesignal: 8958311abbd9125f26e600914e48833b57321cbf
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+   react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
+-  react-native-safe-area-context: e380a6f783ccaec848e2f3cc8eb205a62362950d
+   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+   react-native-video: 6555881252c8ca039760e1cd6df28ac28ffb2baf
+   react-native-webview: 3c79685b61a68d1fe99136f98f2f34b04dce2e02
+@@ -304,7 +293,6 @@ SPEC CHECKSUMS:
+   RNCAsyncStorage: b63d6e83fc629b01df6b624688f17944cea5637f
+   RNDeviceInfo: 75dac2d7cd6b638b512cc9266ce48a39661fed0e
+   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+-  RNInAppBrowser: 9d1ffb9db0d0cbdf03f528f1f0624b2c533b93fd
+   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+   RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
+   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index e8438c7..8632629 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>23</string>
++	<string>21</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index d7c5027..c5db840 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>23</string>
++	<string>21</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index a24c843..c4d286f 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -672,7 +672,7 @@
+ 			baseConfigurationReference = 54F271B8EB67A4997A2C7D96 /* Pods-apolloschurchapp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 18;
++				CURRENT_PROJECT_VERSION = 17;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7TM8C6252Z;
+ 				HEADER_SEARCH_PATHS = (
+@@ -698,7 +698,7 @@
+ 			baseConfigurationReference = 1F8F5BC4745C8F22C695573D /* Pods-apolloschurchapp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CURRENT_PROJECT_VERSION = 18;
++				CURRENT_PROJECT_VERSION = 17;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 49a5dfc..fe6424a 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>24</string>
++	<string>22</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 9b092fb..65c370b 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>23</string>
++	<string>21</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 4b67053..be55b59 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -1,12 +1,6 @@
+ import React from 'react';
+ import { NativeModules } from 'react-native';
+ // We ran into an issue where SafeAreaView would break jest tests.
+-
+-jest.mock('../apollos-ui-kit/node_modules/react-native-safe-area-context/', () => ({
+-  SafeAreaConsumer: ({ children }) => children({ top: 0, bottom: 0, left: 0, right: 0 }),
+-  SafeAreaProvider: ({ children }) => children,
+-}));
+-
+ jest.mock('react-navigation', () => {
+   const ActualNavigation = require.requireActual('react-navigation');
+   return {
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+index f833f5a..a5d875a 100644
+--- a/apolloschurchapp/metro.config.js
++++ b/apolloschurchapp/metro.config.js
+@@ -26,7 +26,6 @@ const localDeps = [
+ 
+ const sharedNativeModules = [
+   'react-native-linear-gradient',
+-  'react-native-safe-area-context',
+   'react-native-svg',
+   'react-native-onesignal',
+   'react-native-music-control',
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 729ab08..1d070c3 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.0-beta.3",
++  "version": "1.2.0-beta.1",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.0-beta.3",
+-    "@apollosproject/ui-auth": "^1.2.0-beta.3",
+-    "@apollosproject/ui-htmlview": "^1.2.0-beta.3",
+-    "@apollosproject/ui-kit": "^1.2.0-beta.3",
+-    "@apollosproject/ui-media-player": "^1.2.0-beta.3",
+-    "@apollosproject/ui-notifications": "^1.2.0-beta.3",
+-    "@apollosproject/ui-onboarding": "^1.2.0-beta.3",
+-    "@apollosproject/ui-passes": "^1.2.0-beta.3",
+-    "@apollosproject/ui-scripture": "^1.2.0-beta.3",
+-    "@apollosproject/ui-storybook": "^1.2.0-beta.3",
++    "@apollosproject/ui-analytics": "^1.2.0-beta.1",
++    "@apollosproject/ui-auth": "^1.2.0-beta.1",
++    "@apollosproject/ui-htmlview": "^1.2.0-beta.1",
++    "@apollosproject/ui-kit": "^1.2.0-beta.1",
++    "@apollosproject/ui-media-player": "^1.2.0-beta.1",
++    "@apollosproject/ui-notifications": "^1.2.0-beta.1",
++    "@apollosproject/ui-onboarding": "^1.2.0-beta.1",
++    "@apollosproject/ui-passes": "^1.2.0-beta.1",
++    "@apollosproject/ui-scripture": "^1.2.0-beta.1",
++    "@apollosproject/ui-storybook": "^1.2.0-beta.1",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+@@ -108,7 +108,6 @@
+     "react-native-onesignal": "3.3.2",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-safari-view": "2.1.0",
+-    "react-native-safe-area-context": "^0.3.6",
+     "react-native-safe-area-view": "0.13.1",
+     "react-native-screens": "^1.0.0-alpha.23",
+     "react-native-splash-screen": "3.2.0",
+diff --git a/apolloschurchapp/src/user-settings/ChangePassword.js b/apolloschurchapp/src/user-settings/ChangePassword.js
+index b8683fc..6045e31 100644
+--- a/apolloschurchapp/src/user-settings/ChangePassword.js
++++ b/apolloschurchapp/src/user-settings/ChangePassword.js
+@@ -1,13 +1,7 @@
+ import React, { PureComponent } from 'react';
+ import PropTypes from 'prop-types';
+-import {
+-  Platform,
+-  KeyboardAvoidingView,
+-  StyleSheet,
+-  StatusBar,
+-} from 'react-native';
++import { SafeAreaView } from 'react-native';
+ import { Mutation } from 'react-apollo';
+-import { SafeAreaView, Header } from 'react-navigation';
+ import { Formik } from 'formik';
+ import * as Yup from 'yup';
+ 
+@@ -15,6 +9,7 @@ import {
+   Button,
+   ButtonLink,
+   TextInput,
++  BackgroundView,
+   PaddedView,
+   FlexedView,
+   styled,
+@@ -48,15 +43,8 @@ class ChangePassword extends PureComponent {
+   };
+ 
+   renderForm = (props) => (
+-    <KeyboardAvoidingView
+-      behavior={'padding'}
+-      style={StyleSheet.absoluteFill}
+-      keyboardVerticalOffset={
+-        Header.HEIGHT +
+-        (Platform.OS === 'android' ? StatusBar.currentHeight : 0)
+-      }
+-    >
+-      <FlexedView>
++    <FlexedView>
++      <BackgroundView>
+         <PaddedView>
+           <TextInput
+             label="New Password"
+@@ -77,18 +65,18 @@ class ChangePassword extends PureComponent {
+             }
+           />
+         </PaddedView>
+-        <Footer>
+-          <PaddedView>
+-            <Button
+-              disabled={props.isSubmitting}
+-              onPress={props.handleSubmit}
+-              title="Save"
+-              loading={props.isSubmitting}
+-            />
+-          </PaddedView>
+-        </Footer>
+-      </FlexedView>
+-    </KeyboardAvoidingView>
++      </BackgroundView>
++      <Footer>
++        <PaddedView>
++          <Button
++            disabled={props.isSubmitting}
++            onPress={props.handleSubmit}
++            title="Save"
++            loading={props.isSubmitting}
++          />
++        </PaddedView>
++      </Footer>
++    </FlexedView>
+   );
+ 
+   render() {
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+index c730500..985651a 100644
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ b/apolloschurchapp/src/user-settings/Locations/index.js
+@@ -4,6 +4,7 @@ import { Query, Mutation } from 'react-apollo';
+ import { Dimensions } from 'react-native';
+ import Geolocation from 'react-native-geolocation-service';
+ import { PaddedView, ButtonLink } from '@apollosproject/ui-kit';
++import requestLocation from './requestLocation';
+ 
+ import GET_CAMPUSES from './getCampusLocations';
+ import CHANGE_CAMPUS from './campusChange';
+@@ -54,6 +55,7 @@ class Location extends PureComponent {
+   };
+ 
+   async componentDidMount() {
++    await requestLocation();
+     Geolocation.getCurrentPosition(
+       (position) => {
+         this.setState({
+diff --git a/apolloschurchapp/src/user-settings/Locations/requestLocation.android.js b/apolloschurchapp/src/user-settings/Locations/requestLocation.android.js
+new file mode 100644
+index 0000000..02c84c6
+--- /dev/null
++++ b/apolloschurchapp/src/user-settings/Locations/requestLocation.android.js
+@@ -0,0 +1,6 @@
++import { PermissionsAndroid } from 'react-native';
++
++export default async () =>
++  PermissionsAndroid.request(
++    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
++  );
+diff --git a/apolloschurchapp/src/user-settings/Locations/requestLocation.ios.js b/apolloschurchapp/src/user-settings/Locations/requestLocation.ios.js
+new file mode 100644
+index 0000000..88ce139
+--- /dev/null
++++ b/apolloschurchapp/src/user-settings/Locations/requestLocation.ios.js
+@@ -0,0 +1,3 @@
++// not neccessary in ios
++// this is handled by Geolocation.getCurrentPosition()
++export default () => null;
