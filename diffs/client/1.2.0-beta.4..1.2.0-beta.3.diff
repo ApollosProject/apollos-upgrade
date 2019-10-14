@@ -1,0 +1,270 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 06ba626..77d8bc8 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -146,7 +146,7 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 24
++        versionCode 23
+         versionName "1.2.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 21205b5..0267479 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.0-beta.4",
++    "version": "1.2.0-beta.3",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 52fd423..e8438c7 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>24</string>
++	<string>23</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 7188b0b..d7c5027 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>24</string>
++	<string>23</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 4cbb689..49a5dfc 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>25</string>
++	<string>24</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false />
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 2892f83..9b092fb 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>24</string>
++	<string>23</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 59e6419..729ab08 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.0-beta.4",
++  "version": "1.2.0-beta.3",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.0-beta.4",
+-    "@apollosproject/ui-auth": "^1.2.0-beta.4",
+-    "@apollosproject/ui-htmlview": "^1.2.0-beta.4",
+-    "@apollosproject/ui-kit": "^1.2.0-beta.4",
+-    "@apollosproject/ui-media-player": "^1.2.0-beta.4",
+-    "@apollosproject/ui-notifications": "^1.2.0-beta.4",
+-    "@apollosproject/ui-onboarding": "^1.2.0-beta.4",
+-    "@apollosproject/ui-passes": "^1.2.0-beta.4",
+-    "@apollosproject/ui-scripture": "^1.2.0-beta.4",
+-    "@apollosproject/ui-storybook": "^1.2.0-beta.4",
++    "@apollosproject/ui-analytics": "^1.2.0-beta.3",
++    "@apollosproject/ui-auth": "^1.2.0-beta.3",
++    "@apollosproject/ui-htmlview": "^1.2.0-beta.3",
++    "@apollosproject/ui-kit": "^1.2.0-beta.3",
++    "@apollosproject/ui-media-player": "^1.2.0-beta.3",
++    "@apollosproject/ui-notifications": "^1.2.0-beta.3",
++    "@apollosproject/ui-onboarding": "^1.2.0-beta.3",
++    "@apollosproject/ui-passes": "^1.2.0-beta.3",
++    "@apollosproject/ui-scripture": "^1.2.0-beta.3",
++    "@apollosproject/ui-storybook": "^1.2.0-beta.3",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+diff --git a/apolloschurchapp/src/event/Event.js b/apolloschurchapp/src/event/Event.js
+index 18a6d85..270a48f 100644
+--- a/apolloschurchapp/src/event/Event.js
++++ b/apolloschurchapp/src/event/Event.js
+@@ -10,7 +10,6 @@ import {
+   Paragraph,
+   StretchyView,
+ } from '@apollosproject/ui-kit';
+-import HTMLView from '@apollosproject/ui-htmlview';
+ 
+ import { FlexedScrollView, EventInfoItem } from './components';
+ 
+@@ -43,7 +42,6 @@ const Event = ({ event, loading }) => {
+                 />
+                 <EventInfoItem icon={'pin'} title={event.location} />
+               </Paragraph>
+-              <HTMLView isLoading={loading}>{event.description}</HTMLView>
+             </PaddedView>
+           </FlexedScrollView>
+         )}
+@@ -57,7 +55,6 @@ Event.propTypes = {
+     __typename: PropTypes.string,
+     id: PropTypes.string,
+     name: PropTypes.string,
+-    description: PropTypes.string,
+     start: PropTypes.string,
+     end: PropTypes.string,
+     location: PropTypes.string,
+diff --git a/apolloschurchapp/src/event/EventConnected.tests.js b/apolloschurchapp/src/event/EventConnected.tests.js
+index 0594d24..ca7abcd 100644
+--- a/apolloschurchapp/src/event/EventConnected.tests.js
++++ b/apolloschurchapp/src/event/EventConnected.tests.js
+@@ -25,7 +25,6 @@ const mocks = {
+           .toJSON(),
+         location: 'Willow Creek, Chicago',
+         name: 'Cookout',
+-        description: 'Some detailed description',
+         image: {
+           __typename: 'ImageMedia',
+           sources: [
+diff --git a/apolloschurchapp/src/event/getEvent.js b/apolloschurchapp/src/event/getEvent.js
+index 059cb9f..7035e1b 100644
+--- a/apolloschurchapp/src/event/getEvent.js
++++ b/apolloschurchapp/src/event/getEvent.js
+@@ -7,7 +7,6 @@ export const EVENT_FRAGMENT = gql`
+     location
+     start
+     end
+-    description
+     image {
+       sources {
+         uri
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index 79030be..6a6c16a 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,7 +1,6 @@
+ import React, { PureComponent } from 'react';
+ import { TableView, Divider } from '@apollosproject/ui-kit';
+ import { UserWebBrowserConsumer } from 'apolloschurchapp/src/user-web-browser';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+ import ChangeLivestream from './ChangeLivestream';
+ import TouchableCell from './TouchableCell';
+ 
+@@ -29,21 +28,6 @@ export default class TestingControlPanel extends PureComponent {
+             />
+           )}
+         </UserWebBrowserConsumer>
+-        <WebBrowserConsumer>
+-          {(openUrl) => (
+-            <TouchableCell
+-              handlePress={() =>
+-                openUrl(
+-                  'https://apollosrock.newspring.cc',
+-                  {},
+-                  { useRockToken: true }
+-                )
+-              }
+-              iconName="share"
+-              cellText={`Open InAppBrowser With Rock Token`}
+-            />
+-          )}
+-        </WebBrowserConsumer>
+         <TouchableCell
+           handlePress={() => this.props.navigation.navigate('Onboarding')}
+           iconName="Avatar"
+diff --git a/apolloschurchapp/src/ui/WebBrowser/Browser.js b/apolloschurchapp/src/ui/WebBrowser/Browser.js
+index 36f1edf..c6ddcb8 100644
+--- a/apolloschurchapp/src/ui/WebBrowser/Browser.js
++++ b/apolloschurchapp/src/ui/WebBrowser/Browser.js
+@@ -3,50 +3,39 @@ import InAppBrowser from 'react-native-inappbrowser-reborn';
+ import gql from 'graphql-tag';
+ import { client } from '../../client';
+ 
+-export const GET_ROCK_AUTH_DETAILS = gql`
+-  query RockAuthDetails {
++export const GET_USER_COOKIE = gql`
++  query CurrentUserCookie {
+     currentUser {
+       id
+-      rock {
+-        authCookie
+-        authToken
+-      }
++      rockToken
+     }
+   }
+ `;
+ 
+-export const getRockAuthDetails = async () => {
+-  const { data: { currentUser: { rock } = {} } = {} } = await client.query({
+-    query: GET_ROCK_AUTH_DETAILS,
+-  });
+-  return rock;
++export const getCookie = async () => {
++  const { data: { currentUser: { rockToken } = {} } = {} } = await client.query(
++    {
++      query: GET_USER_COOKIE,
++    }
++  );
++  return rockToken;
+ };
+ 
+ const Browser = {
+-  open: async (
+-    baseURL,
+-    options,
+-    auth = { useRockCookie: false, useRockToken: false }
+-  ) => {
+-    const url = new URL(baseURL);
+-    const { authCookie, authToken } = await getRockAuthDetails();
+-    let headers = {};
+-    if (auth.useRockCookie && authCookie) {
++  open: async (url, options) => {
++    const cookie = await getCookie();
++    if (cookie)
+       console.warn(
+         "iOS doesn't support headers, you may want to use src/user-web-view"
+       );
+-      headers = { Cookie: authCookie };
+-    }
+-    if (auth.useRockToken && authToken) {
+-      url.searchParams.append('rckipid', authToken);
+-    }
++    const headers = { Cookie: cookie };
+     try {
+       if (await InAppBrowser.isAvailable()) {
+-        InAppBrowser.open(url.toString(), {
++        InAppBrowser.open(url, {
+           headers,
+           ...options,
+         });
+-      } else Linking.openURL(url.toString());
++      } else Linking.openURL(url);
+     } catch (e) {
+       console.error(e);
+     }
