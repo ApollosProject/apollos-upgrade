@@ -1,0 +1,85 @@
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index c73c48a..b82050d 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.0-beta.6",
++    "version": "1.2.0-beta.5",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 308aa43..3c10fda 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.0-beta.6",
++  "version": "1.2.0-beta.5",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.0-beta.6",
+-    "@apollosproject/ui-auth": "^1.2.0-beta.6",
+-    "@apollosproject/ui-htmlview": "^1.2.0-beta.6",
+-    "@apollosproject/ui-kit": "^1.2.0-beta.6",
+-    "@apollosproject/ui-media-player": "^1.2.0-beta.6",
+-    "@apollosproject/ui-notifications": "^1.2.0-beta.6",
+-    "@apollosproject/ui-onboarding": "^1.2.0-beta.6",
+-    "@apollosproject/ui-passes": "^1.2.0-beta.6",
+-    "@apollosproject/ui-scripture": "^1.2.0-beta.6",
+-    "@apollosproject/ui-storybook": "^1.2.0-beta.6",
++    "@apollosproject/ui-analytics": "^1.2.0-beta.5",
++    "@apollosproject/ui-auth": "^1.2.0-beta.5",
++    "@apollosproject/ui-htmlview": "^1.2.0-beta.5",
++    "@apollosproject/ui-kit": "^1.2.0-beta.5",
++    "@apollosproject/ui-media-player": "^1.2.0-beta.5",
++    "@apollosproject/ui-notifications": "^1.2.0-beta.5",
++    "@apollosproject/ui-onboarding": "^1.2.0-beta.5",
++    "@apollosproject/ui-passes": "^1.2.0-beta.5",
++    "@apollosproject/ui-scripture": "^1.2.0-beta.5",
++    "@apollosproject/ui-storybook": "^1.2.0-beta.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+index 19b8898..07b4938 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
+ import PropTypes from 'prop-types';
+ import { SafeAreaView } from 'react-navigation';
+ import { Query } from 'react-apollo';
+-import { PagerScroll } from 'react-native-tab-view';
+ 
+ import {
+   ErrorCard,
+@@ -99,7 +98,6 @@ class DevotionalContentItem extends PureComponent {
+     return (
+       <TabView
+         routes={tabRoutes}
+-        renderPager={(props) => <PagerScroll {...props} />}
+         renderScene={SceneMap({
+           content: this.contentRoute({ scriptures, loading }),
+           scripture: this.scriptureRoute({ scriptures, loading }),
+diff --git a/apolloschurchapp/src/tabs/discover/SearchFeed/index.js b/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
+index 24d2a6e..63a7e16 100644
+--- a/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
++++ b/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
+@@ -34,9 +34,7 @@ const SearchFeed = withNavigation(({ navigation, searchText }) => (
+     {({ loading, error, data, refetch }) => (
+       <StyledFeedView
+         ListItemComponent={ContentCardConnected}
+-        content={get(data, 'search.edges', [])
+-          .map((edge) => edge.node)
+-          .filter((node) => !!node)}
++        content={get(data, 'search.edges', []).map((edge) => edge.node)}
+         ListEmptyComponent={() => <NoResults searchText={searchText} />}
+         hasContent={get(data, 'search.edges', []).length}
+         isLoading={loading}
