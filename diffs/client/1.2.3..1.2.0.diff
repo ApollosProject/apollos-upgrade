@@ -1,0 +1,1157 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index ca151bf..06ba626 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -147,7 +147,7 @@ android {
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+         versionCode 24
+-        versionName "1.2.3"
++        versionName "1.2.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+@@ -193,7 +193,6 @@ android {
+ dependencies {
+     implementation fileTree(dir: "libs", include: ["*.jar"])
+     implementation "com.facebook.react:react-native:+"  // From node_modules
+-    implementation 'com.facebook.fresco:animated-gif:2.0.0'
+ 
+     if (enableHermes) {
+       def hermesPath = "../../node_modules/hermesvm/android/";
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 8d6c142..9a7574f 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.3",
++    "version": "1.2.0",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 3161a20..52fd423 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.3</string>
++	<string>1.2.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 60fda57..7188b0b 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.3</string>
++	<string>1.2.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 7ed7b7c..4cbb689 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.3</string>
++	<string>1.2.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 84c3fcb..2892f83 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.3</string>
++	<string>1.2.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+index 35373b1..f833f5a 100644
+--- a/apolloschurchapp/metro.config.js
++++ b/apolloschurchapp/metro.config.js
+@@ -30,7 +30,6 @@ const sharedNativeModules = [
+   'react-native-svg',
+   'react-native-onesignal',
+   'react-native-music-control',
+-  'react-native-gesture-handler',
+   'react-native-video',
+   'react-native-video-controls',
+   '@apollosproject/react-native-airplay-btn',
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index deca1b5..64cb522 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.3",
++  "version": "1.2.0",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.3",
+-    "@apollosproject/ui-auth": "^1.2.3",
+-    "@apollosproject/ui-htmlview": "^1.2.3",
+-    "@apollosproject/ui-kit": "^1.2.3",
+-    "@apollosproject/ui-media-player": "^1.2.3",
+-    "@apollosproject/ui-notifications": "^1.2.3",
+-    "@apollosproject/ui-onboarding": "^1.2.3",
+-    "@apollosproject/ui-passes": "^1.2.3",
+-    "@apollosproject/ui-scripture": "^1.2.3",
+-    "@apollosproject/ui-storybook": "^1.2.3",
++    "@apollosproject/ui-analytics": "^1.2.0",
++    "@apollosproject/ui-auth": "^1.2.0",
++    "@apollosproject/ui-htmlview": "^1.2.0",
++    "@apollosproject/ui-kit": "^1.2.0",
++    "@apollosproject/ui-media-player": "^1.2.0",
++    "@apollosproject/ui-notifications": "^1.2.0",
++    "@apollosproject/ui-onboarding": "^1.2.0",
++    "@apollosproject/ui-passes": "^1.2.0",
++    "@apollosproject/ui-scripture": "^1.2.0",
++    "@apollosproject/ui-storybook": "^1.2.0",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index 100ccb9..9b7e84f 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -7,7 +7,6 @@ import { MediaPlayerProvider } from '@apollosproject/ui-media-player';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+ 
+ import NavigationService from './NavigationService';
+-import { LiveProvider } from './live';
+ import ClientProvider from './client';
+ import customTheme, { customIcons } from './theme';
+ 
+@@ -23,13 +22,11 @@ const AppProviders = (props) => (
+       >
+         <MediaPlayerProvider>
+           <AnalyticsProvider>
+-            <LiveProvider>
+-              <Providers
+-                themeInput={customTheme}
+-                iconInput={customIcons}
+-                {...props}
+-              />
+-            </LiveProvider>
++            <Providers
++              themeInput={customTheme}
++              iconInput={customIcons}
++              {...props}
++            />
+           </AnalyticsProvider>
+         </MediaPlayerProvider>
+       </AuthProvider>
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index a6d4092..fb7ca59 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
+ import { ApolloProvider } from 'react-apollo';
+ import { ApolloClient } from 'apollo-client';
+ import { ApolloLink } from 'apollo-link';
+-import { getVersion, getApplicationName } from 'react-native-device-info';
+ 
+ import { authLink, buildErrorLink } from '@apollosproject/ui-auth';
+ import { resolvers, schema, defaults } from '../store';
+@@ -31,8 +30,6 @@ export const client = new ApolloClient({
+   shouldBatch: true,
+   resolvers,
+   typeDefs: schema,
+-  name: getApplicationName(),
+-  version: getVersion(),
+ });
+ 
+ // Hack to give auth link access to method on client;
+diff --git a/apolloschurchapp/src/content-feed/getContentFeed.js b/apolloschurchapp/src/content-feed/getContentFeed.js
+index 97af6f6..40758cb 100644
+--- a/apolloschurchapp/src/content-feed/getContentFeed.js
++++ b/apolloschurchapp/src/content-feed/getContentFeed.js
+@@ -1,6 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from '../content-single/getContentItem';
+ 
+ export default gql`
+   query getContentFeed($itemId: ID!, $after: String, $first: Int) {
+@@ -12,12 +13,14 @@ export default gql`
+           }
+           edges {
+             node {
+-              ...baseCardFragment
++              ...contentItemFragment
++              ...largeCardFragment
+             }
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${CONTENT_ITEM_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js
+index a1e7c23..a126c97 100644
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js
++++ b/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js
+@@ -1,5 +1,4 @@
+ import gql from 'graphql-tag';
+-import { BASE_CARD_FRAGMENT } from '../../ui/ContentCardConnected/query';
+ 
+ export default gql`
+   query getHorizontalContent($itemId: ID!, $cursor: String) {
+@@ -10,7 +9,24 @@ export default gql`
+           edges {
+             cursor
+             node {
+-              ...baseCardFragment
++              id
++              coverImage {
++                name
++                sources {
++                  uri
++                }
++              }
++              parentChannel {
++                id
++                name
++                iconName
++              }
++              title
++              sharing {
++                url
++                message
++                title
++              }
+             }
+           }
+         }
+@@ -18,12 +34,28 @@ export default gql`
+           edges {
+             cursor
+             node {
+-              ...baseCardFragment
++              id
++              coverImage {
++                name
++                sources {
++                  uri
++                }
++              }
++              parentChannel {
++                id
++                name
++                iconName
++              }
++              title
++              sharing {
++                url
++                message
++                title
++              }
+             }
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js b/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js
+index 595c8cd..3bc3e34 100644
+--- a/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js
++++ b/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js
+@@ -1,33 +1,37 @@
+ import gql from 'graphql-tag';
+ 
+-export const contentMediaFragment = gql`
+-  fragment contentMediaFragment on ContentItem {
+-    id
+-    title
+-    parentChannel {
+-      id
+-      name
+-    }
+-    coverImage {
+-      sources {
+-        uri
+-      }
+-    }
+-    videos {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
+-
+ export default gql`
+   query getContentMedia($contentId: ID!) {
+     node(id: $contentId) {
+       ... on ContentItem {
+-        ...contentMediaFragment
++        id
++        title
++        parentChannel {
++          id
++          name
++        }
++        coverImage {
++          sources {
++            uri
++          }
++        }
++        videos {
++          sources {
++            uri
++          }
++        }
++      }
++      ... on WeekendContentItem {
++        liveStream {
++          isLive
++          media {
++            sources {
++              uri
++            }
++          }
++          webViewUrl
++        }
+       }
+     }
+   }
+-  ${contentMediaFragment}
+ `;
+diff --git a/apolloschurchapp/src/content-single/MediaControls/index.js b/apolloschurchapp/src/content-single/MediaControls/index.js
+index 8df4c20..a36e7d9 100644
+--- a/apolloschurchapp/src/content-single/MediaControls/index.js
++++ b/apolloschurchapp/src/content-single/MediaControls/index.js
+@@ -14,7 +14,6 @@ import {
+   H6,
+ } from '@apollosproject/ui-kit';
+ import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+-import { LiveConsumer } from '../../live';
+ import GET_CONTENT_MEDIA from './getContentMedia';
+ 
+ const Container = styled(({ theme }) => ({
+@@ -83,15 +82,21 @@ class MediaControls extends PureComponent {
+   );
+ 
+   renderControls = ({
+-    liveStream,
+     loading,
+     error,
+     data: {
+-      node: { videos, title, parentChannel = {}, coverImage = {} } = {},
++      node: {
++        videos,
++        title,
++        parentChannel = {},
++        coverImage = {},
++        liveStream = {},
++      } = {},
+     } = {},
+   }) => {
+     if (loading || error) return null;
+-    const isLive = !!liveStream;
++
++    const isLive = get(liveStream, 'isLive', false);
+     const hasLiveStreamContent = !!(
+       get(liveStream, 'webViewUrl') || get(liveStream, 'media.sources[0]')
+     );
+@@ -134,19 +139,13 @@ class MediaControls extends PureComponent {
+   render() {
+     if (!this.props.contentId) return null;
+     return (
+-      <LiveConsumer contentId={this.props.contentId}>
+-        {(liveStream) => (
+-          <Query
+-            query={GET_CONTENT_MEDIA}
+-            fetchPolicy="cache-and-network"
+-            variables={{ contentId: this.props.contentId }}
+-          >
+-            {({ data, loading, error }) =>
+-              this.renderControls({ data, loading, error, liveStream })
+-            }
+-          </Query>
+-        )}
+-      </LiveConsumer>
++      <Query
++        query={GET_CONTENT_MEDIA}
++        fetchPolicy="cache-and-network"
++        variables={{ contentId: this.props.contentId }}
++      >
++        {this.renderControls}
++      </Query>
+     );
+   }
+ }
+diff --git a/apolloschurchapp/src/content-single/UniversalContentItem/index.js b/apolloschurchapp/src/content-single/UniversalContentItem/index.js
+index c4031b4..14db7a4 100644
+--- a/apolloschurchapp/src/content-single/UniversalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/UniversalContentItem/index.js
+@@ -33,8 +33,7 @@ const UniversalContentItem = ({ content, loading }) => {
+               </Stretchy>
+             ) : null}
+             <MediaControls contentId={content.id} />
+-            {/* fixes text/navigation spacing by adding vertical padding if we dont have an image */}
+-            <PaddedView vertical={!coverImageSources.length}>
++            <PaddedView vertical={false}>
+               <H2 padded isLoading={!content.title && loading}>
+                 {content.title}
+               </H2>
+diff --git a/apolloschurchapp/src/content-single/WeekendContentItem/index.js b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+index 3bca1c5..f48b63a 100644
+--- a/apolloschurchapp/src/content-single/WeekendContentItem/index.js
++++ b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+@@ -12,13 +12,11 @@ import {
+   ThemeMixin,
+   ThemeConsumer,
+   CardLabel,
+-  withTheme,
+ } from '@apollosproject/ui-kit';
+ import MediaControls from '../MediaControls';
+ import HTMLContent from '../HTMLContent';
+ import HorizontalContentFeed from '../HorizontalContentFeed';
+ import Features from '../Features';
+-import { LiveConsumer } from '../../live';
+ 
+ const FlexedScrollView = styled({ flex: 1 })(ScrollView);
+ 
+@@ -29,19 +27,6 @@ const Header = styled(({ hasMedia, theme }) => ({
+   // backgroundColor: theme.colors.primary,
+ }))(PaddedView);
+ 
+-const LiveAwareLabel = withTheme(({ isLive, title, theme }) => ({
+-  ...(isLive
+-    ? {
+-        title: 'Live',
+-        type: 'secondary',
+-        icon: 'live-dot',
+-        iconSize: theme.helpers.rem(0.4375), // using our typographic size unit based on fontSize so that the icon scales correctly with font size changes.
+-      }
+-    : {
+-        title,
+-      }),
+-}))(CardLabel);
+-
+ const WeekendContentItem = ({ content, loading }) => {
+   const coverImageSources = get(content, 'coverImage.sources', []);
+   return (
+@@ -67,17 +52,11 @@ const WeekendContentItem = ({ content, loading }) => {
+                           />
+                         </Stretchy>
+                       ) : null}
+-                      <LiveConsumer contentId={content.id}>
+-                        {(liveStream) => (
+-                          <LiveAwareLabel
+-                            isLive={!!liveStream}
+-                            title={
+-                              content.parentChannel &&
+-                              content.parentChannel.name
+-                            }
+-                          />
+-                        )}
+-                      </LiveConsumer>
++                      <CardLabel
++                        title={
++                          content.parentChannel && content.parentChannel.name
++                        }
++                      />
+                       <H2 padded isLoading={!content.title && loading}>
+                         {content.title}
+                       </H2>
+diff --git a/apolloschurchapp/src/content-single/getContentItem.js b/apolloschurchapp/src/content-single/getContentItem.js
+index c0652ea..6050795 100644
+--- a/apolloschurchapp/src/content-single/getContentItem.js
++++ b/apolloschurchapp/src/content-single/getContentItem.js
+@@ -4,8 +4,8 @@ export const CONTENT_ITEM_FRAGMENT = gql`
+   fragment contentItemFragment on ContentItem {
+     id
+     title
++    isLiked
+     summary
+-    htmlContent
+     coverImage {
+       name
+       sources {
+@@ -35,6 +35,11 @@ export const CONTENT_ITEM_FRAGMENT = gql`
+         uri
+       }
+     }
++    ... on WeekendContentItem {
++      liveStream {
++        isLive
++      }
++    }
+   }
+ `;
+ 
+diff --git a/apolloschurchapp/src/live/LiveButton.js b/apolloschurchapp/src/live/LiveButton.js
+new file mode 100644
+index 0000000..6e1fa30
+--- /dev/null
++++ b/apolloschurchapp/src/live/LiveButton.js
+@@ -0,0 +1,57 @@
++import React from 'react';
++import { Query } from 'react-apollo';
++import { get } from 'lodash';
++
++import {
++  Card,
++  CardContent,
++  TouchableScale,
++  styled,
++  ChannelLabel,
++  UIText,
++} from '@apollosproject/ui-kit';
++import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
++
++import GET_LIVE_STREAM from './getLiveStream';
++
++const LiveCard = styled(({ theme }) => ({
++  backgroundColor: theme.colors.lightSecondary,
++}))(Card);
++
++const LiveNowButton = () => (
++  <Query
++    query={GET_LIVE_STREAM}
++    fetchPolicy="cache-and-network"
++    pollInterval={60000}
++  >
++    {({ loading, data }) => {
++      const isLive = get(data, 'liveStream.isLive', false);
++
++      return isLive ? (
++        <WebBrowserConsumer>
++          {(openUrl) => (
++            <TouchableScale
++              onPress={() => openUrl('https://apollos.churchonline.org/')}
++            >
++              <LiveCard isLoading={loading}>
++                <CardContent>
++                  <ChannelLabel
++                    icon="video"
++                    label={
++                      <UIText>
++                        <UIText bold>{`We're live.`} </UIText>
++                        Watch now!
++                      </UIText>
++                    }
++                  />
++                </CardContent>
++              </LiveCard>
++            </TouchableScale>
++          )}
++        </WebBrowserConsumer>
++      ) : null;
++    }}
++  </Query>
++);
++
++export default LiveNowButton;
+diff --git a/apolloschurchapp/src/live/LiveButton.tests.js b/apolloschurchapp/src/live/LiveButton.tests.js
+new file mode 100644
+index 0000000..0ac2b75
+--- /dev/null
++++ b/apolloschurchapp/src/live/LiveButton.tests.js
+@@ -0,0 +1,32 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from 'apolloschurchapp/src/Providers';
++
++import LiveNowButton from './LiveButton';
++import getLiveStream from './getLiveStream';
++
++const mocks = [
++  {
++    request: {
++      query: getLiveStream,
++      variables: {
++        isLive: true,
++      },
++    },
++    result: {
++      data: {
++        liveStream: { isLive: true },
++      },
++    },
++  },
++];
++
++it('renders without error', () => {
++  const tree = renderer.create(
++    <Providers mocks={mocks} addTypename={false}>
++      <LiveNowButton isLive />
++    </Providers>
++  );
++  expect(tree).toMatchSnapshot();
++});
+diff --git a/apolloschurchapp/src/live/LiveContext.js b/apolloschurchapp/src/live/LiveContext.js
+deleted file mode 100644
+index d5ffff2..0000000
+--- a/apolloschurchapp/src/live/LiveContext.js
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-import getLiveContent from './getLiveContent';
+-
+-const { Provider, Consumer } = React.createContext([]);
+-
+-const LiveProvider = (props) => (
+-  <Query query={getLiveContent} pollInterval={30000}>
+-    {({ data: { liveStreams = [] } = {} }) => (
+-      <Provider value={liveStreams}>{props.children}</Provider>
+-    )}
+-  </Query>
+-);
+-
+-const LiveConsumer = ({ contentId, children }) => (
+-  <Consumer>
+-    {(liveStreams) => {
+-      const stream = liveStreams.find(
+-        (s) => get(s, 'contentItem.id') === contentId
+-      );
+-      return children(stream);
+-    }}
+-  </Consumer>
+-);
+-
+-LiveConsumer.propTypes = {
+-  children: PropTypes.node,
+-  contentId: PropTypes.string,
+-};
+-
+-LiveProvider.propTypes = { children: PropTypes.node };
+-
+-export { LiveProvider, LiveConsumer };
+diff --git a/apolloschurchapp/src/live/getLiveContent.js b/apolloschurchapp/src/live/getLiveContent.js
+deleted file mode 100644
+index 8aac1d6..0000000
+--- a/apolloschurchapp/src/live/getLiveContent.js
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getLiveContent {
+-    liveStreams {
+-      isLive
+-      eventStartTime
+-      media {
+-        sources {
+-          uri
+-        }
+-      }
+-      webViewUrl
+-
+-      contentItem {
+-        ... on WeekendContentItem {
+-          id
+-        }
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/live/getLiveStream.js b/apolloschurchapp/src/live/getLiveStream.js
+new file mode 100644
+index 0000000..55ae4e5
+--- /dev/null
++++ b/apolloschurchapp/src/live/getLiveStream.js
+@@ -0,0 +1,9 @@
++import gql from 'graphql-tag';
++
++export default gql`
++  query getLiveStream {
++    liveStream {
++      isLive
++    }
++  }
++`;
+diff --git a/apolloschurchapp/src/live/index.js b/apolloschurchapp/src/live/index.js
+index f8f88d3..1612958 100644
+--- a/apolloschurchapp/src/live/index.js
++++ b/apolloschurchapp/src/live/index.js
+@@ -1 +1 @@
+-export { LiveProvider, LiveConsumer } from './LiveContext';
++export LiveButton from './LiveButton';
+diff --git a/apolloschurchapp/src/tabs/connect/getLikedContent.js b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+index b9037c6..67a6720 100644
+--- a/apolloschurchapp/src/tabs/connect/getLikedContent.js
++++ b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+@@ -1,6 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+ 
+ export default gql`
+   query getAllLikedContent($first: Int, $after: String) {
+@@ -11,12 +12,13 @@ export default gql`
+       edges {
+         node {
+           ... on ContentItem {
+-            isLiked
+-            ...baseCardFragment
++            ...contentItemFragment
++            ...largeCardFragment
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${CONTENT_ITEM_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js b/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
+index e581ca1..a63629c 100644
+--- a/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
++++ b/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
+@@ -1,6 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
++import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getContentChannels {
+@@ -11,11 +12,13 @@ export default gql`
+         edges {
+           node {
+             id
+-            ...baseCardFragment
++            ...contentItemFragment
++            ...largeCardFragment
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${CONTENT_ITEM_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index bae53bc..118f612 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -16,6 +16,8 @@ import {
+ import fetchMoreResolver from '../../utils/fetchMoreResolver';
+ import ContentCardConnected from '../../ui/ContentCardConnected';
+ 
++import { LiveButton } from '../../live';
++
+ import Features from './Features';
+ import GET_USER_FEED from './getUserFeed';
+ import GET_CAMPAIGN_CONTENT_ITEM from './getCampaignContentItem';
+@@ -76,6 +78,7 @@ class Home extends PureComponent {
+                 ListHeaderComponent={
+                   <>
+                     <LogoTitle source={require('./wordmark.png')} />
++                    <LiveButton />
+                     <Query
+                       query={GET_CAMPAIGN_CONTENT_ITEM}
+                       fetchPolicy="cache-and-network"
+diff --git a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+index fd6fbc7..345463c 100644
+--- a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
++++ b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+@@ -1,6 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
++import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query campaigns {
+@@ -10,7 +11,8 @@ export default gql`
+           childContentItemsConnection {
+             edges {
+               node {
+-                ...baseCardFragment
++                ...largeCardFragment
++                ...contentItemFragment
+               }
+             }
+           }
+@@ -18,5 +20,6 @@ export default gql`
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${CONTENT_ITEM_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/getUserFeed.js b/apolloschurchapp/src/tabs/home/getUserFeed.js
+index a1515d3..e120403 100644
+--- a/apolloschurchapp/src/tabs/home/getUserFeed.js
++++ b/apolloschurchapp/src/tabs/home/getUserFeed.js
+@@ -1,6 +1,7 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
++import { LARGE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+ 
+ export default gql`
+   query getUserFeed($first: Int, $after: String) {
+@@ -10,10 +11,12 @@ export default gql`
+       }
+       edges {
+         node {
+-          ...baseCardFragment
++          ...largeCardFragment
++          ...contentItemFragment
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${CONTENT_ITEM_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js b/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js
+new file mode 100644
+index 0000000..6675653
+--- /dev/null
++++ b/apolloschurchapp/src/testing-control-panel/ChangeLivestream.js
+@@ -0,0 +1,36 @@
++import React from 'react';
++
++import { Query } from 'react-apollo';
++import { get } from 'lodash';
++
++import { client } from 'apolloschurchapp/src/client';
++import GET_LIVE_STREAM from 'apolloschurchapp/src/live/getLiveStream';
++import TouchableCell from './TouchableCell';
++
++const changeLivestream = ({ isLive }) =>
++  client.writeQuery({
++    query: GET_LIVE_STREAM,
++    data: {
++      liveStream: {
++        __typename: 'LiveStream',
++        isLive,
++      },
++    },
++  });
++
++const ChangeLivestream = () => (
++  <Query query={GET_LIVE_STREAM}>
++    {({ data }) => {
++      const isLive = get(data, 'liveStream.isLive', false);
++      return (
++        <TouchableCell
++          handlePress={() => changeLivestream({ isLive: !isLive })}
++          iconName={isLive ? 'pause' : 'play'}
++          cellText={`${isLive ? 'End' : 'Start'} The Livestream`}
++        />
++      );
++    }}
++  </Query>
++);
++
++export default ChangeLivestream;
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index b988c62..79030be 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,7 +1,8 @@
+ import React, { PureComponent } from 'react';
+-import { TableView } from '@apollosproject/ui-kit';
++import { TableView, Divider } from '@apollosproject/ui-kit';
+ import { UserWebBrowserConsumer } from 'apolloschurchapp/src/user-web-browser';
+ import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
++import ChangeLivestream from './ChangeLivestream';
+ import TouchableCell from './TouchableCell';
+ 
+ export default class TestingControlPanel extends PureComponent {
+@@ -12,6 +13,8 @@ export default class TestingControlPanel extends PureComponent {
+   render() {
+     return (
+       <TableView>
++        <ChangeLivestream />
++        <Divider />
+         <UserWebBrowserConsumer>
+           {(openUserWebView) => (
+             <TouchableCell
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js b/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js
+index b5a744d..e4d7ac2 100644
+--- a/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js
++++ b/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js
+@@ -5,7 +5,6 @@ import { get } from 'lodash';
+ 
+ import { ErrorCard } from '@apollosproject/ui-kit';
+ 
+-import { LiveConsumer } from '../../live/LiveContext';
+ import contentCardComponentMapper from './contentCardComponentMapper';
+ import GET_CONTENT_CARD from './query';
+ 
+@@ -15,32 +14,28 @@ const ContentCardConnected = memo(
+       return <Component {...otherProps} isLoading tile={tile} />;
+ 
+     return (
+-      <LiveConsumer contentId={contentId}>
+-        {(liveStream) => (
+-          <Query query={GET_CONTENT_CARD} variables={{ contentId }}>
+-            {({ data: { node = {} } = {}, loading, error }) => {
+-              if (error) return <ErrorCard error={error} />;
+-
+-              const coverImage = get(node, 'coverImage.sources', undefined);
+-              const hasMedia = !!get(node, 'videos.[0].sources[0]', null);
+-              const isLive = !!liveStream;
+-              const labelText = get(node, 'parentChannel.name', null);
+-
+-              return (
+-                <Component
+-                  {...node}
+-                  hasAction={hasMedia}
+-                  isLive={isLive}
+-                  labelText={isLive ? 'Live' : labelText}
+-                  {...otherProps}
+-                  coverImage={coverImage}
+-                  isLoading={loading}
+-                />
+-              );
+-            }}
+-          </Query>
+-        )}
+-      </LiveConsumer>
++      <Query query={GET_CONTENT_CARD} variables={{ contentId }}>
++        {({ data: { node = {} } = {}, loading, error }) => {
++          if (error) return <ErrorCard error={error} />;
++
++          const coverImage = get(node, 'coverImage.sources', undefined);
++          const hasMedia = !!get(node, 'videos.[0].sources[0]', null);
++          const isLive = get(node, 'liveStream.isLive', false);
++          const labelText = get(node, 'parentChannel.name', null);
++
++          return (
++            <Component
++              {...node}
++              hasAction={hasMedia}
++              isLive={isLive}
++              labelText={labelText}
++              {...otherProps}
++              coverImage={coverImage}
++              isLoading={loading}
++            />
++          );
++        }}
++      </Query>
+     );
+   }
+ );
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/index.js b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+index 40047fe..b15b4d4 100644
+--- a/apolloschurchapp/src/ui/ContentCardConnected/index.js
++++ b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+@@ -1,6 +1,6 @@
+ import ContentCardConnected from './ContentCardConnected';
+ 
+-export { BASE_CARD_FRAGMENT } from './query';
++export { LARGE_CARD_FRAGMENT } from './query';
+ export contentCardComponentMapper from './contentCardComponentMapper';
+ 
+ export default ContentCardConnected;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/query.js b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+index a2e26ea..8b7d514 100644
+--- a/apolloschurchapp/src/ui/ContentCardConnected/query.js
++++ b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+@@ -33,16 +33,13 @@ export const BASE_CARD_FRAGMENT = gql`
+     title
+     hyphenatedTitle: title(hyphenated: true)
+     summary
++    isLiked
+     ... on MediaContentItem {
+       videos {
+         sources {
+           uri
+         }
+       }
+-      parentChannel {
+-        id
+-        name
+-      }
+     }
+     ... on WeekendContentItem {
+       videos {
+@@ -50,6 +47,9 @@ export const BASE_CARD_FRAGMENT = gql`
+           uri
+         }
+       }
++      liveStream {
++        isLive
++      }
+       parentChannel {
+         id
+         name
+@@ -66,15 +66,22 @@ export const BASE_CARD_FRAGMENT = gql`
+   ${THEME_FRAGMENT}
+ `;
+ 
++export const LARGE_CARD_FRAGMENT = gql`
++  fragment largeCardFragment on ContentItem {
++    ...baseCardFragment
++  }
++  ${BASE_CARD_FRAGMENT}
++`;
++
+ const GET_CONTENT_CARD = gql`
+   query getContentCard($contentId: ID!) {
+     node(id: $contentId) {
+       id
+       __typename
+-      ...baseCardFragment
++      ...largeCardFragment
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${LARGE_CARD_FRAGMENT}
+ `;
+ 
+ export default GET_CONTENT_CARD;
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js
+index 73c0531..1024864 100644
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js
++++ b/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js
+@@ -1,5 +1,5 @@
+ import GET_ALL_LIKED_CONTENT from 'apolloschurchapp/src/tabs/connect/getLikedContent';
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import { CONTENT_ITEM_FRAGMENT } from 'apolloschurchapp/src/content-single/getContentItem';
+ 
+ const addItemToLikedContentList = ({ cache, item, variables }) => {
+   try {
+@@ -9,18 +9,14 @@ const addItemToLikedContentList = ({ cache, item, variables }) => {
+     });
+     const fullItem = cache.readFragment({
+       id: `${item.__typename}:${item.id}`,
+-      fragment: BASE_CARD_FRAGMENT,
+-      fragmentName: 'baseCardFragment',
++      fragment: CONTENT_ITEM_FRAGMENT,
+     });
+     const newEdges = [
+       fullItem,
+       ...data.likedContent.edges.map(({ node }) => node),
+     ].map((node) => ({
+       __typename: 'ContentItemsConnectionEdge',
+-      node: {
+-        ...node,
+-        isLiked: true,
+-      },
++      node,
+     }));
+     cache.writeQuery({
+       query: GET_ALL_LIKED_CONTENT,
+diff --git a/apolloschurchapp/src/ui/SearchCard/index.js b/apolloschurchapp/src/ui/SearchCard/index.js
+index 3a73fb4..df282fb 100644
+--- a/apolloschurchapp/src/ui/SearchCard/index.js
++++ b/apolloschurchapp/src/ui/SearchCard/index.js
+@@ -14,11 +14,16 @@ const SearchCard = memo(
+     title,
+     ...otherProps
+   }) => {
++    /* `id` is the only value we pull from the `node` and it is server optimized to not hit Rock. We
++     * need the `id for navigation but also use it to grab the `typename` so we don't have to hit
++     * Rock for that either. */
++    const typename = get(node, '__typename');
++
+     /* We don't have a way to know for certain if a particular card is true for `hasAction` without
+      * hitting Rock. While not 100% perfect we do know that these two types will have almost always
+      * have media associated with them. */
+     const hasAction = ['MediaContentItem', 'WeekendContentItem'].includes(
+-      get(node, '__typename')
++      typename
+     );
+ 
+     return (
+@@ -28,8 +33,8 @@ const SearchCard = memo(
+         isLoading={isLoading}
+         summary={summary}
+         title={title}
+-        {...otherProps}
+         {...node}
++        {...otherProps}
+       />
+     );
+   }
+diff --git a/apolloschurchapp/src/user-settings/Locations/MapView.js b/apolloschurchapp/src/user-settings/Locations/MapView.js
+index b44b872..c2a697b 100644
+--- a/apolloschurchapp/src/user-settings/Locations/MapView.js
++++ b/apolloschurchapp/src/user-settings/Locations/MapView.js
+@@ -83,11 +83,7 @@ class MapView extends Component {
+   }
+ 
+   componentDidUpdate(oldProps) {
+-    // update mapview if there are campuses and the location changes
+-    if (
+-      this.props.campuses.length &&
+-      oldProps.userLocation !== this.props.userLocation
+-    ) {
++    if (oldProps.userLocation !== this.props.userLocation) {
+       this.updateCoordinates({ value: this.previousScrollPosition });
+     }
+   }
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+index 070ca56..d54cc06 100644
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ b/apolloschurchapp/src/user-settings/Locations/index.js
+@@ -64,7 +64,7 @@ class Location extends PureComponent {
+           },
+         });
+       },
+-      (e) => console.warn('Error getting location!', e),
++      () => null,
+       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+     );
+   }
+@@ -79,14 +79,14 @@ class Location extends PureComponent {
+         }}
+         fetchPolicy="cache-and-network"
+       >
+-        {({ loading, error, data: { campuses, currentUser } = {} }) => (
++        {({ loading, error, data: { campuses = [], currentUser } = {} }) => (
+           <Mutation mutation={CHANGE_CAMPUS}>
+             {(handlePress) => (
+               <MapView
+                 navigation={this.props.navigation}
+                 isLoading={loading}
+                 error={error}
+-                campuses={campuses || []}
++                campuses={campuses}
+                 initialRegion={this.props.initialRegion}
+                 userLocation={this.state.userLocation}
+                 currentCampus={get(currentUser, 'profile.campus')}
