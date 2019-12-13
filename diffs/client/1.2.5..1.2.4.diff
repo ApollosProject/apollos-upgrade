@@ -1,0 +1,415 @@
+diff --git a/apolloschurchapp/__mocks__/react-native-permissions/index.js b/apolloschurchapp/__mocks__/react-native-permissions/index.js
+deleted file mode 100644
+index 4d543c8..0000000
+--- a/apolloschurchapp/__mocks__/react-native-permissions/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export * from 'react-native-permissions/mock.js';
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index e05ab7a..607cd7d 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -147,7 +147,7 @@ android {
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+         versionCode 24
+-        versionName "1.2.5"
++        versionName "1.2.4"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 6a3b40e..c77a161 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.5",
++    "version": "1.2.4",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile b/apolloschurchapp/ios/Podfile
+index dc2be4e..354f6da 100644
+--- a/apolloschurchapp/ios/Podfile
++++ b/apolloschurchapp/ios/Podfile
+@@ -2,8 +2,6 @@ platform :ios, '9.0'
+ require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+ 
+ target 'apolloschurchapp' do
+-  permissions_path = '../node_modules/react-native-permissions/ios'
+-
+   # Pods for apolloschurchapp
+   pod 'React', :path => '../node_modules/react-native/'
+   pod 'React-Core', :path => '../node_modules/react-native/React'
+@@ -28,7 +26,6 @@ target 'apolloschurchapp' do
+   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+-  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
+ 
+   target 'apolloschurchappTests' do
+     inherit! :search_paths
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index ae4257d..a30f91b 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -14,8 +14,6 @@ PODS:
+     - glog
+   - glog (0.3.5)
+   - OneSignal (2.10.1)
+-  - Permission-PhotoLibrary (2.0.5):
+-    - RNPermissions
+   - React (0.60.5):
+     - React-Core (= 0.60.5)
+     - React-DevSupport (= 0.60.5)
+@@ -124,8 +122,6 @@ PODS:
+     - React
+   - RNInAppBrowser (3.1.0):
+     - React
+-  - RNPermissions (2.0.5):
+-    - React
+   - RNScreens (1.0.0-alpha.23):
+     - React
+   - RNSVG (9.4.0):
+@@ -137,7 +133,6 @@ DEPENDENCIES:
+   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+-  - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary.podspec`)
+   - React (from `../node_modules/react-native/`)
+   - React-Core (from `../node_modules/react-native/React`)
+   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
+@@ -173,13 +168,12 @@ DEPENDENCIES:
+   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
+-  - RNPermissions (from `../node_modules/react-native-permissions`)
+   - RNScreens (from `../node_modules/react-native-screens`)
+   - RNSVG (from `../node_modules/react-native-svg`)
+   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+ 
+ SPEC REPOS:
+-  trunk:
++  https://github.com/cocoapods/specs.git:
+     - boost-for-react-native
+     - OneSignal
+ 
+@@ -192,8 +186,6 @@ EXTERNAL SOURCES:
+     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
+   glog:
+     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+-  Permission-PhotoLibrary:
+-    :path: "../node_modules/react-native-permissions/ios/PhotoLibrary.podspec"
+   React:
+     :path: "../node_modules/react-native/"
+   React-Core:
+@@ -264,8 +256,6 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-gesture-handler"
+   RNInAppBrowser:
+     :path: "../node_modules/react-native-inappbrowser-reborn"
+-  RNPermissions:
+-    :path: "../node_modules/react-native-permissions"
+   RNScreens:
+     :path: "../node_modules/react-native-screens"
+   RNSVG:
+@@ -280,7 +270,6 @@ SPEC CHECKSUMS:
+   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+   OneSignal: 8fb749fa07f88006403c9b659a570fb7fb74519a
+-  Permission-PhotoLibrary: d6d09cca5d0de1fda1958175106234773a566893
+   React: 53c53c4d99097af47cf60594b8706b4e3321e722
+   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
+   React-cxxreact: 8384287780c4999351ad9b6e7a149d9ed10a2395
+@@ -316,11 +305,10 @@ SPEC CHECKSUMS:
+   RNDeviceInfo: 687c1b2ab6d86ff1ca1208783320cd144138c7f2
+   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+   RNInAppBrowser: 9d1ffb9db0d0cbdf03f528f1f0624b2c533b93fd
+-  RNPermissions: c40561e25ae1d4ca4ad987bde1026f9294a89f74
+   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+   RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
+   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+ 
+-PODFILE CHECKSUM: bec92bd21d6fad684900aca0f0013ce700530821
++PODFILE CHECKSUM: d235853c2d054909a0114df39a2529360918990d
+ 
+-COCOAPODS: 1.8.3
++COCOAPODS: 1.7.5
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 241338e..b829a33 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.5</string>
++	<string>1.2.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 3d463d7..27b288c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.5</string>
++	<string>1.2.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index c4f726c..dfdaff8 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.5</string>
++	<string>1.2.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 1089739..917f810 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.5</string>
++	<string>1.2.4</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+index 5080a3a..35373b1 100644
+--- a/apolloschurchapp/metro.config.js
++++ b/apolloschurchapp/metro.config.js
+@@ -33,7 +33,6 @@ const sharedNativeModules = [
+   'react-native-gesture-handler',
+   'react-native-video',
+   'react-native-video-controls',
+-  'react-native-modal-datetime-picker',
+   '@apollosproject/react-native-airplay-btn',
+   'react-navigation',
+ ];
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 90a41eb..ea09a5f 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.5",
++  "version": "1.2.4",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -63,16 +63,16 @@
+   },
+   "dependencies": {
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.5",
+-    "@apollosproject/ui-auth": "^1.2.5",
+-    "@apollosproject/ui-htmlview": "^1.2.5",
+-    "@apollosproject/ui-kit": "^1.2.5",
+-    "@apollosproject/ui-media-player": "^1.2.5",
+-    "@apollosproject/ui-notifications": "^1.2.5",
+-    "@apollosproject/ui-onboarding": "^1.2.5",
+-    "@apollosproject/ui-passes": "^1.2.5",
+-    "@apollosproject/ui-scripture": "^1.2.5",
+-    "@apollosproject/ui-storybook": "^1.2.5",
++    "@apollosproject/ui-analytics": "^1.2.4",
++    "@apollosproject/ui-auth": "^1.2.4",
++    "@apollosproject/ui-htmlview": "^1.2.4",
++    "@apollosproject/ui-kit": "^1.2.4",
++    "@apollosproject/ui-media-player": "^1.2.4",
++    "@apollosproject/ui-notifications": "^1.2.4",
++    "@apollosproject/ui-onboarding": "^1.2.4",
++    "@apollosproject/ui-passes": "^1.2.4",
++    "@apollosproject/ui-scripture": "^1.2.4",
++    "@apollosproject/ui-storybook": "^1.2.4",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+@@ -104,11 +104,9 @@
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+     "react-native-maps": "0.25.0",
+-    "react-native-modal-datetime-picker": "7.6.0",
+     "react-native-music-control": "0.10.5",
+     "react-native-onesignal": "3.3.2",
+     "react-native-passkit-wallet": "^0.1.4",
+-    "react-native-permissions": "^2.0.5",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-context": "^0.3.6",
+     "react-native-safe-area-view": "0.13.1",
+diff --git a/apolloschurchapp/src/tabs/connect/ActionTable/index.js b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+index a7a7400..d376af6 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionTable/index.js
++++ b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+@@ -62,6 +62,15 @@ const ActionTable = () => (
+               <CellIcon name="arrow-next" />
+             </Cell>
+           </Touchable>
++          <Divider />
++          <Touchable
++            onPress={() => openUrl('https://apollosrock.newspring.cc/page/186')}
++          >
++            <Cell>
++              <CellText>I would like to give</CellText>
++              <CellIcon name="arrow-next" />
++            </Cell>
++          </Touchable>
+         </TableView>
+         <TableView>
+           <Touchable
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
+index 6ac75d0..b829473 100644
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
++++ b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
+@@ -38,7 +38,7 @@ const ButtonLinkSpacing = styled(({ theme }) => ({
+ }))(View);
+ 
+ const AndroidTouchableFix = withTheme(({ theme }) => ({
+-  borderRadius: theme.sizing.baseBorderRadius / 2,
++  borderRadius: theme.sizing.baseUnit / 2,
+ }))(Touchable);
+ 
+ const StyledHorizontalTileFeed = styled(({ theme }) => ({
+diff --git a/apolloschurchapp/src/tabs/connect/getUserProfile.js b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+index 9d2d80c..ef3b2c8 100644
+--- a/apolloschurchapp/src/tabs/connect/getUserProfile.js
++++ b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
+ import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
+ 
+ export default gql`
+-  query CurrentUserProfile {
++  query getCurrentUserProfile {
+     currentUser {
+       id
+       profile {
+diff --git a/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js b/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
+index 62c31bb..1427287 100644
+--- a/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
++++ b/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
+@@ -31,7 +31,7 @@ const Name = styled({
+ })(View);
+ 
+ const AndroidTouchableFix = withTheme(({ theme }) => ({
+-  borderRadius: theme.sizing.baseBorderRadius / 2,
++  borderRadius: theme.sizing.baseUnit / 2,
+ }))(Touchable);
+ 
+ const ButtonLinkSpacing = styled(({ theme }) => ({
+diff --git a/apolloschurchapp/src/user-settings/Locations/Marker.js b/apolloschurchapp/src/user-settings/Locations/Marker.js
+index 6f1fdfe..b91f89e 100644
+--- a/apolloschurchapp/src/user-settings/Locations/Marker.js
++++ b/apolloschurchapp/src/user-settings/Locations/Marker.js
+@@ -7,17 +7,17 @@ import Color from 'color';
+ import { styled } from '@apollosproject/ui-kit';
+ 
+ const MarkerView = styled(({ theme }) => ({
+-  width: theme.sizing.baseUnit * 0.5,
+-  height: theme.sizing.baseUnit * 0.5,
+-  borderRadius: theme.sizing.baseUnit * 0.25,
++  width: 8,
++  height: 8,
++  borderRadius: 4,
+   backgroundColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+   zIndex: 2,
+ }))(View);
+ 
+ const MarkerRingView = styled(({ theme }) => ({
+-  width: theme.sizing.baseUnit * 1.5,
+-  height: theme.sizing.baseUnit * 1.5,
+-  borderRadius: theme.sizing.baseUnit * 0.75,
++  width: 24,
++  height: 24,
++  borderRadius: 12,
+   backgroundColor: Color(theme.colors.primary).fade(theme.alpha.low),
+   borderWidth: 1,
+   borderColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+diff --git a/apolloschurchapp/src/user-settings/getUserPhoto.js b/apolloschurchapp/src/user-settings/getUserPhoto.js
+index 6235575..9d48a44 100644
+--- a/apolloschurchapp/src/user-settings/getUserPhoto.js
++++ b/apolloschurchapp/src/user-settings/getUserPhoto.js
+@@ -1,7 +1,8 @@
+ import gql from 'graphql-tag';
++import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
+ 
+ export default gql`
+-  query CurrentUserPhoto {
++  query getCurrentUserProfile {
+     currentUser {
+       id
+       profile {
+@@ -12,4 +13,5 @@ export default gql`
+       }
+     }
+   }
++  ${CampusParts}
+ `;
+diff --git a/apolloschurchapp/src/user-settings/uploadPhoto.js b/apolloschurchapp/src/user-settings/uploadPhoto.js
+index b5949e8..c1cc667 100644
+--- a/apolloschurchapp/src/user-settings/uploadPhoto.js
++++ b/apolloschurchapp/src/user-settings/uploadPhoto.js
+@@ -1,11 +1,7 @@
+-import { Platform } from 'react-native';
+-
+-import { ReactNativeFile } from 'apollo-upload-client';
+ import gql from 'graphql-tag';
+ import ImagePicker from 'react-native-image-picker';
+-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+-
+-import GET_USER_PHOTO from './getUserPhoto';
++import { ReactNativeFile } from 'apollo-upload-client';
++import GET_USER_PROFILE from './getUserPhoto';
+ 
+ const options = {
+   title: 'Select Profile Image',
+@@ -18,23 +14,7 @@ const options = {
+   },
+ };
+ 
+-async function handleIOSPermissions() {
+-  let cameraPermissionStatus = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);
+-  let hasPermission = cameraPermissionStatus === RESULTS.GRANTED;
+-  if (!hasPermission) {
+-    cameraPermissionStatus = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+-    hasPermission = cameraPermissionStatus === RESULTS.GRANTED;
+-    if (!hasPermission) {
+-      return false;
+-    }
+-  }
+-  return true;
+-}
+-
+-async function showImagePicker() {
+-  if (Platform.OS === 'ios' && !(await handleIOSPermissions())) {
+-    return null;
+-  }
++function showImagePicker() {
+   return new Promise((resolve, reject) => {
+     ImagePicker.showImagePicker(options, (response) => {
+       if (response.didCancel) {
+@@ -79,10 +59,10 @@ export default async ({ client, onUpload = () => ({}) }) => {
+           },
+         }
+       ) => {
+-        const data = cache.readQuery({ query: GET_USER_PHOTO });
++        const data = cache.readQuery({ query: GET_USER_PROFILE });
+ 
+         cache.writeQuery({
+-          query: GET_USER_PHOTO,
++          query: GET_USER_PROFILE,
+           data: {
+             currentUser: {
+               ...data.currentUser,

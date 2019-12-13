@@ -1,0 +1,3202 @@
+diff --git a/apollos-church-api/.dockerignore b/apollos-church-api/.dockerignore
+deleted file mode 100644
+index 66a3225..0000000
+--- a/apollos-church-api/.dockerignore
++++ /dev/null
+@@ -1,4 +0,0 @@
+-packages/apolloschurchapp
+-packages/apollos-ui-kit
+-packages/apollos-church-api/.env
+-packages/*/node_modules
+diff --git a/apollos-church-api/.envExample b/apollos-church-api/.envExample
+index 8559468..8a33ffe 100644
+--- a/apollos-church-api/.envExample
++++ b/apollos-church-api/.envExample
+@@ -1,18 +1,4 @@
+ ROCK_API=
+ ROCK_TOKEN=
+-BIBLE_API_KEY=
+-ENGINE_API_KEY=
+-CLOUDINARY_URL=
+-ONE_SIGNAL_REST_KEY=
+-PORT=4000
+-ROOT_URL=http://localhost:4000
+-
+-TWILIO_ACCOUNT_SID=
+-TWILIO_AUTH_TOKEN=
+-TWILIO_FROM_NUMBER=
+-
+-
+-PASS_WWDR_CERT=
+-PASS_SIGNER_CERT=
+-PASS_SIGNER_KEY=
+-PASS_SIGNER_PASSPHRASE=
+\ No newline at end of file
++ESV_KEY=
++CLOUDINARY_URL=
+\ No newline at end of file
+diff --git a/apollos-church-api/__mocks__/apollo-datasource-mocks/bible.js b/apollos-church-api/__mocks__/apollo-datasource-mocks/bible.js
+new file mode 100644
+index 0000000..921d98d
+--- /dev/null
++++ b/apollos-church-api/__mocks__/apollo-datasource-mocks/bible.js
+@@ -0,0 +1,17 @@
++export default () => ({
++  data: {
++    passages: [
++      {
++        id: 'SNG.1.1',
++        orgId: 'SNG.1.1',
++        bibleId: '9879dbb7cfe39e4d-01',
++        bookId: 'SNG',
++        chapterIds: ['SNG.1'],
++        reference: 'Song of Solomon 1:1',
++        content:
++          '<p class="p"><span data-number="1" class="v">1</span>The Song of songs, which is Solomon’s.</p>',
++        copyright: 'PUBLIC DOMAIN',
++      },
++    ],
++  },
++});
+diff --git a/apollos-church-api/__mocks__/apollo-datasource-mocks/index.js b/apollos-church-api/__mocks__/apollo-datasource-mocks/index.js
+new file mode 100644
+index 0000000..f53054e
+--- /dev/null
++++ b/apollos-church-api/__mocks__/apollo-datasource-mocks/index.js
+@@ -0,0 +1,2 @@
++export { default as liveStreamLive } from './live-stream';
++export { default as Scripture } from './bible';
+diff --git a/apollos-church-api/__mocks__/apollo-datasource-mocks/live-stream.js b/apollos-church-api/__mocks__/apollo-datasource-mocks/live-stream.js
+new file mode 100644
+index 0000000..13fe0d1
+--- /dev/null
++++ b/apollos-church-api/__mocks__/apollo-datasource-mocks/live-stream.js
+@@ -0,0 +1,6 @@
++export default () => ({
++  meta: { status: 200 },
++  response: {
++    item: { isLive: true, eventStartTime: '2018-08-06T17:00:00Z' },
++  },
++});
+diff --git a/apollos-church-api/__mocks__/apollo-server-env.js b/apollos-church-api/__mocks__/apollo-server-env.js
+index 5ec2ff7..ffa940a 100644
+--- a/apollos-church-api/__mocks__/apollo-server-env.js
++++ b/apollos-church-api/__mocks__/apollo-server-env.js
+@@ -1,5 +1,220 @@
+-import createMock from '@apollosproject/apollo-server-env-mock';
++import fetch from 'jest-fetch-mock';
++
++import * as apolloDatasourceMocks from './apollo-datasource-mocks';
++import * as rockMocks from './rock-api-mocks';
+ 
+ const apolloServerEnv = require.requireActual('apollo-server-env');
+ 
+-module.exports = createMock(apolloServerEnv);
++// eslint-disable-next-line
++const Response = apolloServerEnv.Response;
++
++const resolveWith = (data, url) =>
++  Promise.resolve(
++    new Response(JSON.stringify(data), {
++      url,
++      status: 200,
++      statusText: 'OK',
++      headers: new apolloServerEnv.Headers({
++        'Content-Type': 'application/json',
++      }),
++    })
++  );
++
++fetch.mockLiveDataSourceApis = () => {
++  fetch.mockImplementation((request) => {
++    if (request.url.match('/api/v1/events/current')) {
++      return resolveWith(apolloDatasourceMocks.liveStreamLive(), request.url);
++    }
++    if (request.url.match('api.scripture.api.bible')) {
++      return resolveWith(apolloDatasourceMocks.Scripture(), request.url);
++    }
++    return Promise.reject();
++  });
++};
++
++fetch.mockRockDataSourceAPI = () => {
++  fetch.mockImplementation((request) => {
++    let { url } = request;
++    url = decodeURI(url);
++    if (!url.match('https://apollosrock.newspring.cc/api')) {
++      if (request.url.match('/api.scripture.api.bible/v1')) {
++        return resolveWith(apolloDatasourceMocks.Scripture());
++      }
++      return Promise.reject();
++    }
++
++    if (url.match('api/EntityTypes')) {
++      return resolveWith(
++        [
++          {
++            Id: 201,
++          },
++        ],
++        url
++      );
++    }
++
++    if (url.match('api/InteractionChannels')) {
++      return resolveWith(
++        [
++          {
++            Id: 10,
++          },
++        ],
++        url
++      );
++    }
++
++    if (url.match('api/InteractionComponents')) {
++      return resolveWith(
++        [
++          {
++            Id: 101,
++          },
++        ],
++        url
++      );
++    }
++
++    if (url.match('api/ContentChannels/\\d')) {
++      return resolveWith(rockMocks.contentChannel());
++    }
++
++    if (url.match('api/Groups/GetFamilies/\\d')) {
++      return resolveWith(rockMocks.families());
++    }
++
++    if (url.match('api/ContentChannels')) {
++      return resolveWith([rockMocks.contentChannel()]);
++    }
++
++    if (url.match('api/ContentChannelItems/test-case-no-attributes')) {
++      const mock = rockMocks.contentItem();
++      mock.AttributeValues = {};
++      mock.Attributes = {};
++      return resolveWith(mock);
++    }
++
++    if (url.match('api/ContentChannelItems/123')) {
++      const contentItem = rockMocks.contentItem();
++      contentItem.AttributeValues.Scriptures = { Value: 'John 3:16' };
++      return resolveWith(contentItem);
++    }
++
++    if (url.match('api/ContentChannelItems/\\d')) {
++      return resolveWith(rockMocks.contentItem());
++    }
++
++    if (url.match('api/ContentChannelItems')) {
++      return resolveWith([rockMocks.contentItem()]);
++    }
++
++    if (url.match('api/ContentChannelItemAssociations')) {
++      return resolveWith([rockMocks.contentChannelItemAssociation()]);
++    }
++
++    if (url.match('api/Auth/Login')) {
++      const body = JSON.parse(request.body);
++      const response = new Response('');
++      if (body.Password === 'good') {
++        response.headers.set('set-cookie', 'some cookie');
++        return Promise.resolve(response);
++      }
++      return Promise.reject({ ...response, status: 401 });
++    }
++
++    if (url.match('api/People/GetCurrentPerson')) {
++      return resolveWith(rockMocks.people());
++    }
++
++    if (url.match('api/People/\\d')) {
++      return resolveWith(rockMocks.people());
++    }
++
++    if (url.match('api/People')) {
++      if (request.method === 'POST') {
++        const { Email } = JSON.parse(request.body);
++        if (!Email) {
++          const response = new Response('');
++          response.status = 400;
++          return Promise.reject(response);
++        }
++        return resolveWith('35');
++      }
++
++      return resolveWith([rockMocks.people()]);
++    }
++
++    if (url.match('api/Interactions/\\d')) {
++      return resolveWith(rockMocks.interaction());
++    }
++
++    if (url.match('api/Interactions')) {
++      if (request.method === 'GET') {
++        return resolveWith([rockMocks.interaction()]);
++      }
++      if (request.method === 'POST') {
++        const response = new Response('456', {
++          status: 200,
++          statusText: 'OK',
++          headers: new apolloServerEnv.Headers({
++            'Content-Type': 'application/json',
++          }),
++        });
++        return Promise.resolve(response);
++      }
++    }
++
++    if (url.match('api/InteractionSessions')) {
++      if (request.method === 'GET') {
++        return resolveWith(rockMocks.session());
++      }
++      if (request.method === 'POST') {
++        const response = new Response('123', {
++          status: 200,
++          statusText: 'OK',
++          headers: new apolloServerEnv.Headers({
++            'Content-Type': 'application/json',
++          }),
++        });
++        return Promise.resolve(response);
++      }
++    }
++
++    if (url.match('api/UserLogins')) {
++      if (request.method === 'POST') {
++        const { UserName } = JSON.parse(request.body);
++        if (!UserName) {
++          const response = new Response('');
++          response.status = 400;
++          return Promise.reject(response);
++        }
++        return resolveWith({ id: 21 });
++      }
++      const identity = url // identity = UserName
++        .split('eq')
++        .pop()
++        .trim(' '); // EXAMPLE URL: /api/UserLogins?$filter=UserName eq 'isaac.hardy@newspring.cc'
++
++      if (!identity) {
++        const response = new Response('');
++        response.status = 400;
++        return Promise.reject(response);
++      }
++      if (identity === `'isaac.hardy@newspring.cc'`)
++        return resolveWith([rockMocks.userLogins()]);
++
++      return resolveWith([]);
++    }
++    console.log(`No route matching ${url}`);
++    return Promise.reject(`No route matching ${url}`);
++  });
++};
++
++const apolloServerEnvMocked = {
++  ...apolloServerEnv,
++  Response: fetch.Response,
++  fetch,
++};
++
++module.exports = apolloServerEnvMocked;
+diff --git a/apollos-church-api/__mocks__/isomorphic-fetch.js b/apollos-church-api/__mocks__/isomorphic-fetch.js
+new file mode 100644
+index 0000000..779ea17
+--- /dev/null
++++ b/apollos-church-api/__mocks__/isomorphic-fetch.js
+@@ -0,0 +1,103 @@
++import 'isomorphic-fetch';
++import fetch from 'jest-fetch-mock';
++
++import * as rockMocks from './rock-api-mocks';
++
++const resolveWith = (data) =>
++  Promise.resolve(new fetch.Response(JSON.stringify(data)));
++
++fetch.mockRockAPI = () => {
++  fetch.mockImplementation((url, options) => {
++    if (!url.match('https://apollosrock.newspring.cc/api'))
++      return Promise.reject();
++
++    if (url.match('api/ContentChannels/\\d')) {
++      return resolveWith(rockMocks.contentChannel());
++    }
++
++    if (url.match('api/ContentChannels')) {
++      return resolveWith([rockMocks.contentChannel()]);
++    }
++
++    if (url.match('api/ContentChannelItems/test-case-no-attributes')) {
++      const mock = rockMocks.contentItem();
++      mock.AttributeValues = {};
++      mock.Attributes = {};
++      return resolveWith(mock);
++    }
++
++    if (url.match('api/ContentChannelItems/\\d')) {
++      return resolveWith(rockMocks.contentItem());
++    }
++
++    if (url.match('api/ContentChannelItems')) {
++      return resolveWith([rockMocks.contentItem()]);
++    }
++
++    if (url.match('api/ContentChannelItemAssociations')) {
++      return resolveWith([rockMocks.contentChannelItemAssociation()]);
++    }
++
++    if (url.match('api/Auth/Login')) {
++      const body = JSON.parse(options.body);
++      const response = new fetch.Response('');
++      if (body.Password === 'good') {
++        response.headers.set('set-cookie', 'some cookie');
++        return Promise.resolve(response);
++      }
++      response.status = 401;
++      return Promise.reject(response);
++    }
++
++    if (url.match('api/People/GetCurrentPerson')) {
++      return resolveWith(rockMocks.people());
++    }
++
++    if (url.match('api/People/\\d')) {
++      return resolveWith(rockMocks.people());
++    }
++
++    if (url.match('api/People')) {
++      if (options.method === 'POST') {
++        const { Email } = JSON.parse(options.body);
++        if (!Email) {
++          const response = new fetch.Response('');
++          response.status = 400;
++          return Promise.reject(response);
++        }
++        return resolveWith({ personId: 35 });
++      }
++
++      return resolveWith([rockMocks.people()]);
++    }
++
++    if (url.match('api/UserLogins')) {
++      if (options.method === 'POST') {
++        const { UserName } = JSON.parse(options.body);
++        if (!UserName) {
++          const response = new fetch.Response('');
++          response.status = 400;
++          return Promise.reject(response);
++        }
++        return resolveWith({ id: 21 });
++      }
++      const identity = url // identity = UserName
++        .split('eq')
++        .pop()
++        .trim(' '); // EXAMPLE URL: /api/UserLogins?$filter=UserName eq 'isaac.hardy@newspring.cc'
++      if (!identity) {
++        const response = new fetch.Response('');
++        response.status = 400;
++        return Promise.reject(response);
++      }
++      if (identity === `'isaac.hardy@newspring.cc'`)
++        return resolveWith([rockMocks.userLogins()]);
++
++      return resolveWith([]);
++    }
++
++    return Promise.reject();
++  });
++};
++
++export default fetch;
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/content-channel-item-association.js b/apollos-church-api/__mocks__/rock-api-mocks/content-channel-item-association.js
+new file mode 100644
+index 0000000..b59aadb
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/content-channel-item-association.js
+@@ -0,0 +1,18 @@
++export default () => ({
++  ContentChannelItemId: 1,
++  ChildContentChannelItemId: 1,
++  Order: 0,
++  ChildContentChannelItem: null,
++  CreatedDateTime: null,
++  ModifiedDateTime: null,
++  CreatedByPersonAliasId: null,
++  ModifiedByPersonAliasId: null,
++  ModifiedAuditValuesAlreadyUpdated: false,
++  Attributes: null,
++  AttributeValues: null,
++  Id: 1,
++  Guid: 'some-really-long-guid-yo',
++  ForeignId: null,
++  ForeignGuid: null,
++  ForeignKey: null,
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/content-channel.js b/apollos-church-api/__mocks__/rock-api-mocks/content-channel.js
+new file mode 100644
+index 0000000..c3f88a3
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/content-channel.js
+@@ -0,0 +1,27 @@
++export default () => ({
++  ContentChannelTypeId: 6,
++  Name: 'My super cool content channel',
++  Description: 'Some description',
++  IconCssClass: 'fa fa-star',
++  RequiresApproval: false,
++  ItemsManuallyOrdered: false,
++  ChildItemsManuallyOrdered: false,
++  EnableRss: false,
++  ChannelUrl: '',
++  ItemUrl: '',
++  TimeToLive: 0,
++  ContentControlType: 0,
++  RootImageDirectory: '',
++  IsIndexEnabled: false,
++  IsTaggingEnabled: false,
++  ItemTagCategoryId: null,
++  CreatedDateTime: null,
++  ModifiedDateTime: '2018-01-01T01:01:01.001',
++  CreatedByPersonAliasId: null,
++  ModifiedByPersonAliasId: 61,
++  Id: 'some-id',
++  Guid: 'some-sort-of-long-guid',
++  ForeignId: null,
++  ForeignGuid: null,
++  ForeignKey: null,
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/content-item.js b/apollos-church-api/__mocks__/rock-api-mocks/content-item.js
+new file mode 100644
+index 0000000..f42515b
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/content-item.js
+@@ -0,0 +1,494 @@
++export default () => ({
++  ContentChannelId: 1,
++  ContentChannelTypeId: 1,
++  Title: 'SAMPLE: Easter',
++  Content:
++    '<p>\r\n\tLorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin condimentum aliquet. In est nulla, lacinia ac dictum et, laoreet vitae elit. Proin tempus tellus ligula, a consequat diam consectetur a. Phasellus luctus velit sed lorem mollis commodo. Nunc sit amet blandit velit. Donec tincidunt congue facilisis. Sed iaculis at neque non porttitor. Phasellus ultrices egestas erat feugiat pellentesque. Duis venenatis, dolor quis fringilla tempus, sem lorem euismod lectus, sed egestas felis magna at felis. Pellentesque ut rhoncus erat, a pulvinar purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut sit amet consequat est. Maecenas et porta dui, non condimentum lectus.</p>\r\n<p>\r\n\tSuspendisse vel nibh odio. Pellentesque porta sapien ligula, in laoreet diam tempus sed. Morbi nunc erat, mattis eu pulvinar blandit, adipiscing quis magna. Ut quis dui lobortis velit suscipit consectetur. Nulla iaculis fermentum egestas. Aenean venenatis sagittis mauris, sed rhoncus purus accumsan ac. Suspendisse potenti. Sed sed tempor turpis. Duis sit amet nisi nec purus fringilla condimentum. Phasellus non lacus arcu. Donec scelerisque, erat sed tempor elementum, nulla risus scelerisque ante, ac imperdiet velit magna ut quam. Nam tristique orci auctor consequat laoreet. Quisque malesuada metus sed sodales eleifend. Aenean rhoncus, mi sit amet ullamcorper tincidunt, sem sem rutrum felis, in semper enim massa ut sem.</p>\r\n<p>\r\n\tVivamus diam urna, cursus in sapien in, porta gravida enim. Cras non fringilla arcu, tincidunt laoreet lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam volutpat felis quis augue faucibus ultrices. Morbi lobortis vestibulum sodales. Sed tincidunt urna vitae felis ultrices, pharetra placerat quam dignissim. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vel adipiscing tellus. In vitae sodales diam. Aliquam pharetra orci a porta molestie. In et neque bibendum, viverra leo sit amet, auctor magna. Morbi posuere massa sed metus euismod, et adipiscing sem dictum. Cras eget elementum risus, non imperdiet ligula.</p>\r\n',
++  Priority: 100,
++  Status: 2,
++  ApprovedByPersonAliasId: 10,
++  ApprovedDateTime: '2013-08-01T00:00:00',
++  StartDateTime: '2013-08-01T00:00:00',
++  ExpireDateTime: '2020-08-02T00:00:00',
++  Permalink: null,
++  Order: 0,
++  ContentChannel: null,
++  ContentChannelType: null,
++  CreatedDateTime: null,
++  ModifiedDateTime: null,
++  CreatedByPersonAliasId: null,
++  ModifiedByPersonAliasId: null,
++  ModifiedAuditValuesAlreadyUpdated: false,
++  Attributes: {
++    SummaryText: {
++      IsSystem: false,
++      FieldTypeId: 21,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'SummaryText',
++      Name: 'Summary Text',
++      Description: 'Short description',
++      Order: 0,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        allowhtml: {
++          Name: null,
++          Description: null,
++          Value: 'True',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1265,
++      Guid: '35993d3b-57d3-4f41-88a5-a83ee380d2dd',
++    },
++    Image: {
++      IsSystem: false,
++      FieldTypeId: 10,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'Image',
++      Name: 'Image',
++      Description: '',
++      Order: 1,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        binaryFileType: {
++          Name: null,
++          Description: null,
++          Value: '8DBF874C-F3C2-4848-8137-C963C431EB0B',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1266,
++      Guid: 'ffdf621c-ecff-4199-ab90-d678c36dce38',
++    },
++    DetailImage: {
++      IsSystem: false,
++      FieldTypeId: 10,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'DetailImage',
++      Name: 'Detail Image',
++      Description: '',
++      Order: 2,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        binaryFileType: {
++          Name: null,
++          Description: null,
++          Value: '8DBF874C-F3C2-4848-8137-C963C431EB0B',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1267,
++      Guid: '43758fc4-906e-46cd-a6fb-8f21176c1cc5',
++    },
++    ImageByUrlTest: {
++      IsSystem: false,
++      FieldTypeId: 1,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'ImageByUrlTest',
++      Name: 'Image By Url Test',
++      Description: '',
++      Order: 1001,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1923,
++      Guid: '9293638a-a176-d7a0-4916-b57e6cde94d2',
++    },
++    ImageBySchemalessUrlTest: {
++      IsSystem: false,
++      FieldTypeId: 10,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'ImageBySchemalessUrlTest',
++      Name: 'Image By Schemaless Url Test',
++      Description: '',
++      Order: 1001,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1923,
++      Guid: '9293638a-a176-d7a0-4916-b57e6cde94d2',
++    },
++    ImageUnknownFormat: {
++      IsSystem: false,
++      FieldTypeId: 10,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'ImageUnknownFormat',
++      Name: 'Image Of Unknown format',
++      Description: '',
++      Order: 1001,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1923,
++      Guid: '9293638a-a176-d7a0-4916-b57e6cde94d2',
++    },
++    Campuses: {
++      IsSystem: false,
++      FieldTypeId: 26,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'Campuses',
++      Name: 'Campuses',
++      Description: 'The campus or campuses that the item is associated with',
++      Order: 3,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1268,
++      Guid: 'fd8df8ac-0af2-4738-8dda-3b1030c3e0ce',
++    },
++    PrimaryAudience: {
++      IsSystem: false,
++      FieldTypeId: 16,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'PrimaryAudience',
++      Name: 'Primary Audience',
++      Description: 'The primary audience that the item is targeted towards.',
++      Order: 4,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        allowmultiple: {
++          Name: null,
++          Description: null,
++          Value: 'False',
++        },
++        definedtype: {
++          Name: null,
++          Description: null,
++          Value: '16',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1269,
++      Guid: 'ca97aadd-9795-434a-b924-250cc15cd7a5',
++    },
++    SecondaryAudiences: {
++      IsSystem: false,
++      FieldTypeId: 16,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelTypeId',
++      EntityTypeQualifierValue: '1',
++      Key: 'SecondaryAudiences',
++      Name: 'Secondary Audiences',
++      Description: 'Any secondary audiences that the item is targeted towards.',
++      Order: 5,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        allowmultiple: {
++          Name: null,
++          Description: null,
++          Value: 'True',
++        },
++        definedtype: {
++          Name: null,
++          Description: null,
++          Value: '16',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1270,
++      Guid: '95e68a40-c987-4b53-8d9a-0c5605284e4c',
++    },
++    AudioLink: {
++      IsSystem: false,
++      FieldTypeId: 1,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'AudioLink',
++      Name: 'Audio Link',
++      Description: '',
++      Order: 1000,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1925,
++      Guid: 'b9ed0214-752e-f289-43b6-9cda40c1aba9',
++    },
++    Speaker: {
++      IsSystem: false,
++      FieldTypeId: 1,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'Speaker',
++      Name: 'Speaker',
++      Description: '',
++      Order: 1001,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1923,
++      Guid: '9293638a-a176-d7a0-4916-b57e6cde94d2',
++    },
++    VideoLink: {
++      IsSystem: false,
++      FieldTypeId: 1,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'VideoLink',
++      Name: 'Video Link',
++      Description: '',
++      Order: 1002,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {},
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1924,
++      Guid: 'dd8b4442-ca91-2780-4ffe-c3d97e95dfa4',
++    },
++    VideoEmbed: {
++      IsSystem: false,
++      FieldTypeId: 51,
++      EntityTypeId: 208,
++      EntityTypeQualifierColumn: 'ContentChannelId',
++      EntityTypeQualifierValue: '5',
++      Key: 'VideoEmbed',
++      Name: 'VideoEmbed',
++      Description: '',
++      Order: 1003,
++      IsGridColumn: false,
++      DefaultValue: '',
++      IsMultiValue: false,
++      IsRequired: false,
++      AllowSearch: false,
++      IsIndexEnabled: false,
++      IsAnalytic: false,
++      IsAnalyticHistory: false,
++      QualifierValues: {
++        editorHeight: {
++          Name: null,
++          Description: null,
++          Value: '200',
++        },
++        editorMode: {
++          Name: null,
++          Description: null,
++          Value: '2',
++        },
++        editorTheme: {
++          Name: null,
++          Description: null,
++          Value: '0',
++        },
++      },
++      CategoryIds: [],
++      TypeId: 49,
++      TypeName: 'Rock.Model.Attribute',
++      AttributeValues: {},
++      Id: 1926,
++      Guid: '0a7c6ae7-7236-029c-4487-4413921b21ee',
++    },
++  },
++  AttributeValues: {
++    SummaryText: {
++      AttributeId: 1265,
++      EntityId: 1,
++      Value:
++        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sollicitudin condimentum aliquet. In est nulla, lacinia ac dictum et, laoreet vitae elit. Proin tempus tellus ligula, a consequat diam consectetur a.',
++    },
++    Image: {
++      AttributeId: 1266,
++      EntityId: 1,
++      Value: '0241ED2F-B527-424C-917C-1142A398711F',
++    },
++    DetailImage: {
++      AttributeId: 1267,
++      EntityId: 1,
++      Value: '3DA90982-118A-4BFE-9A32-58D9F610090A',
++    },
++    ImageByUrlTest: {
++      AttributeId: 1267,
++      EntityId: 1,
++      Value: 'https://some-domain.com/some/path/to/image.jpg',
++    },
++    ImageBySchemalessUrlTest: {
++      AttributeId: 1267,
++      EntityId: 1,
++      Value: '//some-domain.com/some/path/to/image.jpg',
++    },
++    ImageUnknownFormat: {
++      AttributeId: 1267,
++      EntityId: 1,
++      Value: 'ftp://some-domain.com/some/path/to/image.jpg',
++    },
++    Campuses: {
++      AttributeId: 1268,
++      EntityId: null,
++      Value: '',
++    },
++    PrimaryAudience: {
++      AttributeId: 1269,
++      EntityId: 1,
++      Value: 'B364CDEE-F000-4965-AE67-0C80DDA365DC',
++    },
++    SecondaryAudiences: {
++      AttributeId: 1270,
++      EntityId: null,
++      Value: '',
++    },
++    AudioLink: {
++      AttributeId: 1925,
++      EntityId: 33,
++      Value:
++        'https://rockrms.blob.core.windows.net/sampledata/podcasting/sample.mp3',
++    },
++    Speaker: {
++      AttributeId: 1923,
++      EntityId: 33,
++      Value: 'Pete Foster',
++    },
++    VideoLink: {
++      AttributeId: 1924,
++      EntityId: 33,
++      Value:
++        'https://rockrms.blob.core.windows.net/sampledata/podcasting/money-wise.mp4',
++    },
++    VideoEmbed: {
++      AttributeId: 1926,
++      EntityId: 33,
++      Value:
++        '<script src="//fast.wistia.com/embed/medias/kqykx8xbzq.jsonp" async></script><script src="//fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;"><div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><div class="wistia_embed wistia_async_kqykx8xbzq videoFoam=true" style="height:100%;width:100%">&nbsp;</div></div></div>',
++    },
++  },
++  Id: 1,
++  Guid: '3b8e1859-e42f-4f01-9007-d3e04429f17d',
++  ForeignId: null,
++  ForeignGuid: null,
++  ForeignKey: null,
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/index.js b/apollos-church-api/__mocks__/rock-api-mocks/index.js
+new file mode 100644
+index 0000000..0698b04
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/index.js
+@@ -0,0 +1,9 @@
++export {
++  default as contentChannelItemAssociation,
++} from './content-channel-item-association';
++export { default as contentChannel } from './content-channel';
++export { default as contentItem } from './content-item';
++export { default as people } from './people';
++export { default as userLogins } from './user-logins';
++export { default as session } from './session';
++export { default as interaction } from './interaction';
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/interaction.js b/apollos-church-api/__mocks__/rock-api-mocks/interaction.js
+new file mode 100644
+index 0000000..fb31c98
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/interaction.js
+@@ -0,0 +1,8 @@
++export default () => ({
++  Id: 456,
++  RelatedEntityId: 1,
++  Operation: 'Like',
++  InteractionDateTime: new Date(
++    'Tue Aug 21 2018 09:55:01 GMT-0500 (Central Daylight Time)'
++  ).toJSON(),
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/people.js b/apollos-church-api/__mocks__/rock-api-mocks/people.js
+new file mode 100644
+index 0000000..e5f2474
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/people.js
+@@ -0,0 +1,11 @@
++export default () => ({
++  Id: 51,
++  FirstName: 'Isaac',
++  LastName: 'Hardy',
++  NickName: 'Isaac',
++  Email: 'isaac.hardy@newspring.cc',
++  Photo: {
++    Url:
++      'https://apollosrock.newspring.cc:443/GetImage.ashx?guid=60fd5f35-3167-4c26-9a30-d44937287b87',
++  },
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/session.js b/apollos-church-api/__mocks__/rock-api-mocks/session.js
+new file mode 100644
+index 0000000..8ffdfb4
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/session.js
+@@ -0,0 +1,3 @@
++export default () => ({
++  Id: 123,
++});
+diff --git a/apollos-church-api/__mocks__/rock-api-mocks/user-logins.js b/apollos-church-api/__mocks__/rock-api-mocks/user-logins.js
+new file mode 100644
+index 0000000..9bc8c10
+--- /dev/null
++++ b/apollos-church-api/__mocks__/rock-api-mocks/user-logins.js
+@@ -0,0 +1,5 @@
++export default () => ({
++  UserName: 'isaac.hardy@newspring.cc',
++  PersonId: 35,
++  Id: 21,
++});
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+deleted file mode 100644
+index c407e17..0000000
+--- a/apollos-church-api/apollos.json
++++ /dev/null
+@@ -1,4 +0,0 @@
+-{
+-    "version": "1.2.5",
+-    "environment": "api"
+-}
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 602eb3a..6745712 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -7,99 +7,27 @@
+ 
+ # This file should be checked into version control.
+ # `.env` should NOT be checked into version control.
+-APP:
+-  # This variable is used for generating deep links.
+-  # It should match whatver is in your Info.plist `CFBundleURLTypes`
+-  DEEP_LINK_HOST: apolloschurchapp
+-  ROOT_API_URL: ${ROOT_URL}
+-  JOBS_USERNAME: ${JOBS_USERNAME}
+-  JOBS_PASSWORD: ${JOBS_PASSWORD}
++
+ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+   IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
+-  SHARE_URL: https://apollosrock.newspring.cc
+-  # This should match the timezone of the Rock server
+-  TIMEZONE: 'America/New_York'
+-  USE_PLUGIN: true
+-  SHOW_INACTIVE_CONTENT: ${ROCK_SHOW_INACTIVE_CONTENT}
+-ONE_SIGNAL:
+-  APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+-  REST_KEY: ${ONE_SIGNAL_REST_KEY}
+-CHURCH_ONLINE:
+-  URL: https://apollos.churchonline.org/api/v1/
+-  MEDIA_URLS: []
+-  WEB_VIEW_URL: https://apollos.churchonline.org/
+-ALGOLIA:
+-  APPLICATION_ID: ${ALGOLIA_APP_ID}
+-  API_KEY: ${ALGOLIA_API_KEY}
+-  # TODO: should we support multiple indices? how?
+-  SEARCH_INDEX: test_ContentItems
+-TWILIO:
+-  ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+-  AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+-  FROM_NUMBER: ${TWILIO_FROM_NUMBER}
+-PASS:
+-  TEMPLATES:
+-    CHECKIN: ${PWD}/wallet-passes/checkin.pass
+-  CERTIFICATES:
+-    WWDR: ${PASS_WWDR_CERT}
+-    SIGNER_CERT: ${PASS_SIGNER_CERT}
+-    SIGNER_KEY: ${PASS_SIGNER_KEY}
+-    SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
+ ANALYTICS:
+   # Filling out these fields will automatically enable analytics tracking
+   # on the accompanying service
+   SEGMENT_KEY:
+   GA_ID:
+-  USE_ROCK: true
+ BIBLE_API:
+   KEY: ${BIBLE_API_KEY}
+-  BIBLE_ID:
+-    WEB: '9879dbb7cfe39e4d-01'
+-    KJV: 'de4e12af7f28f599-02'
++  BIBLE_ID: "9879dbb7cfe39e4d-01"
+ CLOUDINARY:
+   # Cloudinary is used to improve image loading
+   # value should look something like
+   # cloudinary://123123123:adkfnla_adASDv_adAS@test
+   URL: ${CLOUDINARY_URL}
+-ENGINE:
+-  API_KEY: ${ENGINE_API_KEY}
+-  SCHEMA_TAG: ${ENGINE_SCHEMA_TAG}
+ 
+ # This key holds various properties that allow our GraphQL server to map to your Rock Instance
+ ROCK_MAPPINGS:
+-  INTERACTIONS:
+-    # Name of the InteractionChannel that will be created
+-    CHANNEL_NAME: Apollos App
+-    # Name of the InteractionComponent that will be created for Content Items
+-    COMPONENT_NAME: Apollos Content Item
+-    # 512 is "Mobile App"
+-    CHANNEL_MEDIUM_TYPE_ID: 512
+-
+-  CONTENT_ITEM:
+-    ContentSeriesContentItem:
+-      # When resolving "ContentSeriesContentItem" look in rock for a "ContentChannelItem"
+-      EntityType: ContentChannelItem
+-      # Used to define the subset of content channels types that use this specific type.
+-      ContentChannelTypeId: [6, 7]
+-    DevotionalContentItem:
+-      EntityType: ContentChannelItem
+-      ContentChannelTypeId: [1]
+-    MediaContentItem:
+-      EntityType: ContentChannelItem
+-    UniversalContentItem:
+-      EntityType: ContentChannelItem
+-    WeekendContentItem:
+-      ContentChannelId: [5]
+-      EntityType: ContentChannelItem
+-    ContentItem:
+-      EntityType: ContentChannelItem
+-
+-  DATAVIEW_CATEGORIES:
+-    # Id of the category used to store all persona dataviews
+-    PersonaId: 210
+-
+   # Apollos will pull these content channels and expose them in the app on the discover screen.
+   DISCOVER_CONTENT_CHANNEL_IDS:
+     - 2
+@@ -109,7 +37,6 @@ ROCK_MAPPINGS:
+     - 8
+   # Apollos will pull content items from these channels and expose them on the user feed
+   # However, it will not expose the channel itself.
+-  # These channels are also pulled when indexing searchable content.
+   FEED_CONTENT_CHANNEL_IDS:
+     - 1
+     - 2
+@@ -119,27 +46,11 @@ ROCK_MAPPINGS:
+     - 6
+     - 8
+ 
+-  CAMPAIGN_CHANNEL_IDS:
+-    - 11
+-
+-  SERMON_CHANNEL_ID: 5
+-
+-  SERVING_GROUP_TYPE_ID: 23
+-  COMMUNITY_GROUP_TYPE_ID: 25
+-  FAMILY_GROUP_TYPE_ID: 10
+-
+-HOME_FEATURES:
+-  - title: FOR YOU
+-    algorithms: [SERMON_CHILDREN, PERSONA_FEED]
+-    subtitle: Explore what God calls you to today
+-  - title: BULLETIN
+-    subtitle: What's happening at apollos?
+-    algorithms:
+-      - type: CONTENT_CHANNEL
+-        arguments:
+-          contentChannelId: 13
+-      - type: UPCOMING_EVENTS
+-
++  # The apollos app will show scripture for specific ContentChannelTypeIds, specified here.
++  # As of right now, it will pull from the 'scriptures' field.
++  # Ignore if this doesn't apply to you.
++  DEVOTIONAL_TYPE_IDS:
++    - 1
+ 
+ # Default mapping of field types -> ids. There's probably no reason to edit this.
+ ROCK_CONSTANTS:
+@@ -252,4 +163,4 @@ ROCK_CONSTANTS:
+   INTERACTION_CHANNEL: 117
+   GROUP_MEMBER: 118
+   TIME_ZONE: 119
+-  LABEL: 120
++  LABEL: 120
+\ No newline at end of file
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+deleted file mode 100644
+index 3fce66e..0000000
+--- a/apollos-church-api/local.graphql
++++ /dev/null
+@@ -1,537 +0,0 @@
+-enum ACTION_FEATURE_ACTION {
+-  READ_CONTENT
+-  READ_EVENT
+-}
+-
+-type ActionListAction {
+-  id: ID!
+-  title: String
+-  subtitle: String
+-  image: ImageMedia
+-  relatedNode: Node
+-  action: ACTION_FEATURE_ACTION
+-}
+-
+-type ActionListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  subtitle: String
+-  actions: [ActionListAction]
+-}
+-
+-input AnalyticsDeviceInfo {
+-  platform: AnalyticsPlatform
+-  deviceId: String
+-  deviceModel: String
+-  osVersion: String
+-  appVersion: String
+-}
+-
+-input AnalyticsIdentifyInput {
+-  traits: [AnalyticsMetaField]
+-  anonymousId: String!
+-  deviceInfo: AnalyticsDeviceInfo
+-}
+-
+-input AnalyticsMetaField {
+-  field: String!
+-  value: AnalyticsValue
+-}
+-
+-enum AnalyticsPlatform {
+-  iOS
+-  Android
+-}
+-
+-type AnalyticsResult {
+-  success: Boolean
+-}
+-
+-input AnalyticsTrackInput {
+-  eventName: String!
+-  properties: [AnalyticsMetaField]
+-  anonymousId: String
+-  deviceInfo: AnalyticsDeviceInfo
+-}
+-
+-scalar AnalyticsValue
+-
+-type AudioMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [AudioMediaSource]
+-}
+-
+-type AudioMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-type AuthenticatedUser {
+-  id: ID!
+-  profile: Person
+-  rock: RockPersonDetails
+-  rockToken: String @deprecated(reason: "Use rock.authCookie instead")
+-}
+-
+-type Authentication {
+-  user: AuthenticatedUser
+-  token: String
+-}
+-
+-enum CacheControlScope {
+-  PUBLIC
+-  PRIVATE
+-}
+-
+-type Campus implements Node {
+-  id: ID!
+-  name: String
+-  street1: String
+-  street2: String
+-  city: String
+-  state: String
+-  postalCode: String
+-  latitude: Float
+-  longitude: Float
+-  image: ImageMediaSource
+-  distanceFromLocation(location: CampusLocationInput): Float
+-  events: [Event]
+-}
+-
+-input CampusLocationInput {
+-  latitude: Float!
+-  longitude: Float!
+-}
+-
+-"""A rgb color string"""
+-scalar Color
+-
+-type ContentChannel implements Node {
+-  id: ID!
+-  name: String
+-  description: String
+-  childContentChannels: [ContentChannel]
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  iconName: String
+-}
+-
+-interface ContentItem {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-type ContentItemsConnection {
+-  edges: [ContentItemsConnectionEdge]
+-  totalCount: Int
+-  pageInfo: PaginationInfo
+-}
+-
+-type ContentItemsConnectionEdge {
+-  node: ContentItem
+-  cursor: String
+-}
+-
+-input ContentItemsConnectionInput {
+-  first: Int
+-  after: String
+-}
+-
+-type ContentSeriesContentItem implements ContentItem & Node {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-  features: [Feature]
+-}
+-
+-type DevotionalContentItem implements ContentItem & Node {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-type Event implements Node {
+-  id: ID!
+-  name: String
+-  description: String
+-  location: String
+-  start: String
+-  end: String
+-  image: ImageMedia
+-}
+-
+-interface Feature {
+-  id: ID!
+-  order: Int
+-}
+-
+-enum GENDER {
+-  Male
+-  Female
+-  Unknown
+-}
+-
+-type Group implements Node {
+-  id: ID!
+-  name: String
+-  leader: Person @deprecated(reason: "No longer used, use 'leaders' instead")
+-  leaders: [Person]
+-  members: [Person]
+-}
+-
+-enum GROUP_TYPE {
+-  Serving
+-  Community
+-  Family
+-}
+-
+-type ImageMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [ImageMediaSource]
+-}
+-
+-type ImageMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-enum LIKE_OPERATION {
+-  Like
+-  Unlike
+-}
+-
+-input LikeEntityInput {
+-  nodeId: ID!
+-  operation: LIKE_OPERATION!
+-}
+-
+-type LiveStream {
+-  isLive: Boolean
+-  eventStartTime: String
+-  media: VideoMedia
+-  webViewUrl: String
+-  contentItem: ContentItem
+-}
+-
+-interface Media {
+-  name: String
+-  key: String
+-  sources: [MediaSource]
+-}
+-
+-type MediaContentItem implements ContentItem & Node {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-enum MediaInputType {
+-  IMAGE
+-  VIDEO
+-  AUDIO
+-}
+-
+-interface MediaSource {
+-  uri: String
+-}
+-
+-type Mutation {
+-  _placeholder: Boolean
+-  updateLikeEntity(input: LikeEntityInput!): ContentItem
+-  updateProfileField(input: UpdateProfileInput!): Person
+-  updateProfileFields(input: [UpdateProfileInput]!): Person
+-  uploadProfileImage(file: Upload!, size: Int!): Person
+-  authenticate(identity: String!, password: String!): Authentication
+-  changePassword(password: String!): Authentication
+-  registerPerson(email: String!, password: String!): Authentication
+-  requestSmsLoginPin(phoneNumber: String!): SmsPinResult
+-  authenticateWithSms(phoneNumber: String!, pin: String!): Authentication
+-  identifySelf(input: AnalyticsIdentifyInput!): AnalyticsResult
+-  trackEvent(input: AnalyticsTrackInput!): AnalyticsResult
+-  updateUserPushSettings(input: PushSettingsInput!): Person
+-  updateUserCampus(campusId: String!): Person
+-}
+-
+-interface Node {
+-  id: ID!
+-}
+-
+-type PaginationInfo {
+-  startCursor: String
+-  endCursor: String
+-}
+-
+-type Pass implements Node {
+-  id: ID!
+-  type: PassType
+-  description: String
+-  logo: ImageMediaSource
+-  thumbnail: ImageMediaSource
+-  barcode: ImageMediaSource
+-  primaryFields: [PassField]
+-  secondaryFields: [PassField]
+-  backgroundColor: Color
+-  foregroundColor: Color
+-  labelColor: Color
+-  logoText: String
+-  passkitFileUrl: String
+-}
+-
+-type PassField {
+-  key: String!
+-  label: String
+-  value: String!
+-  textAlignment: PassFieldTextAlignment
+-}
+-
+-enum PassFieldTextAlignment {
+-  LEFT
+-  CENTER
+-  RIGHT
+-  NATURAL
+-}
+-
+-enum PassType {
+-  GENERIC
+-}
+-
+-type Person implements Node {
+-  id: ID!
+-  firstName: String
+-  lastName: String
+-  nickName: String
+-  email: String
+-  gender: GENDER
+-  birthDate: String
+-  photo: ImageMediaSource
+-  campus: Campus
+-  groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
+-}
+-
+-input PushSettingsInput {
+-  enabled: Boolean
+-  pushProviderUserId: String
+-}
+-
+-type Query {
+-  _placeholder: Boolean
+-  node(id: ID!): Node
+-  likedContent(first: Int, after: String): ContentItemsConnection
+-  contentChannels: [ContentChannel]
+-  campaigns: ContentItemsConnection
+-  userFeed(first: Int, after: String): ContentItemsConnection
+-  personaFeed(first: Int, after: String): ContentItemsConnection
+-  currentUser: AuthenticatedUser
+-  liveStream: LiveStream @deprecated(reason: "Use liveStreams, there may be multiple.")
+-  liveStreams: [LiveStream]
+-  scripture(query: String!, version: VERSION): Scripture @deprecated(reason: "Use 'scriptures' instead.")
+-  scriptures(query: String!, version: VERSION): [Scripture]
+-  userPass: Pass
+-  search(query: String!, first: Int, after: String): SearchResultsConnection
+-  campuses(location: CampusLocationInput): [Campus]
+-  userFeedFeatures: [Feature]
+-}
+-
+-type RockPersonDetails {
+-  authToken: String
+-  authCookie: String
+-}
+-
+-type Scripture implements Node {
+-  id: ID!
+-  html: String
+-  reference: String
+-  copyright: String
+-  version: String
+-}
+-
+-type ScriptureFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  scriptures: [Scripture]
+-  sharing: SharableFeature
+-}
+-
+-type SearchResult {
+-  cursor: String
+-  title: String
+-  summary: String
+-  coverImage: ImageMedia
+-  node: Node
+-}
+-
+-type SearchResultsConnection {
+-  edges: [SearchResult]
+-  pageInfo: PaginationInfo
+-}
+-
+-interface Sharable {
+-  message: String
+-  title: String
+-  url: String @deprecated(reason: "Not supported on the interface")
+-}
+-
+-type SharableContentItem implements Sharable {
+-  message: String
+-  title: String
+-  url: String
+-}
+-
+-type SharableFeature implements Sharable {
+-  message: String
+-  title: String
+-  url: String @deprecated(reason: "Not supported on a feature")
+-}
+-
+-type SmsPinResult {
+-  success: Boolean
+-}
+-
+-type TextFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  body: String
+-  sharing: SharableFeature
+-}
+-
+-type Theme {
+-  type: ThemeType
+-  colors: ThemeColors
+-}
+-
+-type ThemeColors {
+-  primary: Color
+-  secondary: Color
+-  screen: Color
+-  paper: Color
+-  alert: Color
+-}
+-
+-enum ThemeType {
+-  LIGHT
+-  DARK
+-}
+-
+-type UniversalContentItem implements ContentItem & Node {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-enum UPDATEABLE_PROFILE_FIELDS {
+-  FirstName
+-  LastName
+-  Email
+-  NickName
+-  Gender
+-  BirthDate
+-}
+-
+-input UpdateProfileInput {
+-  field: UPDATEABLE_PROFILE_FIELDS!
+-  value: String!
+-}
+-
+-"""The `Upload` scalar type represents a file upload."""
+-scalar Upload
+-
+-enum VERSION {
+-  WEB
+-  KJV
+-}
+-
+-type VideoMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [VideoMediaSource]
+-  embedHtml: String
+-}
+-
+-type VideoMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-type WeekendContentItem implements ContentItem & Node {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  liveStream: LiveStream
+-  sharing: SharableContentItem
+-  features: [Feature]
+-}
+-
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index ae4e3c6..c4b568f 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,71 +1,65 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "1.2.5",
++  "version": "0.6.0",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+-    "start": "./scripts/generateLocalSchema.sh & yarn start:dev",
++    "start": "if test \"$NOW_ENV\" = \"true\" ; then yarn start:now ; else yarn start:dev ; fi",
+     "start:dev": "nodemon ./src/index.js --exec babel-node --delay 2",
++    "start:now": "babel-node ./src/index.js",
+     "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+-    "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
++    "test": "jest",
++    "test:watch": "jest --maxWorkers=2 --watch",
+     "lint": "eslint ./src --ext .js",
+     "fixlint": "eslint ./src --ext .js --fix",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+-    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json",
+-    "schema-diff": "./scripts/schemaDiff.sh",
+-    "schema-lint": "graphql-schema-linter local.graphql"
++    "release": "standard-version --release-as minor"
+   },
+   "engines": {
+     "node": ">=8.11.x"
+   },
+   "jest": {
+     "collectCoverage": true,
+-    "collectCoverageFrom": [
+-      "src/**/*.{js,jsx}"
+-    ],
+     "testMatch": [
+       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
+       "<rootDir>/src/**/?(*.)(spec|test|tests).{js,jsx,mjs}"
+     ],
+-    "testEnvironment": "node",
+-    "reporters": [
+-      "<rootDir>/../../scripts/fingers-crossed-reporter.js"
+-    ]
++    "testEnvironment": "node"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^1.2.5",
+-    "@apollosproject/data-connector-algolia-search": "^1.2.5",
+-    "@apollosproject/data-connector-analytics": "^1.2.5",
+-    "@apollosproject/data-connector-bible": "^1.2.5",
+-    "@apollosproject/data-connector-church-online": "^1.2.5",
+-    "@apollosproject/data-connector-cloudinary": "^1.2.5",
+-    "@apollosproject/data-connector-onesignal": "^1.2.5",
+-    "@apollosproject/data-connector-passes": "^1.2.5",
+-    "@apollosproject/data-connector-redis-cache": "^1.2.5",
+-    "@apollosproject/data-connector-rock": "^1.2.5",
+-    "@apollosproject/data-connector-twilio": "^1.2.5",
+-    "@apollosproject/data-schema": "^1.2.5",
+-    "@apollosproject/rock-apollo-data-source": "^1.2.5",
+-    "@apollosproject/server-core": "^1.2.5",
++    "@apollosproject/data-connector-rock-content": "^0.6.0",
++    "@apollosproject/server-core": "^0.6.0",
++    "@apollosproject/config": "^0.6.0",
++    "@apollosproject/data-connector-analytics": "^0.6.0",
++    "@apollosproject/data-connector-people": "^0.6.0",
++    "@apollosproject/data-connector-rock-auth": "^0.6.0",
++    "@apollosproject/rock-apollo-data-source": "^0.6.0",
++    "@apollosproject/server-core": "^0.6.0",
++    "apollo-datasource-rest": "0.1.1",
+     "apollo-server": "^2.0.5",
+-    "apollo-server-express": "2.4.8",
++    "casual": "1.5.19",
++    "cloudinary": "^1.11.0",
+     "color": "3.0.0",
++    "dataloader": "1.4.0",
+     "dotenv": "6.0.0",
+-    "express": "^4.17.0",
+     "graphql": "0.13.2",
++    "isomorphic-fetch": "2.2.1",
++    "lodash": "4.17.10",
+     "prettier": "1.12.1",
+-    "randomcolor": "0.5.3"
++    "randomcolor": "0.5.3",
++    "sanitize-html": "1.18.2",
++    "url-join": "4.0.0",
++    "with-query": "1.0.2"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.2.5",
+-    "@apollosproject/babel-preset-apollos": "^1.2.5",
+-    "@babel/cli": "^7.4.5",
+-    "@babel/core": "^7.4.5",
+-    "@entria/graphql-findbreakingchanges": "^1.0.1",
++    "@apollosproject/babel-preset-apollos": "^0.6.0",
++    "@babel/cli": "7.1.5",
++    "@babel/core": "7.1.6",
+     "codecov": "3.0.2",
+-    "get-graphql-schema": "^2.1.2",
+-    "graphql-schema-linter": "^0.2.0",
+-    "nodemon": "1.18.7"
++    "coveralls": "3.0.1",
++    "jest": "23.6.0",
++    "jest-fetch-mock": "1.6.2",
++    "nodemon": "1.17.5"
+   }
+ }
+diff --git a/apollos-church-api/scripts/generateLocalSchema.sh b/apollos-church-api/scripts/generateLocalSchema.sh
+deleted file mode 100755
+index 869e5a8..0000000
+--- a/apollos-church-api/scripts/generateLocalSchema.sh
++++ /dev/null
+@@ -1,28 +0,0 @@
+-PING_SERVER="curl 'http://localhost:4000/graphql' -H 'content-type: application/json' -H 'accept: application/json' --data-binary '{\"query\":\"{_placeholder}\"}' > /dev/null 2>&1"
+-
+-if eval "$PING_SERVER"; then
+-  echo 'Server running, downloading schema from localhost:4000'
+-  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
+-  echo 'Done. Check local.graphql'
+-else
+-  echo $*
+-  if [ "$*" = "--start-server" ]; then
+-    echo 'Server not running, starting server'
+-    PORT=4000 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX npm run start:prod > /tmp/server-log.txt &
+-    SERVER_PID=$!
+-    echo "Server running... (PID $SERVER_PID)"
+-  fi
+-  sleep 1
+-  until eval "$PING_SERVER"; do
+-      sleep 1
+-      echo 'Waiting for server to boot....'
+-  done
+-  echo 'Curling Server for most recent schema.'
+-  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
+-  echo 'Publishing Schema to Apollo Engine.'
+-  npx apollo server:publish --endpoint=http://localhost:4000
+-  if [ "$*" = "--start-server" ]; then
+-    echo "Killing Server (PID $SERVER_PID)"
+-    kill -9 $SERVER_PID
+-  fi
+-fi
+diff --git a/apollos-church-api/scripts/schemaDiff.sh b/apollos-church-api/scripts/schemaDiff.sh
+deleted file mode 100755
+index 67404e4..0000000
+--- a/apollos-church-api/scripts/schemaDiff.sh
++++ /dev/null
+@@ -1,13 +0,0 @@
+-#!/usr/bin/env bash
+-sh ./scripts/generateLocalSchema.sh --start-server
+-./node_modules/.bin/get-graphql-schema https://apollos-church-api-herokuapp-com.global.ssl.fastly.net > prod.graphql
+-DIFF=$(graphql-findbreakingchanges prod.graphql local.graphql)
+-rm prod.graphql
+-echo "$DIFF"
+-
+-if [[ ! $DIFF = *"NO BREAKING CHANGES"* ]]
+-then
+-  exit 1
+-else
+-  exit 0
+-fi
+diff --git a/apollos-church-api/src/connectors/__tests__/cloudinary.tests.js b/apollos-church-api/src/connectors/__tests__/cloudinary.tests.js
+new file mode 100644
+index 0000000..10b8391
+--- /dev/null
++++ b/apollos-church-api/src/connectors/__tests__/cloudinary.tests.js
+@@ -0,0 +1,51 @@
++import ApollosConfig from '@apollosproject/config';
++import withCloudinary, { config } from '../cloudinary';
++
++const originalUrl =
++  'https://apollosrock.newspring.cc/GetImage.ashx?guid=f54b0db0-95f5-44ad-b8f2-8bcd1b23cfdb';
++
++describe('Cloudinary', () => {
++  beforeEach(() => {
++    // reset cloudinary config
++    ApollosConfig.loadJs({
++      CLOUDINARY: {
++        URL:
++          'cloudinary://123456789012345:abcdeghijklmnopqrstuvwxyz12@n07t21i7',
++      },
++    });
++    config();
++  });
++  afterEach(() => {
++    ApollosConfig.loadJs({
++      CLOUDINARY: {
++        URL: null,
++      },
++    });
++    config();
++  });
++  it('must return the URL if CLOUDINARY_URL is not specified', () => {
++    ApollosConfig.loadJs({
++      CLOUDINARY: {
++        URL: null,
++      },
++    });
++    config();
++
++    const url = withCloudinary(originalUrl);
++
++    expect(url).toEqual(originalUrl);
++  });
++  it('must return a cloudinary fetch URL if CLOUDINARY_URL is defined', () => {
++    const url = withCloudinary(originalUrl);
++
++    expect(url).toEqual(
++      'https://res.cloudinary.com/n07t21i7/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Df54b0db0-95f5-44ad-b8f2-8bcd1b23cfdb'
++    );
++  });
++  it('must not double parse a cloudinary url.', () => {
++    const url = withCloudinary(originalUrl);
++    const doubledParsed = withCloudinary(url);
++
++    expect(url).toEqual(doubledParsed);
++  });
++});
+diff --git a/apollos-church-api/src/connectors/cloudinary.js b/apollos-church-api/src/connectors/cloudinary.js
+new file mode 100644
+index 0000000..93f4a02
+--- /dev/null
++++ b/apollos-church-api/src/connectors/cloudinary.js
+@@ -0,0 +1,39 @@
++import cloudinary from 'cloudinary';
++import ApollosConfig from '@apollosproject/config';
++
++const { CLOUDINARY } = ApollosConfig;
++// Cloudinary picks up settings from `env`,
++// no way to pass straight into config if using `CLOUDINARY_URL format`
++// Exposed as Utiliy function to reset config (mostly used in tests)
++export function config() {
++  process.env.CLOUDINARY_URL = CLOUDINARY.URL;
++  cloudinary.config(true);
++  cloudinary.config({
++    private_cdn: false,
++    secure: true,
++  });
++}
++// we always want to setup the config on boot.
++config();
++
++const cleanUrl = (url) => url.replace(/:(443|80)/, '');
++
++export default function withCloudinary(_url = '', options) {
++  const url = cleanUrl(_url);
++  // If we call this function twice, only the first transform will be applied
++  if (url.startsWith('https://res.cloudinary.com')) {
++    return url;
++  }
++  if (CLOUDINARY.URL) {
++    return cloudinary.url(url, {
++      type: 'fetch',
++      fetch_format: 'auto',
++      width: '1600',
++      crop: 'limit',
++      ...options,
++    });
++  }
++  return url;
++}
++
++export { cloudinary };
+diff --git a/apollos-church-api/src/connectors/rock/.Rhistory b/apollos-church-api/src/connectors/rock/.Rhistory
+new file mode 100644
+index 0000000..e69de29
+diff --git a/apollos-church-api/src/connectors/rock/__tests__/rock-constants.tests.js b/apollos-church-api/src/connectors/rock/__tests__/rock-constants.tests.js
+new file mode 100644
+index 0000000..324301c
+--- /dev/null
++++ b/apollos-church-api/src/connectors/rock/__tests__/rock-constants.tests.js
+@@ -0,0 +1,68 @@
++import { fetch } from 'apollo-server-env';
++import { buildGetMock } from '../../../utils/testUtils';
++
++import RockConstants from '../rock-constants';
++
++describe('RockConstants', () => {
++  beforeEach(() => {
++    fetch.resetMocks();
++  });
++  it("creates a Channel if it doesn't exist", async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([[], { Id: 1 }], dataSource);
++    dataSource.post = buildGetMock('1', dataSource);
++    const result = await dataSource.interactionChannel();
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++    expect(dataSource.post.mock.calls).toMatchSnapshot();
++  });
++  it('finds the Channel if it exists', async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([{ Id: 1 }], dataSource);
++    dataSource.post = jest.fn();
++    const result = await dataSource.interactionChannel();
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++    expect(dataSource.post.mock.calls.length).toBe(0);
++  });
++  it("creates a Component if it doesn't exist", async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([[], { Id: 1 }], dataSource);
++    dataSource.post = buildGetMock('1', dataSource);
++    const result = await dataSource.interactionComponent();
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++    expect(dataSource.post.mock.calls).toMatchSnapshot();
++  });
++  it('finds the Component if it exists', async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([{ Id: 1 }], dataSource);
++    dataSource.post = jest.fn();
++    const result = await dataSource.interactionComponent();
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++    expect(dataSource.post.mock.calls.length).toBe(0);
++  });
++  it('finds a ContentItem model ID', async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([{ Id: 1 }], dataSource);
++    const result = await dataSource.modelTypeId('ContentItem');
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++  });
++  it('finds a UniversalContentItem model ID', async () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([{ Id: 1 }], dataSource);
++    const result = await dataSource.modelTypeId('UniversalContentItem');
++    expect(result).toMatchSnapshot();
++    expect(dataSource.get.mock.calls).toMatchSnapshot();
++  });
++  it('Throws when finding an unknown model ', () => {
++    const dataSource = new RockConstants();
++    dataSource.get = buildGetMock([{ Id: 1 }], dataSource);
++    const prom = dataSource.modelTypeId('IDontExist');
++    expect(prom).rejects.toEqual(
++      new Error('IDontExist has not been mapped into a Rock type!')
++    );
++  });
++});
+diff --git a/apollos-church-api/src/connectors/rock/rock-constants.js b/apollos-church-api/src/connectors/rock/rock-constants.js
+new file mode 100644
+index 0000000..083f072
+--- /dev/null
++++ b/apollos-church-api/src/connectors/rock/rock-constants.js
+@@ -0,0 +1,82 @@
++// TODO - eliminate this file through more robust configuration.
++
++import RockApolloDataSource from '@apollosproject/rock-apollo-data-source';
++
++const mapApollosNameToRockName = (name) => {
++  switch (name) {
++    case 'ContentItem':
++    case 'UniversalContentItem':
++    case 'DevotionalContentItem':
++      return 'ContentChannelItem';
++    default:
++      throw new Error(`${name} has not been mapped into a Rock type!`);
++  }
++};
++
++export default class RockConstants extends RockApolloDataSource {
++  async findOrCreate({ model, objectAttributes }) {
++    // Turns {ChannelId: 7, Name: 'Something'} into '(ChannelId eq 7) and (Name eq 'Something')'
++    const filter = Object.keys(objectAttributes)
++      .map((key) => {
++        if (typeof objectAttributes[key] === 'string') {
++          return `(${key} eq '${objectAttributes[key]}')`;
++        }
++        return `(${key} eq ${objectAttributes[key]})`;
++      })
++      .join(' and ');
++
++    const objects = await this.request(model)
++      .filter(filter)
++      .cache({ ttl: 86400 })
++      .get();
++    if (objects.length) {
++      return objects[0];
++    }
++    const objectId = await this.post(`/${model}`, objectAttributes);
++    const ret = await this.get(`/${model}/${objectId}`);
++    console.log('Created', ret);
++    return ret;
++  }
++
++  async createOrFindInteractionComponent({ componentName, channelId }) {
++    return this.findOrCreate({
++      model: 'InteractionComponents',
++      objectAttributes: { Name: componentName, ChannelId: channelId },
++    });
++  }
++
++  async createOrFindInteractionChannel({ channelName }) {
++    return this.findOrCreate({
++      model: 'InteractionChannels',
++      objectAttributes: { Name: channelName, UsesSession: true },
++    });
++  }
++
++  async interactionChannel() {
++    return this.createOrFindInteractionChannel({
++      channelName: 'Apollos App',
++    });
++  }
++
++  async interactionComponent() {
++    const channel = await this.interactionChannel();
++    return this.createOrFindInteractionComponent({
++      componentName: 'Apollos Content Item',
++      channelId: channel.id,
++    });
++  }
++
++  async modelTypeId(nameInput) {
++    const name = mapApollosNameToRockName(nameInput);
++
++    const types = await this.request('EntityTypes')
++      .filter(`Name eq 'Rock.Model.${name}'`)
++      .cache({ ttl: 86400 })
++      .get();
++    if (types.length) {
++      return types[0];
++    }
++
++    return null;
++  }
++}
+diff --git a/apollos-church-api/src/data/bible/_tests_/resolver.tests.js b/apollos-church-api/src/data/bible/_tests_/resolver.tests.js
+new file mode 100644
+index 0000000..d445602
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/_tests_/resolver.tests.js
+@@ -0,0 +1,34 @@
++import { graphql } from 'graphql';
++import { fetch } from 'apollo-server-env';
++import { makeExecutableSchema } from 'apollo-server';
++import { testSchema as typeDefs, resolvers } from '../..';
++import { getTestContext } from '../../../utils/testUtils';
++
++describe('Scripture', () => {
++  let schema;
++  let context;
++  beforeEach(() => {
++    schema = makeExecutableSchema({ typeDefs, resolvers });
++    context = getTestContext();
++
++    fetch.resetMocks();
++    fetch.mockLiveDataSourceApis();
++  });
++
++  it('returns', async () => {
++    const query = `
++      query {
++        scripture (query: "SNG.1.1") {
++          id
++          html
++          reference
++          copyright
++        }
++      }
++    `;
++    const rootValue = {};
++
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++});
+diff --git a/apollos-church-api/src/data/bible/data-source.js b/apollos-church-api/src/data/bible/data-source.js
+new file mode 100644
+index 0000000..d0ef9f7
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/data-source.js
+@@ -0,0 +1,28 @@
++import { RESTDataSource } from 'apollo-datasource-rest';
++import ApollosConfig from '@apollosproject/config';
++
++const { BIBLE_API } = ApollosConfig;
++
++export default class Scripture extends RESTDataSource {
++  resource = 'Scripture';
++
++  baseURL = 'https://api.scripture.api.bible/v1/bibles/';
++
++  token = BIBLE_API.KEY;
++
++  willSendRequest(request) {
++    request.headers.set('api-key', `${this.token}`);
++  }
++
++  async getScripture(query) {
++    const bibleId = BIBLE_API.BIBLE_ID;
++    return this.get(`${bibleId}/search?query=${query}`);
++  }
++
++  // In the future, we can use this field to handle content that returns multiple
++  // "scriptures". Like references across several different books of the bible.
++  async getScriptures(query) {
++    const scripture = await this.getScripture(query);
++    return [scripture];
++  }
++}
+diff --git a/apollos-church-api/src/data/bible/index.js b/apollos-church-api/src/data/bible/index.js
+new file mode 100644
+index 0000000..61a10a8
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/index.js
+@@ -0,0 +1,5 @@
++import schema from './schema';
++import resolver from './resolver';
++import dataSource from './data-source';
++
++export { schema, resolver, dataSource };
+diff --git a/apollos-church-api/src/data/bible/resolver.js b/apollos-church-api/src/data/bible/resolver.js
+new file mode 100644
+index 0000000..01d6711
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/resolver.js
+@@ -0,0 +1,14 @@
++import { get } from 'lodash';
++
++export default {
++  Query: {
++    scripture: (root, { query }, { dataSources }) =>
++      dataSources.Scripture.getScripture(query),
++  },
++  Scripture: {
++    id: ({ data: { passages } = {} }) => get(passages, '[0].id'),
++    html: ({ data: { passages } = {} }) => get(passages, '[0].content'),
++    reference: ({ data: { passages } = {} }) => get(passages, '[0].reference'),
++    copyright: ({ data: { passages } = {} }) => get(passages, '[0].copyright'),
++  },
++};
+diff --git a/apollos-church-api/src/data/bible/schema.js b/apollos-church-api/src/data/bible/schema.js
+new file mode 100644
+index 0000000..82e3fe7
+--- /dev/null
++++ b/apollos-church-api/src/data/bible/schema.js
+@@ -0,0 +1,14 @@
++import { gql } from 'apollo-server';
++
++export default gql`
++  type Scripture {
++    id: String
++    html: String
++    reference: String
++    copyright: String
++  }
++
++  extend type Query {
++    scripture(query: String!): Scripture
++  }
++`;
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 50d8d41..655c759 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -2,86 +2,50 @@ import { gql } from 'apollo-server';
+ 
+ import { createApolloServerConfig } from '@apollosproject/server-core';
+ 
+-import * as Analytics from '@apollosproject/data-connector-analytics';
+-import * as Scripture from '@apollosproject/data-connector-bible';
+-import * as LiveStream from '@apollosproject/data-connector-church-online';
+-import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+-import * as OneSignal from '@apollosproject/data-connector-onesignal';
+-import * as Search from '@apollosproject/data-connector-algolia-search';
+-import * as Pass from '@apollosproject/data-connector-passes';
+-import * as Cache from '@apollosproject/data-connector-redis-cache';
+-import * as Sms from '@apollosproject/data-connector-twilio';
++import * as Auth from '@apollosproject/data-connector-rock-auth';
+ import {
+-  Followings,
+-  Interactions,
+-  RockConstants,
+-  Person,
+   ContentItem,
+   ContentChannel,
+   Sharable,
+-  Auth,
+-  PersonalDevice,
+-  Template,
+-  AuthSms,
+-  Campus,
+-  Group,
+-  BinaryFiles,
+-  Features,
+-  Event,
+-} from '@apollosproject/data-connector-rock';
+-import * as Theme from './theme';
++} from '@apollosproject/data-connector-rock-content';
++import * as Analytics from '@apollosproject/data-connector-analytics';
++import { Person, Family } from '@apollosproject/data-connector-people';
++
++import RockConstants from '../connectors/rock/rock-constants';
+ 
+-// This module is used to attach Rock User updating to the OneSignal module.
+-// This module includes a Resolver that overides a resolver defined in `OneSignal`
+-import * as OneSignalWithRock from './oneSignalWithRock';
++import * as Media from './media';
++import * as LiveStream from './live';
++import * as Theme from './theme';
++import * as Scripture from './bible';
++import * as Interactions from './interactions';
+ 
+ const data = {
+-  Followings,
+   ContentChannel,
+   ContentItem,
+   Person,
+-  Cloudinary,
++  Media,
+   Auth,
+-  AuthSms,
+-  Sms,
+   LiveStream,
+   Theme,
+   Scripture,
+   Interactions,
+-  RockConstants,
++  RockConstants: { dataSource: RockConstants },
+   Sharable,
+   Analytics,
+-  OneSignal,
+-  PersonalDevice,
+-  OneSignalWithRock,
+-  Pass,
+-  Search,
+-  Template,
+-  Campus,
+-  Group,
+-  BinaryFiles,
+-  Features,
+-  Event,
+-  Cache,
++  Family,
++  UniversalContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
++  DevotionalContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
+ };
+ 
+-const {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-} = createApolloServerConfig(data);
++const { dataSources, resolvers, schema, context } = createApolloServerConfig(
++  data
++);
+ 
+-export {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-};
++export { dataSources, resolvers, schema, context };
+ 
+ // the upload Scalar is added
+ export const testSchema = [
+diff --git a/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js b/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js
+new file mode 100644
+index 0000000..52448a3
+--- /dev/null
++++ b/apollos-church-api/src/data/interactions/__tests__/resolvers.tests.js
+@@ -0,0 +1,99 @@
++import { graphql } from 'graphql';
++import { fetch } from 'apollo-server-env';
++import { makeExecutableSchema } from 'apollo-server';
++import ApollosConfig from '@apollosproject/config';
++import { createGlobalId } from '@apollosproject/server-core';
++
++import { generateToken } from '@apollosproject/data-connector-rock-auth';
++import { getTestContext } from '../../../utils/testUtils';
++import { testSchema as typeDefs, resolvers } from '../..';
++
++ApollosConfig.loadJs({
++  ROCK: {
++    API_URL: 'https://apollosrock.newspring.cc/api',
++    API_TOKEN: 'some-rock-token',
++    IMAGE_URL: 'https://apollosrock.newspring.cc/GetImage.ashx',
++  },
++});
++
++describe('Interactions', () => {
++  let schema;
++  let context;
++  beforeEach(() => {
++    fetch.resetMocks();
++    fetch.mockRockDataSourceAPI();
++    schema = makeExecutableSchema({ typeDefs, resolvers });
++    const token = generateToken({ cookie: 'some-cookie', sessionId: 123 });
++    context = getTestContext({
++      req: {
++        headers: { authorization: token },
++      },
++    });
++  });
++
++  it('likes an entity', async () => {
++    const query = `
++      mutation likeEntity {
++        updateLikeEntity(
++          input: {
++            nodeId: "${createGlobalId(1, 'UniversalContentItem')}"
++            operation: Like
++          }
++        ) {
++          id
++          operation
++          interactionDateTime
++        }
++      }
++    `;
++    const rootValue = {};
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++  it('uses interactions to track if a user liked content', async () => {
++    const query = `
++      query getContent {
++        node(id: "${createGlobalId(1, 'UniversalContentItem')}") {
++          id
++          ... on UniversalContentItem {
++            isLiked
++          }
++        }
++      }
++    `;
++    const rootValue = {};
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++
++  it('gets all user liked content', async () => {
++    const query = `
++      query {
++        getAllLikedContent {
++          id
++          title
++          isLiked
++        }
++      }
++    `;
++    const rootValue = {};
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++
++  it('returns an empty array for liked content without a user logged in', async () => {
++    const query = `
++      query {
++        getAllLikedContent {
++          id
++          title
++          isLiked
++        }
++      }
++    `;
++    const contextWithoutUser = getTestContext();
++    const rootValue = {};
++    const result = await graphql(schema, query, rootValue, contextWithoutUser);
++    expect(result).toMatchSnapshot();
++  });
++});
+diff --git a/apollos-church-api/src/data/interactions/data-source.js b/apollos-church-api/src/data/interactions/data-source.js
+new file mode 100644
+index 0000000..9729abe
+--- /dev/null
++++ b/apollos-church-api/src/data/interactions/data-source.js
+@@ -0,0 +1,72 @@
++import { AuthenticationError } from 'apollo-server';
++import { parseGlobalId } from '@apollosproject/server-core';
++import RockApolloDataSource from '@apollosproject/rock-apollo-data-source';
++
++export default class Interactions extends RockApolloDataSource {
++  resource = 'Interactions';
++
++  async createInteraction({ nodeId, operationName }) {
++    const { dataSources } = this.context;
++    const { id, __type } = parseGlobalId(nodeId);
++    const contentItemType = await dataSources.RockConstants.modelTypeId(__type);
++    const interactionComponent = await this.context.dataSources.RockConstants.interactionComponent();
++    const currentUser = await dataSources.Auth.getCurrentPerson();
++
++    const interactionId = await this.post('/Interactions', {
++      RelatedEntityId: id,
++      RelatedEntityTypeId: contentItemType.id,
++      PersonAliasId: currentUser.primaryAliasId,
++      InteractionComponentId: interactionComponent.id,
++      InteractionSessionId: this.context.sessionId,
++      Operation: operationName,
++      InteractionDateTime: new Date().toJSON(),
++    });
++    return this.get(`/Interactions/${interactionId}`);
++  }
++
++  async getForContentItem({ contentItemId }) {
++    const { dataSources } = this.context;
++    const contentItemType = await dataSources.RockConstants.modelTypeId(
++      'ContentItem'
++    );
++    try {
++      const currentUser = await dataSources.Auth.getCurrentPerson();
++      return this.request('Interactions')
++        .filter(
++          // eslint-disable-next-line prettier/prettier
++          `(RelatedEntityId eq ${contentItemId}) and (RelatedEntityTypeId eq ${
++            contentItemType.id
++          }) and (PersonAliasId eq ${currentUser.primaryAliasId})`
++        )
++        .get();
++    } catch (e) {
++      if (e instanceof AuthenticationError) {
++        return [];
++      }
++      throw e;
++    }
++  }
++
++  async getForContentItems() {
++    const { dataSources } = this.context;
++    const contentItemType = await dataSources.RockConstants.modelTypeId(
++      'ContentItem'
++    );
++    try {
++      const currentUser = await dataSources.Auth.getCurrentPerson();
++      return this.request('Interactions')
++        .filter(
++          // eslint-disable-next-line prettier/prettier
++          `(RelatedEntityTypeId eq ${
++            contentItemType.id
++          }) and (PersonAliasId eq ${currentUser.primaryAliasId})`
++        )
++        .get();
++    } catch (e) {
++      if (e instanceof AuthenticationError) {
++        return [];
++      }
++      throw e;
++    }
++  }
++}
+diff --git a/apollos-church-api/src/data/interactions/index.js b/apollos-church-api/src/data/interactions/index.js
+new file mode 100644
+index 0000000..47dcc05
+--- /dev/null
++++ b/apollos-church-api/src/data/interactions/index.js
+@@ -0,0 +1,5 @@
++import dataSource from './data-source';
++import schema from './schema';
++import resolver from './resolver';
++
++export { schema, resolver, dataSource };
+diff --git a/apollos-church-api/src/data/interactions/resolver.js b/apollos-church-api/src/data/interactions/resolver.js
+new file mode 100644
+index 0000000..b22937f
+--- /dev/null
++++ b/apollos-church-api/src/data/interactions/resolver.js
+@@ -0,0 +1,19 @@
++import { createGlobalId } from '@apollosproject/server-core';
++
++export default {
++  Mutation: {
++    updateLikeEntity: async (
++      root,
++      { input: { nodeId, sessionId, operation } },
++      { dataSources }
++    ) =>
++      dataSources.Interactions.createInteraction({
++        nodeId,
++        sessionId,
++        operationName: operation,
++      }),
++  },
++  Interaction: {
++    id: (root) => createGlobalId(root.id, 'Interaction'),
++  },
++};
+diff --git a/apollos-church-api/src/data/interactions/schema.js b/apollos-church-api/src/data/interactions/schema.js
+new file mode 100644
+index 0000000..0188dc1
+--- /dev/null
++++ b/apollos-church-api/src/data/interactions/schema.js
+@@ -0,0 +1,23 @@
++import { gql } from 'apollo-server';
++
++export default gql`
++  type Interaction implements Node {
++    id: ID!
++    operation: LIKE_OPERATION!
++    interactionDateTime: String!
++  }
++
++  enum LIKE_OPERATION {
++    Like
++    Unlike
++  }
++
++  input LikeEntityInput {
++    nodeId: ID!
++    operation: LIKE_OPERATION!
++  }
++
++  extend type Mutation {
++    updateLikeEntity(input: LikeEntityInput!): Interaction
++  }
++`;
+diff --git a/apollos-church-api/src/data/live/__tests__/resolver.tests.js b/apollos-church-api/src/data/live/__tests__/resolver.tests.js
+new file mode 100644
+index 0000000..ecbe6cb
+--- /dev/null
++++ b/apollos-church-api/src/data/live/__tests__/resolver.tests.js
+@@ -0,0 +1,34 @@
++import { fetch } from 'apollo-server-env';
++
++import { graphql } from 'graphql';
++import { makeExecutableSchema } from 'apollo-server';
++import { testSchema as typeDefs, resolvers } from '../..';
++import { getTestContext } from '../../../utils/testUtils';
++// we import the root-level schema and resolver so we test the entire integration:
++
++describe('LiveStream', () => {
++  let schema;
++  let context;
++  beforeEach(() => {
++    schema = makeExecutableSchema({ typeDefs, resolvers });
++    context = getTestContext();
++
++    fetch.resetMocks();
++    fetch.mockLiveDataSourceApis();
++  });
++
++  it('returns', async () => {
++    const query = `
++      query {
++        liveStream {
++          isLive
++          eventStartTime
++        }
++      }
++    `;
++    const rootValue = {};
++
++    const result = await graphql(schema, query, rootValue, context);
++    expect(result).toMatchSnapshot();
++  });
++});
+diff --git a/apollos-church-api/src/data/live/data-source.js b/apollos-church-api/src/data/live/data-source.js
+new file mode 100644
+index 0000000..d108c4b
+--- /dev/null
++++ b/apollos-church-api/src/data/live/data-source.js
+@@ -0,0 +1,11 @@
++import { RESTDataSource } from 'apollo-datasource-rest';
++
++export default class LiveStream extends RESTDataSource {
++  resource = 'LiveStream';
++
++  baseURL = 'https://apollos.churchonline.org/api/v1/';
++
++  async getLiveStream() {
++    return this.get('events/current');
++  }
++}
+diff --git a/apollos-church-api/src/data/live/index.js b/apollos-church-api/src/data/live/index.js
+new file mode 100644
+index 0000000..61a10a8
+--- /dev/null
++++ b/apollos-church-api/src/data/live/index.js
+@@ -0,0 +1,5 @@
++import schema from './schema';
++import resolver from './resolver';
++import dataSource from './data-source';
++
++export { schema, resolver, dataSource };
+diff --git a/apollos-church-api/src/data/live/resolver.js b/apollos-church-api/src/data/live/resolver.js
+new file mode 100644
+index 0000000..509df21
+--- /dev/null
++++ b/apollos-church-api/src/data/live/resolver.js
+@@ -0,0 +1,11 @@
++export default {
++  Query: {
++    liveStream: (root, args, { dataSources }) =>
++      dataSources.LiveStream.getLiveStream(),
++  },
++  LiveStream: {
++    isLive: ({ response: { item: { isLive } = {} } = {} }) => isLive,
++    eventStartTime: ({ response: { item: { eventStartTime } = {} } = {} }) =>
++      eventStartTime,
++  },
++};
+diff --git a/apollos-church-api/src/data/live/schema.js b/apollos-church-api/src/data/live/schema.js
+new file mode 100644
+index 0000000..fe8678d
+--- /dev/null
++++ b/apollos-church-api/src/data/live/schema.js
+@@ -0,0 +1,12 @@
++import { gql } from 'apollo-server';
++
++export default gql`
++  type LiveStream {
++    isLive: Boolean
++    eventStartTime: String
++  }
++
++  extend type Query {
++    liveStream: LiveStream
++  }
++`;
+diff --git a/apollos-church-api/src/data/media/index.js b/apollos-church-api/src/data/media/index.js
+new file mode 100644
+index 0000000..2abc0de
+--- /dev/null
++++ b/apollos-church-api/src/data/media/index.js
+@@ -0,0 +1,98 @@
++import { gql } from 'apollo-server';
++import ApollosConfig from '@apollosproject/config';
++import withCloudinary from '../../connectors/cloudinary';
++
++const { ROCK } = ApollosConfig;
++
++export const schema = gql`
++  interface Media {
++    name: String
++    key: String
++    sources: [MediaSource]
++  }
++
++  interface MediaSource {
++    uri: String
++  }
++
++  type ImageMedia implements Media {
++    name: String
++    key: String
++    sources: [ImageMediaSource]
++  }
++
++  type VideoMedia implements Media {
++    name: String
++    key: String
++    sources: [VideoMediaSource]
++    # duration: Float
++    embedHtml: String
++  }
++
++  type AudioMedia implements Media {
++    name: String
++    key: String
++    # duration: Float
++    sources: [AudioMediaSource]
++  }
++
++  type AudioMediaSource implements MediaSource {
++    uri: String
++    # format: String
++    # size: String
++  }
++
++  type ImageMediaSource implements MediaSource {
++    uri: String
++    # width: Int
++    # height: Int
++  }
++
++  type VideoMediaSource implements MediaSource {
++    uri: String
++    # format: String
++    # size: String
++  }
++
++  enum MediaInputType {
++    IMAGE
++    VIDEO
++    AUDIO
++  }
++`;
++
++const addTypenameToSources = (__typename) => ({ sources }) =>
++  sources.map((s) => ({ __typename, ...s }));
++
++export const resolver = {
++  Media: {
++    // Implementors must attach __typename to root.
++    __resolveType: ({ __typename }) => __typename,
++  },
++  MediaSource: {
++    // Implementors must attach __typename to root.
++    __resolveType: ({ __typename }) => __typename,
++  },
++  ImageMedia: {
++    sources: addTypenameToSources('ImageMediaSource'),
++  },
++  AudioMedia: {
++    sources: addTypenameToSources('AudioMediaSource'),
++  },
++  VideoMedia: {
++    sources: addTypenameToSources('VideoMediaSource'),
++  },
++  ImageMediaSource: {
++    uri: ({ uri = '' }) => {
++      if (!uri || typeof uri !== 'string') return null;
++      if (uri.startsWith('http')) return withCloudinary(uri);
++      if (uri.startsWith('//')) return withCloudinary(`https:${uri}`);
++
++      // Handle Rock GUID:
++      if (uri.split('-').length === 5)
++        return withCloudinary(`${ROCK.IMAGE_URL}?guid=${uri}`);
++
++      return uri;
++    },
++  },
++};
+diff --git a/apollos-church-api/src/data/oneSignalWithRock.js b/apollos-church-api/src/data/oneSignalWithRock.js
+deleted file mode 100644
+index e810c58..0000000
+--- a/apollos-church-api/src/data/oneSignalWithRock.js
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/* eslint-disable import/prefer-default-export */
+-
+-export const resolver = {
+-  Mutation: {
+-    updateUserPushSettings: async (root, { input }, { dataSources }) => {
+-      // register the changes w/ one signal
+-      const returnValue = await dataSources.OneSignal.updatePushSettings(input);
+-
+-      // if the pushProviderUserId is changing, we need ot register the device with rock.
+-      if (input.pushProviderUserId != null) {
+-        await dataSources.PersonalDevice.addPersonalDevice({
+-          pushId: input.pushProviderUserId,
+-        });
+-      }
+-
+-      // return the original return value (which is currentPerson)
+-      return returnValue;
+-    },
+-  },
+-};
+diff --git a/apollos-church-api/src/index.js b/apollos-church-api/src/index.js
+index 796ad4d..8704c6d 100644
+--- a/apollos-church-api/src/index.js
++++ b/apollos-church-api/src/index.js
+@@ -1,4 +1,3 @@
+-import dotenv from 'dotenv/config'; // eslint-disable-line
+ import config from './config'; // eslint-disable-line
+ import server from './server';
+ 
+@@ -11,6 +10,6 @@ if (!PORT && process.env.NODE_ENV !== 'test')
+     'Add `ENV=4000` if you are having trouble connecting to the server. By default, PORT is random.'
+   );
+ 
+-server.listen({ port: PORT }, () => {
+-  console.log(`🚀 Server ready at http://0.0.0.0:${PORT}`);
++server.listen({ port: PORT }).then(({ url }) => {
++  console.log(`🚀 Server ready at ${url}`);
+ });
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 80159aa..e82048c 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,47 +1,17 @@
+-import { ApolloServer } from 'apollo-server-express';
+-import ApollosConfig from '@apollosproject/config';
+-import express from 'express';
+-import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+-import { get } from 'lodash';
++import { ApolloServer } from 'apollo-server';
+ 
+-import {
+-  resolvers,
+-  schema,
+-  testSchema,
+-  context,
+-  dataSources,
+-  applyServerMiddleware,
+-  setupJobs,
+-} from './data';
++import { resolvers, schema, testSchema, context, dataSources } from './data';
+ 
+ export { resolvers, schema, testSchema };
+ 
+-const isDev =
+-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test';
+-
+-const extensions = isDev ? [() => new RockLoggingExtension()] : [];
+-
+-const cacheOptions = isDev
+-  ? {}
+-  : {
+-      cacheControl: {
+-        stripFormattedExtensions: false,
+-        calculateHttpHeaders: true,
+-        defaultMaxAge: 600,
+-      },
+-    };
+-
+-const { ENGINE } = ApollosConfig;
+-
+-const apolloServer = new ApolloServer({
++export default new ApolloServer({
+   typeDefs: schema,
+   resolvers,
+   dataSources,
+   context,
+   introspection: true,
+-  extensions,
+   formatError: (error) => {
+-    console.error(get(error, 'extensions.exception.stacktrace').join('\n'));
++    console.error(error.extensions.exception.stacktrace.join('\n'));
+     return error;
+   },
+   playground: {
+@@ -49,19 +19,4 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
+-  ...cacheOptions,
+-  engine: {
+-    apiKey: ENGINE.API_KEY,
+-    schemaTag: ENGINE.SCHEMA_TAG,
+-  },
+ });
+-
+-const app = express();
+-
+-applyServerMiddleware({ app, dataSources, context });
+-setupJobs({ app, dataSources, context });
+-
+-apolloServer.applyMiddleware({ app });
+-apolloServer.applyMiddleware({ app, path: '/' });
+-
+-export default app;
+diff --git a/apollos-church-api/src/utils/testUtils.js b/apollos-church-api/src/utils/testUtils.js
+new file mode 100644
+index 0000000..5f1c527
+--- /dev/null
++++ b/apollos-church-api/src/utils/testUtils.js
+@@ -0,0 +1,33 @@
++import { KeyValueCache } from 'apollo-server-caching';
++import {
++  context as getContext,
++  dataSources as getDataSources,
++} from '../data/index';
++
++export function getTestContext(req) {
++  const context = getContext(req);
++  const dataSources = getDataSources();
++  // Apollo Server does this internally.
++  Object.values(dataSources).forEach((dataSource) => {
++    if (dataSource.initialize) {
++      dataSource.initialize({ context, cache: KeyValueCache });
++    }
++  });
++  context.dataSources = dataSources;
++  return context;
++}
++
++export const buildGetMock = (response, dataSource) => {
++  const get = jest.fn();
++  if (Array.isArray(response) && Array.isArray(response[0])) {
++    response.forEach((responseVal) => {
++      get.mockReturnValueOnce(
++        new Promise((resolve) => resolve(dataSource.normalize(responseVal)))
++      );
++    });
++  }
++  get.mockReturnValue(
++    new Promise((resolve) => resolve(dataSource.normalize(response)))
++  );
++  return get;
++};
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/icon.png b/apollos-church-api/wallet-passes/checkin.pass/icon.png
+deleted file mode 100644
+index eb025791d640b41889b0584085aec4f7540d9ed8..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 658
+zcmV;D0&V??P)<h;3K|Lk000e1NJLTq0012T0012b1^@s6R+DEB00001b5ch_0Itp)
+z=>Px%Oi4sRR7eeDWJu5b&p>CuL}&ZJ){R<9(@<w2)pSQyWrpq9DR6D?zkOqnuWe)a
+z_4hAaj1Yt5IE^wjLNQa2i;KZiTLVRm5Qij7xmZ~l0`;{q%#1;E2!;YQ0g^2B)6-_)
+zVP{7(f`P$9OPxUo=wo65NtQ+<`RLKR4-EhQL&_CaW@d&kBRyj6WFXp72|gYMXLS|0
+z!BY+$WjJ`}E}S1_VhCpwVi0X<xRD_P6C)$symc2YGpspx3C=fDkYi906@l~dF^IMl
+zIk6nS_mJVqhmQ;!FI{8!`|lsz{AeP5OO&NLk`fHM(h_jP*PMs=@Xgn+4Et^&f;iID
+zkO2`EaOD^bqAW%B<$qw}S$FX=+@Q5k2Y>_=gajF^l@;J}xEKU21;t~yu>oBFk-PU9
+zo`3ob=Wo1xmEjLk5J#Dy79MbgNDP9OI;*KLNb>W-wX6juAY}0V+joY&H*Uj)LJV~o
+zI9TwPt^_TO0>%>zfb!+Ki&tP=IKBG9ML3&}gM-0aM-$G+#=vVS4?7!!Kd=;nfkSuh
+zF}(Wx1;&Nbn=f5w_>ENHBc}nlA|wW0O9O!AEEgLaTsd;SgbM;0AAkH{*meCDT*ysR
+zjX{)$2hK-l;0=8AMB$~Q!C<ANfNlnuFC)MY7iVT-0vC%@4;_PxAv17VDlNdr0IEBY
+zftNP^xI$J7DyMN-iZgg4fZ2o*sn|m{kQla+tTcm$xENNYI4un^&|~=Z=MP0V)DU~k
+s!#LXR#Tpq@62uv&R5Bl{F#}>L06Dg??>EPstpET307*qoM6N<$f}#QyX#fBK
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/icon@2x.png b/apollos-church-api/wallet-passes/checkin.pass/icon@2x.png
+deleted file mode 100644
+index bc4e9a6c50da95a102613f00515da6e5f1504773..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 1191
+zcmV;Y1X%ltP)<h;3K|Lk000e1NJLTq0024w0024&1^@s6;k!yG00001b5ch_0Itp)
+z=>Px(VM#<mRA>e5T1!t;K@>ja{b+ewd5MU;DHNzcTo?@oiBUp~1_bKDoh#S;1Al>u
+zJ9n-qsECR|G#bOofRwj@8bgeUQ3;Py%F7u{YkNC0_s+d@A(fuZy)$Rd%=zY=Irq$I
+z4RGuBE*t`iI0P8?AcledZ<Y>QG;Glj-GQ*{hN$7FY9AVlMp3swAmdtfB|Ny<Nu6<M
+zb`CDzyHDkdVC;)UZ`9eCx;7LSLRONAIYui}cc5mY5iXP!Gxdxx7@(uJnmI-*Q+J?k
+zHY-F$$S>1bTcZ^VQ(j&Jrno%QF5|Y|87i`~z?zfkZ3=(t3bf>?8Em;Zij|f-%Zeu=
+z4Ad1Uui|aCYKTPVRS(h)C|0+fGr(k`$lF*_qz6vW4d}VT0?18G;a0k{PM@Hp8_>>r
+zy25t`hG2DLgSZJTRtp$oV~9L0ow@*xkB)|`RTV_Nwsv;l?%QGLAD<%fS+Ya{g`K(p
+zZLyXktHcsjcr`l@zg#Zp9vvt0ai_hWok>vz84O*3vc8>;(Xl;s24_CPvfE8m?QFqG
+zbiR{`Jhh#|fo7QKk#lo<8~Vnl_jL8(cPH6>4d@foeoAagC>$tO5a+HWdO0%(OY7@C
+zmg9rd_bz?03r-1z1GO_g58b1Iz=kkz*FWI?U`sPIxUwpLS<<^upq8vml&@xy)&bAf
+z7W7a2bzAR%O%#D2k577=K~LVyDrf?~4xvC<ioKX72Oq~spq2e}gVq{lHy?i)+Pg5I
+z_*`DMRngV~+If6Ew*Wua)`)UulM$L^?y^KdLZ>jG=TVg)J0*#*1b};U6P`-k);ka<
+z5RaU6_Z1bCgaKt;oCl_6QOf7>VheiqjL?&Z=E`zNj*APD;q4FtG%+Ryu2fm5YfGc8
+zbl{u$1^BVDD(&8D$3{f~F0N@MAwV(61O%2uE{_MEPtK57zP|0<U3lo6@U^8cB5pK7
+zfU?~783O4-XH<?HjNJE3K|Y*FOO=~~$=3`tJJ|#{5YfmXNfKz|-YtBF@5?JRw&p6K
+zW}rCb!?`Jm)=&V#fk+AMAouMZqX#9{MM25@nt`&Cg#L*saHEV!DfKYix6ph9>hp4y
+zP8Bpx6VNJ@?v<mok4AFQRw_6A=?i>YT9$VE+FGot2`I~&E9kB{h>~_5!hetH9b>12
+z(F%&;q%~Co#brrco}^Kqa~d`{+}1k}tMZVRm;e_orQV@jPu0JsHI^1ZMv{@b*y7TX
+zs?sG6YuFo1lxzrl(GyC&iK+}@s0M1UwXx=fuBHa)f(GUoHOx!MqNxe-@SAdvrOm0z
+zbxo-7g$rN@LD7+s&{}QfURo7UT*{0?CC!5(H7TJgpseEbet<unp9cl$>0C>31I1-X
+z{By%W6R%adfp!S4&Z*rnUZC7jx7kugEj+7LT8&&f`li+%KL+o=E-Df?g#WLrXrDr7
+z5ce4k9cY1?hJgm|N9ec077cwH1|kSsG;lvczjbIV`Uf@}0T|pBL$3e;002ovPDHLk
+FV1lDsAjJRx
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/logo.png b/apollos-church-api/wallet-passes/checkin.pass/logo.png
+deleted file mode 100644
+index 66c5d6acadd9847001564a64d3cef75337d6027b..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 619
+zcmV-x0+juUP)<h;3K|Lk000e1NJLTq0012T0012b1^@s6R+DEB00001b5ch_0Itp)
+z=>Px%B}qg<R7ef&RLzRiKoG8KH)hPZ2n&KJ9z1y1gLrXa51zz>_yhjHs;ld>_zL<K
+zs|(^y5J3?<`4WmCh$6zwB%Plwzo3=r>?WDSi<b#BRrRH-zN+f#CR%>W4*ZV}WN~~c
+zi6^4V#*-f+a(GBCX2|ApuQP7P_YtDCG>xzM*dl!pDJqIc<j#ShB99JW9l#*cG)-=b
+z&}u`xt4L_A0dIr`k%~C4BL2k8MH#g`)6CB9H8M1Sy-7tTCz$AR6@&SSki1nJ9jKkP
+z;!UzQskLSs6&)&rph5{ldTxYwH7F9;Op@fR+Fi0YDbsvdP}K+K=u0q)ULb*730R6=
+z)%GH_)}BL^=QX(DKNW)TJFd(d#f9l1_Tdz|zh0yyMKwSmazQA28rBFsQymj^CeM?L
+zmEEE&Bt_;1Yg_%Hzh@qQRr_y?GqsDN{&*<v%Y~%5onm6;q&lIs^U46C@}Cf|^*_#j
+z3yF=?ZjuX0op%*LPy}IAwN?YNk@*x09mBJDL;p3&PEuri6s6o!M_h|{ApWMd${-lO
+z1fHsmv#n;J!aSvuG|Q&9K|I#|hUWKDu~LHY7sM+My8^%Co?TN{YSuo(x%w-E>v7%2
+zvzF<U)9Mbw6>H=Bu%9aC%ho$3GCP%8`HTRa-SC6?Ium~kkBm2bO!d})Y3d&QD`6QN
+z=YIi@%DNKyvc0{+Tg+tr&4YE9--XZP!G24JWe56n;5TEM+8QPN!ZiQ@002ovPDHLk
+FV1lg7AM5}C
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/logo@2x.png b/apollos-church-api/wallet-passes/checkin.pass/logo@2x.png
+deleted file mode 100644
+index c47ad00a6c448de33f13033da23e6c089de00b67..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 1207
+zcmV;o1W5adP)<h;3K|Lk000e1NJLTq0024w0024&1^@s6;k!yG00001b5ch_0Itp)
+z=>Px(aY;l$RA>e5S#66HM-c9w-J6@c^W}qRd_fTcA;@6_69geBh8XdKh$tpe^JDx6
+z{)s>|CPt%T3?hi1{23AgA{x)z-I>|FE}vQ1b9bofo1W<r0==+IPrY>2Q(fI%-J?|a
+zg$RTQgb0KPgb0KPgb0KPypMqX7=g&L{sl7Tx@b$Qhe@*Oq{#Qch&=SMaTi2C*@U#x
+zCy08xY%)!Gtpg>Z?Qrrto1>8FWEowy$u#A)4m8UKKLE(wMvh_*{l9@~qAMGLEcis~
+zV4kmjQAM_nOsgZBW!dMX=*!BE8D*WzmHS}?TLr4j$jNa-x=8a5<7Z=1Ye3<!CZ#U9
+zc}TlPS?^mnoodpp0Uf33am>7Z)!g_XWk^+;(;qadwORveA|pDCee<f;>MiS{)@P9o
+zn^;~0Vk<!5=mM6}^PFE=>tUQMUQ?uQbA0G74$~g1%gI-zwE{HH2N)H#S#aWSfPF<;
+z|03{}(f(K8R)Atu#MKu2>bT~epI>}{^nJsDMQR@->hI-vb!py#0^}#Ca@ds<Bbm=7
+zOScMVi?$*?ZkL@$A5oqg#}&KW%j~;%peXq+!BJ^1{0jj8o47z)$tN1mtFL#UT3Jdy
+z9nH*3r0+wd@9PQh=_ls+fjsXWo~AWvdj*P;ZyBR`h;s-dnZ<E3v(kb#L=OMX$&YD9
+zp6jBH!0-xG(VDmj!Tx;!TPgby5zUP9G#|yo_Xu2fnpU^%4QR1|;QyoOh}P_U?9MMe
+zg3e1pZwGECP6<3GvNxckEc*r}-yY67Msg6x3wH$G2<iJ9$17-6k9m^*gzgQfA-Uv(
+zv3mf!Ix$*)b|_*;dn~8*8Dz@VvX1M!7oc!t386nH8n;wIg-$m~9^>(%XqSKJI~k_^
+z3uU_NyBDCtVei}+EMpxb*+bgiWmxMZ$gClKZ>|$c4P)D~O0v?c7of&ij#fl}0!UwS
+zU_$S7X7|_$y?8?ZYZ?spPt#o6je+8tayM#IEJVUDvdq6Jm2NkA0!aT(k=C2Y7M(|?
+z(dAiVptz<iN<Ow9jKnI^_TIY3mIh>v(&|@Hq~ax;q|Z7i33GH5@N$trbQ=ItPLHD@
+zeZ|!mCE;gz-ao?WRiQNkitEWka9~+7WIJ<mI!NEANZ)@rUO_VrO2S4!mF0R8#rjHd
+z=9HY~=oo#9G~M8M1r5c+MNE@9iEpFV1`30n;(Ai-9A`~9o{4;k5y`7BZWXs7eNRiO
+zHhS%X88s-re$h@#=g)^}${xTiI>^rv;-gkDCAP3~G+q<_V0ji|?azkUVD)E2SRPS}
+z(IzZJA&=)5cjC#OW2L@pr7qHTGj{Q_Qm1XwVLKjX{fn+PY5^^-BVlmC)tE1Nq_ucw
+zEZL|96xWf?h9n2-(DC8wD5dGAF1pS@i)%=fe8*jkv>}_*np3cyf#MqSGSas8BIXM;
+zJa7W)zP%WI2KzdD@$3skwSEYDYVWH!UV2tdK1hWKgb0KPgb0KPgb0KPgb2Kkz&jnu
+VcU*cLS`+{P002ovPDHLkV1mczIo<#O
+
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/pass.json b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+deleted file mode 100644
+index a3916b3..0000000
+--- a/apollos-church-api/wallet-passes/checkin.pass/pass.json
++++ /dev/null
+@@ -1,57 +0,0 @@
+-{
+-  "description": "Apollos Church",
+-  "formatVersion": 1,
+-  "organizationName": "Apollos Church",
+-  "passTypeIdentifier": "pass.com.apollos.testing",
+-  "teamIdentifier": "7TM8C6252Z",
+-  "logoText": "Apollos Church",
+-  "backgroundColor": "rgb(0,103,109)",
+-  "foregroundColor": "rgb(248,247,244)",
+-  "labelColor": "rgb(248,247,244)",
+-  "serialNumber": "checkinpass-{{ person | GetPersonAlternateId }}",
+-  "thumbnail": {
+-    "uri": "{{ person.Photo.Url }}&format=png&height=200"
+-  },
+-  "thumbnail@2x": {
+-    "uri": "{{ person.Photo.Url }}&format=png&height=400"
+-  },
+-  "barcodes": [
+-    {
+-      "message": "{{ person | GetPersonAlternateId }}",
+-      "format": "PKBarcodeFormatQR",
+-      "messageEncoding": "iso-8859-1"
+-    }
+-  ],
+-{% assign personCampus = person | Campus %}
+-{% if personCampus.Location.Latitude %}
+-  "locations": [
+-    {
+-      "latitude": {{ personCampus.Location.Latitude }},
+-      "longitude": {{ personCampus.Location.Longitude }},
+-      "relevantText": "Tap to check-in at {{ personCampus.Name }}"
+-    }
+-  ],
+-{% endif %}
+-  "generic": {
+-    "primaryFields": [
+-      {
+-        "key": "member",
+-        "value": "{{ person.FullName }}"
+-      }
+-    ],
+-    "secondaryFields": [
+-      {
+-        "key": "home",
+-        "label": "home",
+-        "value": "{{ person | Address:'Home','[[City]], [[State]]' }}"
+-      },
+-      {
+-        "key": "campus",
+-        "label": "campus",
+-        "textAlignment": "PKTextAlignmentRight",
+-        "value":
+-          "{% assign personCampus = person | Campus %}{{ personCampus.Name  }}"
+-      }
+-    ]
+-  }
+-}
