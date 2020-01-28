@@ -1,0 +1,260 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index f09172c..6096696 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.3.0-beta.1",
++    "version": "1.2.0-beta.3",
+     "environment": "api"
+ }
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 602eb3a..e9cb0f5 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -12,8 +12,6 @@ APP:
+   # It should match whatver is in your Info.plist `CFBundleURLTypes`
+   DEEP_LINK_HOST: apolloschurchapp
+   ROOT_API_URL: ${ROOT_URL}
+-  JOBS_USERNAME: ${JOBS_USERNAME}
+-  JOBS_PASSWORD: ${JOBS_PASSWORD}
+ ROCK:
+   API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+@@ -52,12 +50,9 @@ ANALYTICS:
+   # on the accompanying service
+   SEGMENT_KEY:
+   GA_ID:
+-  USE_ROCK: true
+ BIBLE_API:
+   KEY: ${BIBLE_API_KEY}
+-  BIBLE_ID:
+-    WEB: '9879dbb7cfe39e4d-01'
+-    KJV: 'de4e12af7f28f599-02'
++  BIBLE_ID: '9879dbb7cfe39e4d-01'
+ CLOUDINARY:
+   # Cloudinary is used to improve image loading
+   # value should look something like
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+index e15ee8a..1bdafd8 100644
+--- a/apollos-church-api/local.graphql
++++ b/apollos-church-api/local.graphql
+@@ -118,7 +118,7 @@ type ContentChannel implements Node {
+ 
+ interface ContentItem {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+@@ -136,7 +136,6 @@ interface ContentItem {
+ 
+ type ContentItemsConnection {
+   edges: [ContentItemsConnectionEdge]
+-  totalCount: Int
+   pageInfo: PaginationInfo
+ }
+ 
+@@ -152,7 +151,7 @@ input ContentItemsConnectionInput {
+ 
+ type ContentSeriesContentItem implements ContentItem & Node {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+@@ -172,7 +171,7 @@ type ContentSeriesContentItem implements ContentItem & Node {
+ 
+ type DevotionalContentItem implements ContentItem & Node {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+@@ -192,7 +191,6 @@ type DevotionalContentItem implements ContentItem & Node {
+ type Event implements Node {
+   id: ID!
+   name: String
+-  description: String
+   location: String
+   start: String
+   end: String
+@@ -249,7 +247,6 @@ type LiveStream {
+   eventStartTime: String
+   media: VideoMedia
+   webViewUrl: String
+-  contentItem: ContentItem
+ }
+ 
+ interface Media {
+@@ -260,7 +257,7 @@ interface Media {
+ 
+ type MediaContentItem implements ContentItem & Node {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+@@ -295,10 +292,9 @@ type Mutation {
+   uploadProfileImage(file: Upload!, size: Int!): Person
+   authenticate(identity: String!, password: String!): Authentication
+   changePassword(password: String!): Authentication
+-  registerPerson(email: String!, password: String!, userProfile: [UpdateProfileInput]): Authentication
++  registerPerson(email: String!, password: String!): Authentication
+   requestSmsLoginPin(phoneNumber: String!): SmsPinResult
+   authenticateWithSms(phoneNumber: String!, pin: String!): Authentication
+-  registerWithSms(phoneNumber: String!, pin: String!, userProfile: [UpdateProfileInput]): Authentication
+   identifySelf(input: AnalyticsIdentifyInput!): AnalyticsResult
+   trackEvent(input: AnalyticsTrackInput!): AnalyticsResult
+   updateUserPushSettings(input: PushSettingsInput!): Person
+@@ -375,11 +371,9 @@ type Query {
+   userFeed(first: Int, after: String): ContentItemsConnection
+   personaFeed(first: Int, after: String): ContentItemsConnection
+   currentUser: AuthenticatedUser
+-  userExists(identity: String): USER_AUTH_STATUS
+-  liveStream: LiveStream @deprecated(reason: "Use liveStreams, there may be multiple.")
+-  liveStreams: [LiveStream]
+-  scripture(query: String!, version: VERSION): Scripture @deprecated(reason: "Use 'scriptures' instead.")
+-  scriptures(query: String!, version: VERSION): [Scripture]
++  liveStream: LiveStream
++  scripture(query: String!): Scripture
++  scriptures(query: String!): [Scripture]
+   userPass: Pass
+   search(query: String!, first: Int, after: String): SearchResultsConnection
+   campuses(location: CampusLocationInput): [Campus]
+@@ -396,7 +390,6 @@ type Scripture implements Node {
+   html: String
+   reference: String
+   copyright: String
+-  version: String
+ }
+ 
+ type ScriptureFeature implements Feature & Node {
+@@ -439,7 +432,6 @@ type SharableFeature implements Sharable {
+ 
+ type SmsPinResult {
+   success: Boolean
+-  userAuthStatus: USER_AUTH_STATUS
+ }
+ 
+ type TextFeature implements Feature & Node {
+@@ -469,7 +461,7 @@ enum ThemeType {
+ 
+ type UniversalContentItem implements ContentItem & Node {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+@@ -502,17 +494,6 @@ input UpdateProfileInput {
+ """The `Upload` scalar type represents a file upload."""
+ scalar Upload
+ 
+-enum USER_AUTH_STATUS {
+-  NONE
+-  NEW_APP_USER
+-  EXISTING_APP_USER
+-}
+-
+-enum VERSION {
+-  WEB
+-  KJV
+-}
+-
+ type VideoMedia implements Media {
+   name: String
+   key: String
+@@ -526,7 +507,7 @@ type VideoMediaSource implements MediaSource {
+ 
+ type WeekendContentItem implements ContentItem & Node {
+   id: ID!
+-  title(hyphenated: Boolean): String
++  title: String
+   coverImage: ImageMedia
+   images: [ImageMedia]
+   videos: [VideoMedia]
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 454d094..a25db9c 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "1.3.0-beta.1",
++  "version": "1.2.0-beta.3",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -34,20 +34,20 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-algolia-search": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-analytics": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-bible": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-church-online": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-cloudinary": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-onesignal": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-passes": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-redis-cache": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-rock": "^1.3.0-beta.1",
+-    "@apollosproject/data-connector-twilio": "^1.3.0-beta.1",
+-    "@apollosproject/data-schema": "^1.3.0-beta.1",
+-    "@apollosproject/rock-apollo-data-source": "^1.3.0-beta.1",
+-    "@apollosproject/server-core": "^1.3.0-beta.1",
++    "@apollosproject/config": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-algolia-search": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-analytics": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-bible": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-church-online": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-cloudinary": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-onesignal": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-passes": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-redis-cache": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-rock": "^1.2.0-beta.3",
++    "@apollosproject/data-connector-twilio": "^1.2.0-beta.3",
++    "@apollosproject/data-schema": "^1.2.0-beta.3",
++    "@apollosproject/rock-apollo-data-source": "^1.2.0-beta.3",
++    "@apollosproject/server-core": "^1.2.0-beta.3",
+     "apollo-server": "^2.0.5",
+     "apollo-server-express": "2.4.8",
+     "color": "3.0.0",
+@@ -58,8 +58,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.3.0-beta.1",
+-    "@apollosproject/babel-preset-apollos": "^1.3.0-beta.1",
++    "@apollosproject/apollo-server-env-mock": "^1.2.0-beta.3",
++    "@apollosproject/babel-preset-apollos": "^1.2.0-beta.3",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@entria/graphql-findbreakingchanges": "^1.0.1",
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 80159aa..8652945 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -2,7 +2,6 @@ import { ApolloServer } from 'apollo-server-express';
+ import ApollosConfig from '@apollosproject/config';
+ import express from 'express';
+ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+-import { get } from 'lodash';
+ 
+ import {
+   resolvers,
+@@ -41,7 +40,7 @@ const apolloServer = new ApolloServer({
+   introspection: true,
+   extensions,
+   formatError: (error) => {
+-    console.error(get(error, 'extensions.exception.stacktrace').join('\n'));
++    console.error(error.extensions.exception.stacktrace.join('\n'));
+     return error;
+   },
+   playground: {
