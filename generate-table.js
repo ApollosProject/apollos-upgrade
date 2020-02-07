@@ -39,7 +39,7 @@ const generateTable = async () => {
                             return '-'
                         }
                         return isBig
-                        ? `[->${toRelease}](${RepoUrl}/compare/release/${fromRelease}..release/${toRelease}) [core](https://github.com/ApollosProject/apollos-prototype/compare/v${fromRelease}...v${toRelease})`
+                        ? `[->${toRelease}](${RepoUrl}/compare/release/${fromRelease}..release/${toRelease}) [core](https://github.com/ApollosProject/apollos-apps/compare/v${fromRelease}...v${toRelease})`
                         : `[->${toRelease}](${RepoUrl}/compare/release/${fromRelease}..release/${toRelease})`
                     }),
                 )(R.range(0, length)),

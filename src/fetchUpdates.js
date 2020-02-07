@@ -7,7 +7,7 @@ module.exports.getNewVersion = async () => {
     };
 
     const response = await fetch(
-      `https://api.github.com/repos/ApollosProject/apollos-prototype/contents/lerna.json`,
+      `https://api.github.com/repos/ApollosProject/apollos-apps/contents/lerna.json`,
       headers,
     );
 
