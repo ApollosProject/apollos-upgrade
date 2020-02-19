@@ -1,0 +1,152 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index ce4f7ce..fab32f8 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.3.0-beta.6",
++    "version": "1.3.0-beta.0",
+     "environment": "api"
+ }
+\ No newline at end of file
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index c8754e4..602eb3a 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -33,20 +33,8 @@ CHURCH_ONLINE:
+ ALGOLIA:
+   APPLICATION_ID: ${ALGOLIA_APP_ID}
+   API_KEY: ${ALGOLIA_API_KEY}
+-  # TODO: should we support multiple indices? how
+-  SEARCH_INDEX: test_ContentItem
+-  # Configure Algolia custom settings here
+-  # https://www.algolia.com/doc/api-reference/settings-api-parameters/
+-  CONFIGURATION:
+-    searchableAttributes:
+-      - title
+-      - unordered(summary)
+-    #customRankings:
+-      # NOT CURRENTLY INCLUDED
+-      # This just demonstrates what's possible
+-      # To include likedCount (or any other field) override search package
+-      # and add field to config below
+-      #- desc(likedCount)
++  # TODO: should we support multiple indices? how?
++  SEARCH_INDEX: test_ContentItems
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+index 7438b56..e15ee8a 100644
+--- a/apollos-church-api/local.graphql
++++ b/apollos-church-api/local.graphql
+@@ -1,5 +1,3 @@
+-directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
+-
+ enum ACTION_FEATURE_ACTION {
+   READ_CONTENT
+   READ_EVENT
+@@ -102,8 +100,8 @@ type Campus implements Node {
+ }
+ 
+ input CampusLocationInput {
+-  latitude: Float
+-  longitude: Float
++  latitude: Float!
++  longitude: Float!
+ }
+ 
+ """A rgb color string"""
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index e0d6086..2a866af 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "1.3.0-beta.6",
++  "version": "1.3.0-beta.0",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+@@ -34,20 +34,20 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-algolia-search": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-analytics": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-bible": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-church-online": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-cloudinary": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-onesignal": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-passes": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-redis-cache": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-rock": "^1.3.0-beta.6",
+-    "@apollosproject/data-connector-twilio": "^1.3.0-beta.6",
+-    "@apollosproject/data-schema": "^1.3.0-beta.6",
+-    "@apollosproject/rock-apollo-data-source": "^1.3.0-beta.6",
+-    "@apollosproject/server-core": "^1.3.0-beta.6",
++    "@apollosproject/config": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-algolia-search": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-analytics": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-bible": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-church-online": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-cloudinary": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-onesignal": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-passes": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-redis-cache": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-rock": "^1.3.0-beta.0",
++    "@apollosproject/data-connector-twilio": "^1.3.0-beta.0",
++    "@apollosproject/data-schema": "^1.3.0-beta.0",
++    "@apollosproject/rock-apollo-data-source": "^1.3.0-beta.0",
++    "@apollosproject/server-core": "^1.3.0-beta.0",
+     "apollo-server": "^2.0.5",
+     "apollo-server-express": "2.4.8",
+     "color": "3.0.0",
+@@ -58,8 +58,8 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.3.0-beta.6",
+-    "@apollosproject/babel-preset-apollos": "^1.3.0-beta.6",
++    "@apollosproject/apollo-server-env-mock": "^1.3.0-beta.0",
++    "@apollosproject/babel-preset-apollos": "^1.3.0-beta.0",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@entria/graphql-findbreakingchanges": "^1.0.1",
+diff --git a/apollos-church-api/scripts/generateLocalSchema.sh b/apollos-church-api/scripts/generateLocalSchema.sh
+index d8008f2..869e5a8 100755
+--- a/apollos-church-api/scripts/generateLocalSchema.sh
++++ b/apollos-church-api/scripts/generateLocalSchema.sh
+@@ -8,7 +8,7 @@ else
+   echo $*
+   if [ "$*" = "--start-server" ]; then
+     echo 'Server not running, starting server'
+-    PORT=4000 npm run start:prod > /tmp/server-log.txt &
++    PORT=4000 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX npm run start:prod > /tmp/server-log.txt &
+     SERVER_PID=$!
+     echo "Server running... (PID $SERVER_PID)"
+   fi
+@@ -20,7 +20,7 @@ else
+   echo 'Curling Server for most recent schema.'
+   ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
+   echo 'Publishing Schema to Apollo Engine.'
+-  npx apollo schema:publish --endpoint=http://localhost:4000
++  npx apollo server:publish --endpoint=http://localhost:4000
+   if [ "$*" = "--start-server" ]; then
+     echo "Killing Server (PID $SERVER_PID)"
+     kill -9 $SERVER_PID
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 88a6902..80159aa 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -27,7 +27,7 @@ const cacheOptions = isDev
+       cacheControl: {
+         stripFormattedExtensions: false,
+         calculateHttpHeaders: true,
+-        defaultMaxAge: 3600,
++        defaultMaxAge: 600,
+       },
+     };
+ 

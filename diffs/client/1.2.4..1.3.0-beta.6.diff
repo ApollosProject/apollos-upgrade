@@ -1,0 +1,5782 @@
+diff --git a/apolloschurchapp/__mocks__/react-native-permissions/index.js b/apolloschurchapp/__mocks__/react-native-permissions/index.js
+new file mode 100644
+index 0000000..4d543c8
+--- /dev/null
++++ b/apolloschurchapp/__mocks__/react-native-permissions/index.js
+@@ -0,0 +1 @@
++export * from 'react-native-permissions/mock.js';
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 607cd7d..c17f0d4 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -147,7 +147,7 @@ android {
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+         versionCode 24
+-        versionName "1.2.4"
++        versionName "1.3.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index c77a161..96a2dc4 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.2.4",
++    "version": "1.3.0-beta.6",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/index.js b/apolloschurchapp/index.js
+index 6bfaa01..a0dac08 100644
+--- a/apolloschurchapp/index.js
++++ b/apolloschurchapp/index.js
+@@ -1,12 +1,12 @@
+-import './polyfill'; // this can be removed when we upgrade to react-native 59
++import './loadConfig';
+ import { AppRegistry, YellowBox } from 'react-native';
+ import SplashScreen from 'react-native-splash-screen';
+-
+-import Config from 'react-native-config';
++import ApollosConfig from '@apollosproject/config';
+ import Storybook from './storybook';
+-import MainApp from './src';
+ 
+-const useStorybook = Config.STORYBOOK === 'true';
++const useStorybook = ApollosConfig.STORYBOOK === 'true';
++
++const MainApp = require('./src').default;
+ 
+ let App = MainApp;
+ if (useStorybook) {
+diff --git a/apolloschurchapp/ios/Gemfile b/apolloschurchapp/ios/Gemfile
+new file mode 100644
+index 0000000..8419108
+--- /dev/null
++++ b/apolloschurchapp/ios/Gemfile
+@@ -0,0 +1,2 @@
++source 'https://rubygems.org'
++gem 'cocoapods', '1.8.4'
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Gemfile.lock b/apolloschurchapp/ios/Gemfile.lock
+new file mode 100644
+index 0000000..80a9446
+--- /dev/null
++++ b/apolloschurchapp/ios/Gemfile.lock
+@@ -0,0 +1,83 @@
++GEM
++  remote: https://rubygems.org/
++  specs:
++    CFPropertyList (3.0.2)
++    activesupport (4.2.11.1)
++      i18n (~> 0.7)
++      minitest (~> 5.1)
++      thread_safe (~> 0.3, >= 0.3.4)
++      tzinfo (~> 1.1)
++    algoliasearch (1.27.1)
++      httpclient (~> 2.8, >= 2.8.3)
++      json (>= 1.5.1)
++    atomos (0.1.3)
++    claide (1.0.3)
++    cocoapods (1.8.4)
++      activesupport (>= 4.0.2, < 5)
++      claide (>= 1.0.2, < 2.0)
++      cocoapods-core (= 1.8.4)
++      cocoapods-deintegrate (>= 1.0.3, < 2.0)
++      cocoapods-downloader (>= 1.2.2, < 2.0)
++      cocoapods-plugins (>= 1.0.0, < 2.0)
++      cocoapods-search (>= 1.0.0, < 2.0)
++      cocoapods-stats (>= 1.0.0, < 2.0)
++      cocoapods-trunk (>= 1.4.0, < 2.0)
++      cocoapods-try (>= 1.1.0, < 2.0)
++      colored2 (~> 3.1)
++      escape (~> 0.0.4)
++      fourflusher (>= 2.3.0, < 3.0)
++      gh_inspector (~> 1.0)
++      molinillo (~> 0.6.6)
++      nap (~> 1.0)
++      ruby-macho (~> 1.4)
++      xcodeproj (>= 1.11.1, < 2.0)
++    cocoapods-core (1.8.4)
++      activesupport (>= 4.0.2, < 6)
++      algoliasearch (~> 1.0)
++      concurrent-ruby (~> 1.1)
++      fuzzy_match (~> 2.0.4)
++      nap (~> 1.0)
++    cocoapods-deintegrate (1.0.4)
++    cocoapods-downloader (1.3.0)
++    cocoapods-plugins (1.0.0)
++      nap
++    cocoapods-search (1.0.0)
++    cocoapods-stats (1.1.0)
++    cocoapods-trunk (1.4.1)
++      nap (>= 0.8, < 2.0)
++      netrc (~> 0.11)
++    cocoapods-try (1.1.0)
++    colored2 (3.1.2)
++    concurrent-ruby (1.1.5)
++    escape (0.0.4)
++    fourflusher (2.3.1)
++    fuzzy_match (2.0.4)
++    gh_inspector (1.1.3)
++    httpclient (2.8.3)
++    i18n (0.9.5)
++      concurrent-ruby (~> 1.0)
++    json (2.3.0)
++    minitest (5.14.0)
++    molinillo (0.6.6)
++    nanaimo (0.2.6)
++    nap (1.1.0)
++    netrc (0.11.0)
++    ruby-macho (1.4.0)
++    thread_safe (0.3.6)
++    tzinfo (1.2.6)
++      thread_safe (~> 0.1)
++    xcodeproj (1.14.0)
++      CFPropertyList (>= 2.3.3, < 4.0)
++      atomos (~> 0.1.3)
++      claide (>= 1.0.2, < 2.0)
++      colored2 (~> 3.1)
++      nanaimo (~> 0.2.6)
++
++PLATFORMS
++  ruby
++
++DEPENDENCIES
++  cocoapods (= 1.8.4)
++
++BUNDLED WITH
++   2.0.2
+diff --git a/apolloschurchapp/ios/Podfile b/apolloschurchapp/ios/Podfile
+index 354f6da..a623104 100644
+--- a/apolloschurchapp/ios/Podfile
++++ b/apolloschurchapp/ios/Podfile
+@@ -2,6 +2,8 @@ platform :ios, '9.0'
+ require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+ 
+ target 'apolloschurchapp' do
++  permissions_path = '../node_modules/react-native-permissions/ios'
++
+   # Pods for apolloschurchapp
+   pod 'React', :path => '../node_modules/react-native/'
+   pod 'React-Core', :path => '../node_modules/react-native/React'
+@@ -26,6 +28,8 @@ target 'apolloschurchapp' do
+   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
++  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
++  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
+ 
+   target 'apolloschurchappTests' do
+     inherit! :search_paths
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index a30f91b..4b2cb89 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -14,6 +14,10 @@ PODS:
+     - glog
+   - glog (0.3.5)
+   - OneSignal (2.10.1)
++  - Permission-Notifications (2.0.5):
++    - RNPermissions
++  - Permission-PhotoLibrary (2.0.5):
++    - RNPermissions
+   - React (0.60.5):
+     - React-Core (= 0.60.5)
+     - React-DevSupport (= 0.60.5)
+@@ -65,9 +69,9 @@ PODS:
+     - React
+   - react-native-image-picker (0.28.0):
+     - React
+-  - react-native-maps (0.25.0):
++  - react-native-maps (0.26.1):
+     - React
+-  - react-native-music-control (0.10.5):
++  - react-native-music-control (0.10.8):
+     - React
+   - react-native-onesignal (3.3.2):
+     - OneSignal (= 2.10.1)
+@@ -122,6 +126,8 @@ PODS:
+     - React
+   - RNInAppBrowser (3.1.0):
+     - React
++  - RNPermissions (2.0.5):
++    - React
+   - RNScreens (1.0.0-alpha.23):
+     - React
+   - RNSVG (9.4.0):
+@@ -133,6 +139,8 @@ DEPENDENCIES:
+   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
++  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
++  - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary.podspec`)
+   - React (from `../node_modules/react-native/`)
+   - React-Core (from `../node_modules/react-native/React`)
+   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
+@@ -168,12 +176,13 @@ DEPENDENCIES:
+   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
++  - RNPermissions (from `../node_modules/react-native-permissions`)
+   - RNScreens (from `../node_modules/react-native-screens`)
+   - RNSVG (from `../node_modules/react-native-svg`)
+   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+ 
+ SPEC REPOS:
+-  https://github.com/cocoapods/specs.git:
++  https://github.com/CocoaPods/Specs.git:
+     - boost-for-react-native
+     - OneSignal
+ 
+@@ -186,6 +195,10 @@ EXTERNAL SOURCES:
+     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
+   glog:
+     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
++  Permission-Notifications:
++    :path: "../node_modules/react-native-permissions/ios/Notifications.podspec"
++  Permission-PhotoLibrary:
++    :path: "../node_modules/react-native-permissions/ios/PhotoLibrary.podspec"
+   React:
+     :path: "../node_modules/react-native/"
+   React-Core:
+@@ -256,6 +269,8 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-gesture-handler"
+   RNInAppBrowser:
+     :path: "../node_modules/react-native-inappbrowser-reborn"
++  RNPermissions:
++    :path: "../node_modules/react-native-permissions"
+   RNScreens:
+     :path: "../node_modules/react-native-screens"
+   RNSVG:
+@@ -270,6 +285,8 @@ SPEC CHECKSUMS:
+   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+   OneSignal: 8fb749fa07f88006403c9b659a570fb7fb74519a
++  Permission-Notifications: 172e3ac9b8a915f0797af17891c93fe5caea6b40
++  Permission-PhotoLibrary: d6d09cca5d0de1fda1958175106234773a566893
+   React: 53c53c4d99097af47cf60594b8706b4e3321e722
+   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
+   React-cxxreact: 8384287780c4999351ad9b6e7a149d9ed10a2395
+@@ -280,8 +297,8 @@ SPEC CHECKSUMS:
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
+-  react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
+-  react-native-music-control: 700e53dc9b2ec7342f69705243609c1cd644fa44
++  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
++  react-native-music-control: dcfe5b61e56a15898c4618579cb8ce612c9d21a8
+   react-native-onesignal: 8958311abbd9125f26e600914e48833b57321cbf
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+   react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
+@@ -305,10 +322,11 @@ SPEC CHECKSUMS:
+   RNDeviceInfo: 687c1b2ab6d86ff1ca1208783320cd144138c7f2
+   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+   RNInAppBrowser: 9d1ffb9db0d0cbdf03f528f1f0624b2c533b93fd
++  RNPermissions: c40561e25ae1d4ca4ad987bde1026f9294a89f74
+   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+   RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
+   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+ 
+-PODFILE CHECKSUM: d235853c2d054909a0114df39a2529360918990d
++PODFILE CHECKSUM: 4d39aaf28e44d03e5013c41ba0483da61d45219d
+ 
+-COCOAPODS: 1.7.5
++COCOAPODS: 1.8.4
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index b829a33..2670e42 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.4</string>
++	<string>1.3.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 27b288c..6ec4b61 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.4</string>
++	<string>1.3.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index dfdaff8..6b04c55 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.4</string>
++	<string>1.3.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 917f810..32c67ad 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -15,7 +15,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>BNDL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.2.4</string>
++	<string>1.3.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index de5a421..b3c654a 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -1,7 +1,11 @@
+ import React from 'react';
+ import { NativeModules } from 'react-native';
+-// We ran into an issue where SafeAreaView would break jest tests.
++import ApollosConfig from '@apollosproject/config';
++import FRAGMENTS from '@apollosproject/ui-fragments';
++
++ApollosConfig.loadJs({ FRAGMENTS });
+ 
++// We ran into an issue where SafeAreaView would break jest tests.
+ jest.mock(
+   '../apollos-ui-kit/node_modules/react-native-safe-area-context/',
+   () => ({
+@@ -28,9 +32,9 @@ jest.mock('react-native-music-control', () => ({
+   STATE_PAUSED: true,
+ }));
+ 
+-jest.mock('react-native-config', () => ({
++ApollosConfig.loadJs({
+   ONE_SIGNAL_KEY: 'doesntmatter',
+-}));
++});
+ 
+ jest.mock('Animated', () => {
+   const ActualAnimated = require.requireActual('Animated');
+@@ -53,6 +57,8 @@ jest.mock('Animated', () => {
+   };
+ });
+ 
++jest.mock('NativeAnimatedHelper');
++
+ jest.mock('react-native-safari-view', () => ({
+   isAvailable: jest.fn().mockImplementation(() => Promise.resolve(true)),
+   show: jest.fn(),
+@@ -84,6 +90,10 @@ jest.mock('@apollosproject/ui-notifications', () => ({
+   NotificationsProvider: ({ children }) => children,
+ }));
+ 
++jest.mock('@apollosproject/ui-mapview', () => ({
++  MapViewConnected: 'MapViewConnected',
++}));
++
+ jest.mock('@apollosproject/ui-media-player', () => ({
+   MediaPlayerSpacer: ({ children }) => children,
+   MediaPlayer: () => 'MediaPlayer',
+@@ -96,7 +106,6 @@ jest.mock('react-native-video', () => 'Video');
+ 
+ jest.mock('NativeEventEmitter');
+ 
+-jest.mock('react-native-maps');
+ jest.mock('DatePickerIOS', () => 'DatePicker');
+ jest.mock('./src/client/index');
+ 
+diff --git a/apolloschurchapp/loadConfig.js b/apolloschurchapp/loadConfig.js
+new file mode 100644
+index 0000000..922e5d0
+--- /dev/null
++++ b/apolloschurchapp/loadConfig.js
+@@ -0,0 +1,4 @@
++import ApollosConfig from '@apollosproject/config';
++import FRAGMENTS from '@apollosproject/ui-fragments';
++
++ApollosConfig.loadJs({ FRAGMENTS });
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+index 35373b1..228b070 100644
+--- a/apolloschurchapp/metro.config.js
++++ b/apolloschurchapp/metro.config.js
+@@ -12,28 +12,37 @@ const flatten = (array) =>
+   array.reduce((accum, curr) => curr.concat(accum), []);
+ 
+ const localDeps = [
+-  path.resolve('..', 'apollos-ui-kit'),
+-  path.resolve('..', 'apollos-ui-passes'),
++  path.resolve('..', 'apollos-config'),
++  path.resolve('..', 'apollos-ui-analytics'),
+   path.resolve('..', 'apollos-ui-auth'),
++  path.resolve('..', 'apollos-ui-connected'),
++  path.resolve('..', 'apollos-ui-fragments'),
+   path.resolve('..', 'apollos-ui-htmlview'),
+-  path.resolve('..', 'apollos-ui-analytics'),
+-  path.resolve('..', 'apollos-ui-storybook'),
+-  path.resolve('..', 'apollos-ui-onboarding'),
++  path.resolve('..', 'apollos-ui-kit'),
++  path.resolve('..', 'apollos-ui-mapview'),
+   path.resolve('..', 'apollos-ui-media-player'),
+-  path.resolve('..', 'apollos-ui-scripture'),
+   path.resolve('..', 'apollos-ui-notifications'),
++  path.resolve('..', 'apollos-ui-onboarding'),
++  path.resolve('..', 'apollos-ui-passes'),
++  path.resolve('..', 'apollos-ui-scripture'),
++  path.resolve('..', 'apollos-ui-storybook'),
+ ];
+ 
+ const sharedNativeModules = [
++  '@apollosproject/react-native-airplay-btn',
++  '@react-native-community/async-storage',
++  'react-native-geolocation-service',
++  'react-native-config',
++  'react-native-gesture-handler',
+   'react-native-linear-gradient',
++  'react-native-maps',
++  'react-native-modal-datetime-picker',
++  'react-native-music-control',
++  'react-native-onesignal',
+   'react-native-safe-area-context',
+   'react-native-svg',
+-  'react-native-onesignal',
+-  'react-native-music-control',
+-  'react-native-gesture-handler',
+   'react-native-video',
+   'react-native-video-controls',
+-  '@apollosproject/react-native-airplay-btn',
+   'react-navigation',
+ ];
+ 
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index ea09a5f..f74ec87 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.2.4",
++  "version": "1.3.0-beta.6",
+   "private": true,
+   "devDependencies": {
+     "codecov": "3.0.2",
+@@ -38,7 +38,7 @@
+     "postversion": "react-native-version --never-amend --never-increment-build --android android/app/build.gradle --ios ios/",
+     "prestart": "lerna run generate-stories & node ./scripts/get-introspection-data.js",
+     "postinstall": "jetify",
+-    "pods": "./scripts/install_pods.sh",
++    "pods": "(cd ios && bundle install && bundle exec pod install)",
+     "start": "react-native start",
+     "test": "TZ=UTC jest"
+   },
+@@ -62,22 +62,26 @@
+     ]
+   },
+   "dependencies": {
++    "@apollosproject/config": "^1.3.0-beta.6",
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.2.4",
+-    "@apollosproject/ui-auth": "^1.2.4",
+-    "@apollosproject/ui-htmlview": "^1.2.4",
+-    "@apollosproject/ui-kit": "^1.2.4",
+-    "@apollosproject/ui-media-player": "^1.2.4",
+-    "@apollosproject/ui-notifications": "^1.2.4",
+-    "@apollosproject/ui-onboarding": "^1.2.4",
+-    "@apollosproject/ui-passes": "^1.2.4",
+-    "@apollosproject/ui-scripture": "^1.2.4",
+-    "@apollosproject/ui-storybook": "^1.2.4",
++    "@apollosproject/ui-analytics": "^1.3.0-beta.6",
++    "@apollosproject/ui-auth": "^1.3.0-beta.6",
++    "@apollosproject/ui-connected": "^1.3.0-beta.6",
++    "@apollosproject/ui-fragments": "^1.3.0-beta.6",
++    "@apollosproject/ui-htmlview": "^1.3.0-beta.6",
++    "@apollosproject/ui-kit": "^1.3.0-beta.6",
++    "@apollosproject/ui-mapview": "^1.3.0-beta.6",
++    "@apollosproject/ui-media-player": "^1.3.0-beta.6",
++    "@apollosproject/ui-notifications": "^1.3.0-beta.6",
++    "@apollosproject/ui-onboarding": "^1.3.0-beta.6",
++    "@apollosproject/ui-passes": "^1.3.0-beta.6",
++    "@apollosproject/ui-scripture": "^1.3.0-beta.6",
++    "@apollosproject/ui-storybook": "^1.3.0-beta.6",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+-    "apollo-client": "2.5.1",
++    "apollo-client": "2.6.8",
+     "apollo-link": "1.2.8",
+     "apollo-link-http": "1.5.11",
+     "apollo-link-schema": "1.1.6",
+@@ -103,10 +107,12 @@
+     "react-native-image-picker": "0.28.0",
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+-    "react-native-maps": "0.25.0",
+-    "react-native-music-control": "0.10.5",
++    "react-native-maps": "0.26.1",
++    "react-native-modal-datetime-picker": "7.6.0",
++    "react-native-music-control": "0.10.8",
+     "react-native-onesignal": "3.3.2",
+     "react-native-passkit-wallet": "^0.1.4",
++    "react-native-permissions": "^2.0.5",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-context": "^0.3.6",
+     "react-native-safe-area-view": "0.13.1",
+diff --git a/apolloschurchapp/polyfill.js b/apolloschurchapp/polyfill.js
+deleted file mode 100644
+index e2e1ede..0000000
+--- a/apolloschurchapp/polyfill.js
++++ /dev/null
+@@ -1,10 +0,0 @@
+-// this can be removed when we upgrade to react-native 59
+-
+-// symbol polyfills
+-global.Symbol = require('core-js/es6/symbol');
+-require('core-js/fn/symbol/iterator');
+-
+-// collection fn polyfills
+-require('core-js/fn/map');
+-require('core-js/fn/set');
+-require('core-js/fn/array/find');
+diff --git a/apolloschurchapp/scripts/install_pods.sh b/apolloschurchapp/scripts/install_pods.sh
+deleted file mode 100755
+index dfd82f2..0000000
+--- a/apolloschurchapp/scripts/install_pods.sh
++++ /dev/null
+@@ -1,11 +0,0 @@
+-cd ios
+-# check cocoapods version
+-MY_VERSION=$(pod --version)
+-PODFILE_TEXT=$(sed -n /COCOAPODS/p Podfile.lock)
+-MASTER_VERSION=${PODFILE_TEXT#"COCOAPODS: "}
+-if [[ $MY_VERSION != $MASTER_VERSION ]]; then
+-	echo "Cocoapods version mismatch. Install version $MASTER_VERSION."
+-	exit 1
+-fi
+-# update repo and install pods
+-pod install --repo-update
+diff --git a/apolloschurchapp/src/NavigationService.js b/apolloschurchapp/src/NavigationService.js
+index a2a5348..8a268af 100644
+--- a/apolloschurchapp/src/NavigationService.js
++++ b/apolloschurchapp/src/NavigationService.js
+@@ -1,4 +1,4 @@
+-import { NavigationActions } from 'react-navigation';
++import { StackActions, NavigationActions } from 'react-navigation';
+ 
+ let _navigator;
+ 
+@@ -15,6 +15,29 @@ const navigate = (routeName, params) => {
+   );
+ };
+ 
++export const resetAction = ({ navigatorName, routeName }) =>
++  StackActions.reset({
++    index: 0,
++    key: null,
++    actions: [
++      NavigationActions.navigate({
++        routeName: navigatorName,
++        action: NavigationActions.navigate({
++          routeName,
++        }),
++      }),
++    ],
++  });
++
++const resetToAuth = () => {
++  _navigator.dispatch(
++    resetAction({
++      navigatorName: 'Auth',
++      routeName: 'AuthSMSPhoneEntryConnected',
++    })
++  );
++};
++
+ const goBack = (from) => {
+   let key;
+   if (from) {
+@@ -27,5 +50,7 @@ const goBack = (from) => {
+ export default {
+   setTopLevelNavigator,
+   navigate,
++  resetAction,
+   goBack,
++  resetToAuth,
+ };
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index 100ccb9..b0056a4 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -1,24 +1,25 @@
+ import React from 'react';
+-import Config from 'react-native-config';
++import ApollosConfig from '@apollosproject/config';
+ import { Providers } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
+ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { MediaPlayerProvider } from '@apollosproject/ui-media-player';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
++import { LiveProvider } from '@apollosproject/ui-connected';
+ 
+ import NavigationService from './NavigationService';
+-import { LiveProvider } from './live';
+ import ClientProvider from './client';
+ import customTheme, { customIcons } from './theme';
+ 
+ const AppProviders = (props) => (
+   <ClientProvider {...props}>
+     <NotificationsProvider
+-      oneSignalKey={Config.ONE_SIGNAL_KEY}
++      oneSignalKey={ApollosConfig.ONE_SIGNAL_KEY}
+       navigate={NavigationService.navigate}
+     >
+       <AuthProvider
+         navigateToAuth={() => NavigationService.navigate('Auth')}
++        navigate={NavigationService.navigate}
+         closeAuth={() => NavigationService.navigate('Onboarding')}
+       >
+         <MediaPlayerProvider>
+diff --git a/apolloschurchapp/src/__tests__/LandingScreen.tests.js b/apolloschurchapp/src/__tests__/LandingScreen.tests.js
+deleted file mode 100644
+index 37abb80..0000000
+--- a/apolloschurchapp/src/__tests__/LandingScreen.tests.js
++++ /dev/null
+@@ -1,15 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import { Providers } from '@apollosproject/ui-kit';
+-import LandingScreen from '../LandingScreen';
+-
+-describe('the LandingScreen', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <LandingScreen />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/client/cache.js b/apolloschurchapp/src/client/cache.js
+index 862639f..d2ebc30 100644
+--- a/apolloschurchapp/src/client/cache.js
++++ b/apolloschurchapp/src/client/cache.js
+@@ -5,7 +5,7 @@ import {
+ import AsyncStorage from '@react-native-community/async-storage';
+ import { CachePersistor } from 'apollo-cache-persist';
+ import gql from 'graphql-tag';
+-import Config from 'react-native-config';
++import ApollosConfig from '@apollosproject/config';
+ import introspectionQueryResultData from './fragmentTypes.json';
+ 
+ export const CACHE_LOADED = gql`
+@@ -23,7 +23,7 @@ export const MARK_CACHE_LOADED = gql`
+ // We reset our apollo cache based an env value and static number.
+ // In the future, we should also look at resetting the app when an error occurs related to Apollo.
+ // You can also increment this number to force a manual reset of the cache.
+-const SCHEMA_VERSION = `${Config.SCHEMA_VERSION}-1`; // Must be a string.
++const SCHEMA_VERSION = `${ApollosConfig.SCHEMA_VERSION}-1`; // Must be a string.
+ const SCHEMA_VERSION_KEY = 'apollo-schema-version';
+ 
+ const nodeCacheRedirect = (_, { id }, { getCacheKey }) =>
+diff --git a/apolloschurchapp/src/client/httpLink.js b/apolloschurchapp/src/client/httpLink.js
+index c8974f8..805851d 100644
+--- a/apolloschurchapp/src/client/httpLink.js
++++ b/apolloschurchapp/src/client/httpLink.js
+@@ -1,12 +1,12 @@
+ import { Platform } from 'react-native';
+ import { createUploadLink } from 'apollo-upload-client';
+-import Config from 'react-native-config';
++import ApollosConfig from '@apollosproject/config';
+ import { split } from 'apollo-link';
+ import { createHttpLink } from 'apollo-link-http';
+ import { getMainDefinition } from 'apollo-utilities';
+ 
+-let uri = Config.APP_DATA_URL;
+-const androidUri = Config.ANDROID_URL || '10.0.2.2';
++let uri = ApollosConfig.APP_DATA_URL;
++const androidUri = ApollosConfig.ANDROID_URL || '10.0.2.2';
+ 
+ // Android's emulator requires localhost network traffic to go through 10.0.2.2
+ if (Platform.OS === 'android') uri = uri.replace('localhost', androidUri);
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index a6d4092..36957bf 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -11,12 +11,17 @@ import NavigationService from '../NavigationService';
+ import httpLink from './httpLink';
+ import cache, { ensureCacheHydration, MARK_CACHE_LOADED } from './cache';
+ 
+-const goToAuth = () => NavigationService.navigate('Auth');
++const goToAuth = () => NavigationService.resetToAuth();
+ const wipeData = () => cache.writeData({ data: defaults });
+ 
+-let resetStore;
+-const onAuthError = () => {
+-  resetStore();
++let clearStore;
++let storeIsResetting = false;
++const onAuthError = async () => {
++  if (!storeIsResetting) {
++    storeIsResetting = true;
++    await clearStore();
++  }
++  storeIsResetting = false;
+   goToAuth();
+ };
+ 
+@@ -37,11 +42,11 @@ export const client = new ApolloClient({
+ 
+ // Hack to give auth link access to method on client;
+ // eslint-disable-next-line prefer-destructuring
+-resetStore = client.resetStore;
++clearStore = client.clearStore;
+ 
+ wipeData();
+ // Ensure that media player still works after logout.
+-client.onResetStore(() => wipeData());
++client.onClearStore(() => wipeData());
+ 
+ class ClientProvider extends PureComponent {
+   static propTypes = {
+diff --git a/apolloschurchapp/src/content-feed/content-feed.tests.js b/apolloschurchapp/src/content-feed/content-feed.tests.js
+index 8578983..345ff12 100644
+--- a/apolloschurchapp/src/content-feed/content-feed.tests.js
++++ b/apolloschurchapp/src/content-feed/content-feed.tests.js
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+ import { renderWithApolloData } from '../utils/testUtils';
+ import GET_CONTENT_FEED from './getContentFeed';
+diff --git a/apolloschurchapp/src/content-feed/getContentFeed.js b/apolloschurchapp/src/content-feed/getContentFeed.js
+index 97af6f6..38ed31f 100644
+--- a/apolloschurchapp/src/content-feed/getContentFeed.js
++++ b/apolloschurchapp/src/content-feed/getContentFeed.js
+@@ -1,6 +1,5 @@
+ import gql from 'graphql-tag';
+-
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query getContentFeed($itemId: ID!, $after: String, $first: Int) {
+@@ -12,12 +11,12 @@ export default gql`
+           }
+           edges {
+             node {
+-              ...baseCardFragment
++              ...contentCardFragment
+             }
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/content-feed/index.js b/apolloschurchapp/src/content-feed/index.js
+index 8443086..17e015d 100644
+--- a/apolloschurchapp/src/content-feed/index.js
++++ b/apolloschurchapp/src/content-feed/index.js
+@@ -3,10 +3,12 @@ import { Query } from 'react-apollo';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+-import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
++import {
++  ContentCardConnected,
++  fetchMoreResolver,
++} from '@apollosproject/ui-connected';
+ 
+-import ContentCardConnected from 'apolloschurchapp/src/ui/ContentCardConnected';
+-import fetchMoreResolver from 'apolloschurchapp/src/utils/fetchMoreResolver';
++import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+ 
+ import GET_CONTENT_FEED from './getContentFeed';
+ /**
+diff --git a/apolloschurchapp/src/content-single/ActionContainer/ActionContainer.tests.js b/apolloschurchapp/src/content-single/ActionContainer/ActionContainer.tests.js
+index 4d5e84a..2222b55 100644
+--- a/apolloschurchapp/src/content-single/ActionContainer/ActionContainer.tests.js
++++ b/apolloschurchapp/src/content-single/ActionContainer/ActionContainer.tests.js
+@@ -1,7 +1,7 @@
+ // import React from 'react';
+ // import renderer from 'react-test-renderer';
+ 
+-// import Providers from 'apolloschurchapp/src/Providers';
++// import Providers from '../Providers';
+ 
+ // import ActionContainer from './ActionContainer';
+ 
+diff --git a/apolloschurchapp/src/content-single/ActionContainer/index.js b/apolloschurchapp/src/content-single/ActionContainer/index.js
+index 7b64e05..8021d9c 100644
+--- a/apolloschurchapp/src/content-single/ActionContainer/index.js
++++ b/apolloschurchapp/src/content-single/ActionContainer/index.js
+@@ -1,11 +1,12 @@
+ import React from 'react';
+ import { Platform, View } from 'react-native';
+ import PropTypes from 'prop-types';
+-import ShareContentButtonConnected from 'apolloschurchapp/src/ui/ShareContentButtonConnected';
+-
+ import { SideBySideView, styled } from '@apollosproject/ui-kit';
+-import LikeContentButtonConnected from 'apolloschurchapp/src/ui/LikeContentButtonConnected';
+ import { MediaPlayerSpacer } from '@apollosproject/ui-media-player';
++import {
++  LikeButtonConnected,
++  ShareButtonConnected,
++} from '@apollosproject/ui-connected';
+ 
+ const PositioningView = styled(({ theme }) => ({
+   justifyContent: 'space-around',
+@@ -22,8 +23,8 @@ const ActionContainer = ({ itemId }) => (
+   <Container>
+     <MediaPlayerSpacer>
+       <PositioningView>
+-        <LikeContentButtonConnected itemId={itemId} />
+-        <ShareContentButtonConnected itemId={itemId} />
++        <LikeButtonConnected itemId={itemId} />
++        <ShareButtonConnected itemId={itemId} />
+       </PositioningView>
+     </MediaPlayerSpacer>
+   </Container>
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js b/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
+index cb74911..7f4debf 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
+@@ -1,10 +1,12 @@
+ import React from 'react';
+ import { ScrollView } from 'react-native';
+ import PropTypes from 'prop-types';
++import {
++  ContentHTMLViewConnected,
++  HorizontalContentSeriesFeedConnected,
++} from '@apollosproject/ui-connected';
+ import { PaddedView, H2, styled, withIsLoading } from '@apollosproject/ui-kit';
+ import { ScriptureList } from '@apollosproject/ui-scripture';
+-import HorizontalContentFeed from '../HorizontalContentFeed';
+-import HTMLContent from '../HTMLContent';
+ 
+ const ContentContainer = withIsLoading(
+   styled({ paddingVertical: 0 })(PaddedView)
+@@ -33,9 +35,12 @@ const ContentTab = ({
+           tabDestination={'scripture'}
+         />
+       ) : null}
+-      <HTMLContent contentId={id} />
++      <ContentHTMLViewConnected contentId={id} />
+     </ContentContainer>
+-    <HorizontalContentFeed contentId={id} navigation={navigation} />
++    <HorizontalContentSeriesFeedConnected
++      contentId={id}
++      navigation={navigation}
++    />
+   </ScrollView>
+ );
+ 
+@@ -54,6 +59,7 @@ ContentTab.propTypes = {
+   references: PropTypes.arrayOf(PropTypes.string),
+   /** The devotional title */
+   title: PropTypes.string,
++  navigation: PropTypes.shape({ navigate: PropTypes.array }).isRequired,
+ };
+ 
+ export default ContentTab;
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+index 2c1e254..1a46e3d 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/Devotional.tests.js
+@@ -1,8 +1,9 @@
+ import React from 'react';
+-import Providers from 'apolloschurchapp/src/Providers';
+-import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+ import { createStackNavigator, createAppContainer } from 'react-navigation';
+-import GET_CONTENT_ITEM_CONTENT from '../HTMLContent/getContentItemContent';
++import { GET_CONTENT_ITEM_CONTENT } from '@apollosproject/ui-connected';
++
++import Providers from '../../Providers';
++import { renderWithApolloData } from '../../utils/testUtils';
+ import GET_SCRIPTURE from './getScripture';
+ import Devotional from '.';
+ 
+@@ -62,7 +63,7 @@ const mocks = [contentScriptureMock, contentHTMLMock];
+ describe('the Devotional component', () => {
+   it('renders a devotional', async () => {
+     const DevotionalStack = createStackNavigator({
+-      Devotional: () => <Devotional id="1" content={{ title: 'Title' }} />, //eslint-disable-line
++      Devotional: (props) => <Devotional id="1" content={{ title: 'Title' }} {...props} />, //eslint-disable-line
+     });
+     const DevotionalWithNavigation = createAppContainer(DevotionalStack);
+     const tree = await renderWithApolloData(
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/ScriptureTab.js b/apolloschurchapp/src/content-single/DevotionalContentItem/ScriptureTab.js
+index c03f364..98fb169 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/ScriptureTab.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/ScriptureTab.js
+@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
+ import PropTypes from 'prop-types';
+ import { PaddedView } from '@apollosproject/ui-kit';
+ import ScriptureItem from '@apollosproject/ui-scripture';
+-import HorizontalContentFeed from '../HorizontalContentFeed';
++import { HorizontalContentSeriesFeedConnected } from '@apollosproject/ui-connected';
+ 
+ /**
+  * This is the Scripture side of the Devotional tabbed component.
+@@ -27,7 +27,10 @@ const ScriptureTab = ({ id, scripture, isLoading, navigation }) => (
+         />
+       ))}
+     </PaddedView>
+-    <HorizontalContentFeed contentId={id} navigation={navigation} />
++    <HorizontalContentSeriesFeedConnected
++      contentId={id}
++      navigation={navigation}
++    />
+   </ScrollView>
+ );
+ 
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/getScripture.js b/apolloschurchapp/src/content-single/DevotionalContentItem/getScripture.js
+index c94dad9..f641711 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/getScripture.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/getScripture.js
+@@ -1,4 +1,5 @@
+ import gql from 'graphql-tag';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query getScripture($itemId: ID!) {
+@@ -7,13 +8,10 @@ export default gql`
+       id
+       ... on DevotionalContentItem {
+         scriptures {
+-          id
+-          html
+-          reference
+-          copyright
+-          version
++          ...ScriptureFragment
+         }
+       }
+     }
+   }
++  ${ApollosConfig.FRAGMENTS.SCRIPTURE_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+index 2ddacec..9d39893 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/index.js
+@@ -81,7 +81,9 @@ class DevotionalContentItem extends PureComponent {
+     />
+   );
+ 
+-  renderLoading = () => <ContentTab title={''} isLoading />;
++  renderLoading = () => (
++    <ContentTab title={''} isLoading navigation={this.props.navigation} />
++  );
+ 
+   renderTabs = ({ data, error, loading }) => {
+     if (error) return <ErrorCard error={error} />;
+diff --git a/apolloschurchapp/src/content-single/Features/ScriptureFeature.js b/apolloschurchapp/src/content-single/Features/ScriptureFeature.js
+index ed87622..d346ce9 100644
+--- a/apolloschurchapp/src/content-single/Features/ScriptureFeature.js
++++ b/apolloschurchapp/src/content-single/Features/ScriptureFeature.js
+@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
+ 
+ import { ActionCard } from '@apollosproject/ui-kit';
+ import { ScriptureItem } from '@apollosproject/ui-scripture';
+-import ShareContentButtonConnected from 'apolloschurchapp/src/ui/ShareContentButtonConnected';
++import { ShareButtonConnected } from '@apollosproject/ui-connected';
+ 
+ const ScriptureFeature = ({
+   scriptures,
+@@ -13,9 +13,7 @@ const ScriptureFeature = ({
+ }) => (
+   <ActionCard
+     icon={'text'}
+-    action={
+-      <ShareContentButtonConnected message={message} itemId={contentId} />
+-    }
++    action={<ShareButtonConnected message={message} itemId={contentId} />}
+   >
+     {scriptures.map(({ copyright, reference, html, id, version }) => (
+       <ScriptureItem
+@@ -45,19 +43,4 @@ ScriptureFeature.propTypes = {
+   contentId: PropTypes.string.isRequired,
+ };
+ 
+-export const SCRIPTURE_FEATURE_FRAGMENT = `
+-fragment ScriptureFeatureFragment on ScriptureFeature {
+-  sharing {
+-    message
+-  }
+-  scriptures {
+-    id
+-    html
+-    reference
+-    copyright
+-    version
+-  }
+-}
+-`;
+-
+ export default ScriptureFeature;
+diff --git a/apolloschurchapp/src/content-single/Features/TextFeature.js b/apolloschurchapp/src/content-single/Features/TextFeature.js
+index b4bb2a6..4cec5a9 100644
+--- a/apolloschurchapp/src/content-single/Features/TextFeature.js
++++ b/apolloschurchapp/src/content-single/Features/TextFeature.js
+@@ -2,13 +2,11 @@ import React from 'react';
+ import PropTypes from 'prop-types';
+ 
+ import { ActionCard, BodyText } from '@apollosproject/ui-kit';
+-import ShareContentButtonConnected from 'apolloschurchapp/src/ui/ShareContentButtonConnected';
++import { ShareButtonConnected } from '@apollosproject/ui-connected';
+ 
+ const TextFeature = ({ body, sharing: { message } = {}, contentId }) => (
+   <ActionCard
+-    action={
+-      <ShareContentButtonConnected message={message} itemId={contentId} />
+-    }
++    action={<ShareButtonConnected message={message} itemId={contentId} />}
+   >
+     <BodyText>{body}</BodyText>
+   </ActionCard>
+@@ -20,14 +18,4 @@ TextFeature.propTypes = {
+   contentId: PropTypes.string.isRequired,
+ };
+ 
+-export const TEXT_FEATURE_FRAGMENT = `
+-fragment TextFeatureFragment on TextFeature {
+-  body
+-  id
+-  sharing {
+-    message
+-  }
+-}
+-`;
+-
+ export default TextFeature;
+diff --git a/apolloschurchapp/src/content-single/Features/getContentItemFeatures.js b/apolloschurchapp/src/content-single/Features/getContentItemFeatures.js
+index a015cec..9d3cac5 100644
+--- a/apolloschurchapp/src/content-single/Features/getContentItemFeatures.js
++++ b/apolloschurchapp/src/content-single/Features/getContentItemFeatures.js
+@@ -1,8 +1,12 @@
+ import gql from 'graphql-tag';
+-import { TEXT_FEATURE_FRAGMENT } from './TextFeature';
+-import { SCRIPTURE_FEATURE_FRAGMENT } from './ScriptureFeature';
++import ApollosConfig from '@apollosproject/config';
+ 
+-const FEATURES_FRAGMENT = `
++const {
++  TEXT_FEATURE_FRAGMENT,
++  SCRIPTURE_FEATURE_FRAGMENT,
++} = ApollosConfig.FRAGMENTS;
++
++const FEATURES_FRAGMENT = gql`
+   fragment FeaturesFragment on Feature {
+     id
+     ...TextFeatureFragment
+diff --git a/apolloschurchapp/src/content-single/HTMLContent/getContentItemContent.js b/apolloschurchapp/src/content-single/HTMLContent/getContentItemContent.js
+deleted file mode 100644
+index 207df6d..0000000
+--- a/apolloschurchapp/src/content-single/HTMLContent/getContentItemContent.js
++++ /dev/null
+@@ -1,12 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getContentItemHTML($contentId: ID!) {
+-    node(id: $contentId) {
+-      ... on ContentItem {
+-        id
+-        htmlContent
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/content-single/HTMLContent/index.js b/apolloschurchapp/src/content-single/HTMLContent/index.js
+deleted file mode 100644
+index b830a1d..0000000
+--- a/apolloschurchapp/src/content-single/HTMLContent/index.js
++++ /dev/null
+@@ -1,43 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import InAppBrowser from 'react-native-inappbrowser-reborn';
+-
+-import HTMLView from '@apollosproject/ui-htmlview';
+-import { ErrorCard } from '@apollosproject/ui-kit';
+-
+-import GET_CONTENT_ITEM_CONTENT from './getContentItemContent';
+-
+-function handlePressAnchor(url) {
+-  return InAppBrowser.open(url);
+-}
+-
+-const HTMLContent = ({ contentId }) => {
+-  if (!contentId) return <HTMLView isLoading />;
+-
+-  return (
+-    <Query
+-      query={GET_CONTENT_ITEM_CONTENT}
+-      variables={{ contentId }}
+-      fetchPolicy={'cache-and-network'}
+-    >
+-      {({ data: { node: { htmlContent } = {} } = {}, loading, error }) => {
+-        if (!htmlContent && error) return <ErrorCard error={error} />;
+-        return (
+-          <HTMLView
+-            isLoading={!htmlContent && loading}
+-            onPressAnchor={handlePressAnchor}
+-          >
+-            {htmlContent}
+-          </HTMLView>
+-        );
+-      }}
+-    </Query>
+-  );
+-};
+-
+-HTMLContent.propTypes = {
+-  contentId: PropTypes.string,
+-};
+-
+-export default HTMLContent;
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/HorizontalContentFeed.tests.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/HorizontalContentFeed.tests.js
+deleted file mode 100644
+index 182f5e1..0000000
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/HorizontalContentFeed.tests.js
++++ /dev/null
+@@ -1,206 +0,0 @@
+-import React from 'react';
+-import Providers from 'apolloschurchapp/src/Providers';
+-import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+-import GET_CONTENT_CARD from '../../ui/ContentCardConnected/query';
+-import GET_HORIZONTAL_CONTENT from './getHorizontalContent';
+-import HorizontalContentFeed from '.';
+-
+-const mock = {
+-  request: {
+-    query: GET_HORIZONTAL_CONTENT,
+-    variables: { itemId: 'ContentSeriesContentItem:123' },
+-  },
+-  result: {
+-    data: {
+-      node: {
+-        id: 'ContentSeriesContentItem:123',
+-        childContentItemsConnection: {
+-          edges: [
+-            {
+-              cursor: 'b487224762b030f470967f45d7205823',
+-              node: {
+-                id: 'DevotionalContentItem:d395278cd4b68e074ca4e595c8feab6d',
+-                coverImage: {
+-                  name: 'Square Image',
+-                  sources: [
+-                    {
+-                      uri:
+-                        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D31af1a61-360c-4b1e-8e62-45517c06a9a2',
+-                      __typename: 'ImageMediaSource',
+-                    },
+-                  ],
+-                  __typename: 'ImageMedia',
+-                },
+-                parentChannel: {
+-                  id: 'ContentChannel:559b23fd0aa90e81b1c023e72e230fa1',
+-                  name: 'Devotional',
+-                  iconName: 'text',
+-                  __typename: 'ContentChannel',
+-                },
+-                title: 'God sees who you can be not who you are',
+-                sharing: {
+-                  url:
+-                    'https://apollosrock.newspring.cc/devotional/god-sees-who-you-can-be-not-who-you-are',
+-                  message:
+-                    'God sees who you can be not who you are - Life is challenging enough.',
+-                  title: 'Share via ...',
+-                  __typename: 'SharableContentItem',
+-                },
+-                __typename: 'DevotionalContentItem',
+-              },
+-              __typename: 'ContentItemsConnectionEdge',
+-            },
+-            {
+-              cursor: '4affc1122ad80d4edcf6c5bc9d88ae99',
+-              node: {
+-                id: 'DevotionalContentItem:fbea6914a3e8877516cbd333d919075d',
+-                coverImage: {
+-                  name: 'Square Image',
+-                  sources: [
+-                    {
+-                      uri:
+-                        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D31af1a61-360c-4b1e-8e62-45517c06a9a2',
+-                      __typename: 'ImageMediaSource',
+-                    },
+-                  ],
+-                  __typename: 'ImageMedia',
+-                },
+-                parentChannel: {
+-                  id: 'ContentChannel:559b23fd0aa90e81b1c023e72e230fa1',
+-                  name: 'Devotional',
+-                  iconName: 'text',
+-                  __typename: 'ContentChannel',
+-                },
+-                title: 'Thank God for the friends who will tell it like it is',
+-                sharing: {
+-                  url:
+-                    'https://apollosrock.newspring.cc/devotional/thank-god-for-the-friends-who-will-tell-it-like-it-is',
+-                  message:
+-                    'Thank God for the friends who will tell it like it is - Some of us grew up in a sanitized church.',
+-                  title: 'Share via ...',
+-                  __typename: 'SharableContentItem',
+-                },
+-                __typename: 'DevotionalContentItem',
+-              },
+-              __typename: 'ContentItemsConnectionEdge',
+-            },
+-            {
+-              cursor: '659a26257a49fb2bf1446bb747bf7dd3',
+-              node: {
+-                id: 'DevotionalContentItem:5e18250f586ab8de4d3d6292c919dcc4',
+-                coverImage: {
+-                  name: 'Square Image',
+-                  sources: [
+-                    {
+-                      uri:
+-                        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D31af1a61-360c-4b1e-8e62-45517c06a9a2',
+-                      __typename: 'ImageMediaSource',
+-                    },
+-                  ],
+-                  __typename: 'ImageMedia',
+-                },
+-                parentChannel: {
+-                  id: 'ContentChannel:559b23fd0aa90e81b1c023e72e230fa1',
+-                  name: 'Devotional',
+-                  iconName: 'text',
+-                  __typename: 'ContentChannel',
+-                },
+-                title: 'No sin is too bad',
+-                sharing: {
+-                  url:
+-                    'https://apollosrock.newspring.cc/devotional/no-sin-is-too-bad',
+-                  message:
+-                    'No sin is too bad - In Jeremiah 3, God’s people had really messed up.',
+-                  title: 'Share via ...',
+-                  __typename: 'SharableContentItem',
+-                },
+-                __typename: 'DevotionalContentItem',
+-              },
+-              __typename: 'ContentItemsConnectionEdge',
+-            },
+-            {
+-              cursor: 'c8d2fe738629909c33010432432f21c8',
+-              node: {
+-                id: 'DevotionalContentItem:bdc2c29b85949e4ca8232b373a07953d',
+-                coverImage: {
+-                  name: 'Square Image',
+-                  sources: [
+-                    {
+-                      uri:
+-                        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D31af1a61-360c-4b1e-8e62-45517c06a9a2',
+-                      __typename: 'ImageMediaSource',
+-                    },
+-                  ],
+-                  __typename: 'ImageMedia',
+-                },
+-                parentChannel: {
+-                  id: 'ContentChannel:559b23fd0aa90e81b1c023e72e230fa1',
+-                  name: 'Devotional',
+-                  iconName: 'text',
+-                  __typename: 'ContentChannel',
+-                },
+-                title: 'Change starts with a choice',
+-                sharing: {
+-                  url:
+-                    'https://apollosrock.newspring.cc/devotional/change-starts-with-a-choice',
+-                  message:
+-                    'Change starts with a choice - Have you ever restored an old piece of furniture?',
+-                  title: 'Share via ...',
+-                  __typename: 'SharableContentItem',
+-                },
+-                __typename: 'DevotionalContentItem',
+-              },
+-              __typename: 'ContentItemsConnectionEdge',
+-            },
+-          ],
+-          __typename: 'ContentItemsConnection',
+-        },
+-        siblingContentItemsConnection: {
+-          edges: [],
+-          __typename: 'ContentItemsConnection',
+-        },
+-        __typename: 'ContentSeriesContentItem',
+-      },
+-    },
+-  },
+-};
+-
+-const navigation = {
+-  push: jest.fn(),
+-};
+-
+-const additionalMocks = mock.result.data.node.childContentItemsConnection.edges.map(
+-  ({ node }) => ({
+-    request: {
+-      query: GET_CONTENT_CARD,
+-      variables: { contentId: node.id },
+-    },
+-    result: {
+-      data: {
+-        node: {
+-          ...node,
+-          summary: 'bla bla bla',
+-          isLiked: false,
+-          theme: null,
+-          coverImage: null,
+-        },
+-      },
+-    },
+-  })
+-);
+-
+-console.log(additionalMocks);
+-
+-describe('the HorizontalContentFeed component', () => {
+-  it('renders a horizontal content feed', async () => {
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={[mock, ...additionalMocks]}>
+-        <HorizontalContentFeed
+-          contentId={'ContentSeriesContentItem:123'}
+-          navigation={navigation}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js
+deleted file mode 100644
+index a1e7c23..0000000
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/getHorizontalContent.js
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import gql from 'graphql-tag';
+-import { BASE_CARD_FRAGMENT } from '../../ui/ContentCardConnected/query';
+-
+-export default gql`
+-  query getHorizontalContent($itemId: ID!, $cursor: String) {
+-    node(id: $itemId) {
+-      ... on ContentItem {
+-        id
+-        childContentItemsConnection(after: $cursor) {
+-          edges {
+-            cursor
+-            node {
+-              ...baseCardFragment
+-            }
+-          }
+-        }
+-        siblingContentItemsConnection(after: $cursor) {
+-          edges {
+-            cursor
+-            node {
+-              ...baseCardFragment
+-            }
+-          }
+-        }
+-      }
+-    }
+-  }
+-  ${BASE_CARD_FRAGMENT}
+-`;
+diff --git a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js b/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
+deleted file mode 100644
+index f5f356f..0000000
+--- a/apolloschurchapp/src/content-single/HorizontalContentFeed/index.js
++++ /dev/null
+@@ -1,119 +0,0 @@
+-import React, { Component } from 'react';
+-import { get } from 'lodash';
+-import PropTypes from 'prop-types';
+-import { withNavigation } from 'react-navigation';
+-import { Query } from 'react-apollo';
+-
+-import { HorizontalTileFeed, TouchableScale } from '@apollosproject/ui-kit';
+-
+-import HorizontalContentCardConnected from '../../ui/HorizontalContentCardConnected';
+-
+-import GET_HORIZONTAL_CONTENT from './getHorizontalContent';
+-
+-const loadingStateObject = {
+-  node: {
+-    id: 'fakeId0',
+-    title: '',
+-    isLoading: true,
+-  },
+-};
+-
+-class HorizontalContentFeed extends Component {
+-  static propTypes = {
+-    contentId: PropTypes.string,
+-    navigation: PropTypes.shape({
+-      push: PropTypes.func,
+-    }),
+-  };
+-
+-  renderItem = ({ item }) => {
+-    const itemId = get(item, 'id', '');
+-    const disabled = get(item, 'id', '') === this.props.contentId;
+-    return (
+-      <TouchableScale
+-        onPress={() => this.handleOnPressItem(item)}
+-        disabled={disabled}
+-      >
+-        <HorizontalContentCardConnected
+-          contentId={itemId}
+-          disabled={disabled}
+-        />
+-      </TouchableScale>
+-    );
+-  };
+-
+-  handleOnPressItem = (item) => {
+-    this.props.navigation.push('ContentSingle', {
+-      itemId: item.id,
+-    });
+-  };
+-
+-  renderFeed = ({ data, loading, error, fetchMore }) => {
+-    if (error) return null;
+-    if (loading) return null;
+-
+-    const children = get(data, 'node.childContentItemsConnection.edges', []);
+-    const siblings = get(data, 'node.siblingContentItemsConnection.edges', []);
+-    const isParent = children.length > 0;
+-
+-    const edges = isParent ? children : siblings;
+-    const content = edges.map((edge) => edge.node);
+-    const { cursor } = edges.length && edges[edges.length - 1];
+-    const currentIndex = content.findIndex(
+-      ({ id }) => id === this.props.contentId
+-    );
+-    const initialScrollIndex = currentIndex === -1 ? 0 : currentIndex;
+-
+-    return content && content.length ? (
+-      <HorizontalTileFeed
+-        content={content}
+-        loadingStateObject={loadingStateObject}
+-        renderItem={this.renderItem}
+-        initialScrollIndex={initialScrollIndex}
+-        getItemLayout={(itemData, index) => ({
+-          // We need to pass this function so that initialScrollIndex will work.
+-          length: 240,
+-          offset: 240 * index,
+-          index,
+-        })}
+-        onEndReached={() =>
+-          fetchMore({
+-            query: GET_HORIZONTAL_CONTENT,
+-            variables: { cursor, itemId: this.props.contentId },
+-            updateQuery: (previousResult, { fetchMoreResult }) => {
+-              const connection = isParent
+-                ? 'childContentItemsConnection'
+-                : 'siblingContentItemsConnection';
+-              const newEdges = get(fetchMoreResult.node, connection, []).edges;
+-
+-              return {
+-                node: {
+-                  ...previousResult.node,
+-                  [connection]: {
+-                    ...previousResult.node[connection],
+-                    edges: [...edges, ...newEdges],
+-                  },
+-                },
+-              };
+-            },
+-          })
+-        }
+-      />
+-    ) : null;
+-  };
+-
+-  render() {
+-    if (!this.props.contentId) return this.renderFeed({ loading: true });
+-
+-    return (
+-      <Query
+-        query={GET_HORIZONTAL_CONTENT}
+-        variables={{ itemId: this.props.contentId }}
+-      >
+-        {this.renderFeed}
+-      </Query>
+-    );
+-  }
+-}
+-
+-export default withNavigation(HorizontalContentFeed);
+diff --git a/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js b/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js
+deleted file mode 100644
+index 595c8cd..0000000
+--- a/apolloschurchapp/src/content-single/MediaControls/getContentMedia.js
++++ /dev/null
+@@ -1,33 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export const contentMediaFragment = gql`
+-  fragment contentMediaFragment on ContentItem {
+-    id
+-    title
+-    parentChannel {
+-      id
+-      name
+-    }
+-    coverImage {
+-      sources {
+-        uri
+-      }
+-    }
+-    videos {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
+-
+-export default gql`
+-  query getContentMedia($contentId: ID!) {
+-    node(id: $contentId) {
+-      ... on ContentItem {
+-        ...contentMediaFragment
+-      }
+-    }
+-  }
+-  ${contentMediaFragment}
+-`;
+diff --git a/apolloschurchapp/src/content-single/MediaControls/index.js b/apolloschurchapp/src/content-single/MediaControls/index.js
+deleted file mode 100644
+index 8df4c20..0000000
+--- a/apolloschurchapp/src/content-single/MediaControls/index.js
++++ /dev/null
+@@ -1,154 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import PropTypes from 'prop-types';
+-import { Query, Mutation } from 'react-apollo';
+-import { View } from 'react-native';
+-import { get } from 'lodash';
+-
+-import { PLAY_VIDEO } from '@apollosproject/ui-media-player';
+-import {
+-  styled,
+-  TouchableScale,
+-  MediaThumbnail,
+-  MediaThumbnailIcon,
+-  MediaThumbnailItem,
+-  H6,
+-} from '@apollosproject/ui-kit';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+-import { LiveConsumer } from '../../live';
+-import GET_CONTENT_MEDIA from './getContentMedia';
+-
+-const Container = styled(({ theme }) => ({
+-  flexDirection: 'row',
+-  alignItems: 'flex-start',
+-  justifyContent: 'flex-start',
+-  marginTop: -(theme.sizing.baseUnit * 2.5),
+-}))(View);
+-
+-const StyledMediaThumbnail = styled({ marginVertical: 0 })(MediaThumbnail);
+-
+-class MediaControls extends PureComponent {
+-  static propTypes = {
+-    contentId: PropTypes.string,
+-  };
+-
+-  renderPlayButton = ({ action, coverImageSources }) => (
+-    <Container>
+-      <TouchableScale onPress={action}>
+-        <StyledMediaThumbnail image={coverImageSources}>
+-          <MediaThumbnailItem centered>
+-            <MediaThumbnailIcon name="play" />
+-          </MediaThumbnailItem>
+-          <MediaThumbnailItem centered bottom>
+-            <H6 padded>Play</H6>
+-          </MediaThumbnailItem>
+-        </StyledMediaThumbnail>
+-      </TouchableScale>
+-    </Container>
+-  );
+-
+-  renderMedia = ({
+-    videoSource,
+-    coverImageSources,
+-    title,
+-    parentChannelName,
+-  }) => (
+-    <Mutation mutation={PLAY_VIDEO}>
+-      {(play) =>
+-        this.renderPlayButton({
+-          action: () =>
+-            play({
+-              variables: {
+-                mediaSource: videoSource,
+-                posterSources: coverImageSources,
+-                title,
+-                isVideo: true,
+-                artist: parentChannelName,
+-              },
+-            }),
+-          coverImageSources,
+-        })
+-      }
+-    </Mutation>
+-  );
+-
+-  renderWebView = ({ webViewUrl, coverImageSources }) => (
+-    <WebBrowserConsumer>
+-      {(openUrl) =>
+-        this.renderPlayButton({
+-          action: () => openUrl(webViewUrl),
+-          coverImageSources,
+-        })
+-      }
+-    </WebBrowserConsumer>
+-  );
+-
+-  renderControls = ({
+-    liveStream,
+-    loading,
+-    error,
+-    data: {
+-      node: { videos, title, parentChannel = {}, coverImage = {} } = {},
+-    } = {},
+-  }) => {
+-    if (loading || error) return null;
+-    const isLive = !!liveStream;
+-    const hasLiveStreamContent = !!(
+-      get(liveStream, 'webViewUrl') || get(liveStream, 'media.sources[0]')
+-    );
+-
+-    const videoSource = get(videos, '[0].sources[0]', null);
+-    const shouldRender = (isLive && hasLiveStreamContent) || videoSource;
+-
+-    if (!shouldRender) return null;
+-
+-    const coverImageSources = (coverImage && coverImage.sources) || [];
+-
+-    // Content is live, and we have a livestream media
+-    if (isLive && get(liveStream, 'media.sources[0].uri')) {
+-      return this.renderMedia({
+-        coverImageSources,
+-        videoSource: liveStream.media.sources[0],
+-        parentChannelName: parentChannel.name,
+-        title,
+-      });
+-    }
+-
+-    // Content is live, and we don't have a livestream media
+-    // but we do have a webview url
+-    if (isLive && get(liveStream, 'webViewUrl')) {
+-      return this.renderWebView({
+-        webViewUrl: liveStream.webViewUrl,
+-        coverImageSources,
+-      });
+-    }
+-
+-    // Default case, normal media.
+-    return this.renderMedia({
+-      coverImageSources,
+-      videoSource,
+-      parentChannelName: parentChannel.name,
+-      title,
+-    });
+-  };
+-
+-  render() {
+-    if (!this.props.contentId) return null;
+-    return (
+-      <LiveConsumer contentId={this.props.contentId}>
+-        {(liveStream) => (
+-          <Query
+-            query={GET_CONTENT_MEDIA}
+-            fetchPolicy="cache-and-network"
+-            variables={{ contentId: this.props.contentId }}
+-          >
+-            {({ data, loading, error }) =>
+-              this.renderControls({ data, loading, error, liveStream })
+-            }
+-          </Query>
+-        )}
+-      </LiveConsumer>
+-    );
+-  }
+-}
+-
+-export default MediaControls;
+diff --git a/apolloschurchapp/src/content-single/UniversalContentItem/index.js b/apolloschurchapp/src/content-single/UniversalContentItem/index.js
+index c4031b4..4f49089 100644
+--- a/apolloschurchapp/src/content-single/UniversalContentItem/index.js
++++ b/apolloschurchapp/src/content-single/UniversalContentItem/index.js
+@@ -1,7 +1,12 @@
+ import React from 'react';
+-import { ScrollView } from 'react-native';
++import { Animated } from 'react-native';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
++import {
++  ContentHTMLViewConnected,
++  HorizontalContentSeriesFeedConnected,
++  MediaControlsConnected,
++} from '@apollosproject/ui-connected';
+ import {
+   styled,
+   GradientOverlayImage,
+@@ -10,12 +15,14 @@ import {
+   H2,
+   StretchyView,
+ } from '@apollosproject/ui-kit';
+-import MediaControls from '../MediaControls';
+-import HTMLContent from '../HTMLContent';
+-import HorizontalContentFeed from '../HorizontalContentFeed';
++
+ import Features from '../Features';
+ 
+-const FlexedScrollView = styled({ flex: 1 })(ScrollView);
++const FlexedScrollView = styled({ flex: 1 })(Animated.ScrollView);
++
++const StyledMediaControlsConnected = styled(({ theme }) => ({
++  marginTop: -(theme.sizing.baseUnit * 2.5),
++}))(MediaControlsConnected);
+ 
+ const UniversalContentItem = ({ content, loading }) => {
+   const coverImageSources = get(content, 'coverImage.sources', []);
+@@ -32,16 +39,16 @@ const UniversalContentItem = ({ content, loading }) => {
+                 />
+               </Stretchy>
+             ) : null}
+-            <MediaControls contentId={content.id} />
++            <StyledMediaControlsConnected contentId={content.id} />
+             {/* fixes text/navigation spacing by adding vertical padding if we dont have an image */}
+             <PaddedView vertical={!coverImageSources.length}>
+               <H2 padded isLoading={!content.title && loading}>
+                 {content.title}
+               </H2>
+-              <HTMLContent contentId={content.id} />
++              <ContentHTMLViewConnected contentId={content.id} />
+             </PaddedView>
+             <Features contentId={content.id} />
+-            <HorizontalContentFeed contentId={content.id} />
++            <HorizontalContentSeriesFeedConnected contentId={content.id} />
+           </FlexedScrollView>
+         )}
+       </StretchyView>
+diff --git a/apolloschurchapp/src/content-single/WeekendContentItem/index.js b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+index 3bca1c5..acf72e6 100644
+--- a/apolloschurchapp/src/content-single/WeekendContentItem/index.js
++++ b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+@@ -1,7 +1,13 @@
+ import React from 'react';
+-import { ScrollView, Dimensions } from 'react-native';
++import { Animated, Dimensions } from 'react-native';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
++import {
++  ContentHTMLViewConnected,
++  HorizontalContentSeriesFeedConnected,
++  LiveConsumer,
++  MediaControlsConnected,
++} from '@apollosproject/ui-connected';
+ import {
+   styled,
+   GradientOverlayImage,
+@@ -14,13 +20,10 @@ import {
+   CardLabel,
+   withTheme,
+ } from '@apollosproject/ui-kit';
+-import MediaControls from '../MediaControls';
+-import HTMLContent from '../HTMLContent';
+-import HorizontalContentFeed from '../HorizontalContentFeed';
++
+ import Features from '../Features';
+-import { LiveConsumer } from '../../live';
+ 
+-const FlexedScrollView = styled({ flex: 1 })(ScrollView);
++const FlexedScrollView = styled({ flex: 1 })(Animated.ScrollView);
+ 
+ const Header = styled(({ hasMedia, theme }) => ({
+   paddingTop: Dimensions.get('window').width * 0.5, // for some reason % based padding still is buggy
+@@ -29,6 +32,10 @@ const Header = styled(({ hasMedia, theme }) => ({
+   // backgroundColor: theme.colors.primary,
+ }))(PaddedView);
+ 
++const StyledMediaControlsConnected = styled(({ theme }) => ({
++  marginTop: -(theme.sizing.baseUnit * 2.5),
++}))(MediaControlsConnected);
++
+ const LiveAwareLabel = withTheme(({ isLive, title, theme }) => ({
+   ...(isLive
+     ? {
+@@ -45,55 +52,52 @@ const LiveAwareLabel = withTheme(({ isLive, title, theme }) => ({
+ const WeekendContentItem = ({ content, loading }) => {
+   const coverImageSources = get(content, 'coverImage.sources', []);
+   return (
+-    <ThemeMixin mixin={content.theme || {}}>
+-      <ThemeConsumer>
+-        {(theme) => (
+-          <BackgroundView>
+-            <StretchyView>
+-              {({ Stretchy, ...scrollViewProps }) => (
+-                <FlexedScrollView {...scrollViewProps}>
+-                  <Header hasMedia={content.videos && content.videos.sources}>
+-                    <ThemeMixin mixin={{ type: 'dark' }}>
+-                      {coverImageSources.length || loading ? (
+-                        <Stretchy
+-                          background
+-                          style={{ backgroundColor: theme.colors.primary }}
+-                        >
+-                          <GradientOverlayImage
+-                            isLoading={!coverImageSources.length && loading}
+-                            overlayColor={theme.colors.primary}
+-                            overlayType="featured"
+-                            source={coverImageSources}
+-                          />
+-                        </Stretchy>
+-                      ) : null}
+-                      <LiveConsumer contentId={content.id}>
+-                        {(liveStream) => (
+-                          <LiveAwareLabel
+-                            isLive={!!liveStream}
+-                            title={
+-                              content.parentChannel &&
+-                              content.parentChannel.name
+-                            }
+-                          />
+-                        )}
+-                      </LiveConsumer>
+-                      <H2 padded isLoading={!content.title && loading}>
+-                        {content.title}
+-                      </H2>
+-                      <HTMLContent contentId={content.id} />
+-                    </ThemeMixin>
+-                  </Header>
+-                  <MediaControls contentId={content.id} />
+-                  <Features contentId={content.id} />
+-                  <HorizontalContentFeed contentId={content.id} />
+-                </FlexedScrollView>
+-              )}
+-            </StretchyView>
+-          </BackgroundView>
+-        )}
+-      </ThemeConsumer>
+-    </ThemeMixin>
++    <ThemeConsumer>
++      {(theme) => (
++        <BackgroundView>
++          <StretchyView>
++            {({ Stretchy, ...scrollViewProps }) => (
++              <FlexedScrollView {...scrollViewProps}>
++                <Header hasMedia={content.videos && content.videos.sources}>
++                  <ThemeMixin mixin={{ type: 'dark' }}>
++                    {coverImageSources.length || loading ? (
++                      <Stretchy
++                        background
++                        style={{ backgroundColor: theme.colors.primary }}
++                      >
++                        <GradientOverlayImage
++                          isLoading={!coverImageSources.length && loading}
++                          overlayColor={theme.colors.primary}
++                          overlayType="featured"
++                          source={coverImageSources}
++                        />
++                      </Stretchy>
++                    ) : null}
++                    <LiveConsumer contentId={content.id}>
++                      {(liveStream) => (
++                        <LiveAwareLabel
++                          isLive={!!liveStream}
++                          title={
++                            content.parentChannel && content.parentChannel.name
++                          }
++                        />
++                      )}
++                    </LiveConsumer>
++                    <H2 padded isLoading={!content.title && loading}>
++                      {content.title}
++                    </H2>
++                    <ContentHTMLViewConnected contentId={content.id} />
++                  </ThemeMixin>
++                </Header>
++                <StyledMediaControlsConnected contentId={content.id} />
++                <Features contentId={content.id} />
++                <HorizontalContentSeriesFeedConnected contentId={content.id} />
++              </FlexedScrollView>
++            )}
++          </StretchyView>
++        </BackgroundView>
++      )}
++    </ThemeConsumer>
+   );
+ };
+ 
+diff --git a/apolloschurchapp/src/content-single/getContentItem.js b/apolloschurchapp/src/content-single/getContentItem.js
+index c0652ea..95695dd 100644
+--- a/apolloschurchapp/src/content-single/getContentItem.js
++++ b/apolloschurchapp/src/content-single/getContentItem.js
+@@ -1,42 +1,5 @@
+ import gql from 'graphql-tag';
+-
+-export const CONTENT_ITEM_FRAGMENT = gql`
+-  fragment contentItemFragment on ContentItem {
+-    id
+-    title
+-    summary
+-    htmlContent
+-    coverImage {
+-      name
+-      sources {
+-        uri
+-      }
+-    }
+-    theme {
+-      type
+-      colors {
+-        primary
+-        secondary
+-        screen
+-        paper
+-      }
+-    }
+-    parentChannel {
+-      id
+-      name
+-    }
+-    videos {
+-      sources {
+-        uri
+-      }
+-    }
+-    audios {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query getContentItem($itemId: ID!) {
+@@ -47,5 +10,5 @@ export default gql`
+       }
+     }
+   }
+-  ${CONTENT_ITEM_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_ITEM_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/event/Event.tests.js b/apolloschurchapp/src/event/Event.tests.js
+index 10cf33d..03e543f 100644
+--- a/apolloschurchapp/src/event/Event.tests.js
++++ b/apolloschurchapp/src/event/Event.tests.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import renderer from 'react-test-renderer';
+ import moment from 'moment';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+ import Event from './Event';
+ 
+diff --git a/apolloschurchapp/src/event/EventConnected.tests.js b/apolloschurchapp/src/event/EventConnected.tests.js
+index 0594d24..c32b77e 100644
+--- a/apolloschurchapp/src/event/EventConnected.tests.js
++++ b/apolloschurchapp/src/event/EventConnected.tests.js
+@@ -1,8 +1,8 @@
+ import React from 'react';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+ import moment from 'moment';
++import Providers from '../Providers';
++
+ import { renderWithApolloData } from '../utils/testUtils';
+ import getEvent from './getEvent';
+ import EventConnected from './EventConnected';
+diff --git a/apolloschurchapp/src/event/components.js b/apolloschurchapp/src/event/components.js
+index 509e400..f227415 100644
+--- a/apolloschurchapp/src/event/components.js
++++ b/apolloschurchapp/src/event/components.js
+@@ -1,9 +1,9 @@
+ import React from 'react';
+-import { ScrollView, View } from 'react-native';
++import { Animated, View } from 'react-native';
+ import PropTypes from 'prop-types';
+ import { styled, withTheme, H6, H4, Icon } from '@apollosproject/ui-kit';
+ 
+-const FlexedScrollView = styled({ flex: 1 })(ScrollView);
++const FlexedScrollView = styled({ flex: 1 })(Animated.ScrollView);
+ 
+ const StyledIcon = withTheme(({ theme: { colors, sizing } }) => ({
+   fill: colors.text.tertiary,
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 114240e..64ab0de 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -6,6 +6,7 @@ import SplashScreen from 'react-native-splash-screen';
+ 
+ import { BackgroundView, withTheme } from '@apollosproject/ui-kit';
+ import Passes from '@apollosproject/ui-passes';
++import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+ import { MediaPlayer } from '@apollosproject/ui-media-player';
+ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
+ 
+@@ -16,7 +17,6 @@ import Event from './event';
+ import Tabs from './tabs';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+-import Location from './user-settings/Locations';
+ import LandingScreen from './LandingScreen';
+ import UserWebBrowser from './user-web-browser';
+ import Onboarding from './ui/Onboarding';
+diff --git a/apolloschurchapp/src/live/LiveContext.js b/apolloschurchapp/src/live/LiveContext.js
+deleted file mode 100644
+index d5ffff2..0000000
+--- a/apolloschurchapp/src/live/LiveContext.js
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-import getLiveContent from './getLiveContent';
+-
+-const { Provider, Consumer } = React.createContext([]);
+-
+-const LiveProvider = (props) => (
+-  <Query query={getLiveContent} pollInterval={30000}>
+-    {({ data: { liveStreams = [] } = {} }) => (
+-      <Provider value={liveStreams}>{props.children}</Provider>
+-    )}
+-  </Query>
+-);
+-
+-const LiveConsumer = ({ contentId, children }) => (
+-  <Consumer>
+-    {(liveStreams) => {
+-      const stream = liveStreams.find(
+-        (s) => get(s, 'contentItem.id') === contentId
+-      );
+-      return children(stream);
+-    }}
+-  </Consumer>
+-);
+-
+-LiveConsumer.propTypes = {
+-  children: PropTypes.node,
+-  contentId: PropTypes.string,
+-};
+-
+-LiveProvider.propTypes = { children: PropTypes.node };
+-
+-export { LiveProvider, LiveConsumer };
+diff --git a/apolloschurchapp/src/live/getLiveContent.js b/apolloschurchapp/src/live/getLiveContent.js
+deleted file mode 100644
+index 8aac1d6..0000000
+--- a/apolloschurchapp/src/live/getLiveContent.js
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getLiveContent {
+-    liveStreams {
+-      isLive
+-      eventStartTime
+-      media {
+-        sources {
+-          uri
+-        }
+-      }
+-      webViewUrl
+-
+-      contentItem {
+-        ... on WeekendContentItem {
+-          id
+-        }
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/live/index.js b/apolloschurchapp/src/live/index.js
+deleted file mode 100644
+index f8f88d3..0000000
+--- a/apolloschurchapp/src/live/index.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export { LiveProvider, LiveConsumer } from './LiveContext';
+diff --git a/apolloschurchapp/src/scripture/ScriptureConnected.tests.js b/apolloschurchapp/src/scripture/ScriptureConnected.tests.js
+index 3f40632..9ee5618 100644
+--- a/apolloschurchapp/src/scripture/ScriptureConnected.tests.js
++++ b/apolloschurchapp/src/scripture/ScriptureConnected.tests.js
+@@ -1,6 +1,6 @@
+ import React from 'react';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+ import { renderWithApolloData } from '../utils/testUtils';
+ import getScripture from './getScripture';
+diff --git a/apolloschurchapp/src/scripture/getScripture.js b/apolloschurchapp/src/scripture/getScripture.js
+index 76e423e..2988861 100644
+--- a/apolloschurchapp/src/scripture/getScripture.js
++++ b/apolloschurchapp/src/scripture/getScripture.js
+@@ -1,12 +1,11 @@
+ import gql from 'graphql-tag';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query GetScripture($query: String!) {
+     scripture(query: $query) {
+-      reference
+-      html
+-      copyright
+-      version
++      ...ScriptureFragment
+     }
+   }
++  ${ApollosConfig.FRAGMENTS.SCRIPTURE_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/connect/ActionBar.js b/apolloschurchapp/src/tabs/connect/ActionBar.js
+index 8708fda..12f4564 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionBar.js
++++ b/apolloschurchapp/src/tabs/connect/ActionBar.js
+@@ -2,10 +2,10 @@ import React from 'react';
+ import { ActionBar, ActionBarItem } from '@apollosproject/ui-kit';
+ import { withNavigation } from 'react-navigation';
+ import PropTypes from 'prop-types';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
++import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
+ 
+ const Toolbar = ({ navigation }) => (
+-  <WebBrowserConsumer>
++  <RockAuthedWebBrowser>
+     {(openUrl) => (
+       <ActionBar>
+         <ActionBarItem
+@@ -25,7 +25,7 @@ const Toolbar = ({ navigation }) => (
+         />
+       </ActionBar>
+     )}
+-  </WebBrowserConsumer>
++  </RockAuthedWebBrowser>
+ );
+ 
+ Toolbar.propTypes = {
+diff --git a/apolloschurchapp/src/tabs/connect/ActionTable/index.js b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+index d376af6..dc37bcd 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionTable/index.js
++++ b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+@@ -12,8 +12,8 @@ import {
+   PaddedView,
+   H4,
+ } from '@apollosproject/ui-kit';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+-import NavigationActions from 'apolloschurchapp/src/NavigationService';
++import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
++import NavigationActions from '../../../NavigationService';
+ 
+ const RowHeader = styled(({ theme }) => ({
+   flexDirection: 'row',
+@@ -27,7 +27,7 @@ const Name = styled({
+ })(View);
+ 
+ const ActionTable = () => (
+-  <WebBrowserConsumer>
++  <RockAuthedWebBrowser>
+     {(openUrl) => (
+       <View>
+         <RowHeader>
+@@ -62,15 +62,6 @@ const ActionTable = () => (
+               <CellIcon name="arrow-next" />
+             </Cell>
+           </Touchable>
+-          <Divider />
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/186')}
+-          >
+-            <Cell>
+-              <CellText>I would like to give</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+         </TableView>
+         <TableView>
+           <Touchable
+@@ -85,7 +76,7 @@ const ActionTable = () => (
+         </TableView>
+       </View>
+     )}
+-  </WebBrowserConsumer>
++  </RockAuthedWebBrowser>
+ );
+ 
+ const StyledActionTable = styled(({ theme }) => ({
+diff --git a/apolloschurchapp/src/tabs/connect/Connect.js b/apolloschurchapp/src/tabs/connect/Connect.js
+index 4ba12d4..461e03e 100644
+--- a/apolloschurchapp/src/tabs/connect/Connect.js
++++ b/apolloschurchapp/src/tabs/connect/Connect.js
+@@ -3,11 +3,12 @@ import { ScrollView } from 'react-native';
+ import { SafeAreaView } from 'react-navigation';
+ import PropTypes from 'prop-types';
+ 
++import { HorizontalLikedContentFeedConnected } from '@apollosproject/ui-connected';
+ import { BackgroundView } from '@apollosproject/ui-kit';
++
+ import ActionTable from './ActionTable';
+ import ActionBar from './ActionBar';
+ import UserAvatarHeader from './UserAvatarHeader';
+-import { RecentlyLikedTileFeedConnected } from './RecentlyLikedTileFeed';
+ 
+ class Connect extends PureComponent {
+   static navigationOptions = () => ({
+@@ -29,7 +30,7 @@ class Connect extends PureComponent {
+           <ScrollView>
+             <UserAvatarHeader />
+             <ActionBar />
+-            <RecentlyLikedTileFeedConnected />
++            <HorizontalLikedContentFeedConnected />
+             <ActionTable />
+           </ScrollView>
+         </SafeAreaView>
+diff --git a/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js b/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js
+deleted file mode 100644
+index 673817c..0000000
+--- a/apolloschurchapp/src/tabs/connect/LikedContentList/LikedContentList.tests.js
++++ /dev/null
+@@ -1,68 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import wait from 'waait';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import GET_LIKED_CONTENT from '../getLikedContent';
+-import LikedContentList from '.';
+-
+-describe('LikedContentList component', () => {
+-  it('renders LikedContentList', async () => {
+-    const mock = {
+-      request: {
+-        query: GET_LIKED_CONTENT,
+-      },
+-      result: {
+-        data: {
+-          likedContent: [
+-            {
+-              __typename: 'UniversalContentItem',
+-              id: 'UniversalContentItem:4148aeb9482181025e9cad42826e676a',
+-              title: 'Making Prayer a Spiritual Habit',
+-              coverImage: {
+-                sources: [
+-                  {
+-                    uri:
+-                      'https://apollosrock.newspring.cc/GetImage.ashx?guid=55be1fd5-d8eb-43a6-aa70-f8e27bb63d31',
+-                  },
+-                ],
+-              },
+-              sharing: {
+-                title: 'Making Prayer a Spiritual Habit',
+-                message: '',
+-                url: 'https://apollosrock.newspring.cc/',
+-              },
+-            },
+-            {
+-              __typename: 'UniversalContentItem',
+-              id: 'UniversalContentItem:9dbdc4e565dcaa3c9b17eb5ae42de96e',
+-              title: 'Vacations and Your Budget',
+-              coverImage: {
+-                sources: [
+-                  {
+-                    uri:
+-                      'https://apollosrock.newspring.cc/GetImage.ashx?guid=993efb47-47ec-4dec-a3d3-47bcacfbd58e',
+-                  },
+-                ],
+-              },
+-              sharing: {
+-                title: 'Vacations and Your Budget',
+-                message: '',
+-                url: 'https://apollosrock.newspring.cc/',
+-              },
+-            },
+-          ],
+-        },
+-      },
+-    };
+-    const navigation = { navigate: jest.fn(), getParam: jest.fn() };
+-    const tree = renderer.create(
+-      <Providers mocks={[mock]}>
+-        <LikedContentList navigation={navigation} />
+-      </Providers>
+-    );
+-    await wait(0); // wait for response from graphql
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js b/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
+deleted file mode 100644
+index 38dedb3..0000000
+--- a/apolloschurchapp/src/tabs/connect/LikedContentList/index.js
++++ /dev/null
+@@ -1,69 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-
+-import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
+-import fetchMoreResolver from 'apolloschurchapp/src/utils/fetchMoreResolver';
+-import ContentCardConnected from '../../../ui/ContentCardConnected';
+-
+-import GET_LIKED_CONTENT from '../getLikedContent';
+-/** A FeedView wrapped in a query to pull content data. */
+-class LikedContentList extends PureComponent {
+-  /** Function for React Navigation to set information in the header. */
+-  static navigationOptions = () => ({
+-    title: 'Your Likes',
+-  });
+-
+-  static propTypes = {
+-    /** Functions passed down from React Navigation to use in navigating to/from
+-     * items in the feed.
+-     */
+-    navigation: PropTypes.shape({
+-      getParam: PropTypes.func,
+-      navigate: PropTypes.func,
+-    }),
+-  };
+-
+-  /** Function that is called when a card in the feed is pressed.
+-   * Takes the user to the ContentSingle
+-   */
+-  handleOnPress = (item) =>
+-    this.props.navigation.navigate('ContentSingle', {
+-      itemId: item.id,
+-      sharing: item.sharing,
+-    });
+-
+-  render() {
+-    return (
+-      <BackgroundView>
+-        <Query
+-          query={GET_LIKED_CONTENT}
+-          fetchPolicy="cache-and-network"
+-          variables={{ first: 20 }}
+-        >
+-          {({ loading, error, data, refetch, fetchMore, variables }) => (
+-            <FeedView
+-              ListItemComponent={ContentCardConnected}
+-              content={get(data, 'likedContent.edges', []).map(
+-                (edge) => edge.node
+-              )}
+-              isLoading={loading}
+-              error={error}
+-              refetch={refetch}
+-              onPressItem={this.handleOnPress}
+-              fetchMore={fetchMoreResolver({
+-                collectionName: 'likedContent',
+-                fetchMore,
+-                variables,
+-                data,
+-              })}
+-            />
+-          )}
+-        </Query>
+-      </BackgroundView>
+-    );
+-  }
+-}
+-
+-export default LikedContentList;
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
+deleted file mode 100644
+index b829473..0000000
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.js
++++ /dev/null
+@@ -1,118 +0,0 @@
+-import React, { Component } from 'react';
+-import { View } from 'react-native';
+-import { withNavigation } from 'react-navigation';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  PaddedView,
+-  H5,
+-  H6,
+-  HorizontalTileFeed,
+-  ButtonLink,
+-  TouchableScale,
+-  Touchable,
+-  withIsLoading,
+-} from '@apollosproject/ui-kit';
+-
+-import HorizontalContentCardConnected from 'apolloschurchapp/src/ui/HorizontalContentCardConnected';
+-
+-const RowHeader = styled(({ theme }) => ({
+-  flexDirection: 'row',
+-  justifyContent: 'space-between',
+-  alignItems: 'center',
+-  zIndex: 2, // UX hack to improve tapability. Positions RowHeader above StyledHorizontalTileFeed
+-  paddingTop: theme.sizing.baseUnit * 0.5,
+-  paddingLeft: theme.sizing.baseUnit,
+-}))(View);
+-
+-const Name = styled({
+-  flexGrow: 2,
+-})(View);
+-
+-const ButtonLinkSpacing = styled(({ theme }) => ({
+-  flexDirection: 'row', // correctly positions the loading state
+-  justifyContent: 'flex-end', // correctly positions the loading state
+-  padding: theme.sizing.baseUnit, // UX hack to improve tapability.
+-}))(View);
+-
+-const AndroidTouchableFix = withTheme(({ theme }) => ({
+-  borderRadius: theme.sizing.baseUnit / 2,
+-}))(Touchable);
+-
+-const StyledHorizontalTileFeed = styled(({ theme }) => ({
+-  /* UX hack to improve tapability. The magic number below happens to be the number of pixels that
+-   * aligns everything in the same place as if none of the UX hacks were there. */
+-  marginTop: theme.sizing.baseUnit * -1.25,
+-  zIndex: 1,
+-}))(HorizontalTileFeed);
+-
+-class RecentlyLikedTileFeed extends Component {
+-  static propTypes = {
+-    navigation: PropTypes.shape({
+-      navigate: PropTypes.func,
+-    }),
+-    isLoading: PropTypes.bool,
+-    name: PropTypes.string,
+-    content: PropTypes.arrayOf(
+-      PropTypes.any // this component doesn't care about the shape of `node`, just that it exists
+-    ),
+-  };
+-
+-  loadingStateObject = {
+-    id: 'fake_id',
+-    title: '',
+-    coverImage: [],
+-  };
+-
+-  titleImageItem = ({ item }) => (
+-    <TouchableScale
+-      onPress={() => {
+-        this.props.navigation.push('ContentSingle', {
+-          itemId: item.id,
+-        });
+-      }}
+-    >
+-      <HorizontalContentCardConnected
+-        isLoading={item.isLoading}
+-        contentId={item.id}
+-      />
+-    </TouchableScale>
+-  );
+-
+-  render() {
+-    const { isLoading, name, navigation, content = [] } = this.props;
+-
+-    return (
+-      <PaddedView horizontal={false}>
+-        <RowHeader>
+-          <Name>
+-            <H5>{name}</H5>
+-          </Name>
+-
+-          <AndroidTouchableFix
+-            onPress={() => {
+-              navigation.navigate('LikedContentList');
+-            }}
+-          >
+-            <ButtonLinkSpacing>
+-              <H6>
+-                {/* we have to wrap "View All" in a ButtonLink twice to inherit styles and color correctly. */}
+-                <ButtonLink>View All</ButtonLink>
+-              </H6>
+-            </ButtonLinkSpacing>
+-          </AndroidTouchableFix>
+-        </RowHeader>
+-        <StyledHorizontalTileFeed
+-          content={content}
+-          renderItem={this.titleImageItem}
+-          loadingStateObject={this.loadingStateObject}
+-          isLoading={isLoading}
+-        />
+-      </PaddedView>
+-    );
+-  }
+-}
+-
+-export default withNavigation(withIsLoading(RecentlyLikedTileFeed));
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.tests.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.tests.js
+deleted file mode 100644
+index e57b4c6..0000000
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeed.tests.js
++++ /dev/null
+@@ -1,111 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-import RecentlyLikedTileFeed from './RecentlyLikedTileFeed';
+-
+-describe('RecentlyLikedTileFeed', () => {
+-  it('renders a RecentlyLikedTileFeed', () => {
+-    const props = {
+-      content: [
+-        {
+-          id: 'UniversalContentItem:4148aeb9482181025e9cad42826e676a',
+-          title: 'Making Prayer a Spiritual Habit',
+-          __typename: 'UniversalContentItem',
+-          coverImage: {
+-            sources: [
+-              {
+-                uri:
+-                  'https://apollosrock.newspring.cc/GetImage.ashx?guid=55be1fd5-d8eb-43a6-aa70-f8e27bb63d31',
+-              },
+-            ],
+-          },
+-          sharing: {
+-            title: 'Making Prayer a Spiritual Habit',
+-            message: '',
+-            url: 'https://apollosrock.newspring.cc/',
+-          },
+-        },
+-        {
+-          id: 'UniversalContentItem:9dbdc4e565dcaa3c9b17eb5ae42de96e',
+-          title: 'Vacations and Your Budget',
+-          __typename: 'UniversalContentItem',
+-          coverImage: {
+-            sources: [
+-              {
+-                uri:
+-                  'https://apollosrock.newspring.cc/GetImage.ashx?guid=993efb47-47ec-4dec-a3d3-47bcacfbd58e',
+-              },
+-            ],
+-          },
+-          sharing: {
+-            title: 'Vacations and Your Budget',
+-            message: '',
+-            url: 'https://apollosrock.newspring.cc/',
+-          },
+-        },
+-      ],
+-      name: 'Liked Content',
+-      navigation: jest.fn(),
+-      isLoading: false,
+-    };
+-
+-    const tree = renderer.create(
+-      <Providers>
+-        <RecentlyLikedTileFeed {...props} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-
+-  it('renders a loading state', () => {
+-    const props = {
+-      content: [
+-        {
+-          id: 'UniversalContentItem:4148aeb9482181025e9cad42826e676a',
+-          title: 'Making Prayer a Spiritual Habit',
+-          coverImage: {
+-            sources: [
+-              {
+-                uri:
+-                  'https://apollosrock.newspring.cc/GetImage.ashx?guid=55be1fd5-d8eb-43a6-aa70-f8e27bb63d31',
+-              },
+-            ],
+-          },
+-          sharing: {
+-            title: 'Making Prayer a Spiritual Habit',
+-            message: '',
+-            url: 'https://apollosrock.newspring.cc/',
+-          },
+-        },
+-        {
+-          id: 'UniversalContentItem:9dbdc4e565dcaa3c9b17eb5ae42de96e',
+-          title: 'Vacations and Your Budget',
+-          coverImage: {
+-            sources: [
+-              {
+-                uri:
+-                  'https://apollosrock.newspring.cc/GetImage.ashx?guid=993efb47-47ec-4dec-a3d3-47bcacfbd58e',
+-              },
+-            ],
+-          },
+-          sharing: {
+-            title: 'Vacations and Your Budget',
+-            message: '',
+-            url: 'https://apollosrock.newspring.cc/',
+-          },
+-        },
+-      ],
+-      name: 'Liked Content',
+-      navigation: jest.fn(),
+-      isLoading: true,
+-    };
+-
+-    const tree = renderer.create(
+-      <Providers>
+-        <RecentlyLikedTileFeed {...props} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js
+deleted file mode 100644
+index bfccbe1..0000000
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.js
++++ /dev/null
+@@ -1,43 +0,0 @@
+-import React from 'react';
+-import { Query } from 'react-apollo';
+-import PropTypes from 'prop-types';
+-
+-import GET_LIKED_CONTENT from '../getLikedContent';
+-import RecentlyLikedTileFeed from './RecentlyLikedTileFeed';
+-
+-const RecentlyLikedTileFeedConnected = ({ navigation }) => (
+-  <Query
+-    query={GET_LIKED_CONTENT}
+-    fetchPolicy="cache-and-network"
+-    variables={{ first: 3 }}
+-  >
+-    {({
+-      loading,
+-      data: { likedContent: { edges = [] } = { edges: [] } } = {},
+-    }) => {
+-      if (!edges.length) return null;
+-      return (
+-        <RecentlyLikedTileFeed
+-          id={'liked'}
+-          name={'Recently Liked'}
+-          content={edges.map((e) => e.node)}
+-          isLoading={loading}
+-          navigation={navigation}
+-          loadingStateObject={{
+-            title: 'Recently Liked',
+-            isLoading: true,
+-          }}
+-        />
+-      );
+-    }}
+-  </Query>
+-);
+-
+-RecentlyLikedTileFeedConnected.propTypes = {
+-  navigation: PropTypes.shape({
+-    getParam: PropTypes.func,
+-    navigate: PropTypes.func,
+-  }),
+-};
+-
+-export default RecentlyLikedTileFeedConnected;
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js
+deleted file mode 100644
+index 016b246..0000000
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/RecentlyLikedTileFeedConnected.tests.js
++++ /dev/null
+@@ -1,111 +0,0 @@
+-import React from 'react';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import { renderWithApolloData } from '../../../utils/testUtils';
+-
+-import GET_LIKED_CONTENT from '../getLikedContent';
+-import RecentlyLikedTileFeedConnected from './RecentlyLikedTileFeedConnected';
+-
+-describe('RecentlyLikedTileFeedConnected', () => {
+-  it('renders a RecentlyLikedTileFeedConnected', async () => {
+-    const mock = {
+-      request: {
+-        query: GET_LIKED_CONTENT,
+-        variables: { first: 3 },
+-      },
+-      result: {
+-        data: {
+-          likedContent: {
+-            __typename: 'ContentItemsConnection',
+-            pageInfo: {
+-              __typename: 'PaginationInfo',
+-              endCursor: '123',
+-            },
+-            edges: [
+-              {
+-                __typename: 'ContentItemsConnectionEdge',
+-                node: {
+-                  __typename: 'UniversalContentItem',
+-                  id: 'UniversalContentItem:d57994350b9d213866b24dea3a97433d',
+-                  coverImage: null,
+-                  parentChannel: {
+-                    id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
+-                    name: 'Editorial',
+-                    iconName: 'text',
+-                    __typename: 'ContentChannel',
+-                  },
+-                  title: 'Mea Animal Aperiam Ornatus Eu',
+-                  hyphenatedTitle: 'Mea Animal Aperiam Ornatus Eu',
+-                  summary: 'Bla bla bla',
+-                  theme: null,
+-                  isLiked: false,
+-                  likedCount: 0,
+-                  videos: [],
+-                  audios: [],
+-                },
+-              },
+-              {
+-                __typename: 'ContentItemsConnectionEdge',
+-                node: {
+-                  __typename: 'UniversalContentItem',
+-                  id: 'UniversalContentItem:b36e55d803443431e96bb4b5068147ec',
+-                  coverImage: null,
+-                  parentChannel: {
+-                    id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
+-                    name: 'Editorial',
+-                    iconName: 'text',
+-                    __typename: 'ContentChannel',
+-                  },
+-                  title: 'Probo Senserit Id Mea, Ut Sed Malis Postea,',
+-                  hyphenatedTitle:
+-                    'Probo Senserit Id Mea, Ut Sed Malis Postea,',
+-                  summary: 'Bla bla bla',
+-                  theme: null,
+-                  isLiked: false,
+-                  likedCount: 0,
+-                  videos: [],
+-                  audios: [],
+-                },
+-              },
+-            ],
+-          },
+-        },
+-      },
+-    };
+-    const navigation = { navigate: jest.fn(), getParam: jest.fn() };
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={[mock]}>
+-        <RecentlyLikedTileFeedConnected navigation={navigation} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-
+-  it('renders nothing if no liked content', async () => {
+-    const mock = {
+-      request: {
+-        query: GET_LIKED_CONTENT,
+-      },
+-      result: {
+-        data: {
+-          likedContent: {
+-            __typename: 'ContentItemsConnection',
+-            pageInfo: {
+-              __typename: 'PaginationInfo',
+-              endCursor: null,
+-            },
+-            edges: [],
+-          },
+-        },
+-      },
+-    };
+-    const navigation = { navigate: jest.fn(), getParam: jest.fn() };
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={[mock]}>
+-        <RecentlyLikedTileFeedConnected navigation={navigation} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/index.js b/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/index.js
+deleted file mode 100644
+index f67e890..0000000
+--- a/apolloschurchapp/src/tabs/connect/RecentlyLikedTileFeed/index.js
++++ /dev/null
+@@ -1,2 +0,0 @@
+-export RecentlyLikedTileFeed from './RecentlyLikedTileFeed';
+-export RecentlyLikedTileFeedConnected from './RecentlyLikedTileFeedConnected';
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader.js
+deleted file mode 100644
+index 9f1b65a..0000000
+--- a/apolloschurchapp/src/tabs/connect/UserAvatarHeader.js
++++ /dev/null
+@@ -1,44 +0,0 @@
+-import React from 'react';
+-import { Query } from 'react-apollo';
+-import PropTypes from 'prop-types';
+-import { withNavigation } from 'react-navigation';
+-
+-import { Avatar, H3, styled, PaddedView } from '@apollosproject/ui-kit';
+-import GET_USER_PROFILE from './getUserProfile';
+-
+-const Container = styled({
+-  alignItems: 'center',
+-  justifyContent: 'center',
+-})(PaddedView);
+-
+-const UserAvatarHeader = ({ navigation }) => (
+-  <Query query={GET_USER_PROFILE} fetchPolicy="cache-and-network">
+-    {({
+-      data: { currentUser: { profile: { photo, firstName } = {} } = {} } = {},
+-    }) => (
+-      <Container>
+-        <PaddedView horizontal={false}>
+-          <Avatar
+-            source={photo}
+-            size="large"
+-            buttonIcon="settings"
+-            onPressIcon={() => navigation.navigate('UserSettings')}
+-          />
+-        </PaddedView>
+-        <H3>
+-          Hello
+-          {firstName ? ` ${firstName}` : ''}!
+-        </H3>
+-      </Container>
+-    )}
+-  </Query>
+-);
+-
+-UserAvatarHeader.propTypes = {
+-  navigation: PropTypes.shape({
+-    getParam: PropTypes.func,
+-    navigate: PropTypes.func,
+-  }),
+-};
+-
+-export default withNavigation(UserAvatarHeader);
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeader.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeader.js
+new file mode 100644
+index 0000000..5c5e2fa
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/UserAvatarHeader.js
+@@ -0,0 +1,74 @@
++import React from 'react';
++import { Query } from 'react-apollo';
++import PropTypes from 'prop-types';
++import { withNavigation } from 'react-navigation';
++import { get } from 'lodash';
++
++import { H3, styled, PaddedView } from '@apollosproject/ui-kit';
++import { UserAvatarConnected } from '@apollosproject/ui-connected';
++import GET_USER_PROFILE from './getUserProfile';
++
++const GetUserProfile = ({ children }) => (
++  <Query query={GET_USER_PROFILE}>
++    {({ data: { currentUser = {} } = {} }) => {
++      const firstName = get(currentUser, 'profile.firstName');
++      return children({ firstName });
++    }}
++  </Query>
++);
++
++GetUserProfile.propTypes = {
++  children: PropTypes.func.isRequired,
++};
++
++const Container = styled({
++  alignItems: 'center',
++  justifyContent: 'center',
++})(PaddedView);
++
++const UserAvatarHeader = ({
++  buttonIcon,
++  message,
++  navigation,
++  onPressIcon,
++  size,
++  ...props
++}) => (
++  <Container>
++    <PaddedView horizontal={false}>
++      <UserAvatarConnected
++        size={size}
++        buttonIcon={buttonIcon}
++        onPressIcon={() => navigation.navigate('UserSettings')}
++        {...props}
++      />
++    </PaddedView>
++    <GetUserProfile>
++      {({ firstName }) => (
++        <H3>
++          {message}
++          {firstName ? ` ${firstName}` : ''}!
++        </H3>
++      )}
++    </GetUserProfile>
++  </Container>
++);
++
++UserAvatarHeader.propTypes = {
++  buttonIcon: PropTypes.string,
++  message: PropTypes.string,
++  navigation: PropTypes.shape({
++    getParam: PropTypes.func,
++    navigate: PropTypes.func,
++  }).isRequired,
++  onPressIcon: PropTypes.func,
++  size: PropTypes.string,
++};
++
++UserAvatarHeader.defaultProps = {
++  buttonIcon: 'settings',
++  message: 'Hello',
++  size: 'large',
++};
++
++export default withNavigation(UserAvatarHeader);
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/getUserProfile.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/getUserProfile.js
+new file mode 100644
+index 0000000..e5aa7e0
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/getUserProfile.js
+@@ -0,0 +1,18 @@
++import gql from 'graphql-tag';
++import ApollosConfig from '@apollosproject/config';
++
++export default gql`
++  query CurrentUserProfile {
++    currentUser {
++      id
++      profile {
++        ...UserProfileParts
++        campus {
++          ...CampusParts
++        }
++      }
++    }
++  }
++  ${ApollosConfig.FRAGMENTS.CAMPUS_PARTS_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.USER_PROFILE_PARTS_FRAGMENT}
++`;
+diff --git a/apolloschurchapp/src/tabs/connect/UserAvatarHeader/index.js b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/index.js
+new file mode 100644
+index 0000000..01d8628
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/connect/UserAvatarHeader/index.js
+@@ -0,0 +1,5 @@
++import UserAvatarHeader from './UserAvatarHeader';
++
++export GET_USER_PROFILE from './getUserProfile';
++
++export default UserAvatarHeader;
+diff --git a/apolloschurchapp/src/tabs/connect/getLikedContent.js b/apolloschurchapp/src/tabs/connect/getLikedContent.js
+deleted file mode 100644
+index b9037c6..0000000
+--- a/apolloschurchapp/src/tabs/connect/getLikedContent.js
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+-
+-export default gql`
+-  query getAllLikedContent($first: Int, $after: String) {
+-    likedContent(first: $first, after: $after) {
+-      pageInfo {
+-        endCursor
+-      }
+-      edges {
+-        node {
+-          ... on ContentItem {
+-            isLiked
+-            ...baseCardFragment
+-          }
+-        }
+-      }
+-    }
+-  }
+-  ${BASE_CARD_FRAGMENT}
+-`;
+diff --git a/apolloschurchapp/src/tabs/connect/getLoginState.js b/apolloschurchapp/src/tabs/connect/getLoginState.js
+deleted file mode 100644
+index 97d3e8d..0000000
+--- a/apolloschurchapp/src/tabs/connect/getLoginState.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query {
+-    isLoggedIn @client
+-  }
+-`;
+diff --git a/apolloschurchapp/src/tabs/connect/getUserProfile.js b/apolloschurchapp/src/tabs/connect/getUserProfile.js
+deleted file mode 100644
+index ef3b2c8..0000000
+--- a/apolloschurchapp/src/tabs/connect/getUserProfile.js
++++ /dev/null
+@@ -1,26 +0,0 @@
+-import gql from 'graphql-tag';
+-import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
+-
+-export default gql`
+-  query getCurrentUserProfile {
+-    currentUser {
+-      id
+-      profile {
+-        id
+-        firstName
+-        lastName
+-        campus {
+-          ...CampusParts
+-        }
+-        email
+-        nickName
+-        gender
+-        birthDate
+-        photo {
+-          uri
+-        }
+-      }
+-    }
+-  }
+-  ${CampusParts}
+-`;
+diff --git a/apolloschurchapp/src/tabs/connect/index.js b/apolloschurchapp/src/tabs/connect/index.js
+index 1901a73..6d40ffa 100644
+--- a/apolloschurchapp/src/tabs/connect/index.js
++++ b/apolloschurchapp/src/tabs/connect/index.js
+@@ -1,19 +1,19 @@
+ import { createStackNavigator } from 'react-navigation';
+ import { withTheme } from '@apollosproject/ui-kit';
++import { LikedContentFeedConnected } from '@apollosproject/ui-connected';
+ 
+-import UserSettings from 'apolloschurchapp/src/user-settings';
+-
++import UserSettings from '../../user-settings';
+ import TestingControlPanel from '../../testing-control-panel';
++
+ import tabBarIcon from '../tabBarIcon';
+ import Connect from './Connect';
+-import LikedContentList from './LikedContentList';
+ 
+ const ConnectNavigator = createStackNavigator(
+   {
+     Connect,
+     TestingControlPanel,
+     UserSettings,
+-    LikedContentList,
++    LikedContentFeedConnected,
+   },
+   {
+     initialRouteName: 'Connect',
+diff --git a/apolloschurchapp/src/tabs/discover/DiscoverFeed/DiscoverFeed.tests.js b/apolloschurchapp/src/tabs/discover/DiscoverFeed/DiscoverFeed.tests.js
+index 568ee71..61156fe 100644
+--- a/apolloschurchapp/src/tabs/discover/DiscoverFeed/DiscoverFeed.tests.js
++++ b/apolloschurchapp/src/tabs/discover/DiscoverFeed/DiscoverFeed.tests.js
+@@ -3,9 +3,9 @@ import { flatMap } from 'lodash';
+ import { createStackNavigator, createAppContainer } from 'react-navigation';
+ import renderer from 'react-test-renderer';
+ 
++import { GET_CONTENT_CARD } from '@apollosproject/ui-connected';
+ import Providers from '../../../Providers';
+ import { renderWithApolloData } from '../../../utils/testUtils';
+-import GET_CONTENT_CARD from '../../../ui/ContentCardConnected/query';
+ 
+ import GET_CONTENT_CHANNELS from './getContentChannels';
+ import DiscoverFeed from '.';
+diff --git a/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js b/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
+index 1427287..fcea58e 100644
+--- a/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
++++ b/apolloschurchapp/src/tabs/discover/DiscoverFeed/TileContentFeed.js
+@@ -16,7 +16,7 @@ import {
+   withIsLoading,
+ } from '@apollosproject/ui-kit';
+ 
+-import HorizontalContentCardConnected from '../../../ui/HorizontalContentCardConnected';
++import { HorizontalContentCardConnected } from '@apollosproject/ui-connected';
+ 
+ const RowHeader = styled(({ theme }) => ({
+   flexDirection: 'row',
+@@ -31,7 +31,7 @@ const Name = styled({
+ })(View);
+ 
+ const AndroidTouchableFix = withTheme(({ theme }) => ({
+-  borderRadius: theme.sizing.baseUnit / 2,
++  borderRadius: theme.sizing.baseBorderRadius / 2,
+ }))(Touchable);
+ 
+ const ButtonLinkSpacing = styled(({ theme }) => ({
+diff --git a/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js b/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
+index e581ca1..8168eb9 100644
+--- a/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
++++ b/apolloschurchapp/src/tabs/discover/DiscoverFeed/getContentChannels.js
+@@ -1,6 +1,5 @@
+ import gql from 'graphql-tag';
+-
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query getContentChannels {
+@@ -11,11 +10,11 @@ export default gql`
+         edges {
+           node {
+             id
+-            ...baseCardFragment
++            ...contentCardFragment
+           }
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/discover/SearchFeed/SearchFeed.tests.js b/apolloschurchapp/src/tabs/discover/SearchFeed/SearchFeed.tests.js
+index aed2839..d8e0544 100644
+--- a/apolloschurchapp/src/tabs/discover/SearchFeed/SearchFeed.tests.js
++++ b/apolloschurchapp/src/tabs/discover/SearchFeed/SearchFeed.tests.js
+@@ -3,9 +3,9 @@ import { flatMap } from 'lodash';
+ import { createStackNavigator, createAppContainer } from 'react-navigation';
+ import renderer from 'react-test-renderer';
+ 
++import { GET_CONTENT_CARD } from '@apollosproject/ui-connected';
+ import Providers from '../../../Providers';
+ import { renderWithApolloData } from '../../../utils/testUtils';
+-import GET_CONTENT_CARD from '../../../ui/ContentCardConnected/query';
+ 
+ import GET_SEARCH_RESULTS from './getSearchResults';
+ import SearchFeed from '.';
+diff --git a/apolloschurchapp/src/tabs/discover/SearchFeed/index.js b/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
+index 2e6c5ec..3aa9ff2 100644
+--- a/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
++++ b/apolloschurchapp/src/tabs/discover/SearchFeed/index.js
+@@ -6,8 +6,7 @@ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+ import { FeedView } from '@apollosproject/ui-kit';
+-
+-import SearchCard from '../../../ui/SearchCard';
++import { SearchCardConnected } from '@apollosproject/ui-connected';
+ 
+ import GET_SEARCH_RESULTS from './getSearchResults';
+ import NoResults from './NoResults';
+@@ -37,7 +36,7 @@ const SearchFeed = withNavigation(({ navigation, searchText }) => (
+   >
+     {({ loading, error, data, refetch }) => (
+       <StyledFeedView
+-        ListItemComponent={SearchCard}
++        ListItemComponent={SearchCardConnected}
+         content={get(data, 'search.edges', [])}
+         ListEmptyComponent={() => <NoResults searchText={searchText} />}
+         hasContent={get(data, 'search.edges', []).length}
+diff --git a/apolloschurchapp/src/tabs/discover/discover.tests.js b/apolloschurchapp/src/tabs/discover/discover.tests.js
+index abd60dd..a0cff65 100644
+--- a/apolloschurchapp/src/tabs/discover/discover.tests.js
++++ b/apolloschurchapp/src/tabs/discover/discover.tests.js
+@@ -2,10 +2,10 @@ import React from 'react';
+ import { flatMap } from 'lodash';
+ import { createStackNavigator, createAppContainer } from 'react-navigation';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import { GET_CONTENT_CARD } from '@apollosproject/ui-connected';
++import Providers from '../../Providers';
+ 
+ import { renderWithApolloData } from '../../utils/testUtils';
+-import GET_CONTENT_CARD from '../../ui/ContentCardConnected/query';
+ 
+ import Discover from './Discover';
+ import GET_CONTENT_CHANNELS from './DiscoverFeed/getContentChannels';
+diff --git a/apolloschurchapp/src/tabs/discover/index.js b/apolloschurchapp/src/tabs/discover/index.js
+index eaf3ee0..6b1821c 100644
+--- a/apolloschurchapp/src/tabs/discover/index.js
++++ b/apolloschurchapp/src/tabs/discover/index.js
+@@ -1,7 +1,7 @@
+ import { createStackNavigator } from 'react-navigation';
+ import { withTheme } from '@apollosproject/ui-kit';
+ 
+-import ContentFeed from 'apolloschurchapp/src/content-feed';
++import ContentFeed from '../../content-feed';
+ 
+ import tabBarIcon from '../tabBarIcon';
+ 
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index bae53bc..570904d 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -5,6 +5,10 @@ import SafeAreaView from 'react-native-safe-area-view';
+ import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
++import {
++  ContentCardConnected,
++  fetchMoreResolver,
++} from '@apollosproject/ui-connected';
+ import {
+   styled,
+   FeedView,
+@@ -13,9 +17,6 @@ import {
+   FeaturedCard,
+ } from '@apollosproject/ui-kit';
+ 
+-import fetchMoreResolver from '../../utils/fetchMoreResolver';
+-import ContentCardConnected from '../../ui/ContentCardConnected';
+-
+ import Features from './Features';
+ import GET_USER_FEED from './getUserFeed';
+ import GET_CAMPAIGN_CONTENT_ITEM from './getCampaignContentItem';
+diff --git a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+index fd6fbc7..ab5ea09 100644
+--- a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
++++ b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+@@ -1,6 +1,6 @@
+ import gql from 'graphql-tag';
+ 
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query campaigns {
+@@ -10,7 +10,7 @@ export default gql`
+           childContentItemsConnection {
+             edges {
+               node {
+-                ...baseCardFragment
++                ...contentCardFragment
+               }
+             }
+           }
+@@ -18,5 +18,5 @@ export default gql`
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/getUserFeed.js b/apolloschurchapp/src/tabs/home/getUserFeed.js
+index a1515d3..b19d647 100644
+--- a/apolloschurchapp/src/tabs/home/getUserFeed.js
++++ b/apolloschurchapp/src/tabs/home/getUserFeed.js
+@@ -1,6 +1,5 @@
+ import gql from 'graphql-tag';
+-
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
++import ApollosConfig from '@apollosproject/config';
+ 
+ export default gql`
+   query getUserFeed($first: Int, $after: String) {
+@@ -10,10 +9,10 @@ export default gql`
+       }
+       edges {
+         node {
+-          ...baseCardFragment
++          ...contentCardFragment
+         }
+       }
+     }
+   }
+-  ${BASE_CARD_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/home.tests.js b/apolloschurchapp/src/tabs/home/home.tests.js
+index 96a5008..213e947 100644
+--- a/apolloschurchapp/src/tabs/home/home.tests.js
++++ b/apolloschurchapp/src/tabs/home/home.tests.js
+@@ -1,7 +1,7 @@
+ import React from 'react';
+ import renderer from 'react-test-renderer';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../../Providers';
+ 
+ import Home from './Home';
+ import GET_USER_FEED from './getUserFeed';
+diff --git a/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js b/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js
+index 5fd039f..e187cb0 100644
+--- a/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js
++++ b/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js
+@@ -1,7 +1,7 @@
+ import React from 'react';
+ import renderer from 'react-test-renderer';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+ import TouchableCell from './TouchableCell';
+ 
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index b988c62..165caf8 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,7 +1,7 @@
+ import React, { PureComponent } from 'react';
+ import { TableView } from '@apollosproject/ui-kit';
+-import { UserWebBrowserConsumer } from 'apolloschurchapp/src/user-web-browser';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
++import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
++import { UserWebBrowserConsumer } from '../user-web-browser';
+ import TouchableCell from './TouchableCell';
+ 
+ export default class TestingControlPanel extends PureComponent {
+@@ -26,21 +26,28 @@ export default class TestingControlPanel extends PureComponent {
+             />
+           )}
+         </UserWebBrowserConsumer>
+-        <WebBrowserConsumer>
++        <RockAuthedWebBrowser>
+           {(openUrl) => (
+-            <TouchableCell
+-              handlePress={() =>
+-                openUrl(
+-                  'https://apollosrock.newspring.cc',
+-                  {},
+-                  { useRockToken: true }
+-                )
+-              }
+-              iconName="share"
+-              cellText={`Open InAppBrowser With Rock Token`}
+-            />
++            <>
++              <TouchableCell
++                handlePress={() =>
++                  openUrl(
++                    'https://apollosrock.newspring.cc',
++                    {},
++                    { useRockToken: true }
++                  )
++                }
++                iconName="share"
++                cellText={`Open InAppBrowser With Rock Token`}
++              />
++              <TouchableCell
++                handlePress={() => openUrl('mailto:fake@apollosproject.com')}
++                iconName="share"
++                cellText={`Open Email link`}
++              />
++            </>
+           )}
+-        </WebBrowserConsumer>
++        </RockAuthedWebBrowser>
+         <TouchableCell
+           handlePress={() => this.props.navigation.navigate('Onboarding')}
+           iconName="Avatar"
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js b/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js
+deleted file mode 100644
+index dca9ff2..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/ContentCardConnected.js
++++ /dev/null
+@@ -1,62 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-
+-import { ErrorCard } from '@apollosproject/ui-kit';
+-
+-import { LiveConsumer } from '../../live/LiveContext';
+-import contentCardComponentMapper from './contentCardComponentMapper';
+-import GET_CONTENT_CARD from './query';
+-
+-const ContentCardConnected = memo(
+-  ({ Component, contentId, isLoading, tile, mapProps, ...otherProps }) => {
+-    if (!contentId || isLoading)
+-      return <Component {...otherProps} isLoading tile={tile} />;
+-
+-    return (
+-      <LiveConsumer contentId={contentId}>
+-        {(liveStream) => (
+-          <Query query={GET_CONTENT_CARD} variables={{ contentId }}>
+-            {({ data: { node = {} } = {}, loading, error }) => {
+-              if (error) return <ErrorCard error={error} />;
+-
+-              const coverImage = get(node, 'coverImage.sources', undefined);
+-              const hasMedia = !!get(node, 'videos.[0].sources[0]', null);
+-              const isLive = !!liveStream;
+-              const labelText = get(node, 'parentChannel.name', '');
+-
+-              return (
+-                <Component
+-                  {...node}
+-                  hasAction={hasMedia}
+-                  isLive={isLive}
+-                  labelText={isLive ? 'Live' : labelText}
+-                  {...otherProps}
+-                  coverImage={coverImage}
+-                  isLoading={loading}
+-                />
+-              );
+-            }}
+-          </Query>
+-        )}
+-      </LiveConsumer>
+-    );
+-  }
+-);
+-
+-ContentCardConnected.propTypes = {
+-  Component: PropTypes.func,
+-  mapProps: PropTypes.func,
+-  contentId: PropTypes.string,
+-  isLoading: PropTypes.bool,
+-  tile: PropTypes.bool,
+-};
+-
+-ContentCardConnected.defaultProps = {
+-  Component: contentCardComponentMapper,
+-};
+-
+-ContentCardConnected.displayName = 'ContentCardConnected';
+-
+-export default ContentCardConnected;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/contentCardComponentMapper.js b/apolloschurchapp/src/ui/ContentCardConnected/contentCardComponentMapper.js
+deleted file mode 100644
+index 30d8e1e..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/contentCardComponentMapper.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import React from 'react';
+-import { get } from 'lodash';
+-
+-import { DefaultCard, HighlightCard } from '@apollosproject/ui-kit';
+-
+-const contentCardComponentMapper = (props) => {
+-  // map typename to the the card we want to render.
+-  switch (get(props, '__typename')) {
+-    case 'MediaContentItem':
+-    case 'WeekendContentItem':
+-    case 'ContentSeriesContentItem':
+-    case 'DevotionalContentItem':
+-      return <HighlightCard {...props} />;
+-    default:
+-      return <DefaultCard {...props} />;
+-  }
+-};
+-
+-export default contentCardComponentMapper;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/index.js b/apolloschurchapp/src/ui/ContentCardConnected/index.js
+deleted file mode 100644
+index 40047fe..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/index.js
++++ /dev/null
+@@ -1,6 +0,0 @@
+-import ContentCardConnected from './ContentCardConnected';
+-
+-export { BASE_CARD_FRAGMENT } from './query';
+-export contentCardComponentMapper from './contentCardComponentMapper';
+-
+-export default ContentCardConnected;
+diff --git a/apolloschurchapp/src/ui/ContentCardConnected/query.js b/apolloschurchapp/src/ui/ContentCardConnected/query.js
+deleted file mode 100644
+index a2e26ea..0000000
+--- a/apolloschurchapp/src/ui/ContentCardConnected/query.js
++++ /dev/null
+@@ -1,80 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export const COVER_IMAGE_FRAGMENT = gql`
+-  fragment coverImageFragment on ContentItem {
+-    coverImage {
+-      sources {
+-        uri
+-      }
+-    }
+-  }
+-`;
+-
+-export const THEME_FRAGMENT = gql`
+-  fragment themeFragment on ContentItem {
+-    theme {
+-      type
+-      colors {
+-        primary
+-        secondary
+-        screen
+-        paper
+-      }
+-    }
+-  }
+-`;
+-
+-export const BASE_CARD_FRAGMENT = gql`
+-  fragment baseCardFragment on ContentItem {
+-    id
+-    __typename
+-    ...coverImageFragment
+-    ...themeFragment
+-    title
+-    hyphenatedTitle: title(hyphenated: true)
+-    summary
+-    ... on MediaContentItem {
+-      videos {
+-        sources {
+-          uri
+-        }
+-      }
+-      parentChannel {
+-        id
+-        name
+-      }
+-    }
+-    ... on WeekendContentItem {
+-      videos {
+-        sources {
+-          uri
+-        }
+-      }
+-      parentChannel {
+-        id
+-        name
+-      }
+-    }
+-    ... on DevotionalContentItem {
+-      parentChannel {
+-        id
+-        name
+-      }
+-    }
+-  }
+-  ${COVER_IMAGE_FRAGMENT}
+-  ${THEME_FRAGMENT}
+-`;
+-
+-const GET_CONTENT_CARD = gql`
+-  query getContentCard($contentId: ID!) {
+-    node(id: $contentId) {
+-      id
+-      __typename
+-      ...baseCardFragment
+-    }
+-  }
+-  ${BASE_CARD_FRAGMENT}
+-`;
+-
+-export default GET_CONTENT_CARD;
+diff --git a/apolloschurchapp/src/ui/HorizontalContentCardConnected/horizontalContentCardComponentMapper.js b/apolloschurchapp/src/ui/HorizontalContentCardConnected/horizontalContentCardComponentMapper.js
+deleted file mode 100644
+index 433b143..0000000
+--- a/apolloschurchapp/src/ui/HorizontalContentCardConnected/horizontalContentCardComponentMapper.js
++++ /dev/null
+@@ -1,32 +0,0 @@
+-import React from 'react';
+-import { get } from 'lodash';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  HorizontalDefaultCard,
+-  HorizontalHighlightCard,
+-} from '@apollosproject/ui-kit';
+-
+-const horizontalContentCardComponentMapper = ({
+-  title,
+-  hyphenatedTitle,
+-  ...props
+-}) => {
+-  // map typename to the the card we want to render.
+-  switch (get(props, '__typename')) {
+-    case 'MediaContentItem':
+-    case 'WeekendContentItem':
+-    case 'ContentSeriesContentItem':
+-    case 'DevotionalContentItem':
+-      return <HorizontalHighlightCard title={hyphenatedTitle} {...props} />;
+-    default:
+-      return <HorizontalDefaultCard title={title} {...props} />;
+-  }
+-};
+-
+-horizontalContentCardComponentMapper.propTypes = {
+-  hyphenatedTitle: PropTypes.string,
+-  title: PropTypes.string,
+-};
+-
+-export default horizontalContentCardComponentMapper;
+diff --git a/apolloschurchapp/src/ui/HorizontalContentCardConnected/index.js b/apolloschurchapp/src/ui/HorizontalContentCardConnected/index.js
+deleted file mode 100644
+index c0a38bc..0000000
+--- a/apolloschurchapp/src/ui/HorizontalContentCardConnected/index.js
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import ContentCardConnected from '../ContentCardConnected';
+-
+-import horizontalContentCardComponentMapper from './horizontalContentCardComponentMapper';
+-
+-const HorizontalContentCardConnected = memo(
+-  ({ Component, isLoading, ...otherProps }) => (
+-    <ContentCardConnected
+-      Component={Component}
+-      isLoading={isLoading}
+-      {...otherProps}
+-    />
+-  )
+-);
+-
+-HorizontalContentCardConnected.propTypes = {
+-  Component: PropTypes.func,
+-  isLoading: PropTypes.bool,
+-};
+-
+-HorizontalContentCardConnected.defaultProps = {
+-  Component: horizontalContentCardComponentMapper,
+-};
+-
+-HorizontalContentCardConnected.displayName = 'HorizontalContentCardConnected';
+-
+-export default HorizontalContentCardConnected;
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+index 13e64f1..c60a3b9 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import renderer from 'react-test-renderer';
+ import { GradientOverlayImage } from '@apollosproject/ui-kit';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../../Providers';
+ 
+ import LandingScreen from '.';
+ 
+diff --git a/apolloschurchapp/src/ui/LandingScreen/index.js b/apolloschurchapp/src/ui/LandingScreen/index.js
+index f929f81..d803a8d 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/index.js
++++ b/apolloschurchapp/src/ui/LandingScreen/index.js
+@@ -28,7 +28,7 @@ const BrandIcon = withTheme(({ theme, color }) => ({
+ }))(Icon);
+ 
+ const Title = styled(({ theme, color }) => ({
+-  marginBottom: theme.sizing.baseUnit * 2,
++  marginBottom: theme.sizing.baseUnit,
+   ...(color ? { color } : {}),
+ }))(H1);
+ 
+diff --git a/apolloschurchapp/src/ui/LikeContentButton/Like.tests.js b/apolloschurchapp/src/ui/LikeContentButton/Like.tests.js
+deleted file mode 100644
+index 1ec78ec..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButton/Like.tests.js
++++ /dev/null
+@@ -1,26 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import { LikeIcon } from '.';
+-
+-describe('the LikeContentButton component', () => {
+-  it('should render a Like', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <LikeIcon itemId={'abc'} isLiked={false} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-
+-  it('should render a UnLike', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <LikeIcon itemId={'abc'} isLiked />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/LikeContentButton/index.js b/apolloschurchapp/src/ui/LikeContentButton/index.js
+deleted file mode 100644
+index 3a58e27..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButton/index.js
++++ /dev/null
+@@ -1,36 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-
+-import { Icon, withTheme } from '@apollosproject/ui-kit';
+-import { ProtectedTouchable } from '@apollosproject/ui-auth';
+-
+-import { withNavigation } from 'react-navigation';
+-
+-const LikeIcon = withTheme(
+-  ({ theme: { colors: { secondary } = {} } = {}, isLiked } = {}) => ({
+-    name: isLiked ? 'like-solid' : 'like',
+-    fill: secondary,
+-  })
+-)(Icon);
+-
+-LikeIcon.propTypes = {
+-  isLiked: PropTypes.bool,
+-};
+-
+-const LikeContentButton = withNavigation(({ isLiked, toggleLike, itemId }) => (
+-  <ProtectedTouchable
+-    onPress={() =>
+-      toggleLike({ itemId, operation: isLiked ? 'Unlike' : 'Like' })
+-    }
+-  >
+-    <LikeIcon isLiked={isLiked} />
+-  </ProtectedTouchable>
+-));
+-
+-LikeContentButton.propTypes = {
+-  itemId: PropTypes.string,
+-  isLiked: PropTypes.bool,
+-  toggleLike: PropTypes.func,
+-};
+-
+-export { LikeContentButton as default, LikeIcon };
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/LikeButton.tests.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/LikeButton.tests.js
+deleted file mode 100644
+index aee7385..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/LikeButton.tests.js
++++ /dev/null
+@@ -1,114 +0,0 @@
+-// import React from 'react';
+-// import renderer from 'react-test-renderer';
+-
+-// import Providers from 'apolloschurchapp/src/Providers';
+-// import gql from 'graphql-tag';
+-
+-// import LikeContentButtonConnected from '.';
+-
+-describe('the LikeContentButtonConnected component', () => {
+-  it('should render', () => {
+-    //     const updateLikeEntity = {
+-    //       request: {
+-    //         query: gql`
+-    //           mutation updateLikeEntity($itemId: ID!, $operation: LIKE_OPERATION!) {
+-    //             updateLikeEntity(
+-    //               input: { nodeId: $itemId, operation: $operation }
+-    //             ) {
+-    //               id
+-    //               operation
+-    //               interactionDateTime
+-    //             }
+-    //           }
+-    //         `,
+-    //         variables: {
+-    //           itemId: 'asdf',
+-    //           operation: 'Like',
+-    //         },
+-    //       },
+-    //       result: {
+-    //         data: {
+-    //           node: { isLiked: true },
+-    //         },
+-    //       },
+-    //     };
+-    //     const getLikedContentItem = {
+-    //       request: {
+-    //         query: gql`
+-    //           query getLikedContentItem($itemId: ID!) {
+-    //             node(id: $itemId) {
+-    //               ... on ContentItem {
+-    //                 id
+-    //                 isLiked
+-    //               }
+-    //             }
+-    //           }
+-    //         `,
+-    //         variables: {
+-    //           itemId: 'asdf',
+-    //         },
+-    //       },
+-    //       result: {
+-    //         data: {
+-    //           updateLikeEntity: { operation: 'Like' },
+-    //         },
+-    //       },
+-    //     };
+-    //     const tree = renderer.create(
+-    //       <Providers mocks={[updateLikeEntity, getLikedContentItem]}>
+-    //         <LikeContentButtonConnected itemId={'asdf'} />
+-    //       </Providers>
+-    //     );
+-    //     expect(tree).toMatchSnapshot();
+-  });
+-  it('should render when loading', () => {
+-    //     const updateLikeEntity = {
+-    //       request: {
+-    //         query: gql`
+-    //           mutation updateLikeEntity($itemId: ID!, $operation: LIKE_OPERATION!) {
+-    //             updateLikeEntity(
+-    //               input: { nodeId: $itemId, operation: $operation }
+-    //             ) {
+-    //               id
+-    //               operation
+-    //               interactionDateTime
+-    //             }
+-    //           }
+-    //         `,
+-    //         variables: {
+-    //           itemId: 'asdf',
+-    //           operation: 'Like',
+-    //         },
+-    //       },
+-    //       result: {
+-    //         data: {
+-    //           node: { isLiked: true },
+-    //         },
+-    //       },
+-    //     };
+-    //     const getLikedContentItem = {
+-    //       request: {
+-    //         query: gql`
+-    //           query getLikedContentItem($itemId: ID!) {
+-    //             node(id: $itemId) {
+-    //               ... on ContentItem {
+-    //                 id
+-    //                 isLiked
+-    //               }
+-    //             }
+-    //           }
+-    //         `,
+-    //         variables: {
+-    //           itemId: 'asdf',
+-    //         },
+-    //       },
+-    //       result: null,
+-    //     };
+-    //     const tree = renderer.create(
+-    //       <Providers mocks={[updateLikeEntity, getLikedContentItem]}>
+-    //         <LikeContentButtonConnected itemId={'asdf'} />
+-    //       </Providers>
+-    //     );
+-    //     expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/getLikedContentItem.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/getLikedContentItem.js
+deleted file mode 100644
+index 1ddaa3a..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/getLikedContentItem.js
++++ /dev/null
+@@ -1,12 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getLikedContentItem($itemId: ID!) {
+-    node(id: $itemId) {
+-      ... on ContentItem {
+-        id
+-        isLiked
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/index.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/index.js
+deleted file mode 100644
+index 724407e..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/index.js
++++ /dev/null
+@@ -1,123 +0,0 @@
+-import React from 'react';
+-
+-import PropTypes from 'prop-types';
+-import { get } from 'lodash';
+-import { Query, Mutation } from 'react-apollo';
+-
+-import LikeContentButton from 'apolloschurchapp/src/ui/LikeContentButton';
+-import { AnalyticsConsumer } from '@apollosproject/ui-analytics';
+-
+-import UPDATE_LIKE_ENTITY from './updateLikeEntity';
+-import GET_LIKED_CONTENT_ITEM from './getLikedContentItem';
+-import updateLikedContent from './updateLikedContent';
+-
+-const GetLikeData = ({ itemId, children }) => (
+-  <Query query={GET_LIKED_CONTENT_ITEM} variables={{ itemId }}>
+-    {({ data: { node = {} } = {}, loading }) => {
+-      const isLiked = loading ? false : get(node, 'isLiked') || false;
+-      return children({ isLiked, item: node });
+-    }}
+-  </Query>
+-);
+-
+-GetLikeData.propTypes = {
+-  itemId: PropTypes.string,
+-  children: PropTypes.func.isRequired,
+-};
+-
+-const UpdateLikeStatus = ({
+-  itemId,
+-  item = { __typename: null },
+-  isLiked,
+-  children,
+-}) => (
+-  <AnalyticsConsumer>
+-    {({ track }) => (
+-      <Mutation
+-        mutation={UPDATE_LIKE_ENTITY}
+-        optimisticResponse={{
+-          updateLikeEntity: {
+-            id: itemId, // unknown at this time
+-            isLiked: !isLiked,
+-            likedCount: 0, // field required but exact value is not needed
+-            __typename: item && item.__typename,
+-          },
+-        }}
+-        update={(
+-          cache,
+-          {
+-            data: {
+-              updateLikeEntity: { isLiked: liked },
+-            },
+-          }
+-        ) => {
+-          updateLikedContent({ liked, cache, item });
+-          cache.writeQuery({
+-            query: GET_LIKED_CONTENT_ITEM,
+-            data: {
+-              node: {
+-                ...item,
+-                isLiked: liked,
+-              },
+-            },
+-          });
+-        }}
+-      >
+-        {(createNewInteraction) =>
+-          itemId
+-            ? children({
+-                itemId,
+-                isLiked,
+-                toggleLike: async (variables) => {
+-                  try {
+-                    await createNewInteraction({ variables });
+-                    track({
+-                      eventName: isLiked ? 'UnlikeContent' : 'LikeContent',
+-                      properties: {
+-                        id: itemId,
+-                      },
+-                    });
+-                  } catch (e) {
+-                    throw e.message;
+-                  }
+-                },
+-              })
+-            : null
+-        }
+-      </Mutation>
+-    )}
+-  </AnalyticsConsumer>
+-);
+-
+-UpdateLikeStatus.propTypes = {
+-  itemId: PropTypes.string,
+-  children: PropTypes.func.isRequired,
+-  isLiked: PropTypes.bool.isRequired,
+-  item: PropTypes.shape({
+-    id: PropTypes.string,
+-    __typename: PropTypes.string,
+-    isLiked: PropTypes.bool,
+-  }),
+-};
+-
+-const LikeContentButtonConnected = ({ itemId }) => (
+-  <GetLikeData itemId={itemId}>
+-    {({ isLiked, item }) => (
+-      <UpdateLikeStatus itemId={itemId} item={item} isLiked={isLiked}>
+-        {({ toggleLike, isLiked: newLikeValue }) => (
+-          <LikeContentButton
+-            itemId={itemId}
+-            isLiked={newLikeValue}
+-            toggleLike={toggleLike}
+-          />
+-        )}
+-      </UpdateLikeStatus>
+-    )}
+-  </GetLikeData>
+-);
+-
+-LikeContentButtonConnected.propTypes = {
+-  itemId: PropTypes.string,
+-};
+-
+-export default LikeContentButtonConnected;
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikeEntity.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikeEntity.js
+deleted file mode 100644
+index 986d867..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikeEntity.js
++++ /dev/null
+@@ -1,11 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  mutation updateLikeEntity($itemId: ID!, $operation: LIKE_OPERATION!) {
+-    updateLikeEntity(input: { nodeId: $itemId, operation: $operation }) {
+-      id
+-      isLiked
+-      likedCount
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js b/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js
+deleted file mode 100644
+index 73c0531..0000000
+--- a/apolloschurchapp/src/ui/LikeContentButtonConnected/updateLikedContent.js
++++ /dev/null
+@@ -1,82 +0,0 @@
+-import GET_ALL_LIKED_CONTENT from 'apolloschurchapp/src/tabs/connect/getLikedContent';
+-import { BASE_CARD_FRAGMENT } from 'apolloschurchapp/src/ui/ContentCardConnected';
+-
+-const addItemToLikedContentList = ({ cache, item, variables }) => {
+-  try {
+-    const data = cache.readQuery({
+-      query: GET_ALL_LIKED_CONTENT,
+-      variables,
+-    });
+-    const fullItem = cache.readFragment({
+-      id: `${item.__typename}:${item.id}`,
+-      fragment: BASE_CARD_FRAGMENT,
+-      fragmentName: 'baseCardFragment',
+-    });
+-    const newEdges = [
+-      fullItem,
+-      ...data.likedContent.edges.map(({ node }) => node),
+-    ].map((node) => ({
+-      __typename: 'ContentItemsConnectionEdge',
+-      node: {
+-        ...node,
+-        isLiked: true,
+-      },
+-    }));
+-    cache.writeQuery({
+-      query: GET_ALL_LIKED_CONTENT,
+-      variables,
+-      data: {
+-        ...data,
+-        likedContent: {
+-          ...data.likedContent,
+-          edges: newEdges,
+-        },
+-      },
+-    });
+-  } catch (e) {
+-    console.log(e);
+-    // Most likely we haven't ran the `getAllLikedContent` query yet.
+-    // We can safely exit.
+-  }
+-};
+-
+-const removeItemFromLikedContentList = ({ cache, item, variables }) => {
+-  try {
+-    const data = cache.readQuery({
+-      query: GET_ALL_LIKED_CONTENT,
+-      variables,
+-    });
+-
+-    const filteredEdges = data.likedContent.edges.filter(
+-      ({ node }) => node.id !== item.id
+-    );
+-
+-    cache.writeQuery({
+-      query: GET_ALL_LIKED_CONTENT,
+-      variables,
+-      data: {
+-        ...data,
+-        likedContent: {
+-          ...data.likedContent,
+-          edges: filteredEdges,
+-        },
+-      },
+-    });
+-  } catch (e) {
+-    console.log(e);
+-    // Most likely we haven't ran the `getAllLikedContent` query yet.
+-    // We can safely exit.
+-  }
+-};
+-
+-const updateLikedContent = ({ liked, cache, item }) => {
+-  if (liked) {
+-    addItemToLikedContentList({ cache, item, variables: { first: 3 } });
+-    addItemToLikedContentList({ cache, item, variables: { first: 20 } });
+-  } else {
+-    removeItemFromLikedContentList({ cache, item, variables: { first: 3 } });
+-    removeItemFromLikedContentList({ cache, item, variables: { first: 20 } });
+-  }
+-};
+-
+-export default updateLikedContent;
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 67d9879..28510f3 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,12 +1,15 @@
+ import React from 'react';
+-
++import {
++  checkNotifications,
++  openSettings,
++  requestNotifications,
++  RESULTS,
++} from 'react-native-permissions';
+ import {
+   GradientOverlayImage,
+   styled,
+   BackgroundView,
+ } from '@apollosproject/ui-kit';
+-import { ApolloConsumer } from 'react-apollo';
+-
+ import {
+   AskNotificationsConnected,
+   AskNameConnected,
+@@ -15,8 +18,7 @@ import {
+   LocationFinderConnected,
+   OnboardingSwiper,
+ } from '@apollosproject/ui-onboarding';
+-
+-import { requestPushPermissions } from '@apollosproject/ui-notifications';
++import { resetAction } from '../../NavigationService';
+ 
+ const FullscreenBackgroundView = styled({
+   position: 'absolute',
+@@ -63,22 +65,35 @@ function Onboarding({ navigation }) {
+                 />
+               }
+             />
+-            <ApolloConsumer>
+-              {(client) => (
+-                <AskNotificationsConnected
+-                  onPressPrimary={() => navigation.replace('Tabs')}
+-                  onRequestPushPermissions={() =>
+-                    requestPushPermissions({ client })
+-                  }
+-                  primaryNavText={'Finish'}
+-                  BackgroundComponent={
+-                    <StyledGradient
+-                      source={'https://picsum.photos/640/640/?random'}
+-                    />
++            <AskNotificationsConnected
++              onRequestPushPermissions={(update) => {
++                checkNotifications().then((checkRes) => {
++                  if (checkRes.status === RESULTS.DENIED) {
++                    requestNotifications(['alert', 'badge', 'sound']).then(
++                      () => {
++                        update();
++                      }
++                    );
++                  } else {
++                    openSettings();
+                   }
++                });
++              }}
++              onPressPrimary={() =>
++                navigation.dispatch(
++                  resetAction({
++                    navigatorName: 'Tabs',
++                    routeName: 'Home',
++                  })
++                )
++              }
++              primaryNavText={'Finish'}
++              BackgroundComponent={
++                <StyledGradient
++                  source={'https://picsum.photos/640/640/?random'}
+                 />
+-              )}
+-            </ApolloConsumer>
++              }
++            />
+           </>
+         )}
+       </OnboardingSwiper>
+diff --git a/apolloschurchapp/src/ui/SearchCard/SearchCard.tests.js b/apolloschurchapp/src/ui/SearchCard/SearchCard.tests.js
+deleted file mode 100644
+index c91c711..0000000
+--- a/apolloschurchapp/src/ui/SearchCard/SearchCard.tests.js
++++ /dev/null
+@@ -1,70 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import SearchCard from '.';
+-
+-describe('The SearchCard component', () => {
+-  it('should render', () => {
+-    const data = {
+-      title: 'How to lead people to Jesus',
+-      summary:
+-        'Love compels a mother to lose all dignity in public as she screams the name of her lost child.',
+-      coverImage: {
+-        name: null,
+-        sources: [
+-          {
+-            uri:
+-              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dd3a96243-2558-4c04-bf41-3aadcf41771f',
+-            __typename: 'ImageMediaSource',
+-          },
+-        ],
+-        __typename: 'ImageMedia',
+-      },
+-      cursor: 'b487224762b030f470967f45d7205823',
+-      node: {
+-        id: 'DevotionalContentItem:561dfb7dbd8a5c093fd8385c7edaadbc',
+-        title: 'How to lead people to Jesus',
+-        hyphenatedTitle: '-',
+-        isLiked: false,
+-        likedCount: 0,
+-        summary:
+-          'Love compels a mother to lose all dignity in public as she screams the name of her lost child.',
+-        coverImage: {
+-          name: 'Square Image',
+-          sources: [
+-            {
+-              uri:
+-                'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dd3a96243-2558-4c04-bf41-3aadcf41771f',
+-              __typename: 'ImageMediaSource',
+-            },
+-          ],
+-          __typename: 'ImageMedia',
+-        },
+-        theme: null,
+-        parentChannel: {
+-          id: 'ContentChannel:559b23fd0aa90e81b1c023e72e230fa1',
+-          name: 'Devotional',
+-          __typename: 'ContentChannel',
+-        },
+-        videos: [{ sources: [], __typename: 'VideoMedia' }],
+-        audios: [],
+-        __typename: 'DevotionalContentItem',
+-      },
+-      __typename: 'SearchResult',
+-    };
+-
+-    const tree = renderer.create(
+-      <Providers>
+-        <SearchCard
+-          coverImage={data.coverImage}
+-          summary={data.summary}
+-          title={data.title}
+-          node={data.node}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/SearchCard/index.js b/apolloschurchapp/src/ui/SearchCard/index.js
+deleted file mode 100644
+index 3a73fb4..0000000
+--- a/apolloschurchapp/src/ui/SearchCard/index.js
++++ /dev/null
+@@ -1,55 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-import { get } from 'lodash';
+-
+-import { contentCardComponentMapper } from '../ContentCardConnected';
+-
+-const SearchCard = memo(
+-  ({
+-    Component,
+-    coverImage,
+-    isLoading,
+-    node,
+-    summary,
+-    title,
+-    ...otherProps
+-  }) => {
+-    /* We don't have a way to know for certain if a particular card is true for `hasAction` without
+-     * hitting Rock. While not 100% perfect we do know that these two types will have almost always
+-     * have media associated with them. */
+-    const hasAction = ['MediaContentItem', 'WeekendContentItem'].includes(
+-      get(node, '__typename')
+-    );
+-
+-    return (
+-      <Component
+-        coverImage={get(coverImage, 'sources', [])}
+-        hasAction={hasAction}
+-        isLoading={isLoading}
+-        summary={summary}
+-        title={title}
+-        {...otherProps}
+-        {...node}
+-      />
+-    );
+-  }
+-);
+-
+-SearchCard.propTypes = {
+-  Component: PropTypes.func,
+-  coverImage: PropTypes.shape({
+-    sources: PropTypes.array,
+-  }),
+-  summary: PropTypes.string,
+-  title: PropTypes.string,
+-  node: PropTypes.shape({}),
+-  isLoading: PropTypes.bool,
+-};
+-
+-SearchCard.defaultProps = {
+-  Component: contentCardComponentMapper,
+-};
+-
+-SearchCard.displayName = 'SearchCard';
+-
+-export default SearchCard;
+diff --git a/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js b/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js
+index ad074a3..cdaeb17 100644
+--- a/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js
++++ b/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js
+@@ -1,7 +1,7 @@
+ import React from 'react';
+ import renderer from 'react-test-renderer';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../../Providers';
+ 
+ import SearchInputHeader from '.';
+ 
+diff --git a/apolloschurchapp/src/ui/ShareContentButton/ShareContentButton.tests.js b/apolloschurchapp/src/ui/ShareContentButton/ShareContentButton.tests.js
+deleted file mode 100644
+index 106f6b3..0000000
+--- a/apolloschurchapp/src/ui/ShareContentButton/ShareContentButton.tests.js
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import { Providers } from '@apollosproject/ui-kit';
+-
+-import ShareContentButton from '.';
+-
+-describe('the Share component', () => {
+-  it('should render', () => {
+-    const shareObject = {
+-      title: 'Shared Object Title',
+-      url: 'https://github.com/ApollosProject/apollos-prototype',
+-    };
+-    const tree = renderer.create(
+-      <Providers>
+-        <ShareContentButton content={shareObject} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/ShareContentButton/index.js b/apolloschurchapp/src/ui/ShareContentButton/index.js
+deleted file mode 100644
+index 4286a7f..0000000
+--- a/apolloschurchapp/src/ui/ShareContentButton/index.js
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-import { compose, pure } from 'recompose';
+-import share from 'apolloschurchapp/src/utils/content/share';
+-import { Touchable, Icon, withTheme } from '@apollosproject/ui-kit';
+-import { AnalyticsConsumer } from '@apollosproject/ui-analytics';
+-
+-const enhance = compose(
+-  pure,
+-  withTheme()
+-);
+-
+-const ShareContentButton = enhance(({ content, theme }) => (
+-  <AnalyticsConsumer>
+-    {({ track }) => {
+-      const onPress = () => {
+-        share(content);
+-        track({
+-          eventName: 'Share',
+-          properties: { id: content.id, title: content.title },
+-        });
+-      };
+-      return (
+-        <Touchable onPress={onPress}>
+-          <Icon name={'share'} fill={theme.colors.secondary} />
+-        </Touchable>
+-      );
+-    }}
+-  </AnalyticsConsumer>
+-));
+-
+-ShareContentButton.propTypes = {
+-  content: PropTypes.shape({
+-    title: PropTypes.string,
+-    url: PropTypes.string,
+-    id: PropTypes.string,
+-  }),
+-};
+-
+-export default ShareContentButton;
+diff --git a/apolloschurchapp/src/ui/ShareContentButtonConnected/ShareContentButtonConnected.tests.js b/apolloschurchapp/src/ui/ShareContentButtonConnected/ShareContentButtonConnected.tests.js
+deleted file mode 100644
+index 46a3b2c..0000000
+--- a/apolloschurchapp/src/ui/ShareContentButtonConnected/ShareContentButtonConnected.tests.js
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import React from 'react';
+-import Providers from 'apolloschurchapp/src/Providers';
+-import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+-import getShareContent from './getShareContent';
+-import ShareContentButtonConnected from '.';
+-
+-const shareMock = {
+-  request: {
+-    query: getShareContent,
+-    variables: { itemId: '1' },
+-  },
+-  result: {
+-    data: {
+-      node: {
+-        id: '1',
+-        __typename: 'ContentSeriesContentItem',
+-        sharing: {
+-          url: 'https://apolloschurchapp.newspring.cc',
+-          title: 'Test Title ',
+-          __typename: 'SharableContentItem',
+-        },
+-      },
+-    },
+-  },
+-};
+-
+-const mocks = [shareMock];
+-
+-describe('the ShareContentButtonConnected', () => {
+-  it('renders a share button', async () => {
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={mocks}>
+-        <ShareContentButtonConnected itemId={'1'} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('renders a share button with custom url, and title', async () => {
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={mocks}>
+-        <ShareContentButtonConnected
+-          itemId={'1'}
+-          url={'https://apollosrock.com'}
+-          title="Some great title"
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/ui/ShareContentButtonConnected/getShareContent.js b/apolloschurchapp/src/ui/ShareContentButtonConnected/getShareContent.js
+deleted file mode 100644
+index 44718b3..0000000
+--- a/apolloschurchapp/src/ui/ShareContentButtonConnected/getShareContent.js
++++ /dev/null
+@@ -1,16 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getShareContent($itemId: ID!) {
+-    node(id: $itemId) {
+-      ... on ContentItem {
+-        id
+-        sharing {
+-          url
+-          message
+-          title
+-        }
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/ui/ShareContentButtonConnected/index.js b/apolloschurchapp/src/ui/ShareContentButtonConnected/index.js
+deleted file mode 100644
+index 95483b5..0000000
+--- a/apolloschurchapp/src/ui/ShareContentButtonConnected/index.js
++++ /dev/null
+@@ -1,34 +0,0 @@
+-import React from 'react';
+-
+-import PropTypes from 'prop-types';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-
+-import ShareContentButton from 'apolloschurchapp/src/ui/ShareContentButton';
+-
+-import GET_SHARE_CONTENT from './getShareContent';
+-
+-const ShareContentButtonConnected = ({ itemId, title, message, url }) => (
+-  <Query query={GET_SHARE_CONTENT} variables={{ itemId }}>
+-    {({ data }) => {
+-      const sharing = get(data, 'node.sharing', {});
+-      const content = {
+-        id: itemId,
+-        title: title || sharing.title,
+-        message: message || sharing.message,
+-        url: url || sharing.url,
+-      };
+-      return <ShareContentButton content={content} />;
+-    }}
+-  </Query>
+-);
+-
+-ShareContentButtonConnected.propTypes = {
+-  itemId: PropTypes.string.isRequired,
+-  // These props are available to override the default sharing data for a node.
+-  title: PropTypes.string,
+-  message: PropTypes.string,
+-  url: PropTypes.string,
+-};
+-
+-export default ShareContentButtonConnected;
+diff --git a/apolloschurchapp/src/ui/WebBrowser/Browser.js b/apolloschurchapp/src/ui/WebBrowser/Browser.js
+deleted file mode 100644
+index 19ef6bc..0000000
+--- a/apolloschurchapp/src/ui/WebBrowser/Browser.js
++++ /dev/null
+@@ -1,63 +0,0 @@
+-import { Linking } from 'react-native';
+-import InAppBrowser from 'react-native-inappbrowser-reborn';
+-import gql from 'graphql-tag';
+-import { client } from '../../client';
+-
+-export const GET_ROCK_AUTH_DETAILS = gql`
+-  query RockAuthDetails {
+-    currentUser {
+-      id
+-      rock {
+-        authCookie
+-        authToken
+-      }
+-    }
+-  }
+-`;
+-
+-export const getRockAuthDetails = async () => {
+-  const { data: { currentUser: { rock } = {} } = {} } = await client.query({
+-    query: GET_ROCK_AUTH_DETAILS,
+-    fetchPolicy: 'network-only',
+-  });
+-  return rock;
+-};
+-
+-const Browser = {
+-  open: async (
+-    baseURL,
+-    options,
+-    auth = { useRockCookie: false, useRockToken: false }
+-  ) => {
+-    const url = new URL(baseURL);
+-    // NOTE: RN adds a trailing slash
+-    // https://github.com/facebook/react-native/issues/24428
+-    url._url = url.toString().endsWith('/')
+-      ? url.toString().slice(0, -1)
+-      : url.toString();
+-
+-    const { authCookie, authToken } = await getRockAuthDetails();
+-    let headers = {};
+-    if (auth.useRockCookie && authCookie) {
+-      console.warn(
+-        "iOS doesn't support headers, you may want to use src/user-web-view"
+-      );
+-      headers = { Cookie: authCookie };
+-    }
+-    if (auth.useRockToken && authToken) {
+-      url.searchParams.append('rckipid', authToken);
+-    }
+-    try {
+-      if (await InAppBrowser.isAvailable()) {
+-        InAppBrowser.open(url.toString(), {
+-          headers,
+-          ...options,
+-        });
+-      } else Linking.openURL(url.toString());
+-    } catch (e) {
+-      console.error(e);
+-    }
+-  },
+-};
+-
+-export default Browser;
+diff --git a/apolloschurchapp/src/ui/WebBrowser/index.js b/apolloschurchapp/src/ui/WebBrowser/index.js
+deleted file mode 100644
+index 9e85ea5..0000000
+--- a/apolloschurchapp/src/ui/WebBrowser/index.js
++++ /dev/null
+@@ -1,41 +0,0 @@
+-// Provider API for WebBrowser that injects theme values and defaults to the web browser:
+-import { Platform } from 'react-native';
+-import { createContext } from 'react';
+-
+-import { withTheme } from '@apollosproject/ui-kit';
+-
+-import Browser from './Browser';
+-
+-const { Provider: BaseProvider, Consumer } = createContext(Browser.open);
+-
+-// NOTE: don't think this is working...
+-const Provider = withTheme(({ theme }) => ({
+-  value: (url, headers = {}, options = {}) =>
+-    Browser.open(url, {
+-      ...Platform.select({
+-        ios: {
+-          dismissButtonStyle: 'cancel',
+-          preferredBarTintColor: theme.colors.background.paper,
+-          preferredControlTintColor: theme.colors.primary,
+-          readerMode: false,
+-          animated: true,
+-          modalPresentationStyle: 'overFullScreen',
+-          modalTransitionStyle: 'partialCurl',
+-          modalEnabled: true,
+-        },
+-        android: {
+-          toolbarColor: theme.colors.background.paper,
+-          enableDefaultShare: true,
+-          showTitle: true,
+-          secondaryToolbarColor: 'black',
+-          enableUrlBarHiding: true,
+-          forceCloseOnRedirection: false,
+-        },
+-      }),
+-      headers: { ...headers },
+-      ...options,
+-    }),
+-}))(BaseProvider);
+-
+-export default Browser;
+-export { Provider as WebBrowserProvider, Consumer as WebBrowserConsumer };
+diff --git a/apolloschurchapp/src/ui/WebBrowser/index.tests.js b/apolloschurchapp/src/ui/WebBrowser/index.tests.js
+deleted file mode 100644
+index 88eb48f..0000000
+--- a/apolloschurchapp/src/ui/WebBrowser/index.tests.js
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-import { Platform } from 'react-native';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-
+-import { WebBrowserConsumer } from '.';
+-
+-jest.mock('Platform');
+-
+-describe(`WebBrowser Provider and Consumer`, () => {
+-  it('passes a function', async () => {
+-    renderer.create(
+-      <Providers>
+-        <WebBrowserConsumer>
+-          {(openUrl) => {
+-            expect(typeof openUrl).toBe('function');
+-          }}
+-        </WebBrowserConsumer>
+-      </Providers>
+-    );
+-  });
+-  it('passes a function (Android)', async () => {
+-    Platform.OS = 'android';
+-    renderer.create(
+-      <Providers>
+-        <WebBrowserConsumer>
+-          {(openUrl) => {
+-            expect(typeof openUrl).toBe('function');
+-          }}
+-        </WebBrowserConsumer>
+-      </Providers>
+-    );
+-  });
+-});
+diff --git a/apolloschurchapp/src/user-settings/ChangeAvatar.js b/apolloschurchapp/src/user-settings/ChangeAvatar.js
+deleted file mode 100644
+index ccadf1b..0000000
+--- a/apolloschurchapp/src/user-settings/ChangeAvatar.js
++++ /dev/null
+@@ -1,76 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import { View } from 'react-native';
+-import PropTypes from 'prop-types';
+-import { get } from 'lodash';
+-import { Query, ApolloConsumer } from 'react-apollo';
+-
+-import { PaddedView, Avatar, styled } from '@apollosproject/ui-kit';
+-import GET_USER_PHOTO from './getUserPhoto';
+-import uploadPhoto from './uploadPhoto';
+-
+-const GetPhotoData = ({ children }) => (
+-  <Query query={GET_USER_PHOTO}>
+-    {({ data: { currentUser = {} } = {} }) => {
+-      const photo = get(currentUser, 'profile.photo');
+-      return children({ photo });
+-    }}
+-  </Query>
+-);
+-
+-GetPhotoData.propTypes = {
+-  children: PropTypes.func.isRequired,
+-};
+-
+-const Wrapper = styled({
+-  justifyContent: 'center',
+-  alignItems: 'center',
+-})(View);
+-
+-export default class AvatarForm extends PureComponent {
+-  state = {
+-    isUploadingFile: false,
+-  };
+-
+-  componentWillUnmount() {
+-    this.setState({ isUploadingFile: false });
+-  }
+-
+-  handleUploadPhoto = async ({ client }) => {
+-    try {
+-      await uploadPhoto({
+-        client,
+-        onUpload: () => this.setState({ isUploadingFile: true }),
+-      });
+-      await this.setState({ isUploadingFile: false });
+-    } catch (e) {
+-      console.warn(e);
+-      this.setState({ isUploadingFile: false });
+-    }
+-  };
+-
+-  render() {
+-    const { isUploadingFile } = this.state;
+-
+-    return (
+-      <ApolloConsumer>
+-        {(client) => (
+-          <Wrapper>
+-            <GetPhotoData>
+-              {({ photo }) => (
+-                <PaddedView horizontal={false}>
+-                  <Avatar
+-                    source={photo}
+-                    size="large"
+-                    buttonIcon="camera"
+-                    onPressIcon={() => this.handleUploadPhoto({ client })}
+-                    isLoading={isUploadingFile}
+-                  />
+-                </PaddedView>
+-              )}
+-            </GetPhotoData>
+-          </Wrapper>
+-        )}
+-      </ApolloConsumer>
+-    );
+-  }
+-}
+diff --git a/apolloschurchapp/src/user-settings/ChangePassword.tests.js b/apolloschurchapp/src/user-settings/ChangePassword.tests.js
+index 3718845..85ff133 100644
+--- a/apolloschurchapp/src/user-settings/ChangePassword.tests.js
++++ b/apolloschurchapp/src/user-settings/ChangePassword.tests.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import renderer from 'react-test-renderer';
+ import wait from 'waait';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+ import ChangePassword from './ChangePassword';
+ 
+diff --git a/apolloschurchapp/src/user-settings/Locations/Locations.tests.js b/apolloschurchapp/src/user-settings/Locations/Locations.tests.js
+deleted file mode 100644
+index 25ebf12..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/Locations.tests.js
++++ /dev/null
+@@ -1,133 +0,0 @@
+-import React from 'react';
+-import { renderWithApolloData } from 'apolloschurchapp/src/utils/testUtils';
+-
+-import Providers from 'apolloschurchapp/src/Providers';
+-import GET_CAMPUS_LOCATIONS from './getCampusLocations';
+-import Location from './index';
+-
+-const campuses = [
+-  {
+-    __typename: 'Campus',
+-    id: 'Campus:559b23fd0aa90e81b1c023e72e230fa1',
+-    latitude: 34.59814,
+-    longitude: -82.62045,
+-    name: 'Anderson Campus',
+-    street1: '2940 Concord Rd',
+-    street2: '',
+-    city: 'Anderson',
+-    state: 'SC',
+-    distanceFromLocation: 5,
+-    postalCode: '29621-3619',
+-    image: {
+-      __typename: 'ImageMediaSource',
+-      uri:
+-        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Da47e8e69-9542-42de-9ed3-ff42fdc82417',
+-    },
+-  },
+-  {
+-    __typename: 'Campus',
+-    id: 'Campus:965b6e6d7046a885bea4e300b5c0400d',
+-    latitude: 32.95103,
+-    longitude: -96.74738,
+-    name: 'Dallas Campus',
+-    street1: '102 N Weatherred Dr',
+-    street2: '',
+-    city: 'Richardson',
+-    state: 'TX',
+-    postalCode: '75080-5525',
+-    distanceFromLocation: 50,
+-    image: {
+-      __typename: 'ImageMediaSource',
+-      uri:
+-        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D5f9fd97a-fd6e-4ae5-ab5d-a9b95290d9b6',
+-    },
+-  },
+-  {
+-    __typename: 'Campus',
+-    id: 'Campus:4f68015ba18662a7409d1219a4ce013e',
+-    latitude: 39.10501,
+-    longitude: -84.51138,
+-    name: 'Cincinnati Campus',
+-    street1: '120 E 8th St',
+-    street2: '',
+-    city: 'Cincinnati',
+-    state: 'OH',
+-    postalCode: '45202-2118',
+-    distanceFromLocation: 500,
+-    image: {
+-      __typename: 'ImageMediaSource',
+-      uri:
+-        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dbad9eb54-3e78-44a7-a028-3f2d6e71a36f',
+-    },
+-  },
+-  {
+-    __typename: 'Campus',
+-    id: 'Campus:a0f64573eabf00a607bec911794d50fb',
+-    latitude: 42.09203,
+-    longitude: -88.13289,
+-    name: 'Chicago Campus',
+-    street1: '67 Algonquin Rd',
+-    street2: '',
+-    city: 'South Barrington',
+-    state: 'IL',
+-    postalCode: '60010-6143',
+-    distanceFromLocation: 5000,
+-    image: {
+-      __typename: 'ImageMediaSource',
+-      uri:
+-        'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dede1fb83-968e-4bef-8d77-ad81c96e8a47',
+-    },
+-  },
+-];
+-
+-describe('Display Native Map with Locations', () => {
+-  const initialRegion = {
+-    // roughly show the entire USA by default
+-    latitude: 39.809734,
+-    longitude: -98.555618,
+-    latitudeDelta: 100,
+-    longitudeDelta: 10,
+-  };
+-  const userLocation = {
+-    latitude: 39.104797,
+-    longitude: -84.511959,
+-  };
+-  it('Render a native map view', async () => {
+-    const navigation = {
+-      navigate: jest.fn(),
+-      getParam: jest.fn(),
+-      goBack: jest.fn(),
+-    };
+-
+-    const mock = {
+-      request: {
+-        query: GET_CAMPUS_LOCATIONS,
+-        variables: {
+-          latitude: userLocation.latitude,
+-          longitude: userLocation.longitude,
+-        },
+-      },
+-      result: {
+-        data: {
+-          campuses,
+-          currentUser: {
+-            id: 'AuthenticatedUser:123',
+-            __typename: 'AuthenticatedUser',
+-            profile: {
+-              id: 'Person:123',
+-              __typename: 'Person',
+-              campus: campuses[3],
+-            },
+-          },
+-        },
+-      },
+-    };
+-
+-    const tree = await renderWithApolloData(
+-      <Providers mocks={[mock]}>
+-        <Location navigation={navigation} initialRegion={initialRegion} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/user-settings/Locations/MapView.js b/apolloschurchapp/src/user-settings/Locations/MapView.js
+deleted file mode 100644
+index b44b872..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/MapView.js
++++ /dev/null
+@@ -1,248 +0,0 @@
+-import React, { Component } from 'react';
+-import PropTypes from 'prop-types';
+-import { Animated, Dimensions, Platform, PixelRatio } from 'react-native';
+-import { SafeAreaView } from 'react-navigation';
+-import RNMapView from 'react-native-maps';
+-import { debounce } from 'lodash';
+-
+-import {
+-  Button,
+-  Touchable,
+-  PaddedView,
+-  FlexedView,
+-  styled,
+-  withTheme,
+-  CampusCard,
+-} from '@apollosproject/ui-kit';
+-import { MediaPlayerSpacer } from '@apollosproject/ui-media-player';
+-
+-import Marker from './Marker';
+-
+-const getCampusAddress = (campus) =>
+-  `${campus.street1}\n${campus.city}, ${campus.state} ${campus.postalCode}`;
+-
+-/* TODO: remove magic number. `theme.sizing.baseUnit * 2.25` This width value is a brittle
+- * calculation of width minus `CampusCard` margins */
+-const CARD_WIDTH = Dimensions.get('window').width - 36;
+-
+-const FlexedMapView = styled({ flex: 1 })(({ mapRef, ...props }) => (
+-  <RNMapView ref={mapRef} {...props} />
+-));
+-
+-const Footer = styled({
+-  position: 'absolute',
+-  bottom: 0,
+-  left: 0,
+-  right: 0,
+-})(SafeAreaView);
+-
+-const StyledCampusCard = styled(({ theme }) => ({
+-  width: CARD_WIDTH,
+-  marginHorizontal: theme.sizing.baseUnit / 4,
+-}))(CampusCard);
+-
+-class MapView extends Component {
+-  static propTypes = {
+-    campuses: PropTypes.arrayOf(
+-      PropTypes.shape({
+-        latitude: PropTypes.number.isRequired,
+-        longitude: PropTypes.number.isRequired,
+-      })
+-    ),
+-    currentCampus: PropTypes.shape({
+-      latitude: PropTypes.number.isRequired,
+-      longitude: PropTypes.number.isRequired,
+-    }),
+-    onLocationSelect: PropTypes.func.isRequired,
+-    initialRegion: PropTypes.shape({
+-      latitude: PropTypes.number.isRequired,
+-      longitude: PropTypes.number.isRequired,
+-      latitudeDelta: PropTypes.number,
+-      longitudeDelta: PropTypes.number,
+-    }).isRequired,
+-    userLocation: PropTypes.shape({
+-      latitude: PropTypes.number.isRequired,
+-      longitude: PropTypes.number.isRequired,
+-    }),
+-    theme: PropTypes.shape({
+-      sizing: PropTypes.shape({
+-        baseUnit: PropTypes.number,
+-      }),
+-    }),
+-    navigation: PropTypes.shape({
+-      goBack: PropTypes.func,
+-    }),
+-  };
+-
+-  animation = new Animated.Value(0);
+-
+-  scrollView = null;
+-
+-  componentDidMount() {
+-    this.animation.addListener(debounce(this.updateCoordinates));
+-  }
+-
+-  componentDidUpdate(oldProps) {
+-    // update mapview if there are campuses and the location changes
+-    if (
+-      this.props.campuses.length &&
+-      oldProps.userLocation !== this.props.userLocation
+-    ) {
+-      this.updateCoordinates({ value: this.previousScrollPosition });
+-    }
+-  }
+-
+-  get currentCampus() {
+-    const cardIndex = Math.floor(
+-      this.previousScrollPosition / CARD_WIDTH + 0.3
+-    ); // animate 30% away from landing on the next item;
+-    return this.sortedCampuses[cardIndex];
+-  }
+-
+-  get sortedCampuses() {
+-    const { currentCampus = null, campuses = [] } = this.props;
+-    if (!this.props.currentCampus) {
+-      return campuses;
+-    }
+-    return [
+-      currentCampus,
+-      ...campuses.filter(({ id }) => id !== currentCampus.id),
+-    ];
+-  }
+-
+-  scrollToIndex = (index) => {
+-    this.scrollView.getNode().scrollTo({
+-      x: index * (CARD_WIDTH + 8),
+-      y: 0,
+-      animated: true,
+-    });
+-    this.updateCoordinates({ value: index * (CARD_WIDTH + 8) });
+-  };
+-
+-  updateCoordinates = ({ value }) => {
+-    this.previousScrollPosition = value;
+-
+-    const { userLocation } = this.props;
+-    // campus card height + some padding
+-
+-    const bottomPadding = 100 + this.props.theme.sizing.baseUnit * 12;
+-    const edgePadding = {
+-      top: 100,
+-      left: 100,
+-      right: 100,
+-      bottom:
+-        Platform.OS === 'android'
+-          ? // NOTE: android bug
+-            // https://github.com/react-native-community/react-native-maps/issues/2543
+-            PixelRatio.getPixelSizeForLayoutSize(bottomPadding)
+-          : bottomPadding,
+-    };
+-
+-    const visibleCampuses = [
+-      userLocation,
+-      ...(this.currentCampus ? [this.currentCampus] : this.sortedCampuses),
+-    ];
+-
+-    this.map.fitToCoordinates(visibleCampuses, {
+-      edgePadding,
+-    });
+-  };
+-
+-  render() {
+-    const { onLocationSelect } = this.props;
+-    const interpolations = this.sortedCampuses.map((marker, index) => {
+-      const inputRange = [
+-        (index - 1) * CARD_WIDTH,
+-        index * CARD_WIDTH,
+-        (index + 1) * CARD_WIDTH,
+-      ];
+-      const opacity = this.animation.interpolate({
+-        inputRange,
+-        outputRange: [0.35, 1, 0.35],
+-        extrapolate: 'clamp',
+-      });
+-      return { opacity };
+-    });
+-
+-    return (
+-      <FlexedView>
+-        <FlexedMapView
+-          initialRegion={this.props.initialRegion}
+-          showsUserLocation
+-          mapRef={(map) => {
+-            this.map = map;
+-          }}
+-        >
+-          {this.sortedCampuses.map((campus, index) => {
+-            const campusOpacity = {
+-              opacity: interpolations[index].opacity,
+-            };
+-            return (
+-              <Marker
+-                onPress={() => this.scrollToIndex(index)}
+-                key={campus.id}
+-                opacityStyle={campusOpacity}
+-                latitude={campus.latitude}
+-                longitude={campus.longitude}
+-              />
+-            );
+-          })}
+-        </FlexedMapView>
+-        <Footer>
+-          <Animated.ScrollView
+-            horizontal
+-            showsHorizontalScrollIndicator={false}
+-            snapToInterval={CARD_WIDTH + 8} // account for padding
+-            snapToAlignment={'start'}
+-            decelerationRate={'fast'}
+-            contentContainerStyle={{
+-              paddingHorizontal: this.props.theme.sizing.baseUnit * 0.75,
+-            }}
+-            ref={(ref) => (this.scrollView = ref)} // eslint-disable-line
+-            scrollEventThrottle={16} // roughtly 1000ms/60fps = 16ms
+-            onScroll={Animated.event(
+-              [
+-                {
+-                  nativeEvent: {
+-                    contentOffset: {
+-                      x: this.animation,
+-                    },
+-                  },
+-                },
+-              ],
+-              { useNativeDriver: true }
+-            )}
+-          >
+-            {this.sortedCampuses.map((campus) => (
+-              <Touchable
+-                key={campus.id}
+-                onPress={() => onLocationSelect(campus)}
+-              >
+-                <StyledCampusCard
+-                  distance={campus.distanceFromLocation}
+-                  title={campus.name}
+-                  description={getCampusAddress(campus)}
+-                  images={[campus.image]}
+-                />
+-              </Touchable>
+-            ))}
+-          </Animated.ScrollView>
+-          <MediaPlayerSpacer>
+-            <PaddedView>
+-              <Button
+-                title="Select Campus"
+-                pill={false}
+-                type="secondary"
+-                onPress={() =>
+-                  onLocationSelect(this.currentCampus || this.sortedCampuses[0])
+-                }
+-              />
+-            </PaddedView>
+-          </MediaPlayerSpacer>
+-        </Footer>
+-      </FlexedView>
+-    );
+-  }
+-}
+-
+-export default withTheme()(MapView);
+diff --git a/apolloschurchapp/src/user-settings/Locations/Marker.js b/apolloschurchapp/src/user-settings/Locations/Marker.js
+deleted file mode 100644
+index b91f89e..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/Marker.js
++++ /dev/null
+@@ -1,47 +0,0 @@
+-import React, { memo } from 'react';
+-import { View, Animated } from 'react-native';
+-import PropTypes from 'prop-types';
+-import { Marker } from 'react-native-maps';
+-import Color from 'color';
+-
+-import { styled } from '@apollosproject/ui-kit';
+-
+-const MarkerView = styled(({ theme }) => ({
+-  width: 8,
+-  height: 8,
+-  borderRadius: 4,
+-  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-  zIndex: 2,
+-}))(View);
+-
+-const MarkerRingView = styled(({ theme }) => ({
+-  width: 24,
+-  height: 24,
+-  borderRadius: 12,
+-  backgroundColor: Color(theme.colors.primary).fade(theme.alpha.low),
+-  borderWidth: 1,
+-  borderColor: Color(theme.colors.primary).fade(theme.alpha.medium),
+-  alignItems: 'center',
+-  justifyContent: 'center',
+-}))(View);
+-
+-const StyledMarker = memo(({ latitude, longitude, opacityStyle, onPress }) => (
+-  <Marker onPress={onPress} coordinate={{ latitude, longitude }}>
+-    <Animated.View style={opacityStyle}>
+-      <MarkerRingView>
+-        <MarkerView />
+-      </MarkerRingView>
+-    </Animated.View>
+-  </Marker>
+-));
+-
+-StyledMarker.displayName = 'StyledMarker';
+-
+-StyledMarker.propTypes = {
+-  latitude: PropTypes.number.isRequired,
+-  longitude: PropTypes.number.isRequired,
+-  onPress: PropTypes.func.isRequired,
+-  opacityStyle: PropTypes.shape({}),
+-};
+-
+-export default StyledMarker;
+diff --git a/apolloschurchapp/src/user-settings/Locations/campusChange.js b/apolloschurchapp/src/user-settings/Locations/campusChange.js
+deleted file mode 100644
+index e164b7b..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/campusChange.js
++++ /dev/null
+@@ -1,14 +0,0 @@
+-import gql from 'graphql-tag';
+-import CampusFragment from './campusFragment';
+-
+-export default gql`
+-  mutation campusChange($campusId: String!) {
+-    updateUserCampus(campusId: $campusId) {
+-      id
+-      campus {
+-        ...CampusParts
+-      }
+-    }
+-  }
+-  ${CampusFragment}
+-`;
+diff --git a/apolloschurchapp/src/user-settings/Locations/campusFragment.js b/apolloschurchapp/src/user-settings/Locations/campusFragment.js
+deleted file mode 100644
+index 777cce5..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/campusFragment.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  fragment CampusParts on Campus {
+-    id
+-    name
+-    latitude
+-    longitude
+-    distanceFromLocation
+-    street1
+-    street2
+-    city
+-    state
+-    postalCode
+-    image {
+-      uri
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js b/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js
+deleted file mode 100644
+index 6dc73e9..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/getCampusLocations.js
++++ /dev/null
+@@ -1,20 +0,0 @@
+-import gql from 'graphql-tag';
+-import CampusFragment from './campusFragment';
+-
+-export default gql`
+-  query getAllCampuses($latitude: Float!, $longitude: Float!) {
+-    campuses(location: { latitude: $latitude, longitude: $longitude }) {
+-      ...CampusParts
+-    }
+-    currentUser {
+-      id
+-      profile {
+-        id
+-        campus {
+-          ...CampusParts
+-        }
+-      }
+-    }
+-  }
+-  ${CampusFragment}
+-`;
+diff --git a/apolloschurchapp/src/user-settings/Locations/index.js b/apolloschurchapp/src/user-settings/Locations/index.js
+deleted file mode 100644
+index d2fcd20..0000000
+--- a/apolloschurchapp/src/user-settings/Locations/index.js
++++ /dev/null
+@@ -1,117 +0,0 @@
+-import React, { PureComponent } from 'react';
+-import PropTypes from 'prop-types';
+-import { Query, Mutation } from 'react-apollo';
+-import { Dimensions } from 'react-native';
+-import Geolocation from 'react-native-geolocation-service';
+-import { PaddedView, ButtonLink } from '@apollosproject/ui-kit';
+-import { get } from 'lodash';
+-
+-import GET_CAMPUSES from './getCampusLocations';
+-import CHANGE_CAMPUS from './campusChange';
+-import MapView from './MapView';
+-
+-class Location extends PureComponent {
+-  static propTypes = {
+-    navigation: PropTypes.shape({
+-      getParam: PropTypes.func,
+-      navigate: PropTypes.func,
+-      goBack: PropTypes.func,
+-    }),
+-    initialRegion: PropTypes.shape({
+-      latitude: PropTypes.number,
+-      longitude: PropTypes.number,
+-      latitudeDelta: PropTypes.number,
+-      longitudeDelta: PropTypes.number,
+-    }),
+-  };
+-
+-  static defaultProps = {
+-    initialRegion: {
+-      // roughly show the entire USA by default
+-      latitude: 39.809734,
+-      longitude: -98.555618,
+-      latitudeDelta: 100,
+-      longitudeDelta:
+-        (100 * Dimensions.get('window').width) /
+-        Dimensions.get('window').height,
+-    },
+-  };
+-
+-  static navigationOptions = ({ navigation }) => ({
+-    title: 'Location',
+-    headerLeft: null,
+-    headerRight: (
+-      <PaddedView vertical={false}>
+-        <ButtonLink onPress={() => navigation.goBack()}>Back</ButtonLink>
+-      </PaddedView>
+-    ),
+-  });
+-
+-  state = {
+-    userLocation: {
+-      latitude: 39.104797,
+-      longitude: -84.511959,
+-    },
+-  };
+-
+-  async componentDidMount() {
+-    Geolocation.getCurrentPosition(
+-      (position) => {
+-        this.setState({
+-          userLocation: {
+-            latitude: position.coords.latitude,
+-            longitude: position.coords.longitude,
+-          },
+-        });
+-      },
+-      (e) => console.warn('Error getting location!', e),
+-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+-    );
+-  }
+-
+-  render() {
+-    return (
+-      <Query
+-        query={GET_CAMPUSES}
+-        variables={{
+-          latitude: this.state.userLocation.latitude,
+-          longitude: this.state.userLocation.longitude,
+-        }}
+-        fetchPolicy="cache-and-network"
+-      >
+-        {({ loading, error, data: { campuses, currentUser } = {} }) => (
+-          <Mutation mutation={CHANGE_CAMPUS}>
+-            {(handlePress) => (
+-              <MapView
+-                navigation={this.props.navigation}
+-                isLoading={loading}
+-                error={error}
+-                campuses={campuses || []}
+-                initialRegion={this.props.initialRegion}
+-                userLocation={this.state.userLocation}
+-                currentCampus={get(currentUser, 'profile.campus')}
+-                onLocationSelect={async (campus) => {
+-                  handlePress({
+-                    variables: {
+-                      campusId: campus.id,
+-                    },
+-                    optimisticResponse: {
+-                      updateUserCampus: {
+-                        __typename: 'Mutation',
+-                        id: currentUser.id,
+-                        campus,
+-                      },
+-                    },
+-                  });
+-                  this.props.navigation.goBack();
+-                }}
+-              />
+-            )}
+-          </Mutation>
+-        )}
+-      </Query>
+-    );
+-  }
+-}
+-
+-export default Location;
+diff --git a/apolloschurchapp/src/user-settings/PersonDetails.tests.js b/apolloschurchapp/src/user-settings/PersonDetails.tests.js
+index ef8d662..e1f814d 100644
+--- a/apolloschurchapp/src/user-settings/PersonDetails.tests.js
++++ b/apolloschurchapp/src/user-settings/PersonDetails.tests.js
+@@ -1,8 +1,8 @@
+ import React from 'react';
++import { GET_USER_PROFILE } from '../tabs/connect/UserAvatarHeader';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import Providers from '../Providers';
+ 
+-import GET_USER_PROFILE from '../tabs/connect/getUserProfile';
+ import { renderWithApolloData } from '../utils/testUtils';
+ import PersonalDetails from './PersonalDetails';
+ 
+diff --git a/apolloschurchapp/src/user-settings/PersonalDetails.js b/apolloschurchapp/src/user-settings/PersonalDetails.js
+index 9404206..f44c4be 100644
+--- a/apolloschurchapp/src/user-settings/PersonalDetails.js
++++ b/apolloschurchapp/src/user-settings/PersonalDetails.js
+@@ -20,7 +20,7 @@ import {
+   styled,
+ } from '@apollosproject/ui-kit';
+ 
+-import GET_USER_PROFILE from '../tabs/connect/getUserProfile';
++import { GET_USER_PROFILE } from '../tabs/connect/UserAvatarHeader';
+ import UPDATE_CURRENT_USER from './updateCurrentUser';
+ 
+ const Footer = styled({
+diff --git a/apolloschurchapp/src/user-settings/UserSettings.tests.js b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+index 9a1f3d3..d57af4f 100644
+--- a/apolloschurchapp/src/user-settings/UserSettings.tests.js
++++ b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+@@ -2,9 +2,9 @@ import React from 'react';
+ import renderer from 'react-test-renderer';
+ import wait from 'waait';
+ 
+-import Providers from 'apolloschurchapp/src/Providers';
++import { GET_LOGIN_STATE } from '@apollosproject/ui-auth';
++import Providers from '../Providers';
+ 
+-import GET_LOGIN_STATE from '../tabs/connect/getLoginState';
+ import UserSettings from '.';
+ 
+ describe('UserSettings component', () => {
+diff --git a/apolloschurchapp/src/user-settings/getUserPhoto.js b/apolloschurchapp/src/user-settings/getUserPhoto.js
+deleted file mode 100644
+index 9d48a44..0000000
+--- a/apolloschurchapp/src/user-settings/getUserPhoto.js
++++ /dev/null
+@@ -1,17 +0,0 @@
+-import gql from 'graphql-tag';
+-import CampusParts from 'apolloschurchapp/src/user-settings/Locations/campusFragment';
+-
+-export default gql`
+-  query getCurrentUserProfile {
+-    currentUser {
+-      id
+-      profile {
+-        id
+-        photo {
+-          uri
+-        }
+-      }
+-    }
+-  }
+-  ${CampusParts}
+-`;
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 3dfc18c..22e080a 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -1,6 +1,5 @@
+ import React, { PureComponent } from 'react';
+ import { ScrollView } from 'react-native';
+-import { StackActions, NavigationActions } from 'react-navigation';
+ import PropTypes from 'prop-types';
+ import { Query, Mutation } from 'react-apollo';
+ import { getVersion, getBuildNumber } from 'react-native-device-info';
+@@ -15,10 +14,13 @@ import {
+   Touchable,
+   ActivityIndicator,
+ } from '@apollosproject/ui-kit';
+-import { WebBrowserConsumer } from 'apolloschurchapp/src/ui/WebBrowser';
+ 
+ import { GET_LOGIN_STATE, LOGOUT } from '@apollosproject/ui-auth';
+-import ChangeAvatar from './ChangeAvatar';
++import {
++  RockAuthedWebBrowser,
++  UserAvatarUpdate,
++} from '@apollosproject/ui-connected';
++import NavigationService from '../NavigationService';
+ 
+ class UserSettings extends PureComponent {
+   static navigationOptions = () => ({
+@@ -41,9 +43,9 @@ class UserSettings extends PureComponent {
+           return (
+             <BackgroundView>
+               <ScrollView>
+-                <ChangeAvatar />
++                <UserAvatarUpdate />
+ 
+-                <WebBrowserConsumer>
++                <RockAuthedWebBrowser>
+                   {(openUrl) => (
+                     <>
+                       <TableView>
+@@ -127,21 +129,7 @@ class UserSettings extends PureComponent {
+                                 await handleLogout();
+                                 // This resets the navigation stack, and the navigates to the first auth screen.
+                                 // This ensures that user isn't navigated to a subscreen of Auth, like the pin entry screen.
+-                                await this.props.navigation.dispatch(
+-                                  StackActions.reset({
+-                                    index: 0,
+-                                    key: null,
+-                                    actions: [
+-                                      NavigationActions.navigate({
+-                                        routeName: 'Auth',
+-                                        action: NavigationActions.navigate({
+-                                          routeName:
+-                                            'AuthSMSPhoneEntryConnected',
+-                                        }),
+-                                      }),
+-                                    ],
+-                                  })
+-                                );
++                                await NavigationService.resetToAuth();
+                               }}
+                             >
+                               <Cell>
+@@ -161,7 +149,7 @@ class UserSettings extends PureComponent {
+                       </TableView>
+                     </>
+                   )}
+-                </WebBrowserConsumer>
++                </RockAuthedWebBrowser>
+               </ScrollView>
+             </BackgroundView>
+           );
+diff --git a/apolloschurchapp/src/user-settings/uploadPhoto.js b/apolloschurchapp/src/user-settings/uploadPhoto.js
+deleted file mode 100644
+index c1cc667..0000000
+--- a/apolloschurchapp/src/user-settings/uploadPhoto.js
++++ /dev/null
+@@ -1,82 +0,0 @@
+-import gql from 'graphql-tag';
+-import ImagePicker from 'react-native-image-picker';
+-import { ReactNativeFile } from 'apollo-upload-client';
+-import GET_USER_PROFILE from './getUserPhoto';
+-
+-const options = {
+-  title: 'Select Profile Image',
+-  quality: 0,
+-  storageOptions: {
+-    skipBackup: true,
+-    path: 'images',
+-    waitUntilSaved: true,
+-    cameraRoll: true,
+-  },
+-};
+-
+-function showImagePicker() {
+-  return new Promise((resolve, reject) => {
+-    ImagePicker.showImagePicker(options, (response) => {
+-      if (response.didCancel) {
+-        reject(response.didCancel);
+-      } else if (response.error) {
+-        reject(response.error);
+-      } else {
+-        resolve(response);
+-      }
+-    });
+-  });
+-}
+-
+-export default async ({ client, onUpload = () => ({}) }) => {
+-  try {
+-    const image = await showImagePicker();
+-    const file = new ReactNativeFile({
+-      uri: image.uri,
+-      name: image.fileName,
+-      type: 'image/jpeg',
+-    });
+-    onUpload();
+-    return client.mutate({
+-      mutation: gql`
+-        mutation uploadProfileImage($file: Upload!, $size: Int!) {
+-          uploadProfileImage(file: $file, size: $size) {
+-            id
+-            firstName
+-            lastName
+-            photo {
+-              uri
+-            }
+-          }
+-        }
+-      `,
+-      variables: { file, size: image.fileSize },
+-      update: (
+-        cache,
+-        {
+-          data: {
+-            uploadProfileImage: { photo },
+-          },
+-        }
+-      ) => {
+-        const data = cache.readQuery({ query: GET_USER_PROFILE });
+-
+-        cache.writeQuery({
+-          query: GET_USER_PROFILE,
+-          data: {
+-            currentUser: {
+-              ...data.currentUser,
+-              profile: {
+-                ...data.currentUser.profile,
+-                photo,
+-              },
+-            },
+-          },
+-        });
+-      },
+-    });
+-  } catch (e) {
+-    console.warn(e);
+-    return null;
+-  }
+-};
+diff --git a/apolloschurchapp/src/utils/__tests__/utils.tests.js b/apolloschurchapp/src/utils/__tests__/utils.tests.js
+index 24fe48a..0ea7b89 100644
+--- a/apolloschurchapp/src/utils/__tests__/utils.tests.js
++++ b/apolloschurchapp/src/utils/__tests__/utils.tests.js
+@@ -1,6 +1,8 @@
+ import React from 'react';
+ import { Text } from 'react-native';
+-import fetchMoreResolver from '../fetchMoreResolver';
++
++import { fetchMoreResolver } from '@apollosproject/ui-connected';
++
+ import { renderWithApolloData } from '../testUtils';
+ 
+ describe('the fetchMoreResolver function', () => {
+diff --git a/apolloschurchapp/src/utils/content/__tests__/share.tests.js b/apolloschurchapp/src/utils/content/__tests__/share.tests.js
+deleted file mode 100644
+index 972edaa..0000000
+--- a/apolloschurchapp/src/utils/content/__tests__/share.tests.js
++++ /dev/null
+@@ -1,38 +0,0 @@
+-import { Platform, Share } from 'react-native';
+-import share from '../share';
+-
+-jest.mock('Platform');
+-jest.mock('Share');
+-
+-describe('the share function', () => {
+-  beforeAll(() => {
+-    Share.share = jest.fn();
+-  });
+-  test('default arguments', () => {
+-    Platform.OS = 'ios';
+-    share({ title: 'title', url: 'http://url.com' });
+-    expect(Share.share).toBeCalledWith({
+-      title: 'title',
+-      message: undefined,
+-      url: 'http://url.com',
+-    });
+-  });
+-  test('use message if provided', () => {
+-    Platform.OS = 'ios';
+-    share({ title: 'title', message: 'some message', url: 'http://url.com' });
+-    expect(Share.share).toBeCalledWith({
+-      title: 'title',
+-      message: 'some message',
+-      url: 'http://url.com',
+-    });
+-  });
+-  test('android arguments', () => {
+-    Platform.OS = 'android';
+-    share({ title: 'title', url: 'http://url.com' });
+-    expect(Share.share).toBeCalledWith({
+-      title: 'title',
+-      message: 'http://url.com',
+-      url: 'http://url.com',
+-    });
+-  });
+-});
+diff --git a/apolloschurchapp/src/utils/content/share.js b/apolloschurchapp/src/utils/content/share.js
+deleted file mode 100644
+index 6d4326f..0000000
+--- a/apolloschurchapp/src/utils/content/share.js
++++ /dev/null
+@@ -1,14 +0,0 @@
+-import { Platform, Share } from 'react-native';
+-
+-const share = ({ title, url, message }) => {
+-  Share.share({
+-    title,
+-    message:
+-      Platform.OS === 'android'
+-        ? [message, url].filter((s) => !!s).join('\n')
+-        : message,
+-    url,
+-  });
+-};
+-
+-export default share;
+diff --git a/apolloschurchapp/src/utils/fetchMoreResolver.js b/apolloschurchapp/src/utils/fetchMoreResolver.js
+deleted file mode 100644
+index b93cb2f..0000000
+--- a/apolloschurchapp/src/utils/fetchMoreResolver.js
++++ /dev/null
+@@ -1,42 +0,0 @@
+-import get from 'lodash/get';
+-import set from 'lodash/fp/set';
+-
+-export default function fetchMoreResolver({
+-  collectionName,
+-  variables,
+-  fetchMore,
+-  data,
+-}) {
+-  return () => {
+-    const pageInfoPath = `${collectionName}.pageInfo`;
+-    const edgePath = `${collectionName}.edges`;
+-
+-    const after = get(data, `${pageInfoPath}.endCursor`);
+-    if (!after) return;
+-
+-    fetchMore({
+-      variables: { ...variables, after },
+-      updateQuery: (previousResult, { fetchMoreResult }) => {
+-        // combine previous data and fetchMore data
+-        const newDataWithPageInfo = set(
+-          pageInfoPath,
+-          {
+-            ...get(previousResult, pageInfoPath, {}),
+-            ...get(fetchMoreResult, pageInfoPath, {}),
+-          },
+-          previousResult
+-        );
+-        const newDataWithAdditionalItems = set(
+-          edgePath,
+-          [
+-            ...get(previousResult, edgePath, []),
+-            ...get(fetchMoreResult, edgePath, []),
+-          ],
+-          newDataWithPageInfo
+-        );
+-
+-        return newDataWithAdditionalItems;
+-      },
+-    });
+-  };
+-}
