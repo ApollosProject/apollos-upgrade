@@ -40,7 +40,7 @@ function generateNewReleaseBranch () {
 
     mkdir -p tmp
     cd tmp
-    gitUrl=https://github.com/ApollosProject/apollos-apps/archive/v${newRelease}.zip
+    gitUrl=https://github.com/ApollosProject/apollos-templates/archive/v${newRelease}.zip
     curl -o ApollosProject.zip -L "$gitUrl"
     unzip ApollosProject.zip
     cd ../
@@ -56,7 +56,7 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    cp -r ../tmp/apollos-apps-*/packages/"$AppName" .
+    cp -r ../tmp/apollos-templates-*/"$AppName" .
 
     # commit and push branch
     git add "$AppName"
@@ -75,7 +75,7 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    cp -r ../tmp/apollos-apps-*/packages/"$ApiName" .
+    cp -r ../tmp/apollos-templates-*/"$ApiName" .
 
     # commit and push branch
     git add "$ApiName"
@@ -91,8 +91,8 @@ function generateNewReleaseBranch () {
     git checkout -b "$branchName"
 
     # generate app
-    mv ../tmp/apollos-apps-*/packages/"$ApiName" .
-    mv ../tmp/apollos-apps-*/packages/"$AppName" .
+    mv ../tmp/apollos-templates-*/"$ApiName" .
+    mv ../tmp/apollos-templates-*/"$AppName" .
 
     # commit and push branch
     git add "$ApiName"
@@ -195,7 +195,7 @@ newRelease=$1
 guardExisting
 
 prepare
-generateNewReleaseBranch
+# generateNewReleaseBranch
 addReleaseToList
 generateDiffs
 
