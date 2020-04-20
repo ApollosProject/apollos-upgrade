@@ -1,0 +1,1417 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 96db8c6..7c9c702 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -147,7 +147,7 @@ android {
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+         versionCode 24
+-        versionName "1.3.1"
++        versionName "1.4.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index ca291f5..8bab37a 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.3.1-beta.0",
++    "version": "1.4.0-beta.1",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index a179625..4c2c03c 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -14,9 +14,9 @@ PODS:
+     - glog
+   - glog (0.3.5)
+   - OneSignal (2.10.1)
+-  - Permission-Notifications (2.0.9):
++  - Permission-Notifications (2.0.10):
+     - RNPermissions
+-  - Permission-PhotoLibrary (2.0.9):
++  - Permission-PhotoLibrary (2.0.10):
+     - RNPermissions
+   - React (0.60.5):
+     - React-Core (= 0.60.5)
+@@ -116,17 +116,17 @@ PODS:
+     - React-Core
+   - RNAirplay (1.0.0):
+     - React
+-  - RNBootSplash (2.0.5):
++  - RNBootSplash (2.1.0):
+     - React
+-  - RNCAsyncStorage (1.8.1):
++  - RNCAsyncStorage (1.9.0):
+     - React
+   - RNDeviceInfo (4.0.1):
+     - React
+   - RNGestureHandler (1.6.1):
+     - React
+-  - RNInAppBrowser (3.3.4):
++  - RNInAppBrowser (3.4.0):
+     - React
+-  - RNPermissions (2.0.9):
++  - RNPermissions (2.0.10):
+     - React
+   - RNScreens (1.0.0-alpha.23):
+     - React
+@@ -285,8 +285,8 @@ SPEC CHECKSUMS:
+   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+   OneSignal: 8fb749fa07f88006403c9b659a570fb7fb74519a
+-  Permission-Notifications: 1e03f5c43612ac4f9cdcaf6504695fc4e15f33d9
+-  Permission-PhotoLibrary: 42d41b53adefcfa94f42fb628f143d97136120bd
++  Permission-Notifications: c9eb3a2da68dc0f37a8dc67d37bd28d150c5041d
++  Permission-PhotoLibrary: e59a7a687e002e8c8c46946c26520934ba85a688
+   React: 53c53c4d99097af47cf60594b8706b4e3321e722
+   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
+   React-cxxreact: 8384287780c4999351ad9b6e7a149d9ed10a2395
+@@ -317,12 +317,12 @@ SPEC CHECKSUMS:
+   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
+   rn-fetch-blob: 651b8d076b43d0d7aa294a3d9ec16c00aab8bef9
+   RNAirplay: 75777dd55dafbd3687703c3eb9c290ea6cc43248
+-  RNBootSplash: e5e37b64a03a9655e2db8c2e12a7a30853cf3352
+-  RNCAsyncStorage: e0dd7c8a36543b4ef84969acd9f8aceba3a92dc2
++  RNBootSplash: fbf76a4bf1c03e9acd1dd08ce064847f26d6d8bf
++  RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
+   RNDeviceInfo: 687c1b2ab6d86ff1ca1208783320cd144138c7f2
+   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+-  RNInAppBrowser: 9936b2e23ab7ed9b6ac938eb1c4a656b95292e11
+-  RNPermissions: 2f74237e97b08beda01e914301e12524ddddf5b8
++  RNInAppBrowser: c1a0dad2734458d79bcb6c8f4297ba8658a1da9f
++  RNPermissions: 1008d3511fee0e25739cf81c4af0d1b2248f1053
+   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
+   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 90c7f6c..faa3ab0 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.3.1</string>
++	<string>1.4.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 578086f..8ebfbb2 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "apolloschurchapp",
+-  "version": "1.3.1-beta.0",
++  "version": "1.3.1",
+   "private": true,
+   "engines": {
+     "node": ">=8.11.x"
+@@ -48,21 +48,21 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^1.3.1-beta.0",
++    "@apollosproject/config": "1.4.0-beta.1",
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "^1.3.1-beta.0",
+-    "@apollosproject/ui-auth": "^1.3.1-beta.0",
+-    "@apollosproject/ui-connected": "^1.3.1-beta.0",
+-    "@apollosproject/ui-fragments": "^1.3.1-beta.0",
+-    "@apollosproject/ui-htmlview": "^1.3.1-beta.0",
+-    "@apollosproject/ui-kit": "^1.3.1-beta.0",
+-    "@apollosproject/ui-mapview": "^1.3.1-beta.0",
+-    "@apollosproject/ui-media-player": "^1.3.1-beta.0",
+-    "@apollosproject/ui-notifications": "^1.3.1-beta.0",
+-    "@apollosproject/ui-onboarding": "^1.3.1-beta.0",
+-    "@apollosproject/ui-passes": "^1.3.1-beta.0",
+-    "@apollosproject/ui-scripture": "^1.3.1-beta.0",
+-    "@apollosproject/ui-storybook": "^1.3.1-beta.0",
++    "@apollosproject/ui-analytics": "1.4.0-beta.1",
++    "@apollosproject/ui-auth": "1.4.0-beta.1",
++    "@apollosproject/ui-connected": "1.4.0-beta.1",
++    "@apollosproject/ui-fragments": "1.4.0-beta.1",
++    "@apollosproject/ui-htmlview": "1.4.0-beta.1",
++    "@apollosproject/ui-kit": "1.4.0-beta.1",
++    "@apollosproject/ui-mapview": "1.4.0-beta.1",
++    "@apollosproject/ui-media-player": "1.4.0-beta.1",
++    "@apollosproject/ui-notifications": "1.4.0-beta.1",
++    "@apollosproject/ui-onboarding": "1.4.0-beta.1",
++    "@apollosproject/ui-passes": "1.4.0-beta.1",
++    "@apollosproject/ui-scripture": "1.4.0-beta.1",
++    "@apollosproject/ui-storybook": "1.4.0-beta.1",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+@@ -91,7 +91,7 @@
+     "react-native-config": "^0.11.7",
+     "react-native-device-info": "^4.0.1",
+     "react-native-geolocation-service": "^3.0.0",
+-    "react-native-gesture-handler": "^1.3.1-beta.0",
++    "react-native-gesture-handler": "^1.3.1",
+     "react-native-image-picker": "0.28.0",
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+@@ -117,7 +117,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^1.3.1-beta.0",
++    "@apollosproject/eslint-config": "1.4.0-beta.1",
+     "babel-eslint": "10.0.1",
+     "codecov": "3.6.5",
+     "eslint": "^4.19.1",
+@@ -151,4 +151,4 @@
+       "assets/fonts"
+     ]
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 77a0eff..ea0d140 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"ActionListFeature"},{"name":"VerticalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"VerticalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"ActionListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/content-single/getContentItem.js b/apolloschurchapp/src/content-single/getContentItem.js
+index 95695dd..40de3cb 100644
+--- a/apolloschurchapp/src/content-single/getContentItem.js
++++ b/apolloschurchapp/src/content-single/getContentItem.js
+@@ -6,9 +6,9 @@ export default gql`
+     node(id: $itemId) {
+       __typename
+       ... on ContentItem {
+-        ...contentItemFragment
++        ...contentCardFragment
+       }
+     }
+   }
+-  ${ApollosConfig.FRAGMENTS.CONTENT_ITEM_FRAGMENT}
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
+ `;
+diff --git a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.stories.js b/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.stories.js
+deleted file mode 100644
+index e07dbea..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.stories.js
++++ /dev/null
+@@ -1,172 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@apollosproject/ui-storybook';
+-
+-import { BackgroundView, CenteredView } from '@apollosproject/ui-kit';
+-import ActionListFeature from '.';
+-
+-const actions = [
+-  {
+-    id: 'fakeId1',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId2',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId3',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId4',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-];
+-
+-storiesOf('ActionListFeature', module)
+-  .addDecorator((story) => (
+-    <BackgroundView>
+-      {/* eslint-disable-next-line react-native/no-inline-styles */}
+-      <CenteredView style={{ alignItems: 'stretch' }}>{story()}</CenteredView>
+-    </BackgroundView>
+-  ))
+-  .add('example', () => (
+-    <ActionListFeature
+-      actions={actions}
+-      title={'Title'}
+-      subtitle={'Subtitle'}
+-      onPressActionListButton={() => {}}
+-    />
+-  ))
+-  .add('default', () => <ActionListFeature actions={actions} />)
+-  .add('isLoading', () => {
+-    const loadingStateData = [
+-      {
+-        id: 'fakeId1',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId2',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId3',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId4',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-    ];
+-
+-    return (
+-      <ActionListFeature
+-        actions={loadingStateData}
+-        onPressActionListButton={() => {}}
+-        isLoading
+-      />
+-    );
+-  })
+-  .add('onPressActionListButton', () => (
+-    <ActionListFeature actions={actions} onPressActionListButton={() => {}} />
+-  ))
+-  .add('subtitle', () => (
+-    <ActionListFeature actions={actions} subtitle={'subtitle'} />
+-  ))
+-  .add('title', () => <ActionListFeature actions={actions} title={'Title'} />);
+diff --git a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.tests.js b/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.tests.js
+deleted file mode 100644
+index 37e554a..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/ActionListFeature.tests.js
++++ /dev/null
+@@ -1,191 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from '../../../../Providers';
+-
+-import ActionListFeature from '.';
+-
+-const actions = [
+-  {
+-    id: 'fakeId1',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId2',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId3',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId4',
+-    title: 'Boom',
+-    subtitle: 'What',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: 'https://picsum.photos/200',
+-        },
+-      ],
+-    },
+-  },
+-];
+-
+-describe('The ActionListFeatures component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <ActionListFeature actions={actions} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render with a title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <ActionListFeature
+-          actions={actions}
+-          title={'This renders smaller than its name would suggest'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render with a subtitle', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <ActionListFeature
+-          actions={actions}
+-          subtitle={'This renders larger than you might expect'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a button for onPressActionListButton', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <ActionListFeature
+-          actions={actions}
+-          onPressActionListButton={jest.fn()}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a loading state for isLoading', () => {
+-    const loadingStateData = [
+-      {
+-        id: 'fakeId1',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId2',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId3',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-      {
+-        id: 'fakeId4',
+-        title: '',
+-        subtitle: '',
+-        parentChannel: {
+-          id: '',
+-          name: '',
+-        },
+-        image: {
+-          sources: [
+-            {
+-              uri: '',
+-            },
+-          ],
+-        },
+-      },
+-    ];
+-    const tree = renderer.create(
+-      <Providers>
+-        <ActionListFeature actions={loadingStateData} isLoading />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/index.js b/apolloschurchapp/src/tabs/home/Features/ActionListFeature/index.js
+deleted file mode 100644
+index 91a6eaa..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/ActionListFeature/index.js
++++ /dev/null
+@@ -1,56 +0,0 @@
+-import React, { memo } from 'react';
+-import PropTypes from 'prop-types';
+-
+-import { styled, ActionListCard, H3, H6 } from '@apollosproject/ui-kit';
+-
+-const Title = styled(
+-  ({ theme }) => ({
+-    color: theme.colors.text.tertiary,
+-  }),
+-  'ActionListFeature.Title'
+-)(H6);
+-
+-const Subtitle = styled({}, 'ActionListFeature.Subtitle')(H3);
+-
+-const ActionListFeature = memo(
+-  ({
+-    actions,
+-    id,
+-    isLoading,
+-    onPressActionListButton,
+-    onPressActionItem,
+-    subtitle,
+-    title,
+-  }) => (
+-    <ActionListCard
+-      isLoading={isLoading}
+-      key={id}
+-      header={
+-        <>
+-          {isLoading || title ? ( // we check for isloading here so that they are included in the loading state
+-            <Title numberOfLines={1}>{title}</Title>
+-          ) : null}
+-          {isLoading || subtitle ? <Subtitle>{subtitle}</Subtitle> : null}
+-        </>
+-      }
+-      actions={actions}
+-      onPressActionItem={onPressActionItem}
+-      onPressActionListButton={onPressActionListButton}
+-    />
+-  )
+-);
+-
+-ActionListFeature.displayName = 'Features';
+-
+-ActionListFeature.propTypes = {
+-  // TODO: refactor ActionListCard to safely render without an actions array.
+-  actions: PropTypes.arrayOf(PropTypes.shape({})).isRequired, // at least for the time being this is required
+-  id: PropTypes.number,
+-  isLoading: PropTypes.bool,
+-  onPressActionListButton: PropTypes.func,
+-  onPressActionItem: PropTypes.func,
+-  subtitle: PropTypes.string,
+-  title: PropTypes.string,
+-};
+-
+-export default ActionListFeature;
+diff --git a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.stories.js b/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.stories.js
+deleted file mode 100644
+index eeeb895..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.stories.js
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import React from 'react';
+-import { storiesOf } from '@apollosproject/ui-storybook';
+-
+-import { BackgroundView, CenteredView } from '@apollosproject/ui-kit';
+-import VerticalCardListFeature from '.';
+-
+-const cards = [
+-  {
+-    action: 'READ_CONTENT',
+-    title: 'Live for Freedom Toolkit',
+-    hasAction: null,
+-    actionIcon: null,
+-    labelText: null,
+-    summary:
+-      "Celebrate your freedom in Christ — in the car, shower, cubicle or wherever you go — with this playlist of NewSpring Worship's favorite songs of the summer.",
+-    coverImage: [
+-      {
+-        uri: 'https://picsum.photos/800',
+-      },
+-    ],
+-    relatedNode: {
+-      id: 'UniversalContentItem:95ff79f60a028b1b506aaeedf8b4c6ae',
+-      __typename: 'UniversalContentItem',
+-    },
+-    __typename: 'CardListItem',
+-  },
+-];
+-
+-storiesOf('VerticalCardListFeature', module)
+-  .addDecorator((story) => (
+-    <BackgroundView>
+-      {/* eslint-disable-next-line react-native/no-inline-styles */}
+-      <CenteredView style={{ alignItems: 'stretch' }}>{story()}</CenteredView>
+-    </BackgroundView>
+-  ))
+-  .add('example', () => (
+-    <VerticalCardListFeature
+-      cards={cards}
+-      title={'Title'}
+-      subtitle={'Subtitle'}
+-    />
+-  ))
+-  .add('default', () => <VerticalCardListFeature cards={cards} />)
+-  .add('isLoading', () => <VerticalCardListFeature cards={[]} isLoading />)
+-  .add('subtitle', () => (
+-    <VerticalCardListFeature cards={cards} subtitle={'subtitle'} />
+-  ))
+-  .add('title', () => (
+-    <VerticalCardListFeature cards={cards} title={'Title'} />
+-  ));
+diff --git a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.tests.js b/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.tests.js
+deleted file mode 100644
+index fa7a89f..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/VerticalCardListFeature.tests.js
++++ /dev/null
+@@ -1,68 +0,0 @@
+-import React from 'react';
+-import renderer from 'react-test-renderer';
+-
+-import Providers from '../../../../Providers';
+-
+-import VerticalCardListFeature from '.';
+-
+-const cards = [
+-  {
+-    action: 'READ_CONTENT',
+-    title: 'Card Title',
+-    hasAction: null,
+-    actionIcon: null,
+-    labelText: null,
+-    summary: 'Card summary',
+-    coverImage: [
+-      {
+-        uri: 'https://picsum.photos/800',
+-      },
+-    ],
+-    relatedNode: {
+-      id: 'UniversalContentItem:95ff79f60a028b1b506aaeedf8b4c6ae',
+-      __typename: 'UniversalContentItem',
+-    },
+-    __typename: 'CardListItem',
+-  },
+-];
+-
+-describe('The VerticalCardListFeature component', () => {
+-  it('should render', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <VerticalCardListFeature cards={cards} />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a section title', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <VerticalCardListFeature
+-          cards={cards}
+-          title={'This renders smaller than its name would suggest'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render with a subtitle', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <VerticalCardListFeature
+-          cards={cards}
+-          subtitle={'This renders larger than you might expect'}
+-        />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-  it('should render a loading state for isLoading', () => {
+-    const tree = renderer.create(
+-      <Providers>
+-        <VerticalCardListFeature cards={[]} isLoading />
+-      </Providers>
+-    );
+-    expect(tree).toMatchSnapshot();
+-  });
+-});
+diff --git a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/index.js b/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/index.js
+deleted file mode 100644
+index 6de7bef..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/VerticalCardListFeature/index.js
++++ /dev/null
+@@ -1,86 +0,0 @@
+-import React, { memo } from 'react';
+-import { View } from 'react-native';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  FeedView,
+-  H2,
+-  H5,
+-  PaddedView,
+-  styled,
+-  withIsLoading,
+-} from '@apollosproject/ui-kit';
+-import { contentCardComponentMapper } from '@apollosproject/ui-connected';
+-
+-const Title = styled(
+-  ({ theme }) => ({
+-    color: theme.colors.text.tertiary,
+-  }),
+-  'VerticalCardListFeature.Title'
+-)(H5);
+-
+-const Subtitle = styled({}, 'VerticalCardListFeature.Subtitle')(H2);
+-
+-const Header = styled(({ theme }) => ({
+-  paddingTop: theme.sizing.baseUnit * 3,
+-  paddingBottom: theme.sizing.baseUnit * 0.5,
+-}))(PaddedView);
+-
+-// const getContent = ({ cards, isLoading }) => {
+-//   let content = [];
+-//   if (isLoading && !cards.length) {
+-//     content = [
+-//       {
+-//         id: 'fakeId0',
+-//         isLoading: true,
+-//         title: 'Test',
+-//         summary: 'Boom',
+-//         channelType: '',
+-//         coverImage: [],
+-//         parentChannel: {
+-//           id: '',
+-//           name: '',
+-//         },
+-//       },
+-//     ];
+-//   } else {
+-//     content = cards.map((card) => ({
+-//       ...card,
+-//       coverImage: get(card, 'coverImage.sources', undefined),
+-//       __typename: card.relatedNode.__typename,
+-//     }));
+-//   }
+-//
+-//   return content;
+-// };
+-
+-const VerticalCardListFeature = memo(
+-  ({ cards, isLoading, onPressItem, subtitle, title }) => (
+-    <View>
+-      <Header vertical={false}>
+-        {isLoading || title ? ( // we check for isloading here so that they are included in the loading state
+-          <Title numberOfLines={1}>{title}</Title>
+-        ) : null}
+-        {isLoading || subtitle ? <Subtitle>{subtitle}</Subtitle> : null}
+-      </Header>
+-      <FeedView
+-        onPressItem={onPressItem}
+-        ListItemComponent={contentCardComponentMapper}
+-        content={cards} // {getContent({ cards, isLoading })}
+-        isLoading={isLoading}
+-      />
+-    </View>
+-  )
+-);
+-
+-VerticalCardListFeature.displayName = 'Features';
+-
+-VerticalCardListFeature.propTypes = {
+-  cards: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+-  isLoading: PropTypes.bool,
+-  onPressItem: PropTypes.func,
+-  subtitle: PropTypes.string,
+-  title: PropTypes.string,
+-};
+-
+-export default withIsLoading(VerticalCardListFeature);
+diff --git a/apolloschurchapp/src/tabs/home/Features/getFeedFeatures.js b/apolloschurchapp/src/tabs/home/Features/getFeedFeatures.js
+deleted file mode 100644
+index 584fc1a..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/getFeedFeatures.js
++++ /dev/null
+@@ -1,48 +0,0 @@
+-import gql from 'graphql-tag';
+-
+-export default gql`
+-  query getFeedFeatures {
+-    userFeedFeatures {
+-      ... on ActionListFeature {
+-        id
+-        title
+-        subtitle
+-        actions {
+-          id
+-          title
+-          subtitle
+-          action
+-          image {
+-            sources {
+-              uri
+-            }
+-          }
+-          relatedNode {
+-            id
+-          }
+-        }
+-      }
+-      ... on VerticalCardListFeature {
+-        id
+-        title
+-        subtitle
+-        cards {
+-          action
+-          title
+-          hasAction
+-          actionIcon
+-          labelText
+-          summary
+-          coverImage {
+-            sources {
+-              uri
+-            }
+-          }
+-          relatedNode {
+-            id
+-          }
+-        }
+-      }
+-    }
+-  }
+-`;
+diff --git a/apolloschurchapp/src/tabs/home/Features/index.js b/apolloschurchapp/src/tabs/home/Features/index.js
+deleted file mode 100644
+index 77f32be..0000000
+--- a/apolloschurchapp/src/tabs/home/Features/index.js
++++ /dev/null
+@@ -1,156 +0,0 @@
+-import React, { memo } from 'react';
+-import { Query } from 'react-apollo';
+-import { get } from 'lodash';
+-// import PropTypes from 'prop-types';
+-
+-import VerticalCardListFeature from './VerticalCardListFeature';
+-import ActionListFeature from './ActionListFeature';
+-
+-import GET_FEED_FEATURES from './getFeedFeatures';
+-
+-const handleOnPressActionItem = ({ action, navigation, relatedNode }) => {
+-  if (action === 'READ_CONTENT') {
+-    navigation.navigate('ContentSingle', {
+-      itemId: relatedNode.id,
+-      transitionKey: 2,
+-    });
+-  }
+-  if (action === 'READ_EVENT') {
+-    navigation.navigate('Event', {
+-      eventId: relatedNode.id,
+-      transitionKey: 2,
+-    });
+-  }
+-};
+-
+-// const handleOnPressCardActionButton = ({ id, navigation, title }) =>
+-//   navigation.navigate('ContentFeed', {
+-//     itemId: id,
+-//     itemTitle: title,
+-//   });
+-
+-const actionListLoadingStateData = [
+-  {
+-    id: 'fakeId1',
+-    title: '',
+-    subtitle: '',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: '',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId2',
+-    title: '',
+-    subtitle: '',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: '',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId3',
+-    title: '',
+-    subtitle: '',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: '',
+-        },
+-      ],
+-    },
+-  },
+-  {
+-    id: 'fakeId4',
+-    title: '',
+-    subtitle: '',
+-    parentChannel: {
+-      id: '',
+-      name: '',
+-    },
+-    image: {
+-      sources: [
+-        {
+-          uri: '',
+-        },
+-      ],
+-    },
+-  },
+-];
+-
+-const Features = memo(({ navigation }) => (
+-  <Query query={GET_FEED_FEATURES} fetchPolicy="cache-and-network">
+-    {({ data: features, loading }) =>
+-      get(features, 'userFeedFeatures', []).map(
+-        ({ actions, cards, id, title, __typename, ...props }) => {
+-          switch (__typename) {
+-            case 'ActionListFeature':
+-              return (
+-                <ActionListFeature
+-                  // TODO: How can we better handle generating a loading state.
+-                  actions={loading ? actionListLoadingStateData : actions}
+-                  isLoading={loading}
+-                  onPressActionItem={({ action, relatedNode }) =>
+-                    handleOnPressActionItem({
+-                      action,
+-                      navigation,
+-                      relatedNode,
+-                    })
+-                  }
+-                  // onPressActionListButton={() =>
+-                  //   handleOnPressCardActionButton({
+-                  //     id,
+-                  //     navigation,
+-                  //     title,
+-                  //   })
+-                  // }
+-                  title={title}
+-                  {...props}
+-                />
+-              );
+-            case 'VerticalCardListFeature':
+-              return (
+-                <VerticalCardListFeature
+-                  cards={cards.map((card) => ({
+-                    ...card,
+-                    coverImage: get(card, 'coverImage.sources', undefined),
+-                    __typename: card.relatedNode.__typename,
+-                  }))}
+-                  isLoading={loading}
+-                  onPressItem={({ action, relatedNode }) =>
+-                    handleOnPressActionItem({ action, relatedNode, navigation })
+-                  }
+-                  title={'RECOMMENDED'}
+-                  subtitle={'For Him'}
+-                />
+-              );
+-            default:
+-              return null;
+-          }
+-        }
+-      )
+-    }
+-  </Query>
+-));
+-
+-Features.displayName = 'Features';
+-
+-export default Features;
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index 570904d..966f425 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -1,25 +1,10 @@
+ import React, { PureComponent } from 'react';
+-import { Query } from 'react-apollo';
+ import { Image } from 'react-native';
+ import SafeAreaView from 'react-native-safe-area-view';
+-import { get } from 'lodash';
+ import PropTypes from 'prop-types';
+ 
+-import {
+-  ContentCardConnected,
+-  fetchMoreResolver,
+-} from '@apollosproject/ui-connected';
+-import {
+-  styled,
+-  FeedView,
+-  BackgroundView,
+-  TouchableScale,
+-  FeaturedCard,
+-} from '@apollosproject/ui-kit';
+-
+-import Features from './Features';
+-import GET_USER_FEED from './getUserFeed';
+-import GET_CAMPAIGN_CONTENT_ITEM from './getCampaignContentItem';
++import { styled, BackgroundView } from '@apollosproject/ui-kit';
++import { FeaturesFeedConnected } from '@apollosproject/ui-connected';
+ 
+ const LogoTitle = styled(({ theme }) => ({
+   height: theme.sizing.baseUnit,
+@@ -47,75 +32,31 @@ class Home extends PureComponent {
+       transitionKey: item.transitionKey,
+     });
+ 
++  handleOnPressActionItem = ({ action, relatedNode }) => {
++    if (action === 'READ_CONTENT') {
++      this.props.navigation.navigate('ContentSingle', {
++        itemId: relatedNode.id,
++        transitionKey: 2,
++      });
++    }
++    if (action === 'READ_EVENT') {
++      this.props.navigation.navigate('Event', {
++        eventId: relatedNode.id,
++        transitionKey: 2,
++      });
++    }
++  };
++
+   render() {
+     return (
+       <BackgroundView>
+         <SafeAreaView>
+-          <Query
+-            query={GET_USER_FEED}
+-            variables={{
+-              first: 10,
+-              after: null,
+-            }}
+-            fetchPolicy="cache-and-network"
+-          >
+-            {({ loading, error, data, refetch, fetchMore, variables }) => (
+-              <FeedView
+-                ListItemComponent={ContentCardConnected}
+-                content={get(data, 'userFeed.edges', []).map(
+-                  (edge) => edge.node
+-                )}
+-                fetchMore={fetchMoreResolver({
+-                  collectionName: 'userFeed',
+-                  fetchMore,
+-                  variables,
+-                  data,
+-                })}
+-                isLoading={loading}
+-                error={error}
+-                refetch={refetch}
+-                ListHeaderComponent={
+-                  <>
+-                    <LogoTitle source={require('./wordmark.png')} />
+-                    <Query
+-                      query={GET_CAMPAIGN_CONTENT_ITEM}
+-                      fetchPolicy="cache-and-network"
+-                    >
+-                      {({ data: featuredData, loading: isFeaturedLoading }) => {
+-                        const featuredContent = get(
+-                          featuredData,
+-                          'campaigns.edges',
+-                          []
+-                        ).map((edge) => edge.node);
+-
+-                        const featuredItem = get(
+-                          featuredContent[0],
+-                          'childContentItemsConnection.edges[0].node',
+-                          {}
+-                        );
+-
+-                        return (
+-                          <TouchableScale
+-                            onPress={() =>
+-                              this.handleOnPress({ id: featuredItem.id })
+-                            }
+-                          >
+-                            <ContentCardConnected
+-                              Component={FeaturedCard}
+-                              contentId={featuredItem.id}
+-                              isLoading={isFeaturedLoading}
+-                            />
+-                          </TouchableScale>
+-                        );
+-                      }}
+-                    </Query>
+-                    <Features navigation={this.props.navigation} />
+-                  </>
+-                }
+-                onPressItem={this.handleOnPress}
+-              />
+-            )}
+-          </Query>
++          <FeaturesFeedConnected
++            onPressActionItem={this.handleOnPressActionItem}
++            ListHeaderComponent={
++              <LogoTitle source={require('./wordmark.png')} />
++            }
++          />
+         </SafeAreaView>
+       </BackgroundView>
+     );
+diff --git a/apolloschurchapp/yarn.lock b/apolloschurchapp/yarn.lock
+index 83a8101..7763e96 100644
+--- a/apolloschurchapp/yarn.lock
++++ b/apolloschurchapp/yarn.lock
+@@ -2,35 +2,35 @@
+ # yarn lockfile v1
+ 
+ 
+-"@apollosproject/config@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/config/-/config-1.3.1-beta.0.tgz#4ecbdd20dbb2652cc8d04a75147c5a5528c5f196"
+-  integrity sha512-npDjGhpn+Ijc5MlFqTndjeLv+AK77zegi5t8Zt387hwmGR2rstye9VsRJP5TVeGFgRUKjXWNT20cFCyKd+DSNw==
++"@apollosproject/config@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/config/-/config-1.3.1.tgz#bca5efe957a4651f832bfdfcc65dac7b3684b3ab"
++  integrity sha512-KTJ4XFwVfgG8uqCiLS3k/xB6fhmVOLgq3n6F/So8OufkMaSoXZjn28P/dV0V4kkX3ELvEovszNc0ibvy/qhUtA==
+   dependencies:
+     js-yaml "^3.12.0"
+ 
+-"@apollosproject/eslint-config@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/eslint-config/-/eslint-config-1.3.1-beta.0.tgz#4eb329be31ae3d7069a6ed8acd04aacb6d92ef65"
+-  integrity sha512-mPHjclngMn3a/cr+e44rBffj3xqPT8/zLdpTM6bjRnXu6yjX90i33A0NqFcSD3hZuCWwQ98WQnCOeQ68Ne/Fig==
++"@apollosproject/eslint-config@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/eslint-config/-/eslint-config-1.3.1.tgz#7e7d92371c0c84122d1a0bfc8c78a0a5dfb16913"
++  integrity sha512-4XngbufMG4jJ6Kee18N4awpbsGZpD6NEWu5EVMVzJjXWCjB6mSaZ0s5E0yuQCbblMR2a7fbPCM46vU6VI+lktw==
+ 
+ "@apollosproject/react-native-airplay-btn@0.2.0":
+   version "0.2.0"
+   resolved "https://registry.yarnpkg.com/@apollosproject/react-native-airplay-btn/-/react-native-airplay-btn-0.2.0.tgz#19c1c7154e6c04fd4d5a5587faf6a69cb34d8a79"
+   integrity sha512-yf5TRao2v+jq9LtzqAt4MBZ4OgYR01YsyfbU9TC8/D+M9TWkYTsU8uhWpwYyxN4K1dWBd9jagyDMU0fpcLhkPg==
+ 
+-"@apollosproject/ui-analytics@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-analytics/-/ui-analytics-1.3.1-beta.0.tgz#e89f02a2b0ab1382be293b4186dacc5bdf6a3556"
+-  integrity sha512-A+GgYNIg7yJQwaClS9gf5Rd6Vb+s8NHvEps3NdW5bqCWnBHgv3KU+SVm52f/hRj4lHDx9EbL0j7UnF2Wk+daig==
++"@apollosproject/ui-analytics@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-analytics/-/ui-analytics-1.3.1.tgz#dcf9e6704978b28ecc3d140051d07e26cbc64bc1"
++  integrity sha512-nD0Ydj+k+MsPZGvDJ0VzI0gMY02QTcaLPUdeRoqTiCoIiA/XNTEUSg4ctjOE0ZNHPFjomVX7c6+vc9PKLgRgZg==
+   dependencies:
+     graphql-tag "2.9.2"
+     react-native-device-info "^4.0.1"
+ 
+-"@apollosproject/ui-auth@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-auth/-/ui-auth-1.3.1-beta.0.tgz#f304f2dc5844e5711f77926bc9fe91e6be906cf4"
+-  integrity sha512-aR6o62iA36YMV+E/x6o503/cjN3F9uEXw9WKU/YByy0QHspDxLu/EuWY52gJaS3k927m87fD8EYm1v37qO9zrA==
++"@apollosproject/ui-auth@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-auth/-/ui-auth-1.3.1.tgz#982c50cab8cf7b3929f577bcf7df3a4aa3ebde0d"
++  integrity sha512-FXzMG6yRRzyUdK5KP+p1pm4WDt9A2CLv9wfo3zqXHUEKTQlFAXwWhRqlPFssj7nJimgOlTF6DMc2kT8P08aTvg==
+   dependencies:
+     apollo-cache-inmemory "^1.5.1"
+     apollo-link-context "1.0.14"
+@@ -40,37 +40,37 @@
+     graphql-tag "2.9.2"
+     yup "^0.27.0"
+ 
+-"@apollosproject/ui-connected@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-connected/-/ui-connected-1.3.1-beta.0.tgz#712c23c65b6d78ac8c07e344621d084429d7b9b3"
+-  integrity sha512-Mr99iEtPOtBEEwQI6bjyWwKsHzzMoV5INHxIzg30KpWz7iokjPixVztG6i1MndxEGaWI77zfgpg00YbK2CSYLg==
++"@apollosproject/ui-connected@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-connected/-/ui-connected-1.3.1.tgz#04548ffde7fa7cd817cff026451335aff5ce539b"
++  integrity sha512-RJYSBejZH5+/KBVsglKMU965GAM+NXRc1q31RiBzSfiBjs6b5I8wzc/cDU0xE0GS3yHoIkGXpg3ZJQM7QLmfVw==
+   dependencies:
+     apollo-upload-client "9.0.0"
+     graphql-tag "2.9.2"
+     lodash "^4.17.11"
+     react-apollo "2.5.5"
+ 
+-"@apollosproject/ui-fragments@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-fragments/-/ui-fragments-1.3.1-beta.0.tgz#fbdbdc9f1888a3a01ba5d5b0cc22f8f2a84932d3"
+-  integrity sha512-cifv10thfBk49dt71s/gdXXlcgzhgLlJDAm7dkcvE++J2N+a4SXFIK4cM7uPOlb22rRSqiswT08vjyrgWk+hZg==
++"@apollosproject/ui-fragments@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-fragments/-/ui-fragments-1.3.1.tgz#0d6ed66ce16908a5254e56be6252f71b9007ec9f"
++  integrity sha512-Uu1sPfFK0HvJqRFhzljCsVSnsdPTpxLwLMmhCJIyH3+Xy+b4+sG9D/+gQHd9jixhks+8b/N9XTapYvMeh5+5Lw==
+   dependencies:
+     graphql-tag "2.9.2"
+ 
+-"@apollosproject/ui-htmlview@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-htmlview/-/ui-htmlview-1.3.1-beta.0.tgz#21f3cfc74a11f3b301db6045d326874824d1a33a"
+-  integrity sha512-VUWQWNG6xh5dci9Gqy3CZB8NZqVnLsIWAEJDkRpwz8EkBEsWxi7jEI0t0jrNrJeGVQCbSL1Bg9wh+mCusQfjww==
++"@apollosproject/ui-htmlview@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-htmlview/-/ui-htmlview-1.3.1.tgz#01d2bb1d7fae1ba4639388f48125adf6f28fce1e"
++  integrity sha512-oeJx2wE4gxaffmePJ3IC9RLsyHUw1gkGwHH4riuqtoORkGWIypx/FPjVWZ8OOz2la2R7v4BnXqOPELYT9nU9/g==
+   dependencies:
+-    "@apollosproject/ui-kit" "^1.3.1-beta.0"
+-    "@apollosproject/ui-storybook" "^1.3.1-beta.0"
++    "@apollosproject/ui-kit" "^1.3.1"
++    "@apollosproject/ui-storybook" "^1.3.1"
+     entities "^1.1.2"
+     htmlparser2 "3.9.2"
+ 
+-"@apollosproject/ui-kit@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-kit/-/ui-kit-1.3.1-beta.0.tgz#ee057c4764614d28dcca806e54551e095dc29614"
+-  integrity sha512-br3WTflZqTs22+2ZpsAek4Xrb8UnxFtcQqxaryj+vl+bVE0ZPVZ6V7SozX3kSCvV+9gz6cp7paQoGQDcyw60FA==
++"@apollosproject/ui-kit@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-kit/-/ui-kit-1.3.1.tgz#19733e5a38f99eed51d823606f448e289ee37127"
++  integrity sha512-Dj76/5hQcKGI3RWVA4WBsg2aU96DeZ+q4D9ntIOJltPzpg+I6YTiP4PEDUh6GTJZ8w5PHapISESd2B5cwJwsoA==
+   dependencies:
+     color "^3.1.0"
+     lodash "^4.17.11"
+@@ -82,25 +82,25 @@
+     recompose "^0.30.0"
+     rn-placeholder "1.2.0"
+ 
+-"@apollosproject/ui-mapview@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-mapview/-/ui-mapview-1.3.1-beta.0.tgz#aa884d90865a32816d87a2dc2b523c7367984d12"
+-  integrity sha512-0pf1OnP6pipYQDPNLm0r2T5tz7xZsG0J4G1mReT3FMF9xVXxG/Rnm7cqvk6wh2N1OxPnckTfiD1GUlSs+SZhhA==
++"@apollosproject/ui-mapview@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-mapview/-/ui-mapview-1.3.1.tgz#156245656b751a7079c44a882152665a289634c7"
++  integrity sha512-iZ/4AOUjocybYr148cRBkP+y1Zb9CRefT5lilrHtek56rs6Wb6tBJ8w9HMgGNldf3Ny+5ObC2PJyiXC32vyfBQ==
+   dependencies:
+     graphql-tag "2.9.2"
+     react-apollo "2.5.5"
+ 
+-"@apollosproject/ui-media-player@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-media-player/-/ui-media-player-1.3.1-beta.0.tgz#607d1c9357864595b65411167bd1de53623fdaba"
+-  integrity sha512-v/i2uVQ91wXlG0Qwf906h2h1wuRYFjs/+83IRsVtF/mhU+5aNKmWeqRvrll1LLBP753pKp1NaxYpOtI9PMQroQ==
++"@apollosproject/ui-media-player@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-media-player/-/ui-media-player-1.3.1.tgz#54e978c6ce2bb65b72e62c2c1ababcc98023e867"
++  integrity sha512-jyYcrGUOHwmIr1bNjlhD/WJexHdt3xfx6finUTN03EwyMglhFobjWw/Ik27sbu/p8Rd9ULoB89gYihQnNWOOSw==
+   dependencies:
+     graphql-tag "^2.10.1"
+ 
+-"@apollosproject/ui-notifications@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-notifications/-/ui-notifications-1.3.1-beta.0.tgz#94b88425afcdbde506216fcef1cffaa6ac8e39c7"
+-  integrity sha512-RFOGqxKYopBZ8S4wtkfOh2oDaqmZnYcZwZoxcrpJlipdMfh1lEZX1FJUAgfza5pYdLv/oXDUSSDPc4SuK1UVzw==
++"@apollosproject/ui-notifications@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-notifications/-/ui-notifications-1.3.1.tgz#f0065f9a347fde178624b7cc38a585b42acde26a"
++  integrity sha512-CxsMq5nloBNco/HdtqEcCi2DSSYJUHnTSfqFQlXpSIA0X/xfDZ2okUCtEHX7O6uH8g6ewJt3T7z18qTdZpeRIw==
+   dependencies:
+     apollo-cache-inmemory "^1.5.1"
+     apollo-link-context "1.0.14"
+@@ -109,10 +109,10 @@
+     lodash "^4.17.11"
+     url "^0.11.0"
+ 
+-"@apollosproject/ui-onboarding@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-onboarding/-/ui-onboarding-1.3.1-beta.0.tgz#4cfe7b7a460573e711fc4d5ca0824cb45f0c06b7"
+-  integrity sha512-bpMthHXF8RaAaP502uWRRa195fFoXRK2nRR5O01pV8Iy0Vf7iqIaZ1GssLkiiRCSXkrkXAhmc7ASowxwn7advQ==
++"@apollosproject/ui-onboarding@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-onboarding/-/ui-onboarding-1.3.1.tgz#a1424c2e0f97dec3185be6d2f57a0b0a860887b2"
++  integrity sha512-Xl3mA9o2H1pzgzW41LncDEqnKkI0UvHgjw3b0kZKhE3XKq0Gn3D2NpazBSA2aSt1IkuO7wkv2IsOnUqY5Fxpbg==
+   dependencies:
+     "@react-native-community/async-storage" "^1.5.1"
+     formik "1.5.1"
+@@ -124,24 +124,24 @@
+     react-native-swiper "^1.5.14"
+     yup "0.26.6"
+ 
+-"@apollosproject/ui-passes@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-passes/-/ui-passes-1.3.1-beta.0.tgz#7c7953f43dec402625edd101bf8f1194dd4c95e6"
+-  integrity sha512-E77S0FTw2NHD5ubCyWPhA8Bvbnlv/QwVvDIBdJQGvWKtqRQsax1R2emcEQ51PIoe6Ngl7Ghom4eEWf1SiB32Nw==
++"@apollosproject/ui-passes@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-passes/-/ui-passes-1.3.1.tgz#56d2b0d65dbb1a929a07950c92b71607dbbf02d0"
++  integrity sha512-AnMl41GmcN5rcFLbnAHsCaPM5/78SZstKp67d8/4caN8ydfI6rshxLtlnjBmEVKRUDj/jxoC2+LTSRrhvyP5Fg==
+   dependencies:
+-    "@apollosproject/ui-kit" "^1.3.1-beta.0"
++    "@apollosproject/ui-kit" "^1.3.1"
+     graphql-tag "^2.10.1"
+     react-apollo "2.5.5"
+ 
+-"@apollosproject/ui-scripture@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-scripture/-/ui-scripture-1.3.1-beta.0.tgz#c2de1b6d14f4c76f0d10ab9c0ed36a118994f572"
+-  integrity sha512-D839fhdy4eP9Mew+STK8wtxI5bY/8MmG9JxKfX27bGq8lDZ1UZhmunUdBhkvxlM4w9FZc3RIx3/m1w4+n4Xykw==
++"@apollosproject/ui-scripture@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-scripture/-/ui-scripture-1.3.1.tgz#90dba9c747be12f526b801164e7402d5a428f663"
++  integrity sha512-u1BYVYYi1gLzSbM0rZsunprJUTr4h10UCURC80o5NJsvPvFVHnemxa/8C0cTU62ngKGXdRk067zZiH/yf4fwew==
+ 
+-"@apollosproject/ui-storybook@^1.3.1-beta.0":
+-  version "1.3.1-beta.0"
+-  resolved "https://registry.yarnpkg.com/@apollosproject/ui-storybook/-/ui-storybook-1.3.1-beta.0.tgz#b7f0f2b3ee0e9f172af85aaef2f192289f648175"
+-  integrity sha512-kTzAv810irkIySB4I12SxsG6nvjnkKmy8fzDzxOmLuCVJ8cQuM5kSGKMiLo+GsRdqWdMII7FrQ3AXyl/SgtMGA==
++"@apollosproject/ui-storybook@^1.3.1":
++  version "1.3.1"
++  resolved "https://registry.yarnpkg.com/@apollosproject/ui-storybook/-/ui-storybook-1.3.1.tgz#2c9945a8da9852a2b2957dbd0ee51be8d3b9c881"
++  integrity sha512-LUE4Sjg3/aqcjywO0V2znKgYfRlfG2N7pobDRsWicfymYeNhBchXRwx2TKNa6RVMvua5b86BOYFa7GEwOBEK+A==
+   dependencies:
+     "@storybook/addon-actions" "5.2.4"
+     "@storybook/addon-links" "5.2.4"
+@@ -8311,7 +8311,7 @@ react-native-geolocation-service@^3.0.0:
+   dependencies:
+     "@react-native-community/geolocation" "^1.4.2"
+ 
+-react-native-gesture-handler@^1.3.1-beta.0:
++react-native-gesture-handler@^1.3.1:
+   version "1.6.1"
+   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
+   integrity sha512-gQgIKhDiYf754yzhhliagLuLupvGb6ZyBdzYzr7aus3Fyi87TLOw63ers+r4kGw0h26oAWTAdHd34JnF4NeL6Q==
