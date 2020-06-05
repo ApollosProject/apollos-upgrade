@@ -1,0 +1,463 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 2982c95..925b7a0 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -147,7 +147,7 @@ android {
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+         versionCode 24
+-        versionName "1.4.1"
++        versionName "1.4.2"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index e13d997..4a73a90 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -40,6 +40,17 @@
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
++        <intent-filter android:autoVerify="true">
++          <action android:name="android.intent.action.VIEW" />
++          <category android:name="android.intent.category.DEFAULT" />
++          <category android:name="android.intent.category.BROWSABLE" />
++
++          <!-- Handle urls starting with "http://www.example.com/products" -->
++          <data android:scheme="https"
++                android:host="apollos-church-api.herokuapp.com"
++                android:pathPrefix="/app-link" />
++          <data android:scheme="http" />
++        </intent-filter>
+       </activity>
+ 
+       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 342d788..61b00b4 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.4.1",
++    "version": "1.4.2",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m b/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
+index fd45303..2bf071d 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
++++ b/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
+@@ -27,12 +27,12 @@ - (BOOL)application:(UIApplication *)application
+ }
+ 
+ // Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
+-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
+- restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
++- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
++ restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+ {
+-  return [RCTLinkingManager application:application
+-                   continueUserActivity:userActivity
+-                     restorationHandler:restorationHandler];
++ return [RCTLinkingManager application:application
++                  continueUserActivity:userActivity
++                    restorationHandler:restorationHandler];
+ }
+ 
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 61d1af6..dfc74fd 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.4.1</string>
++	<string>1.4.2</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+index 75e36a1..984fdb2 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
++++ b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+@@ -6,5 +6,9 @@
+ 	<string>development</string>
+ 	<key>com.apple.developer.networking.wifi-info</key>
+ 	<true/>
++	<key>com.apple.developer.associated-domains</key>
++	<array>
++		<string>applink:apollos-church-api.herokuapp.com</string>
++	</array>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 56a42b8..17a2f6a 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -7,11 +7,10 @@ ApollosConfig.loadJs({ FRAGMENTS });
+ 
+ // We ran into an issue where SafeAreaView would break jest tests.
+ jest.mock('react-native-safe-area-context', () => ({
+-    SafeAreaConsumer: ({ children }) =>
+-      children({ top: 0, bottom: 0, left: 0, right: 0 }),
+-    SafeAreaProvider: ({ children }) => children,
+-  })
+-);
++  SafeAreaConsumer: ({ children }) =>
++    children({ top: 0, bottom: 0, left: 0, right: 0 }),
++  SafeAreaProvider: ({ children }) => children,
++}));
+ 
+ jest.mock('@react-native-community/datetimepicker', () => 'DateTimePicker');
+ 
+@@ -82,6 +81,22 @@ jest.mock('@apollosproject/ui-analytics', () => ({
+   withTrackOnPress: (Component) => (props) => <Component {...props} />,
+ }));
+ 
++jest.mock('@apollosproject/ui-kit', () => ({
++  ...require.requireActual('@apollosproject/ui-kit'),
++  NavigationService: {
++    navigate: jest.fn(),
++    setTopLevelNavigator: jest.fn(),
++  },
++}));
++
++jest.mock('@apollosproject/ui-analytics', () => ({
++  track: () => '',
++  AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
++  AnalyticsProvider: ({ children }) => children,
++  TrackEventWhenLoaded: () => null,
++  withTrackOnPress: (Component) => (props) => <Component {...props} />,
++}));
++
+ jest.mock('@apollosproject/ui-notifications', () => ({
+   NotificationsProvider: ({ children }) => children,
+ }));
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index cd6cb8f..ca1eb21 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -48,25 +48,25 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "1.4.1",
++    "@apollosproject/config": "1.4.2",
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "1.4.1",
+-    "@apollosproject/ui-auth": "1.4.1",
+-    "@apollosproject/ui-connected": "1.4.1",
+-    "@apollosproject/ui-fragments": "1.4.1",
+-    "@apollosproject/ui-htmlview": "1.4.1",
+-    "@apollosproject/ui-kit": "1.4.1",
+-    "@apollosproject/ui-mapview": "1.4.1",
+-    "@apollosproject/ui-media-player": "1.4.1",
+-    "@apollosproject/ui-notifications": "1.4.1",
+-    "@apollosproject/ui-onboarding": "1.4.1",
+-    "@apollosproject/ui-passes": "1.4.1",
+-    "@apollosproject/ui-scripture": "1.4.1",
+-    "@apollosproject/ui-storybook": "1.4.1",
+-    "@apollosproject/ui-prayer": "1.4.1",
++    "@apollosproject/ui-analytics": "1.4.2",
++    "@apollosproject/ui-auth": "1.4.2",
++    "@apollosproject/ui-connected": "1.4.2",
++    "@apollosproject/ui-fragments": "1.4.2",
++    "@apollosproject/ui-htmlview": "1.4.2",
++    "@apollosproject/ui-kit": "1.4.2",
++    "@apollosproject/ui-mapview": "1.4.2",
++    "@apollosproject/ui-media-player": "1.4.2",
++    "@apollosproject/ui-notifications": "1.4.2",
++    "@apollosproject/ui-onboarding": "1.4.2",
++    "@apollosproject/ui-passes": "1.4.2",
++    "@apollosproject/ui-scripture": "1.4.2",
++    "@apollosproject/ui-storybook": "1.4.2",
++    "@apollosproject/ui-prayer": "1.4.2",
+     "@react-native-community/async-storage": "^1.5.1",
+-    "@react-native-community/geolocation": "^2.0.2",
+     "@react-native-community/datetimepicker": "^2.4.0",
++    "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.6.8",
+@@ -120,7 +120,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "1.4.1",
++    "@apollosproject/eslint-config": "1.4.2",
+     "babel-eslint": "10.0.1",
+     "codecov": "3.6.5",
+     "eslint": "^4.19.1",
+@@ -155,4 +155,4 @@
+       "assets/fonts"
+     ]
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/NavigationService.js b/apolloschurchapp/src/NavigationService.js
+deleted file mode 100644
+index 8a268af..0000000
+--- a/apolloschurchapp/src/NavigationService.js
++++ /dev/null
+@@ -1,56 +0,0 @@
+-import { StackActions, NavigationActions } from 'react-navigation';
+-
+-let _navigator;
+-
+-const setTopLevelNavigator = (navigatorRef) => {
+-  _navigator = navigatorRef;
+-};
+-
+-const navigate = (routeName, params) => {
+-  _navigator.dispatch(
+-    NavigationActions.navigate({
+-      routeName,
+-      params,
+-    })
+-  );
+-};
+-
+-export const resetAction = ({ navigatorName, routeName }) =>
+-  StackActions.reset({
+-    index: 0,
+-    key: null,
+-    actions: [
+-      NavigationActions.navigate({
+-        routeName: navigatorName,
+-        action: NavigationActions.navigate({
+-          routeName,
+-        }),
+-      }),
+-    ],
+-  });
+-
+-const resetToAuth = () => {
+-  _navigator.dispatch(
+-    resetAction({
+-      navigatorName: 'Auth',
+-      routeName: 'AuthSMSPhoneEntryConnected',
+-    })
+-  );
+-};
+-
+-const goBack = (from) => {
+-  let key;
+-  if (from) {
+-    const route = _navigator.state.nav.routes.find((r) => r.routeName === from);
+-    if (route) ({ key } = route);
+-  }
+-  _navigator.dispatch(NavigationActions.back({ key }));
+-};
+-
+-export default {
+-  setTopLevelNavigator,
+-  navigate,
+-  resetAction,
+-  goBack,
+-  resetToAuth,
+-};
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index b0056a4..bad33dc 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -1,13 +1,12 @@
+ import React from 'react';
+ import ApollosConfig from '@apollosproject/config';
+-import { Providers } from '@apollosproject/ui-kit';
++import { Providers, NavigationService } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
+ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { MediaPlayerProvider } from '@apollosproject/ui-media-player';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+ import { LiveProvider } from '@apollosproject/ui-connected';
+ 
+-import NavigationService from './NavigationService';
+ import ClientProvider from './client';
+ import customTheme, { customIcons } from './theme';
+ 
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 7427345..559db44 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -7,8 +7,8 @@ import { getVersion, getApplicationName } from 'react-native-device-info';
+ 
+ import { authLink, buildErrorLink } from '@apollosproject/ui-auth';
+ 
++import { NavigationService } from '@apollosproject/ui-kit';
+ import { resolvers, schema, defaults } from '../store';
+-import NavigationService from '../NavigationService';
+ 
+ import httpLink from './httpLink';
+ import cache, { ensureCacheHydration } from './cache';
+diff --git a/apolloschurchapp/src/content-feed/index.js b/apolloschurchapp/src/content-feed/index.js
+index 3f0e13f..9e6ff30 100644
+--- a/apolloschurchapp/src/content-feed/index.js
++++ b/apolloschurchapp/src/content-feed/index.js
+@@ -21,7 +21,11 @@ class ContentFeed extends PureComponent {
+     const itemTitle = navigation.getParam('itemTitle', 'Content Channel');
+     return {
+       title: itemTitle,
+-      headerStyle: { backgroundColor: screenProps.headerBackgroundColor },
++      headerStyle: {
++        backgroundColor: screenProps.headerBackgroundColor,
++        borderBottomWidth: 0,
++        elevation: 0,
++      },
+     };
+   };
+ 
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index a424432..8d2d11d 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -4,14 +4,17 @@ import { StatusBar } from 'react-native';
+ import { createStackNavigator, createAppContainer } from 'react-navigation';
+ import RNBootSplash from 'react-native-bootsplash';
+ 
+-import { BackgroundView, withTheme } from '@apollosproject/ui-kit';
++import {
++  BackgroundView,
++  withTheme,
++  NavigationService,
++} from '@apollosproject/ui-kit';
+ import Passes from '@apollosproject/ui-passes';
+ import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+ import { MediaPlayer } from '@apollosproject/ui-media-player';
+ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
+ 
+ import Providers from './Providers';
+-import NavigationService from './NavigationService';
+ import ContentSingle from './content-single';
+ import Event from './event';
+ import Tabs from './tabs';
+diff --git a/apolloschurchapp/src/tabs/connect/ActionTable/index.js b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+index dc37bcd..329fc23 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionTable/index.js
++++ b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+@@ -11,9 +11,9 @@ import {
+   styled,
+   PaddedView,
+   H4,
++  NavigationService,
+ } from '@apollosproject/ui-kit';
+ import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
+-import NavigationActions from '../../../NavigationService';
+ 
+ const RowHeader = styled(({ theme }) => ({
+   flexDirection: 'row',
+@@ -65,7 +65,7 @@ const ActionTable = () => (
+         </TableView>
+         <TableView>
+           <Touchable
+-            onPress={() => NavigationActions.navigate('TestingControlPanel')}
++            onPress={() => NavigationService.navigate('TestingControlPanel')}
+           >
+             <Cell>
+               <CellIcon name="settings" />
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index 2bf03d2..cecfc1e 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -5,8 +5,13 @@ import { UserWebBrowserConsumer } from '../user-web-browser';
+ import TouchableCell from './TouchableCell';
+ 
+ export default class TestingControlPanel extends PureComponent {
+-  static navigationOptions = () => ({
++  static navigationOptions = ({ screenProps }) => ({
+     title: 'Testing Control Panel',
++    headerStyle: {
++      backgroundColor: screenProps.headerBackgroundColor,
++      borderBottomWidth: 0,
++      elevation: 0,
++    },
+   });
+ 
+   render() {
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 28510f3..f200ddc 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -9,6 +9,7 @@ import {
+   GradientOverlayImage,
+   styled,
+   BackgroundView,
++  NavigationService,
+ } from '@apollosproject/ui-kit';
+ import {
+   AskNotificationsConnected,
+@@ -18,7 +19,6 @@ import {
+   LocationFinderConnected,
+   OnboardingSwiper,
+ } from '@apollosproject/ui-onboarding';
+-import { resetAction } from '../../NavigationService';
+ 
+ const FullscreenBackgroundView = styled({
+   position: 'absolute',
+@@ -81,7 +81,7 @@ function Onboarding({ navigation }) {
+               }}
+               onPressPrimary={() =>
+                 navigation.dispatch(
+-                  resetAction({
++                  NavigationService.resetAction({
+                     navigatorName: 'Tabs',
+                     routeName: 'Home',
+                   })
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index cb8e1c3..91002a2 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -13,6 +13,7 @@ import {
+   Divider,
+   Touchable,
+   ActivityIndicator,
++  NavigationService,
+ } from '@apollosproject/ui-kit';
+ 
+ import { GET_LOGIN_STATE, LOGOUT } from '@apollosproject/ui-auth';
+@@ -20,7 +21,6 @@ import {
+   RockAuthedWebBrowser,
+   UserAvatarUpdate,
+ } from '@apollosproject/ui-connected';
+-import NavigationService from '../NavigationService';
+ 
+ class UserSettings extends PureComponent {
+   static navigationOptions = (props) => ({
+diff --git a/apolloschurchapp/src/user-web-browser/Provider.js b/apolloschurchapp/src/user-web-browser/Provider.js
+index bc1ce7f..91280a7 100644
+--- a/apolloschurchapp/src/user-web-browser/Provider.js
++++ b/apolloschurchapp/src/user-web-browser/Provider.js
+@@ -1,5 +1,5 @@
+ import { createContext } from 'react';
+-import NavigationService from '../NavigationService';
++import { NavigationService } from '@apollosproject/ui-kit';
+ 
+ // Can can either call the OpenUserWebView function directly, or call it using
+ // the Consumer. Your choice.
+diff --git a/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js b/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js
+index 5c576db..1c32e08 100644
+--- a/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js
++++ b/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js
+@@ -1,9 +1,9 @@
+ import React from 'react';
++import { NavigationService } from '@apollosproject/ui-kit';
+ import { renderWithApolloData } from '../../utils/testUtils';
+ import Providers from '../../Providers';
+ import BrowserWithUserCookie, { WITH_USER_COOKIE } from '../index';
+ import { OpenUserWebView } from '../Provider';
+-import NavigationService from '../../NavigationService';
+ 
+ const mocks = [
+   {
+@@ -41,8 +41,6 @@ describe('the BrowserWithUserCookie component', () => {
+   });
+ });
+ describe('the OpenUserWebView', () => {
+-  jest.mock('NavigationService');
+-  NavigationService.navigate = jest.fn();
+   it('navigtes', () => {
+     OpenUserWebView({ url: 'fake.com' });
+     expect(NavigationService.navigate).toBeCalledWith('UserWebBrowser', {
