@@ -2,6 +2,17 @@
 
 This repository exposes an untouched Apollos API and UI project.
 
+## How to use
+
+You'll need to run this tool on both API and App directories.
+
+```
+cd apolloschurchapp && npx @apollosproject/upgrade-tools upgrade
+cd apollos-church-api && npx @apollosproject/upgrade-tools upgrade
+```
+
+## Notes
+
 A dedicated branch per release makes changes very easy
 to watch. For example:
 
