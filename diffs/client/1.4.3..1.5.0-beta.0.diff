@@ -1,0 +1,430 @@
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index b1c432a..f6c8dbb 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -146,8 +146,8 @@ android {
+         applicationId "com.apolloschurch.app"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 24
+-        versionName "1.4.3"
++        versionCode 1
++        versionName "1.0.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index bbcde48..3219c60 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.4.3",
++    "version": "1.5.0-beta.0",
+     "environment": "client"
+ }
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 45facc7..6c2828a 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -17,7 +17,7 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.4.3</string>
++	<string>1.0.0</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleURLTypes</key>
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>25</string>
++	<string>1</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 17a2f6a..2472b29 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -22,6 +22,14 @@ jest.mock('react-navigation', () => {
+   };
+ });
+ 
++jest.mock('@react-navigation/native', () => {
++  const ActualNavigation = require.requireActual('@react-navigation/native');
++  return {
++    ...ActualNavigation,
++    SafeAreaView: require.requireActual('SafeAreaView'),
++  };
++});
++
+ jest.mock('react-native-music-control', () => ({
+   enableBackgroundMode: jest.fn(),
+   enableControl: jest.fn(),
+@@ -77,6 +85,8 @@ jest.mock('@apollosproject/ui-analytics', () => ({
+   track: () => '',
+   AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
+   AnalyticsProvider: ({ children }) => children,
++  CoreNavigationAnalytics: ({ children }) =>
++    children({ onNavigationStateChange: jest.fn() }),
+   TrackEventWhenLoaded: () => null,
+   withTrackOnPress: (Component) => (props) => <Component {...props} />,
+ }));
+@@ -89,14 +99,6 @@ jest.mock('@apollosproject/ui-kit', () => ({
+   },
+ }));
+ 
+-jest.mock('@apollosproject/ui-analytics', () => ({
+-  track: () => '',
+-  AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
+-  AnalyticsProvider: ({ children }) => children,
+-  TrackEventWhenLoaded: () => null,
+-  withTrackOnPress: (Component) => (props) => <Component {...props} />,
+-}));
+-
+ jest.mock('@apollosproject/ui-notifications', () => ({
+   NotificationsProvider: ({ children }) => children,
+ }));
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index c43fc89..d6a2385 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -13,8 +13,8 @@
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "fixlint": "eslint ./src --fix",
+     "ios": "react-native run-ios --simulator=\"iPhone 11\"",
+-    "link-packages": "node ./scripts/link-packages",
+-    "unlink-packages": "wml rm all",
++    "link-packages": "yarn --check-files --ignore-scripts && node ./scripts/link-packages",
++    "unlink-packages": "rm -rf ./node_modules/@apollosproject/* && ../node_modules/.bin/wml rm all",
+     "storybook:enable": "sed -i '' 's/STORYBOOK=false/STORYBOOK=true/g' .env",
+     "storybook:disable": "sed -i '' 's/STORYBOOK=true/STORYBOOK=false/g' .env",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+@@ -49,22 +49,22 @@
+   },
+   "dependencies": {
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "1.4.3",
++    "@apollosproject/config": "1.5.0-beta.0",
+     "@apollosproject/react-native-airplay-btn": "0.2.0",
+-    "@apollosproject/ui-analytics": "1.4.3",
+-    "@apollosproject/ui-auth": "1.4.3",
+-    "@apollosproject/ui-connected": "1.4.3",
+-    "@apollosproject/ui-fragments": "1.4.3",
+-    "@apollosproject/ui-htmlview": "1.4.3",
+-    "@apollosproject/ui-kit": "1.4.3",
+-    "@apollosproject/ui-mapview": "1.4.3",
+-    "@apollosproject/ui-media-player": "1.4.3",
+-    "@apollosproject/ui-notifications": "1.4.3",
+-    "@apollosproject/ui-onboarding": "1.4.3",
+-    "@apollosproject/ui-passes": "1.4.3",
+-    "@apollosproject/ui-scripture": "1.4.3",
+-    "@apollosproject/ui-storybook": "1.4.3",
+-    "@apollosproject/ui-prayer": "1.4.3",
++    "@apollosproject/ui-analytics": "1.5.0-beta.0",
++    "@apollosproject/ui-auth": "1.5.0-beta.0",
++    "@apollosproject/ui-connected": "1.5.0-beta.0",
++    "@apollosproject/ui-fragments": "1.5.0-beta.0",
++    "@apollosproject/ui-htmlview": "1.5.0-beta.0",
++    "@apollosproject/ui-kit": "1.5.0-beta.0",
++    "@apollosproject/ui-mapview": "1.5.0-beta.0",
++    "@apollosproject/ui-media-player": "1.5.0-beta.0",
++    "@apollosproject/ui-notifications": "1.5.0-beta.0",
++    "@apollosproject/ui-onboarding": "1.5.0-beta.0",
++    "@apollosproject/ui-passes": "1.5.0-beta.0",
++    "@apollosproject/ui-prayer": "1.5.0-beta.0",
++    "@apollosproject/ui-scripture": "1.5.0-beta.0",
++    "@apollosproject/ui-storybook": "1.5.0-beta.0",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^2.4.0",
+     "@react-native-community/geolocation": "^2.0.2",
+@@ -121,9 +121,9 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "1.4.3",
++    "@apollosproject/eslint-config": "1.5.0-beta.0",
+     "babel-eslint": "10.0.1",
+-    "codecov": "3.6.5",
++    "codecov": "3.7.2",
+     "eslint": "^4.19.1",
+     "eslint-config-airbnb": "^17.0.0",
+     "eslint-config-prettier": "^2.9.0",
+@@ -135,8 +135,8 @@
+     "eslint-plugin-jsx-a11y": "^6.0.3",
+     "eslint-plugin-prettier": "^2.6.0",
+     "eslint-plugin-react": "^7.10.0",
+-    "eslint-plugin-react-native": "^3.2.1",
+     "eslint-plugin-react-hooks": "^4.0.2",
++    "eslint-plugin-react-native": "^3.2.1",
+     "get-dev-paths": "^0.1.0",
+     "graphql-import": "^0.7.1",
+     "jest": "^25.1.0",
+@@ -156,4 +156,4 @@
+       "assets/fonts"
+     ]
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/apolloschurchapp/src/LandingScreen.js b/apolloschurchapp/src/LandingScreen.js
+index fa430a1..89e10ad 100644
+--- a/apolloschurchapp/src/LandingScreen.js
++++ b/apolloschurchapp/src/LandingScreen.js
+@@ -1,12 +1,13 @@
+ import React from 'react';
+-import { styled, GradientOverlayImage } from '@apollosproject/ui-kit';
++import { StyleSheet } from 'react-native';
++import { styled, ConnectedImage } from '@apollosproject/ui-kit';
+ 
+ import ApollosLandingScreen from './ui/LandingScreen';
+ 
+ const FullScreenImage = styled({
+   resizeMode: 'cover',
+-  position: 'absolute',
+-})(GradientOverlayImage);
++  ...StyleSheet.absoluteFill,
++})(ConnectedImage);
+ 
+ const LandingScreen = ({ navigation }) => (
+   <ApollosLandingScreen
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index bad33dc..67b6f44 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -6,8 +6,9 @@ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { MediaPlayerProvider } from '@apollosproject/ui-media-player';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+ import { LiveProvider } from '@apollosproject/ui-connected';
++import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+ 
+-import ClientProvider from './client';
++import ClientProvider, { client } from './client';
+ import customTheme, { customIcons } from './theme';
+ 
+ const AppProviders = (props) => (
+@@ -19,7 +20,12 @@ const AppProviders = (props) => (
+       <AuthProvider
+         navigateToAuth={() => NavigationService.navigate('Auth')}
+         navigate={NavigationService.navigate}
+-        closeAuth={() => NavigationService.navigate('Onboarding')}
++        closeAuth={() =>
++          checkOnboardingStatusAndNavigate({
++            client,
++            navigation: NavigationService,
++          })
++        }
+       >
+         <MediaPlayerProvider>
+           <AnalyticsProvider>
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 9fe796b..f5a2e19 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js b/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
+index b03a167..e1f6ae5 100644
+--- a/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
++++ b/apolloschurchapp/src/content-single/DevotionalContentItem/ContentTab.js
+@@ -61,7 +61,7 @@ ContentTab.propTypes = {
+   references: PropTypes.arrayOf(PropTypes.string),
+   /** The devotional title */
+   title: PropTypes.string,
+-  navigation: PropTypes.shape({ navigate: PropTypes.array }).isRequired,
++  navigation: PropTypes.shape({ navigate: PropTypes.func }).isRequired,
+ };
+ 
+ export default ContentTab;
+diff --git a/apolloschurchapp/src/content-single/WeekendContentItem/index.js b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+index b905fff..85ca33f 100644
+--- a/apolloschurchapp/src/content-single/WeekendContentItem/index.js
++++ b/apolloschurchapp/src/content-single/WeekendContentItem/index.js
+@@ -108,7 +108,11 @@ WeekendContentItem.propTypes = {
+     }),
+     id: PropTypes.string,
+     title: PropTypes.string,
+-    videos: PropTypes.arrayOf(PropTypes.shape({ sources: PropTypes.array })),
++    videos: PropTypes.arrayOf(
++      PropTypes.shape({
++        sources: PropTypes.arrayOf(PropTypes.shape({ uri: PropTypes.string })),
++      })
++    ),
+   }),
+   loading: PropTypes.bool,
+ };
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 8d2d11d..c667d48 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -10,6 +10,7 @@ import {
+   NavigationService,
+ } from '@apollosproject/ui-kit';
+ import Passes from '@apollosproject/ui-passes';
++import { CoreNavigationAnalytics } from '@apollosproject/ui-analytics';
+ import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+ import { MediaPlayer } from '@apollosproject/ui-media-player';
+ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
+@@ -24,6 +25,8 @@ import LandingScreen from './LandingScreen';
+ import UserWebBrowser from './user-web-browser';
+ import Onboarding from './ui/Onboarding';
+ 
++console.log(CoreNavigationAnalytics);
++
+ const AppStatusBar = withTheme(({ theme }) => ({
+   barStyle: theme.barStyle,
+   backgroundColor: theme.colors.background.paper,
+@@ -68,11 +71,16 @@ const App = () => (
+   <Providers>
+     <BackgroundView>
+       <AppStatusBar />
+-      <AppContainer
+-        ref={(navigatorRef) => {
+-          NavigationService.setTopLevelNavigator(navigatorRef);
+-        }}
+-      />
++      <CoreNavigationAnalytics>
++        {(props) => (
++          <AppContainer
++            ref={(navigatorRef) => {
++              NavigationService.setTopLevelNavigator(navigatorRef);
++            }}
++            {...props}
++          />
++        )}
++      </CoreNavigationAnalytics>
+       <MediaPlayer />
+     </BackgroundView>
+   </Providers>
+diff --git a/apolloschurchapp/src/tabs/tabBar.js b/apolloschurchapp/src/tabs/tabBar.js
+index 3d37e66..636293d 100644
+--- a/apolloschurchapp/src/tabs/tabBar.js
++++ b/apolloschurchapp/src/tabs/tabBar.js
+@@ -6,7 +6,7 @@ import { styled, withTheme } from '@apollosproject/ui-kit';
+ 
+ const ThemedBottomTabBar = compose(
+   withTheme(({ theme }) => ({
+-    showLabel: false,
++    showLabel: true,
+     activeTintColor: theme.colors.secondary,
+     inactiveTintColor: theme.colors.text.tertiary,
+     safeAreaInset: { bottom: 0 },
+@@ -14,6 +14,7 @@ const ThemedBottomTabBar = compose(
+   styled(({ theme }) => ({
+     borderTopWidth: 0,
+     backgroundColor: theme.colors.background.paper,
++    marginTop: theme.sizing.baseUnit * 0.3125,
+   })),
+   withTabBarMediaSpacer
+ )(BottomTabBar);
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index f200ddc..7ba75e6 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,4 +1,5 @@
+ import React from 'react';
++import { Query } from 'react-apollo';
+ import {
+   checkNotifications,
+   openSettings,
+@@ -18,6 +19,8 @@ import {
+   AboutYouConnected,
+   LocationFinderConnected,
+   OnboardingSwiper,
++  onboardingComplete,
++  WITH_USER_ID,
+ } from '@apollosproject/ui-onboarding';
+ 
+ const FullscreenBackgroundView = styled({
+@@ -65,35 +68,42 @@ function Onboarding({ navigation }) {
+                 />
+               }
+             />
+-            <AskNotificationsConnected
+-              onRequestPushPermissions={(update) => {
+-                checkNotifications().then((checkRes) => {
+-                  if (checkRes.status === RESULTS.DENIED) {
+-                    requestNotifications(['alert', 'badge', 'sound']).then(
+-                      () => {
+-                        update();
+-                      }
++            <Query query={WITH_USER_ID} fetchPolicy="network-only">
++              {({
++                data: { currentUser: { id } = { currentUser: { id: null } } },
++              }) => (
++                <AskNotificationsConnected
++                  onPressPrimary={() => {
++                    onboardingComplete({ userId: id });
++                    navigation.dispatch(
++                      NavigationService.resetAction({
++                        navigatorName: 'Tabs',
++                        routeName: 'Home',
++                      })
+                     );
+-                  } else {
+-                    openSettings();
++                  }}
++                  onRequestPushPermissions={(update) => {
++                    checkNotifications().then((checkRes) => {
++                      if (checkRes.status === RESULTS.DENIED) {
++                        requestNotifications(['alert', 'badge', 'sound']).then(
++                          () => {
++                            update();
++                          }
++                        );
++                      } else {
++                        openSettings();
++                      }
++                    });
++                  }}
++                  primaryNavText={'Finish'}
++                  BackgroundComponent={
++                    <StyledGradient
++                      source={'http://picsum.photos/640/640/?random'}
++                    />
+                   }
+-                });
+-              }}
+-              onPressPrimary={() =>
+-                navigation.dispatch(
+-                  NavigationService.resetAction({
+-                    navigatorName: 'Tabs',
+-                    routeName: 'Home',
+-                  })
+-                )
+-              }
+-              primaryNavText={'Finish'}
+-              BackgroundComponent={
+-                <StyledGradient
+-                  source={'https://picsum.photos/640/640/?random'}
+                 />
+-              }
+-            />
++              )}
++            </Query>
+           </>
+         )}
+       </OnboardingSwiper>
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 91002a2..38ab901 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -34,9 +34,9 @@ class UserSettings extends PureComponent {
+       navigate: PropTypes.func,
+     }),
+     screenProps: PropTypes.shape({
+-      headerBackgroundColor: PropTypes.any,
++      headerBackgroundColor: PropTypes.string,
+       headerTitleStyle: PropTypes.shape({
+-        color: PropTypes.any,
++        color: PropTypes.string,
+       }),
+     }),
+   };
