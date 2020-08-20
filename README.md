@@ -2,14 +2,19 @@
 
 This repository exposes an untouched Apollos API and UI project.
 
-## How to use
+## Getting Started
 
-You'll need to run this tool on both API and App directories.
+1. Run this tool from inside of both the API and App directories
 
 ```
 cd apolloschurchapp && npx @apollosproject/upgrade-tools upgrade
 cd apollos-church-api && npx @apollosproject/upgrade-tools upgrade
 ```
+
+2. Fix merge conflicts. Below is not absolute but should provide guidance and tips as to how to carry out resolve.
+* Lock files (podfile, yarn), fragments, and local graphQL files can be removed entirely and then will get updated when running `yarn`
+* Native files (build.gradle & info.plist) can be resolved by rejecting new changes
+* Other files should be reviewed in conjunction with the diff table below and replaced (as needed) with what is reflected in master
 
 ## Notes
 
@@ -40,5 +45,3 @@ See table below for the complete list.
 | 1.3.0-beta.5 | [->1.4.3](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.3) | [->1.4.2](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.2) | [->1.4.1](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.1) | [->1.4.0](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.0) | [->1.4.0-beta.2](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.0-beta.2) | [->1.4.0-beta.1](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.0-beta.1) | [->1.4.0-beta.0](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.4.0-beta.0) | [->1.3.1](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.3.1) | [->1.3.1-beta.0](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.3.1-beta.0) | [->1.3.0](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.3.0) | [->1.3.0-beta.6](https://github.com/ApollosProject/apollos-upgrade/compare/release/1.3.0-beta.5..release/1.3.0-beta.6) | X   |
 
 ## To see the full table containing all releases, check back soon :)
-
-## Notes
