@@ -1,0 +1,684 @@
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+index 8f2e35f..b3e62a5 100644
+--- a/apolloschurchapp/.env.production
++++ b/apolloschurchapp/.env.production
+@@ -1,5 +1,5 @@
+-APP_DATA_URL=https://apollos-church-api-herokuapp-com.global.ssl.fastly.net/
++APP_DATA_URL=https://apollos-church-api.herokuapp.com/
+ ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+ GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+ STORYBOOK=$STORYBOOK
+-SCHEMA_VERSION=$SCHEMA_VERSION
+\ No newline at end of file
++SCHEMA_VERSION=$SCHEMA_VERSION
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+new file mode 100644
+index 0000000000000000000000000000000000000000..e56ce76938cb35fca13e5095bf49e3427498abad
+GIT binary patch
+literal 432
+zcmV;h0Z;x@VQh3|WM5zPwqZeDaT*T{)ZV45JcUq%#S;zUjfYNatozAurOp+t2lFm~
+zq4k7ZV)9`lKU!fK+s#4lOF_^gxomH^%}=X7bq;7;Bm}SnZ!gWl<-z4A#nPBsC!Qho
+z@GO$05c^70ARJrqR7MrB$k^MQvaH)ZuvD4xf`>9EPuyE&ulm9~8UH1fzI%q>l)u`1
+zbC0svM~{#qR4y1tyxyXZGtq31*!wP@S0f5*apjyya$~1MZT3F?cvLJ4)Xi^qbPIa#
+zB;T0itnW2sH`&QO`8soTNAG9sB+N_Z&Qd2|HmK*M?p0j1Tt;>`jJ}qMpheL`{W6rE
+zEy25nB37U*?Jym?0ye`b5AV|xN4F4~HeO-&j(WKCD}_f98_fB10M)s`s)@A4e>Cbv
+z8D0k%o62vTI`y7BthL}P&%6@G4PHHF;Wi|!UT(>b<40QY4rvQK@!czLZ9pHa86*lj
+z|2kuernF@6#7pR-;g}{>bP-zd*qtp{d_aUTQ5jTL`tZ@wIHn?}|E$p>r)J6W1kqX;
+a*;Z3D&gttaf9iJdKp3F1LLsh-AGAN5B-Yvh
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/.gitignore b/apolloschurchapp/.gitignore
+index f2728e9..751304e 100644
+--- a/apolloschurchapp/.gitignore
++++ b/apolloschurchapp/.gitignore
+@@ -149,3 +149,10 @@ fastlane/report.xml
+ 
+ # symbols
+ apolloschurchapp.app.dSYM.zip
++
++# Google Play authentication key
++key.json
++*.keystore
++
++# shared secrets
++.env.shared
+diff --git a/apolloschurchapp/.graphqlconfig b/apolloschurchapp/.graphqlconfig
+deleted file mode 100644
+index bb5a722..0000000
+--- a/apolloschurchapp/.graphqlconfig
++++ /dev/null
+@@ -1,3 +0,0 @@
+-{
+-  "schemaPath": "../apollos-church-api/local.graphql"
+-}
+diff --git a/apolloschurchapp/README.md b/apolloschurchapp/README.md
+deleted file mode 100644
+index 362bc28..0000000
+--- a/apolloschurchapp/README.md
++++ /dev/null
+@@ -1,206 +0,0 @@
+-# Apollos Church App prototype
+-
+-[![codecov](https://codecov.io/gh/ApollosProject/apollos-prototype/branch/master/graph/badge.svg)](https://codecov.io/gh/ApollosProject/apollos-prototype)
+-
+-This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
+-
+-Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
+-
+-## Table of Contents
+-
+-* [Updating to New Releases](#updating-to-new-releases)
+-* [Available Scripts](#available-scripts)
+-  * [npm start](#npm-start)
+-  * [npm test](#npm-test)
+-  * [npm run ios](#npm-run-ios)
+-  * [npm run android](#npm-run-android)
+-  * [npm run eject](#npm-run-eject)
+-* [Writing and Running Tests](#writing-and-running-tests)
+-* [Environment Variables](#environment-variables)
+-  * [Configuring Packager IP Address](#configuring-packager-ip-address)
+-* [Customizing App Display Name and Icon](#customizing-app-display-name-and-icon)
+-* [Sharing and Deployment](#sharing-and-deployment)
+-  * [Publishing to Expo's React Native Community](#publishing-to-expos-react-native-community)
+-  * [Building an Expo "standalone" app](#building-an-expo-standalone-app)
+-  * [Ejecting from Create React Native App](#ejecting-from-create-react-native-app)
+-    * [Build Dependencies (Xcode & Android Studio)](#build-dependencies-xcode-android-studio)
+-    * [Should I Use ExpoKit?](#should-i-use-expokit)
+-* [Troubleshooting](#troubleshooting)
+-  * [Networking](#networking)
+-  * [iOS Simulator won't open](#ios-simulator-wont-open)
+-  * [QR Code does not scan](#qr-code-does-not-scan)
+-
+-## Updating to New Releases
+-
+-You should only need to update the global installation of `create-react-native-app` very rarely, ideally never.
+-
+-Updating the `react-native-scripts` dependency of your app should be as simple as bumping the version number in `package.json` and reinstalling your project's dependencies.
+-
+-Upgrading to a new version of React Native requires updating the `react-native`, `react`, and `expo` package versions, and setting the correct `sdkVersion` in `app.json`. See the [versioning guide](https://github.com/react-community/create-react-native-app/blob/master/VERSIONS.md) for up-to-date information about package version compatibility.
+-
+-## Available Scripts
+-
+-If Yarn was installed when the project was initialized, then dependencies will have been installed via Yarn, and you should probably use it to run these commands as well. Unlike dependency installation, command running syntax is identical for Yarn and NPM at the time of this writing.
+-
+-### `npm start`
+-
+-Runs your app in development mode.
+-
+-Open it in the [Expo app](https://expo.io) on your phone to view it. It will reload if you save edits to your files, and you will see build errors and logs in the terminal.
+-
+-Sometimes you may need to reset or clear the React Native packager's cache. To do so, you can pass the `--reset-cache` flag to the start script:
+-
+-```
+-npm start --reset-cache
+-# or
+-yarn start --reset-cache
+-```
+-
+-#### `npm test`
+-
+-Runs the [jest](https://github.com/facebook/jest) test runner on your tests.
+-
+-#### `npm run ios`
+-
+-Like `npm start`, but also attempts to open your app in the iOS Simulator if you're on a Mac and have it installed.
+-
+-#### `npm run android`
+-
+-Like `npm start`, but also attempts to open your app on a connected Android device or emulator. Requires an installation of Android build tools (see [React Native docs](https://facebook.github.io/react-native/docs/getting-started.html) for detailed setup). We also recommend installing Genymotion as your Android emulator. Once you've finished setting up the native build environment, there are two options for making the right copy of `adb` available to Create React Native App:
+-
+-##### Using Android Studio's `adb`
+-
+-1.  Make sure that you can run adb from your terminal.
+-2.  Open Genymotion and navigate to `Settings -> ADB`. Select “Use custom Android SDK tools” and update with your [Android SDK directory](https://stackoverflow.com/questions/25176594/android-sdk-location).
+-
+-##### Using Genymotion's `adb`
+-
+-1.  Find Genymotion’s copy of adb. On macOS for example, this is normally `/Applications/Genymotion.app/Contents/MacOS/tools/`.
+-2.  Add the Genymotion tools directory to your path (instructions for [Mac](http://osxdaily.com/2014/08/14/add-new-path-to-path-command-line/), [Linux](http://www.computerhope.com/issues/ch001647.htm), and [Windows](https://www.howtogeek.com/118594/how-to-edit-your-system-path-for-easy-command-line-access/)).
+-3.  Make sure that you can run adb from your terminal.
+-
+-#### `npm run eject`
+-
+-This will start the process of "ejecting" from Create React Native App's build scripts. You'll be asked a couple of questions about how you'd like to build your project.
+-
+-**Warning:** Running eject is a permanent action (aside from whatever version control system you use). An ejected app will require you to have an [Xcode and/or Android Studio environment](https://facebook.github.io/react-native/docs/getting-started.html) set up.
+-
+-## Customizing App Display Name and Icon
+-
+-You can edit `app.json` to include [configuration keys](https://docs.expo.io/versions/latest/guides/configuration.html) under the `expo` key.
+-
+-To change your app's display name, set the `expo.name` key in `app.json` to an appropriate string.
+-
+-To set an app icon, set the `expo.icon` key in `app.json` to be either a local path or a URL. It's recommended that you use a 512x512 png file with transparency.
+-
+-## Writing and Running Tests
+-
+-This project is set up to use [jest](https://facebook.github.io/jest/) for tests. You can configure whatever testing strategy you like, but jest works out of the box. Create test files in directories called `__tests__` or with the `.test` extension to have the files loaded by jest. See the [the template project](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/App.test.js) for an example test. The [jest documentation](https://facebook.github.io/jest/docs/en/getting-started.html) is also a wonderful resource, as is the [React Native testing tutorial](https://facebook.github.io/jest/docs/en/tutorial-react-native.html).
+-
+-## Environment Variables
+-
+-You can configure some of Create React Native App's behavior using environment variables.
+-
+-### Configuring Packager IP Address
+-
+-When starting your project, you'll see something like this for your project URL:
+-
+-```
+-exp://192.168.0.2:19000
+-```
+-
+-The "manifest" at that URL tells the Expo app how to retrieve and load your app's JavaScript bundle, so even if you load it in the app via a URL like `exp://localhost:19000`, the Expo client app will still try to retrieve your app at the IP address that the start script provides.
+-
+-In some cases, this is less than ideal. This might be the case if you need to run your project inside of a virtual machine and you have to access the packager via a different IP address than the one which prints by default. In order to override the IP address or hostname that is detected by Create React Native App, you can specify your own hostname via the `REACT_NATIVE_PACKAGER_HOSTNAME` environment variable:
+-
+-Mac and Linux:
+-
+-```
+-REACT_NATIVE_PACKAGER_HOSTNAME='my-custom-ip-address-or-hostname' npm start
+-```
+-
+-Windows:
+-
+-```
+-set REACT_NATIVE_PACKAGER_HOSTNAME='my-custom-ip-address-or-hostname'
+-npm start
+-```
+-
+-The above example would cause the development server to listen on `exp://my-custom-ip-address-or-hostname:19000`.
+-
+-## Sharing and Deployment
+-
+-Create React Native App does a lot of work to make app setup and development simple and straightforward, but it's very difficult to do the same for deploying to Apple's App Store or Google's Play Store without relying on a hosted service.
+-
+-### Publishing to Expo's React Native Community
+-
+-Expo provides free hosting for the JS-only apps created by CRNA, allowing you to share your app through the Expo client app. This requires registration for an Expo account.
+-
+-Install the `exp` command-line tool, and run the publish command:
+-
+-```
+-$ npm i -g exp
+-$ exp publish
+-```
+-
+-### Building an Expo "standalone" app
+-
+-You can also use a service like [Expo's standalone builds](https://docs.expo.io/versions/latest/guides/building-standalone-apps.html) if you want to get an IPA/APK for distribution without having to build the native code yourself.
+-
+-### Ejecting from Create React Native App
+-
+-If you want to build and deploy your app yourself, you'll need to eject from CRNA and use Xcode and Android Studio.
+-
+-This is usually as simple as running `npm run eject` in your project, which will walk you through the process. Make sure to install `react-native-cli` and follow the [native code getting started guide for React Native](https://facebook.github.io/react-native/docs/getting-started.html).
+-
+-#### Should I Use ExpoKit?
+-
+-If you have made use of Expo APIs while working on your project, then those API calls will stop working if you eject to a regular React Native project. If you want to continue using those APIs, you can eject to "React Native + ExpoKit" which will still allow you to build your own native code and continue using the Expo APIs. See the [ejecting guide](https://github.com/react-community/create-react-native-app/blob/master/EJECTING.md) for more details about this option.
+-
+-## Troubleshooting
+-
+-### Networking
+-
+-If you're unable to load your app on your phone due to a network timeout or a refused connection, a good first step is to verify that your phone and computer are on the same network and that they can reach each other. Create React Native App needs access to ports 19000 and 19001 so ensure that your network and firewall settings allow access from your device to your computer on both of these ports.
+-
+-Try opening a web browser on your phone and opening the URL that the packager script prints, replacing `exp://` with `http://`. So, for example, if underneath the QR code in your terminal you see:
+-
+-```
+-exp://192.168.0.1:19000
+-```
+-
+-Try opening Safari or Chrome on your phone and loading
+-
+-```
+-http://192.168.0.1:19000
+-```
+-
+-and
+-
+-```
+-http://192.168.0.1:19001
+-```
+-
+-If this works, but you're still unable to load your app by scanning the QR code, please open an issue on the [Create React Native App repository](https://github.com/react-community/create-react-native-app) with details about these steps and any other error messages you may have received.
+-
+-If you're not able to load the `http` URL in your phone's web browser, try using the tethering/mobile hotspot feature on your phone (beware of data usage, though), connecting your computer to that WiFi network, and restarting the packager. If you are using a VPN you may need to disable it.
+-
+-### iOS Simulator won't open
+-
+-If you're on a Mac, there are a few errors that users sometimes see when attempting to `npm run ios`:
+-
+-* "non-zero exit code: 107"
+-* "You may need to install Xcode" but it is already installed
+-* and others
+-
+-There are a few steps you may want to take to troubleshoot these kinds of errors:
+-
+-1.  Make sure Xcode is installed and open it to accept the license agreement if it prompts you. You can install it from the Mac App Store.
+-2.  Open Xcode's Preferences, the Locations tab, and make sure that the `Command Line Tools` menu option is set to something. Sometimes when the CLI tools are first installed by Homebrew this option is left blank, which can prevent Apple utilities from finding the simulator. Make sure to re-run `npm/yarn run ios` after doing so.
+-3.  If that doesn't work, open the Simulator, and under the app menu select `Reset Contents and Settings...`. After that has finished, quit the Simulator, and re-run `npm/yarn run ios`.
+-
+-### QR Code does not scan
+-
+-If you're not able to scan the QR code, make sure your phone's camera is focusing correctly, and also make sure that the contrast on the two colors in your terminal is high enough. For example, WebStorm's default themes may [not have enough contrast](https://github.com/react-community/create-react-native-app/issues/49) for terminal QR codes to be scannable with the system barcode scanners that the Expo app uses.
+-
+-If this causes problems for you, you may want to try changing your terminal's color theme to have more contrast, or running Create React Native App from a different terminal. You can also manually enter the URL printed by the packager script in the Expo app's search bar to load it manually.
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+new file mode 100644
+index 0000000000000000000000000000000000000000..1205564dd6ff775028650e5f5381ecff0bf7c5e0
+GIT binary patch
+literal 2272
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/android/app/debug.keystore b/apolloschurchapp/android/app/debug.keystore
+deleted file mode 100644
+index 364e105ed39fbfd62001429a68140672b06ec0de..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 2257
+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
+EA81kH<^TWy
+
+diff --git a/apolloschurchapp/android/gradle.properties b/apolloschurchapp/android/gradle.properties
+index 6fd5ea8..a5d7cbd 100644
+--- a/apolloschurchapp/android/gradle.properties
++++ b/apolloschurchapp/android/gradle.properties
+@@ -11,10 +11,10 @@
+ # http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
+ # org.gradle.parallel=true
+ #Tue Sep 15 14:49:56 EDT 2020
+-MYAPP_UPLOAD_KEY_ALIAS=apollos
+-MYAPP_UPLOAD_KEY_PASSWORD=apollos
+-MYAPP_UPLOAD_STORE_FILE=apollos.keystore
+-MYAPP_UPLOAD_STORE_PASSWORD=apollos
++MYAPP_UPLOAD_KEY_ALIAS=System.getenv('MYAPP_UPLOAD_KEY_ALIAS')
++MYAPP_UPLOAD_KEY_PASSWORD=System.getenv('MYAPP_UPLOAD_KEY_PASSWORD')
++MYAPP_UPLOAD_STORE_FILE=System.getenv('MYAPP_UPLOAD_STORE_FILE')
++MYAPP_UPLOAD_STORE_PASSWORD=System.getenv('MYAPP_UPLOAD_STORE_PASSWORD')
+ android.enableJetifier=true
+ android.useAndroidX=true
+ org.gradle.jvmargs=-Xmx1536M -Dkotlin.daemon.jvm.options\="-Xmx1536M"
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5318647f3608e94562211d4d88cbedcb5bb759d
+GIT binary patch
+literal 2384
+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
+C8Hzms
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 38ae33a..80b6001 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.6.0-beta.0",
++    "version": "1.6.0-beta.1",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/app.json b/apolloschurchapp/app.json
+deleted file mode 100644
+index f599c1e..0000000
+--- a/apolloschurchapp/app.json
++++ /dev/null
+@@ -1,4 +0,0 @@
+-{
+-  "name": "apolloschurchapp",
+-  "displayName": "apolloschurchapp"
+-}
+\ No newline at end of file
+diff --git a/apolloschurchapp/fastlane/Appfile b/apolloschurchapp/fastlane/Appfile
+index 58c6c26..b647b9f 100644
+--- a/apolloschurchapp/fastlane/Appfile
++++ b/apolloschurchapp/fastlane/Appfile
+@@ -1,6 +1,6 @@
+ # iOS
+ app_identifier("com.differential.apollos") # The bundle identifier of your app
+-apple_id("apps@apollos.app") # Your Apple email address
++apple_id("fastlane@differential.com") # Your Apple email address
+ 
+ itc_team_id("121565707") # App Store Connect Team ID
+ team_id("7KS82J74VW") # Developer Portal Team ID
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index cd6eb32..45aacb6 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -28,6 +28,7 @@ platform :ios do
+ 
+   desc "Push a new beta build to TestFlight"
+   lane :deploy do
++    setup_ci
+     certificates
+     increment_build_number(build_number: number_of_commits, xcodeproj: "ios/apolloschurchapp.xcodeproj")
+     build_app(workspace: "ios/apolloschurchapp.xcworkspace", scheme: "apolloschurchappprod")
+diff --git a/apolloschurchapp/fastlane/Matchfile b/apolloschurchapp/fastlane/Matchfile
+index 184a5d6..238d86b 100644
+--- a/apolloschurchapp/fastlane/Matchfile
++++ b/apolloschurchapp/fastlane/Matchfile
+@@ -2,7 +2,5 @@ git_url("https://github.com/ApollosProject/certificates")
+ 
+ storage_mode("git")
+ 
+-type("appstore")
+-
+ app_identifier(["com.differential.apollos"])
+ username("apps@apollos.app")
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index b041494..facf021 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>21</string>
++	<string>274</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 16d6817..9433cce 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>21</string>
++	<string>274</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 67d5f91..88f3bb4 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -694,9 +694,9 @@
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+-				CODE_SIGN_IDENTITY = "iPhone Developer";
++				CODE_SIGN_IDENTITY = "Apple Development: Apollos Apps (58685TNK9H)";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 21;
++				CURRENT_PROJECT_VERSION = 274;
+ 				DEAD_CODE_STRIPPING = NO;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+@@ -723,9 +723,9 @@
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+-				CODE_SIGN_IDENTITY = "iPhone Distribution";
++				CODE_SIGN_IDENTITY = "Apple Distribution: Differential Dev Shop, LLC (7KS82J74VW)";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 21;
++				CURRENT_PROJECT_VERSION = 274;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index ded121f..4eea809 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>21</string>
++	<string>274</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 4f28bff..bb87423 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>21</string>
++	<string>274</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 8e5298a..88adbc4 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -9,26 +9,21 @@
+     "src"
+   ],
+   "scripts": {
+-    "init": "./scripts/init.sh",
++    "setup": "./scripts/init.sh",
+     "android": "SIM=\"$($HOME/Library/Android/sdk/emulator/emulator -list-avds | sed -n 1p)\" && $HOME/Library/Android/sdk/emulator/emulator -avd \"${SIM}\" & react-native run-android --appId com.differential.apollos",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+-    "fixlint": "eslint ./src --fix",
+     "ios": "react-native run-ios --simulator=\"iPhone 11\"",
+     "link-packages": "yarn --check-files --ignore-scripts && node ./scripts/link-packages",
+     "unlink-packages": "rm -rf ./node_modules/@apollosproject/* && ../node_modules/.bin/wml rm all",
+-    "storybook:enable": "sed -i '' 's/STORYBOOK=false/STORYBOOK=true/g' .env",
+-    "storybook:disable": "sed -i '' 's/STORYBOOK=true/STORYBOOK=false/g' .env",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
+-    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json",
+-    "postversion": "react-native-version --never-amend --never-increment-build --android android/app/build.gradle --ios ios/",
+     "prestart": "yarn generate-stories & node ./scripts/get-introspection-data.js",
+     "postinstall": "jetify && yarn pods",
+     "pods": "(bundle install && cd ios && bundle exec pod install --repo-update)",
+     "start": "react-native start",
+     "test": "TZ=UTC jest",
+     "upgrade": "npx @apollosproject/upgrade-tools upgrade",
+-    "latest": "./scripts/add-packages.sh",
++    "latest": "./scripts/add-packages.sh latest",
+     "beta": "./scripts/add-packages.sh beta",
+     "canary": "./scripts/add-packages.sh canary"
+   },
+@@ -56,17 +51,17 @@
+     "@apollosproject/config": "^1.6.0-beta.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+     "@apollosproject/ui-analytics": "^1.6.0-beta.0",
+-    "@apollosproject/ui-auth": "^1.6.0-beta.0",
+-    "@apollosproject/ui-connected": "^1.6.0-beta.0",
++    "@apollosproject/ui-auth": "^1.6.0-beta.1",
++    "@apollosproject/ui-connected": "^1.6.0-beta.1",
+     "@apollosproject/ui-fragments": "^1.6.0-beta.0",
+-    "@apollosproject/ui-htmlview": "^1.6.0-beta.0",
+-    "@apollosproject/ui-kit": "^1.6.0-beta.0",
+-    "@apollosproject/ui-mapview": "^1.6.0-beta.0",
++    "@apollosproject/ui-htmlview": "^1.6.0-beta.1",
++    "@apollosproject/ui-kit": "^1.6.0-beta.1",
++    "@apollosproject/ui-mapview": "^1.6.0-beta.1",
+     "@apollosproject/ui-media-player": "^1.6.0-beta.0",
+     "@apollosproject/ui-notifications": "^1.6.0-beta.0",
+     "@apollosproject/ui-onboarding": "^1.6.0-beta.0",
+-    "@apollosproject/ui-passes": "^1.6.0-beta.0",
+-    "@apollosproject/ui-prayer": "^1.6.0-beta.0",
++    "@apollosproject/ui-passes": "^1.6.0-beta.1",
++    "@apollosproject/ui-prayer": "^1.6.0-beta.1",
+     "@apollosproject/ui-scripture": "^1.6.0-beta.0",
+     "@apollosproject/ui-storybook": "^1.6.0-beta.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+@@ -127,15 +122,15 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^1.6.0-beta.0",
++    "@apollosproject/eslint-config": "^1.6.0-beta.1",
+     "babel-eslint": "10.0.1",
++    "babel-plugin-module-resolver": "^4.0.0",
+     "codecov": "3.7.2",
+     "eslint": "^4.19.1",
+     "eslint-config-airbnb": "^17.0.0",
+     "eslint-config-prettier": "^2.9.0",
+     "eslint-import-resolver-babel-module": "^5.0.0-beta.0",
+     "eslint-plugin-babel": "^5.1.0",
+-    "eslint-plugin-graphql": "^3.0.3",
+     "eslint-plugin-import": "^2.12.0",
+     "eslint-plugin-jest": "^21.15.2",
+     "eslint-plugin-jsx-a11y": "^6.0.3",
+diff --git a/apolloschurchapp/scripts/add-packages.sh b/apolloschurchapp/scripts/add-packages.sh
+index c0db94d..1bfb0b8 100755
+--- a/apolloschurchapp/scripts/add-packages.sh
++++ b/apolloschurchapp/scripts/add-packages.sh
+@@ -7,7 +7,12 @@ DEVDEPSLINE=$(grep -n "devDependencies" package.json | sed -E "s/^([0-9]+):.*/\1
+ DEPSLINE=$(grep -n "dependencies" package.json | sed -E "s/^([0-9]+):.*/\1/g")
+ 
+ # determine what npm tag to update to
+-[[ $1 = "canary" ]] && TAG=canary || [[ $1 = "beta" ]] && TAG=beta || TAG=latest
++if [ "$#" -ne 1 ]; then
++	echo "pass npm tag like this: ./add-packages.sh <TAG>"
++	exit 1
++else
++	TAG=$1
++fi;
+ 
+ # replace package names with version tag
+ JSON=$(sed -E "s/^.*\"(@apollosproject\/[a-z\-]+)\".*/\1@$TAG /g" package.json)
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index f5a2e19..6cb8492 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
