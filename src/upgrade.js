@@ -38,6 +38,14 @@ const cleanPatch = (patch, projectName, packageName) => {
   let patchWithRenamedProjects = patch;
   patchWithRenamedProjects = patchWithRenamedProjects
     .replace(
+      new RegExp('com\\.differential\\.apollos', 'g'),
+      packageName
+    )
+    .replace(
+      new RegExp('com\\.differential\\.apollos'.split('.').join('/'), 'g'),
+      packageName.split('.').join('/')
+    )
+    .replace(
       new RegExp('com\\.apolloschurchapp', 'g'),
       packageName
     )
@@ -48,7 +56,8 @@ const cleanPatch = (patch, projectName, packageName) => {
     .replace(
       new RegExp('com\\.apolloschurchapp'.split('.').join('/'), 'g'),
       packageName.split('.').join('/')
-    ).replace(
+    )
+    .replace(
       new RegExp('apolloschurchapp', 'g'),
       projectName
     );
