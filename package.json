@@ -1,10 +1,6 @@
 {
   "name": "@apollosproject/upgrade-tools",
   "version": "0.3.2",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "description": "",
   "main": "src/index.js",
   "scripts": {
