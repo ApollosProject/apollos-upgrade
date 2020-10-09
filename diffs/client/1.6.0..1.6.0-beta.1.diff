@@ -1,0 +1,430 @@
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+index 70433a614fb9b190c1ecff496f8d672ca87521ec..e56ce76938cb35fca13e5095bf49e3427498abad 100644
+GIT binary patch
+literal 432
+zcmV;h0Z;x@VQh3|WM5zPwqZeDaT*T{)ZV45JcUq%#S;zUjfYNatozAurOp+t2lFm~
+zq4k7ZV)9`lKU!fK+s#4lOF_^gxomH^%}=X7bq;7;Bm}SnZ!gWl<-z4A#nPBsC!Qho
+z@GO$05c^70ARJrqR7MrB$k^MQvaH)ZuvD4xf`>9EPuyE&ulm9~8UH1fzI%q>l)u`1
+zbC0svM~{#qR4y1tyxyXZGtq31*!wP@S0f5*apjyya$~1MZT3F?cvLJ4)Xi^qbPIa#
+zB;T0itnW2sH`&QO`8soTNAG9sB+N_Z&Qd2|HmK*M?p0j1Tt;>`jJ}qMpheL`{W6rE
+zEy25nB37U*?Jym?0ye`b5AV|xN4F4~HeO-&j(WKCD}_f98_fB10M)s`s)@A4e>Cbv
+z8D0k%o62vTI`y7BthL}P&%6@G4PHHF;Wi|!UT(>b<40QY4rvQK@!czLZ9pHa86*lj
+z|2kuernF@6#7pR-;g}{>bP-zd*qtp{d_aUTQ5jTL`tZ@wIHn?}|E$p>r)J6W1kqX;
+a*;Z3D&gttaf9iJdKp3F1LLsh-AGAN5B-Yvh
+
+literal 368
+zcmV-$0gwJuVQh3|WM5zKk+hJ)^3abTVpsiDM%$jM0e!1RM0WsC^b8a-%JV<NnHxj}
+zY{>nCD%^Q2)C7`fZ_aUA#Eu14t?wcXlOA>5<?S(lBz;e(NHex2zuj`cWE9+t^?|$v
+z@V(`h=U0E#zwv{z5eXmo`3llL(moGzuWKSrcGQ1xjpX2xK3Kb>W$MterNaw7Oz6@q
+z&z@|TZC?LoxV16c({74<-vc8^^##Oq=rm6|=l03mSAKUz#KJaS;NV#%ig=6-Kbt>7
+z9U=BYQ>me8#;qw%A;lJ%5l1nkp<{*OETrVbAuUBh$FW;!Cu#TJL*EdI9<8`SjQUt5
+zdZyG4Dxd?JtZ!RO(TjFmO0B1x*UlqnqF@O)9G+}<1-I+8^8OVu+vP*O%qB(&g)c_S
+zWMeU&{3&6%3Yy6nkmg2WtdXSiNde{Dh>hqsdmv|lW)^@&*J-?&SoDC}!5ah4i1@YO
+OpX+d79h}P>8vGdGDYzd1
+
+diff --git a/apolloschurchapp/android/app/BUCK b/apolloschurchapp/android/app/BUCK
+index 712e466..de2c2e2 100644
+--- a/apolloschurchapp/android/app/BUCK
++++ b/apolloschurchapp/android/app/BUCK
+@@ -35,12 +35,12 @@ android_library(
+ 
+ android_build_config(
+     name = "build_config",
+-    package = "com.differential.apollos",
++    package = "com.apolloschurchapp",
+ )
+ 
+ android_resource(
+     name = "res",
+-    package = "com.differential.apollos",
++    package = "com.apolloschurchapp",
+     res = "src/main/res",
+ )
+ 
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+index 1792515ed25445a79a7725643f7647d5c7d90907..1205564dd6ff775028650e5f5381ecff0bf7c5e0 100644
+GIT binary patch
+literal 2272
+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
+
+literal 2272
+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
+
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index c3fe532..dc97fc5 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -146,20 +146,22 @@ android {
+         applicationId "com.differential.apollos"
+         minSdkVersion rootProject.ext.minSdkVersion
+         targetSdkVersion rootProject.ext.targetSdkVersion
+-        versionCode 331
++        versionCode 197
+         versionName "1.0.0"
+         ndk {
+             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+         }
+-        resValue "string", "build_config_package", "com.differential.apollos"
++        resValue "string", "build_config_package", "com.apolloschurchapp"
+         multiDexEnabled true
+     }
+     signingConfigs {
+         release {
+-            storeFile file(String.valueOf(System.getenv("KEYSTORE_FILE")))
+-            storePassword System.getenv("KEYSTORE_PASSWORD")
+-            keyAlias System.getenv("KEY_ALIAS")
+-            keyPassword System.getenv("KEY_PASSWORD")
++            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
++                storeFile file(MYAPP_UPLOAD_STORE_FILE)
++                storePassword MYAPP_UPLOAD_STORE_PASSWORD
++                keyAlias MYAPP_UPLOAD_KEY_ALIAS
++                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
++            }
+         }
+     }
+     splits {
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index 8f8f889..4a73a90 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -1,5 +1,5 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="com.differential.apollos">
++    package="com.apolloschurchapp">
+ 
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainActivity.java
+similarity index 89%
+rename from apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java
+rename to apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainActivity.java
+index f099ba3..4790556 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java
++++ b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainActivity.java
+@@ -1,4 +1,4 @@
+-package com.differential.apollos;
++package com.apolloschurchapp;
+ import android.os.Bundle;
+ import com.facebook.react.ReactActivity;
+ import com.facebook.react.ReactActivityDelegate;
+@@ -20,7 +20,7 @@ public class MainActivity extends GoogleCastActivity {
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        RNBootSplash.init(R.drawable.bootsplash, com.differential.apollos.MainActivity.this);
++        RNBootSplash.init(R.drawable.bootsplash, com.apolloschurchapp.MainActivity.this);
+     }
+ 
+     @Override
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+similarity index 97%
+rename from apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
+rename to apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+index fe67b25..0bdd47f 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
++++ b/apolloschurchapp/android/app/src/main/java/com/apolloschurchapp/MainApplication.java
+@@ -1,4 +1,4 @@
+-package com.differential.apollos;
++package com.apolloschurchapp;
+ 
+ import android.app.Application;
+ import android.util.Log;
+diff --git a/apolloschurchapp/android/gradle.properties b/apolloschurchapp/android/gradle.properties
+index 1f9599e..a5d7cbd 100644
+--- a/apolloschurchapp/android/gradle.properties
++++ b/apolloschurchapp/android/gradle.properties
+@@ -11,6 +11,10 @@
+ # http://www.gradle.org/docs/current/userguide/multi_project_builds.html#sec:decoupled_projects
+ # org.gradle.parallel=true
+ #Tue Sep 15 14:49:56 EDT 2020
++MYAPP_UPLOAD_KEY_ALIAS=System.getenv('MYAPP_UPLOAD_KEY_ALIAS')
++MYAPP_UPLOAD_KEY_PASSWORD=System.getenv('MYAPP_UPLOAD_KEY_PASSWORD')
++MYAPP_UPLOAD_STORE_FILE=System.getenv('MYAPP_UPLOAD_STORE_FILE')
++MYAPP_UPLOAD_STORE_PASSWORD=System.getenv('MYAPP_UPLOAD_STORE_PASSWORD')
+ android.enableJetifier=true
+ android.useAndroidX=true
+ org.gradle.jvmargs=-Xmx1536M -Dkotlin.daemon.jvm.options\="-Xmx1536M"
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+index 2f384e868f55131f70a190fbac905a5af5ce23b2..f5318647f3608e94562211d4d88cbedcb5bb759d 100644
+GIT binary patch
+literal 2384
+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
+C8Hzms
+
+literal 2384
+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
+CgQfid
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index a185e9b..80b6001 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.6.0",
++    "version": "1.6.0-beta.1",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 870b1a9..88adbc4 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -48,22 +48,22 @@
+   },
+   "dependencies": {
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^1.6.0",
++    "@apollosproject/config": "^1.6.0-beta.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^1.6.0",
+-    "@apollosproject/ui-auth": "^1.6.0",
+-    "@apollosproject/ui-connected": "^1.6.0",
+-    "@apollosproject/ui-fragments": "^1.6.0",
+-    "@apollosproject/ui-htmlview": "^1.6.0",
+-    "@apollosproject/ui-kit": "^1.6.0",
+-    "@apollosproject/ui-mapview": "^1.6.0",
+-    "@apollosproject/ui-media-player": "^1.6.0",
+-    "@apollosproject/ui-notifications": "^1.6.0",
+-    "@apollosproject/ui-onboarding": "^1.6.0",
+-    "@apollosproject/ui-passes": "^1.6.0",
+-    "@apollosproject/ui-prayer": "^1.6.0",
+-    "@apollosproject/ui-scripture": "^1.6.0",
+-    "@apollosproject/ui-storybook": "^1.6.0",
++    "@apollosproject/ui-analytics": "^1.6.0-beta.0",
++    "@apollosproject/ui-auth": "^1.6.0-beta.1",
++    "@apollosproject/ui-connected": "^1.6.0-beta.1",
++    "@apollosproject/ui-fragments": "^1.6.0-beta.0",
++    "@apollosproject/ui-htmlview": "^1.6.0-beta.1",
++    "@apollosproject/ui-kit": "^1.6.0-beta.1",
++    "@apollosproject/ui-mapview": "^1.6.0-beta.1",
++    "@apollosproject/ui-media-player": "^1.6.0-beta.0",
++    "@apollosproject/ui-notifications": "^1.6.0-beta.0",
++    "@apollosproject/ui-onboarding": "^1.6.0-beta.0",
++    "@apollosproject/ui-passes": "^1.6.0-beta.1",
++    "@apollosproject/ui-prayer": "^1.6.0-beta.1",
++    "@apollosproject/ui-scripture": "^1.6.0-beta.0",
++    "@apollosproject/ui-storybook": "^1.6.0-beta.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^2.4.0",
+@@ -122,7 +122,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^1.6.0",
++    "@apollosproject/eslint-config": "^1.6.0-beta.1",
+     "babel-eslint": "10.0.1",
+     "babel-plugin-module-resolver": "^4.0.0",
+     "codecov": "3.7.2",
+diff --git a/apolloschurchapp/scripts/add-packages.sh b/apolloschurchapp/scripts/add-packages.sh
+new file mode 100755
+index 0000000..1bfb0b8
+--- /dev/null
++++ b/apolloschurchapp/scripts/add-packages.sh
+@@ -0,0 +1,30 @@
++# get list of apollosproject packages to update
++
++# get devDependencies line number
++DEVDEPSLINE=$(grep -n "devDependencies" package.json | sed -E "s/^([0-9]+):.*/\1/g")
++
++# get dependecies line number
++DEPSLINE=$(grep -n "dependencies" package.json | sed -E "s/^([0-9]+):.*/\1/g")
++
++# determine what npm tag to update to
++if [ "$#" -ne 1 ]; then
++	echo "pass npm tag like this: ./add-packages.sh <TAG>"
++	exit 1
++else
++	TAG=$1
++fi;
++
++# replace package names with version tag
++JSON=$(sed -E "s/^.*\"(@apollosproject\/[a-z\-]+)\".*/\1@$TAG /g" package.json)
++
++# if packages are listed first and dev packages second...
++if [ $DEVDEPSLINE -gt $DEPSLINE ]
++then
++		PKGS=$(echo "$JSON" | sed -n "$DEPSLINE","$DEVDEPSLINE"p | grep "@apollosproject" | tr -d "\n")
++		DEVPKGS=$(echo "$JSON" | sed -n "$DEVDEPSLINE",/^$/p | grep "@apollosproject" | tr -d "\n")
++else
++		PKGS=$(echo "$JSON" | sed -n "$DEPSLINE",/^$/p | grep "@apollosproject" | tr -d "\n")
++		DEVPKGS=$(echo "$JSON" | sed -n "$DEVDEPSLINE","$DEPSLINE"p | grep "@apollosproject" | tr -d "\n")
++fi
++yarn add --dev $DEVPKGS --ignore-scripts
++yarn add $PKGS --ignore-scripts
