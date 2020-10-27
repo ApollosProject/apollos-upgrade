@@ -1,0 +1,251 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index 5495fb1..1f46c7c 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "1.6.0",
++  "version": "1.7.0-beta.2",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 8533528..f5c0e07 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -117,7 +117,7 @@ ROCK_MAPPINGS:
+     UniversalContentItem:
+       EntityType: ContentChannelItem
+     WeekendContentItem:
+-      ContentChannelId: []
++      ContentChannelId: [5]
+       EntityType: ContentChannelItem
+     ContentItem:
+       EntityType: ContentChannelItem
+@@ -150,6 +150,17 @@ ROCK_MAPPINGS:
+   MOBILE_DEVICE_TYPE_ID: 671
+ 
+ HOME_FEATURES:
++  - type: ActionBar
++    title: Welcome to Apollos
++    actions: [{
++      title: Check In,
++      icon: check,
++      action: OPEN_URL,
++      relatedNode: {
++        __typename: Url,
++        url: 'https://www.google.com'
++      }
++    }]
+   - algorithms: [USER_FEED]
+     type: HeroList
+     primaryAction:
+@@ -187,6 +198,50 @@ HOME_FEATURES:
+           contentChannelId: 13
+       - type: UPCOMING_EVENTS
+ 
++DISCOVER_FEATURES:
++  - algorithms:
++      - type: CONTENT_CHANNEL
++        arguments:
++          contentChannelId: 3
++          limit: 3
++    type: HorizontalCardList
++    subtitle: Sermons
++  - algorithms:
++      - type: CONTENT_CHANNEL
++        arguments:
++          contentChannelId: 5
++          limit: 3
++    type: HorizontalCardList
++    subtitle: Podcasts
++    primaryAction:
++      action: OPEN_CHANNEL
++      title: 'Read More'
++      relatedNode:
++        __typename: ContentChannel
++        id: 5
++        name: Podcasts
++  - algorithms:
++      - type: CONTENT_CHANNEL
++        arguments:
++          contentChannelId: 6
++          limit: 3
++    type: HorizontalCardList
++    title: Videos
++    primaryAction:
++      action: OPEN_CHANNEL
++      title: 'Read More'
++      relatedNode:
++        __typename: ContentChannel
++        id: 6
++        name: Videos
++  - algorithms:
++      - type: CONTENT_CHANNEL
++        arguments:
++          contentChannelId: 8
++          limit: 3
++    type: HorizontalCardList
++    subtitle: Something Else
++
+ # Default mapping of field types -> ids. There's probably no reason to edit this.
+ ROCK_CONSTANTS:
+   TEXT: 1
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+index cdd6308..386665c 100644
+--- a/apollos-church-api/local.graphql
++++ b/apollos-church-api/local.graphql
+@@ -5,6 +5,22 @@ enum ACTION_FEATURE_ACTION {
+   READ_EVENT
+   OPEN_URL
+   OPEN_NODE
++  OPEN_CHANNEL
++}
++
++type ActionBarAction {
++  id: ID!
++  icon: String
++  title: String
++  action: ACTION_FEATURE_ACTION
++  relatedNode: Node
++}
++
++type ActionBarFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  actions: [ActionBarAction]
+ }
+ 
+ type ActionListAction {
+@@ -211,7 +227,8 @@ type ContentSeriesContentItem implements ContentItem & Node & ContentNode & Card
+   isLiked: Boolean
+   likedCount: Int
+   sharing: SharableContentItem
+-  features: [Feature]
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
+ }
+ 
+ type Device implements Node {
+@@ -260,10 +277,16 @@ type FeatureAction {
+   title: String
+ }
+ 
+-interface FeaturesNode {
++type FeatureFeed implements Node {
++  id: ID!
+   features: [Feature]
+ }
+ 
++interface FeaturesNode {
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
++}
++
+ enum GENDER {
+   Male
+   Female
+@@ -300,6 +323,7 @@ type HorizontalCardListFeature implements Feature & Node {
+   title: String
+   subtitle: String
+   cards: [CardListItem]
++  primaryAction: FeatureAction
+ }
+ 
+ type ImageMedia implements Media {
+@@ -514,7 +538,9 @@ type Query {
+   userPass: Pass
+   search(query: String!, first: Int, after: String): SearchResultsConnection
+   campuses(location: CampusLocationInput): [Campus]
+-  userFeedFeatures: [Feature]
++  userFeedFeatures: [Feature] @deprecated(reason: "Use homeFeedFeatures or discoverFeedFeatures")
++  homeFeedFeatures: FeatureFeed
++  discoverFeedFeatures: FeatureFeed
+ }
+ 
+ type RockPersonDetails {
+@@ -710,6 +736,7 @@ type WeekendContentItem implements ContentItem & Node & ContentNode & Card & Vid
+   likedCount: Int
+   liveStream: LiveStream
+   sharing: SharableContentItem
+-  features: [Feature]
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
+ }
+ 
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 0a75bdb..9a689a6 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -40,21 +40,21 @@
+     ]
+   },
+   "dependencies": {
+-    "@apollosproject/bugsnag": "^1.6.0",
+-    "@apollosproject/config": "^1.6.0",
+-    "@apollosproject/data-connector-algolia-search": "^1.6.0",
+-    "@apollosproject/data-connector-analytics": "^1.6.0",
+-    "@apollosproject/data-connector-bible": "^1.6.0",
+-    "@apollosproject/data-connector-church-online": "^1.6.0",
+-    "@apollosproject/data-connector-cloudinary": "^1.6.0",
+-    "@apollosproject/data-connector-onesignal": "^1.6.0",
+-    "@apollosproject/data-connector-passes": "^1.6.0",
+-    "@apollosproject/data-connector-redis-cache": "^1.6.0",
+-    "@apollosproject/data-connector-rock": "^1.6.0",
+-    "@apollosproject/data-connector-twilio": "^1.6.0",
+-    "@apollosproject/data-schema": "^1.6.0",
+-    "@apollosproject/rock-apollo-data-source": "^1.6.0",
+-    "@apollosproject/server-core": "^1.6.0",
++    "@apollosproject/bugsnag": "^1.7.0-beta.2",
++    "@apollosproject/config": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-algolia-search": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-analytics": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-bible": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-church-online": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-cloudinary": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-onesignal": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-passes": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-redis-cache": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-rock": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-twilio": "^1.7.0-beta.2",
++    "@apollosproject/data-schema": "^1.7.0-beta.2",
++    "@apollosproject/rock-apollo-data-source": "^1.7.0-beta.2",
++    "@apollosproject/server-core": "^1.7.0-beta.2",
+     "apollo-server": "^2.14.2",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+@@ -65,9 +65,9 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.6.0",
+-    "@apollosproject/babel-preset-apollos": "^1.6.0",
+-    "@apollosproject/eslint-config": "^1.6.0",
++    "@apollosproject/apollo-server-env-mock": "^1.7.0-beta.2",
++    "@apollosproject/babel-preset-apollos": "^1.7.0-beta.2",
++    "@apollosproject/eslint-config": "^1.7.0-beta.2",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index feab7bb..f27ec1b 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -30,6 +30,8 @@ import {
+   Group,
+   BinaryFiles,
+   Feature,
++  FeatureFeed,
++  ActionAlgorithm,
+   Event,
+   PrayerRequest,
+ } from '@apollosproject/data-connector-rock';
+@@ -66,6 +68,8 @@ const data = {
+   Group,
+   BinaryFiles,
+   Feature,
++  FeatureFeed,
++  ActionAlgorithm,
+   Event,
+   Cache,
+   PrayerRequest,
