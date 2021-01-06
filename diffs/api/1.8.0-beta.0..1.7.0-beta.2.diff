@@ -1,0 +1,945 @@
+diff --git a/apollos-church-api/.nvmrc b/apollos-church-api/.nvmrc
+new file mode 100644
+index 0000000..5b7269c
+--- /dev/null
++++ b/apollos-church-api/.nvmrc
+@@ -0,0 +1 @@
++10.19.0
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index 31fc251..1f46c7c 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "1.8.0-beta.0",
++  "version": "1.7.0-beta.2",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/local.graphql b/apollos-church-api/local.graphql
+new file mode 100644
+index 0000000..386665c
+--- /dev/null
++++ b/apollos-church-api/local.graphql
+@@ -0,0 +1,742 @@
++directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
++
++enum ACTION_FEATURE_ACTION {
++  READ_CONTENT
++  READ_EVENT
++  OPEN_URL
++  OPEN_NODE
++  OPEN_CHANNEL
++}
++
++type ActionBarAction {
++  id: ID!
++  icon: String
++  title: String
++  action: ACTION_FEATURE_ACTION
++  relatedNode: Node
++}
++
++type ActionBarFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  actions: [ActionBarAction]
++}
++
++type ActionListAction {
++  id: ID!
++  title: String
++  subtitle: String
++  image: ImageMedia
++  relatedNode: Node
++  action: ACTION_FEATURE_ACTION
++}
++
++type ActionListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  actions: [ActionListAction]
++  primaryAction: FeatureAction
++}
++
++input AnalyticsDeviceInfo {
++  platform: AnalyticsPlatform
++  deviceId: String
++  deviceModel: String
++  osVersion: String
++  appVersion: String
++}
++
++input AnalyticsIdentifyInput {
++  traits: [AnalyticsMetaField]
++  anonymousId: String!
++  deviceInfo: AnalyticsDeviceInfo
++}
++
++input AnalyticsMetaField {
++  field: String!
++  value: AnalyticsValue
++}
++
++enum AnalyticsPlatform {
++  iOS
++  Android
++}
++
++type AnalyticsResult {
++  success: Boolean
++}
++
++input AnalyticsTrackInput {
++  eventName: String!
++  properties: [AnalyticsMetaField]
++  anonymousId: String
++  deviceInfo: AnalyticsDeviceInfo
++}
++
++scalar AnalyticsValue
++
++type AudioMedia implements Media {
++  name: String
++  key: String
++  sources: [AudioMediaSource]
++}
++
++type AudioMediaSource implements MediaSource {
++  uri: String
++}
++
++interface AudioNode {
++  audios: [AudioMedia]
++}
++
++type AuthenticatedUser {
++  id: ID!
++  profile: Person
++  rock: RockPersonDetails
++  rockToken: String @deprecated(reason: "Use rock.authCookie instead")
++}
++
++type Authentication {
++  user: AuthenticatedUser
++  token: String
++}
++
++enum CacheControlScope {
++  PUBLIC
++  PRIVATE
++}
++
++type Campus implements Node {
++  id: ID!
++  name: String
++  street1: String
++  street2: String
++  city: String
++  state: String
++  postalCode: String
++  latitude: Float
++  longitude: Float
++  image: ImageMediaSource
++  distanceFromLocation(location: CampusLocationInput): Float
++  events: [Event]
++}
++
++input CampusLocationInput {
++  latitude: Float
++  longitude: Float
++}
++
++interface Card {
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  summary: String
++}
++
++type CardListItem {
++  id: ID!
++  hasAction: Boolean
++  actionIcon: String
++  labelText: String
++  summary: String
++  coverImage: ImageMedia
++  title(hyphenated: Boolean): String
++  relatedNode: Node
++  action: ACTION_FEATURE_ACTION
++}
++
++"""A rgb color string"""
++scalar Color
++
++type ContentChannel implements Node {
++  id: ID!
++  name: String
++  description: String
++  childContentChannels: [ContentChannel]
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  iconName: String
++}
++
++interface ContentChildNode {
++  parentChannel: ContentChannel
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++}
++
++interface ContentItem {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++type ContentItemsConnection {
++  edges: [ContentItemsConnectionEdge]
++  totalCount: Int
++  pageInfo: PaginationInfo
++}
++
++type ContentItemsConnectionEdge {
++  node: ContentItem
++  cursor: String
++}
++
++input ContentItemsConnectionInput {
++  first: Int
++  after: String
++}
++
++interface ContentNode {
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  htmlContent: String
++}
++
++interface ContentParentNode {
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++}
++
++type ContentSeriesContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ProgressNode & LikableNode & ShareableNode & FeaturesNode {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  percentComplete: Float
++  upNext: ContentItem
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
++}
++
++type Device implements Node {
++  id: ID!
++  pushId: String!
++  notificationsEnabled: Boolean!
++}
++
++type DevotionalContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ScriptureNode & LikableNode & ShareableNode {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++type Event implements Node {
++  id: ID!
++  name: String
++  description: String
++  location: String
++  start: String
++  end: String
++  image: ImageMedia
++}
++
++interface Feature {
++  id: ID!
++  order: Int
++}
++
++type FeatureAction {
++  relatedNode: Node
++  action: ACTION_FEATURE_ACTION
++  title: String
++}
++
++type FeatureFeed implements Node {
++  id: ID!
++  features: [Feature]
++}
++
++interface FeaturesNode {
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
++}
++
++enum GENDER {
++  Male
++  Female
++  Unknown
++}
++
++type Group implements Node {
++  id: ID!
++  name: String
++  leader: Person @deprecated(reason: "No longer used, use 'leaders' instead")
++  leaders: [Person]
++  members: [Person]
++}
++
++enum GROUP_TYPE {
++  Serving
++  Community
++  Family
++}
++
++type HeroListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  actions: [ActionListAction]
++  heroCard: CardListItem
++  primaryAction: FeatureAction
++}
++
++type HorizontalCardListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  cards: [CardListItem]
++  primaryAction: FeatureAction
++}
++
++type ImageMedia implements Media {
++  name: String
++  key: String
++  sources: [ImageMediaSource]
++}
++
++type ImageMediaSource implements MediaSource {
++  uri: String
++}
++
++enum InteractionAction {
++  VIEW
++  COMPLETE
++  PRAY
++}
++
++input InteractionDataField {
++  field: String!
++  value: InteractionValue
++}
++
++type InteractionResult {
++  success: Boolean
++  node: Node
++}
++
++scalar InteractionValue
++
++interface LikableNode {
++  isLiked: Boolean
++  likedCount: Int
++}
++
++enum LIKE_OPERATION {
++  Like
++  Unlike
++}
++
++input LikeEntityInput {
++  nodeId: ID!
++  operation: LIKE_OPERATION!
++}
++
++interface LiveNode {
++  liveStream: LiveStream
++}
++
++type LiveStream {
++  isLive: Boolean
++  eventStartTime: String
++  media: VideoMedia
++  webViewUrl: String
++  contentItem: ContentItem
++}
++
++interface Media {
++  name: String
++  key: String
++  sources: [MediaSource]
++}
++
++type MediaContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ScriptureNode & LikableNode & ShareableNode {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  scriptures: [Scripture]
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++enum MediaInputType {
++  IMAGE
++  VIDEO
++  AUDIO
++}
++
++interface MediaSource {
++  uri: String
++}
++
++type Mutation {
++  _placeholder: Boolean
++  updateLikeEntity(input: LikeEntityInput!): ContentItem @deprecated(reason: "Use the more general updateLikeNode instead")
++  updateLikeNode(input: LikeEntityInput!): Node
++  updateProfileField(input: UpdateProfileInput!): Person
++  updateProfileFields(input: [UpdateProfileInput]!): Person
++  uploadProfileImage(file: Upload!, size: Int!): Person
++  authenticate(identity: String!, password: String!): Authentication
++  changePassword(password: String!): Authentication
++  registerPerson(email: String!, password: String!, userProfile: [UpdateProfileInput]): Authentication
++  requestSmsLoginPin(phoneNumber: String!): SmsPinResult
++  authenticateWithSms(phoneNumber: String!, pin: String!): Authentication
++  registerWithSms(phoneNumber: String!, pin: String!, userProfile: [UpdateProfileInput]): Authentication
++  interactWithNode(action: InteractionAction!, nodeId: ID!, data: [InteractionDataField]): InteractionResult
++  identifySelf(input: AnalyticsIdentifyInput!): AnalyticsResult
++  trackEvent(input: AnalyticsTrackInput!): AnalyticsResult
++  updateUserPushSettings(input: PushSettingsInput!): Person
++  updateUserCampus(campusId: String!): Person
++  addPrayer(text: String!, isAnonymous: Boolean): PrayerRequest
++}
++
++interface Node {
++  id: ID!
++}
++
++type PaginationInfo {
++  startCursor: String
++  endCursor: String
++}
++
++type Pass implements Node {
++  id: ID!
++  type: PassType
++  description: String
++  logo: ImageMediaSource
++  thumbnail: ImageMediaSource
++  barcode: ImageMediaSource
++  primaryFields: [PassField]
++  secondaryFields: [PassField]
++  backgroundColor: Color
++  foregroundColor: Color
++  labelColor: Color
++  logoText: String
++  passkitFileUrl: String
++}
++
++type PassField {
++  key: String!
++  label: String
++  value: String!
++  textAlignment: PassFieldTextAlignment
++}
++
++enum PassFieldTextAlignment {
++  LEFT
++  CENTER
++  RIGHT
++  NATURAL
++}
++
++enum PassType {
++  GENERIC
++}
++
++type Person implements Node {
++  id: ID!
++  firstName: String
++  lastName: String
++  nickName: String
++  email: String
++  gender: GENDER
++  birthDate: String
++  photo: ImageMediaSource
++  devices: [Device]
++  campus: Campus
++  groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
++}
++
++type PrayerListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  isCard: Boolean
++  title: String
++  subtitle: String
++  prayers: [PrayerRequest]
++}
++
++type PrayerRequest implements Node {
++  id: ID!
++  text: String!
++  requestor: Person
++  isAnonymous: Boolean
++  isPrayed: Boolean
++}
++
++interface ProgressNode {
++  percentComplete: Float
++  upNext: ContentItem
++}
++
++input PushSettingsInput {
++  enabled: Boolean
++  pushProviderUserId: String
++}
++
++type Query {
++  _placeholder: Boolean
++  node(id: ID!): Node
++  likedContent(first: Int, after: String): ContentItemsConnection
++  contentChannels: [ContentChannel]
++  campaigns: ContentItemsConnection
++  userFeed(first: Int, after: String): ContentItemsConnection
++  personaFeed(first: Int, after: String): ContentItemsConnection
++  currentUser: AuthenticatedUser
++  userExists(identity: String): USER_AUTH_STATUS
++  liveStream: LiveStream @deprecated(reason: "Use liveStreams, there may be multiple.")
++  liveStreams: [LiveStream]
++  scripture(query: String!, version: VERSION): Scripture @deprecated(reason: "Use 'scriptures' instead.")
++  scriptures(query: String!, version: VERSION): [Scripture]
++  userPass: Pass
++  search(query: String!, first: Int, after: String): SearchResultsConnection
++  campuses(location: CampusLocationInput): [Campus]
++  userFeedFeatures: [Feature] @deprecated(reason: "Use homeFeedFeatures or discoverFeedFeatures")
++  homeFeedFeatures: FeatureFeed
++  discoverFeedFeatures: FeatureFeed
++}
++
++type RockPersonDetails {
++  authToken: String
++  authCookie: String
++}
++
++type Scripture implements Node {
++  id: ID!
++  html: String
++  reference: String
++  copyright: String
++  version: String
++}
++
++type ScriptureFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  scriptures: [Scripture]
++  sharing: SharableFeature
++}
++
++interface ScriptureNode {
++  scriptures: [Scripture]
++}
++
++type SearchResult {
++  cursor: String
++  title: String
++  summary: String
++  coverImage: ImageMedia
++  node: Node
++}
++
++type SearchResultsConnection {
++  edges: [SearchResult]
++  pageInfo: PaginationInfo
++}
++
++interface Sharable {
++  message: String
++  title: String
++  url: String @deprecated(reason: "Not supported on the interface")
++}
++
++type SharableContentItem implements Sharable {
++  message: String
++  title: String
++  url: String
++}
++
++type SharableFeature implements Sharable {
++  message: String
++  title: String
++  url: String @deprecated(reason: "Not supported on a feature")
++}
++
++interface ShareableNode {
++  sharing: SharableContentItem
++}
++
++type SmsPinResult {
++  success: Boolean
++  userAuthStatus: USER_AUTH_STATUS
++}
++
++type TextFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  body: String
++  sharing: SharableFeature
++}
++
++type Theme {
++  type: ThemeType
++  colors: ThemeColors
++}
++
++type ThemeColors {
++  primary: Color
++  secondary: Color
++  screen: Color
++  paper: Color
++  alert: Color
++}
++
++interface ThemedNode {
++  theme: Theme
++}
++
++enum ThemeType {
++  LIGHT
++  DARK
++}
++
++type UniversalContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & LikableNode & ShareableNode {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  sharing: SharableContentItem
++}
++
++enum UPDATEABLE_PROFILE_FIELDS {
++  FirstName
++  LastName
++  Email
++  NickName
++  Gender
++  BirthDate
++}
++
++input UpdateProfileInput {
++  field: UPDATEABLE_PROFILE_FIELDS!
++  value: String!
++}
++
++"""The `Upload` scalar type represents a file upload."""
++scalar Upload
++
++type Url implements Node {
++  url: String
++  id: ID!
++}
++
++enum USER_AUTH_STATUS {
++  NONE
++  NEW_APP_USER
++  EXISTING_APP_USER
++}
++
++enum VERSION {
++  WEB
++  KJV
++}
++
++type VerticalCardListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  isFeatured: Boolean
++  cards: [CardListItem]
++}
++
++type VideoMedia implements Media {
++  name: String
++  key: String
++  sources: [VideoMediaSource]
++  embedHtml: String
++}
++
++type VideoMediaSource implements MediaSource {
++  uri: String
++}
++
++interface VideoNode {
++  videos: [VideoMedia]
++}
++
++type WebviewFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  linkText: String
++  title: String
++  url: String
++}
++
++type WeekendContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & LikableNode & LiveNode & ShareableNode & FeaturesNode {
++  id: ID!
++  title(hyphenated: Boolean): String
++  coverImage: ImageMedia
++  images: [ImageMedia]
++  videos: [VideoMedia]
++  audios: [AudioMedia]
++  htmlContent: String
++  summary: String
++  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
++  parentChannel: ContentChannel
++  theme: Theme
++  isLiked: Boolean
++  likedCount: Int
++  liveStream: LiveStream
++  sharing: SharableContentItem
++  features: [Feature] @deprecated(reason: "Use featureFeed")
++  featureFeed: FeatureFeed
++}
++
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 4138abb..9a689a6 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -5,39 +5,59 @@
+   "main": "lib/index.js",
+   "scripts": {
+     "setup": "./scripts/init.sh",
+-    "start": "yarn start:prod",
++    "start": "./scripts/generateLocalSchema.sh & yarn start:dev",
+     "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+     "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "postinstall": "yarn build",
+-    "link-packages": "node ./scripts/link-packages && yarn yalc update",
++    "link-packages": "node ./scripts/link-packages",
+     "unlink-packages": "node ./scripts/link-packages remove",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
+-    "lint": "eslint ./src --ext .js"
++    "lint": "eslint ./src --ext .js",
++    "fixlint": "eslint ./src --ext .js --fix",
++    "codecov": "cat ./coverage/lcov.info | codecov",
++    "version": "node ../../scripts/update-apollos-version.js && git add apollos.json",
++    "upgrade": "npx @apollosproject/upgrade-tools upgrade",
++    "latest": "./scripts/add-packages.sh latest",
++    "beta": "./scripts/add-packages.sh beta",
++    "canary": "./scripts/add-packages.sh canary"
+   },
+   "engines": {
+-    "node": ">=10.19.x"
++    "node": ">=8.11.x"
++  },
++  "jest": {
++    "collectCoverage": true,
++    "collectCoverageFrom": [
++      "src/**/*.{js,jsx}"
++    ],
++    "testMatch": [
++      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
++      "<rootDir>/src/**/?(*.)(spec|test|tests).{js,jsx,mjs}"
++    ],
++    "testEnvironment": "node",
++    "reporters": [
++      "<rootDir>/../../scripts/fingers-crossed-reporter.js"
++    ]
+   },
+   "dependencies": {
+-    "@apollosproject/bugsnag": "^1.8.0-beta.0",
+-    "@apollosproject/config": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-algolia-search": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-analytics": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-bible": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-church-online": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-cloudinary": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-onesignal": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-passes": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-redis-cache": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-rock": "^1.8.0-beta.0",
+-    "@apollosproject/data-connector-twilio": "^1.8.0-beta.0",
+-    "@apollosproject/data-schema": "^1.8.0-beta.0",
+-    "@apollosproject/rock-apollo-data-source": "^1.8.0-beta.0",
+-    "@apollosproject/server-core": "^1.8.0-beta.0",
++    "@apollosproject/bugsnag": "^1.7.0-beta.2",
++    "@apollosproject/config": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-algolia-search": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-analytics": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-bible": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-church-online": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-cloudinary": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-onesignal": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-passes": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-redis-cache": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-rock": "^1.7.0-beta.2",
++    "@apollosproject/data-connector-twilio": "^1.7.0-beta.2",
++    "@apollosproject/data-schema": "^1.7.0-beta.2",
++    "@apollosproject/rock-apollo-data-source": "^1.7.0-beta.2",
++    "@apollosproject/server-core": "^1.7.0-beta.2",
+     "apollo-server": "^2.14.2",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+-    "cors": "^2.8.5",
+     "dotenv": "6.0.0",
+     "express": "^4.17.0",
+     "graphql": "14.6.0",
+@@ -45,14 +65,17 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^1.8.0-beta.0",
+-    "@apollosproject/babel-preset-apollos": "^1.8.0-beta.0",
+-    "@apollosproject/eslint-config": "^1.8.0-beta.0",
++    "@apollosproject/apollo-server-env-mock": "^1.7.0-beta.2",
++    "@apollosproject/babel-preset-apollos": "^1.7.0-beta.2",
++    "@apollosproject/eslint-config": "^1.7.0-beta.2",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
++    "@entria/graphql-findbreakingchanges": "^1.0.1",
+     "babel-eslint": "^10.0.3",
++    "babel-jest": "^24.9.0",
+     "babel-plugin-module-resolver": "^3.2.0",
++    "codecov": "3.7.1",
+     "eslint": "^5.16.0",
+     "eslint-config-airbnb-base": "^14.0.0",
+     "eslint-config-prettier": "^2.9.0",
+@@ -61,8 +84,8 @@
+     "eslint-plugin-import": "^2.12.0",
+     "eslint-plugin-jest": "^21.15.2",
+     "eslint-plugin-prettier": "^2.6.0",
++    "get-graphql-schema": "^2.1.2",
+     "linkemon": "^0.1.1",
+-    "nodemon": "1.18.7",
+-    "yalc": "^1.0.0-pre.47"
++    "nodemon": "^2.0.2"
+   }
+ }
+diff --git a/apollos-church-api/scripts/generateLocalSchema.sh b/apollos-church-api/scripts/generateLocalSchema.sh
+new file mode 100755
+index 0000000..59be766
+--- /dev/null
++++ b/apollos-church-api/scripts/generateLocalSchema.sh
+@@ -0,0 +1,15 @@
++PING_SERVER="curl 'http://localhost:4000/graphql' -H 'content-type: application/json' -H 'accept: application/json' --data-binary '{\"query\":\"{_placeholder}\"}' > /dev/null 2>&1"
++
++if eval "$PING_SERVER"; then
++  echo 'Server running, downloading schema from localhost:4000'
++  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
++  echo 'Done. Check local.graphql'
++else
++  sleep 1
++  until eval "$PING_SERVER"; do
++      sleep 1
++      echo 'Waiting for server to boot....'
++  done
++  echo 'Curling Server for most recent schema.'
++  ./node_modules/.bin/get-graphql-schema http://localhost:4000 > local.graphql
++fi
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index a01db43..e0106a6 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,6 +1,3 @@
+-import fs from 'fs';
+-import path from 'path';
+-import cors from 'cors';
+ import { ApolloServer } from 'apollo-server-express';
+ import ApollosConfig from '@apollosproject/config';
+ import express from 'express';
+@@ -46,7 +43,7 @@ const apolloServer = new ApolloServer({
+   extensions,
+   plugins: [new BugsnagPlugin()],
+   formatError: (error) => {
+-    console.error(get(error, 'extensions.exception.stacktrace', []).join('\n'));
++    console.error(get(error, 'extensions.exception.stacktrace').join('\n'));
+     return error;
+   },
+   playground: {
+@@ -64,21 +61,10 @@ const apolloServer = new ApolloServer({
+ const app = express();
+ 
+ // health check
+-app.get('/health', cors(), (req, res) => {
++app.get('/health', (req, res) => {
+   res.send('ok');
+ });
+ 
+-// apollos version
+-app.get('/version', cors(), (req, res) => {
+-  try {
+-    const data = fs.readFileSync(path.join(__dirname, '..', 'apollos.json'));
+-    const { version } = JSON.parse(data);
+-    res.send(version);
+-  } catch (e) {
+-    res.send('unknown');
+-  }
+-});
+-
+ applyServerMiddleware({ app, dataSources, context });
+ setupJobs({ app, dataSources, context });
+ // Comment out if you don't want the API serving apple-app-site-association or assetlinks manifests.

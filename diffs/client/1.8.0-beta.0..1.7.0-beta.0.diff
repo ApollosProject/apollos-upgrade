@@ -1,0 +1,2847 @@
+diff --git a/apolloschurchapp/.nvmrc b/apolloschurchapp/.nvmrc
+new file mode 100644
+index 0000000..5b7269c
+--- /dev/null
++++ b/apolloschurchapp/.nvmrc
+@@ -0,0 +1 @@
++10.19.0
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 0c43e7f..2c65e95 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "1.8.0-beta.0",
++    "version": "1.7.0-beta.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index abc3329..596ecbb 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -14,20 +14,20 @@ PODS:
+     - DoubleConversion
+     - glog
+   - glog (0.3.5)
+-  - google-cast-sdk-no-bluetooth (4.5.3):
+-    - google-cast-sdk-no-bluetooth/Core (= 4.5.3)
+-    - GTMSessionFetcher/Core (~> 1.1)
+-    - Protobuf (~> 3.13)
+-  - google-cast-sdk-no-bluetooth/Core (4.5.3):
+-    - GTMSessionFetcher/Core (~> 1.1)
+-    - Protobuf (~> 3.13)
+-  - GTMSessionFetcher/Core (1.5.0)
++  - google-cast-sdk-no-bluetooth (4.4.8):
++    - google-cast-sdk-no-bluetooth/Core (= 4.4.8)
++    - GTMSessionFetcher/Core (~> 1.0)
++    - Protobuf (~> 3.12)
++  - google-cast-sdk-no-bluetooth/Core (4.4.8):
++    - GTMSessionFetcher/Core (~> 1.0)
++    - Protobuf (~> 3.12)
++  - GTMSessionFetcher/Core (1.4.0)
+   - OneSignal (2.15.2)
+   - Permission-Notifications (2.0.10):
+     - RNPermissions
+   - Permission-PhotoLibrary (2.0.10):
+     - RNPermissions
+-  - Protobuf (3.14.0)
++  - Protobuf (3.13.0)
+   - React (0.60.5):
+     - React-Core (= 0.60.5)
+     - React-DevSupport (= 0.60.5)
+@@ -75,7 +75,7 @@ PODS:
+   - React-jsinspector (0.60.5)
+   - react-native-config (0.11.7):
+     - React
+-  - react-native-geolocation-service (5.1.1):
++  - react-native-geolocation (2.0.2):
+     - React
+   - react-native-google-cast/NoBluetooth (3.3.0):
+     - google-cast-sdk-no-bluetooth
+@@ -170,7 +170,7 @@ DEPENDENCIES:
+   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
+   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+   - react-native-config (from `../node_modules/react-native-config`)
+-  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
++  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+   - react-native-google-cast/NoBluetooth (from `../node_modules/react-native-google-cast/ios/`)
+   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+   - react-native-maps (from `../node_modules/react-native-maps`)
+@@ -243,8 +243,8 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+   react-native-config:
+     :path: "../node_modules/react-native-config"
+-  react-native-geolocation-service:
+-    :path: "../node_modules/react-native-geolocation-service"
++  react-native-geolocation:
++    :path: "../node_modules/@react-native-community/geolocation"
+   react-native-google-cast:
+     :path: "../node_modules/react-native-google-cast/ios/"
+   react-native-image-picker:
+@@ -319,12 +319,12 @@ SPEC CHECKSUMS:
+   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+-  google-cast-sdk-no-bluetooth: 815df973d547e06a90768f4a72220950cd32d8cb
+-  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
++  google-cast-sdk-no-bluetooth: d5a60530c72b0907fb302d835952b6cb0ba5f128
++  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+   OneSignal: 9531e385388565f4d31797ddadbe0fcc786430ec
+   Permission-Notifications: c9eb3a2da68dc0f37a8dc67d37bd28d150c5041d
+   Permission-PhotoLibrary: e59a7a687e002e8c8c46946c26520934ba85a688
+-  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
++  Protobuf: 3dac39b34a08151c6d949560efe3f86134a3f748
+   React: 53c53c4d99097af47cf60594b8706b4e3321e722
+   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
+   React-cxxreact: 8384287780c4999351ad9b6e7a149d9ed10a2395
+@@ -333,7 +333,7 @@ SPEC CHECKSUMS:
+   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
+   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+-  react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
++  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-google-cast: 410619ef162b8b91815ecf7271502224998dee8e
+   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
+   react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
+diff --git a/apolloschurchapp/ios/Swift.swift b/apolloschurchapp/ios/Swift.swift
+deleted file mode 100644
+index 00a17ca..0000000
+--- a/apolloschurchapp/ios/Swift.swift
++++ /dev/null
+@@ -1,9 +0,0 @@
+-//
+-//  Swift.swift
+-//  apolloschurchapp
+-//
+-//  Created by Vincent Wilson on 12/16/20.
+-//  Copyright © 2020 Facebook. All rights reserved.
+-//
+-
+-import Foundation
+diff --git a/apolloschurchapp/ios/apolloschurchapp-Bridging-Header.h b/apolloschurchapp/ios/apolloschurchapp-Bridging-Header.h
+deleted file mode 100644
+index 1b2cb5d..0000000
+--- a/apolloschurchapp/ios/apolloschurchapp-Bridging-Header.h
++++ /dev/null
+@@ -1,4 +0,0 @@
+-//
+-//  Use this file to import your target's public headers that you would like to expose to Swift.
+-//
+-
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h b/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h
+deleted file mode 100644
+index 1b2cb5d..0000000
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h
++++ /dev/null
+@@ -1,4 +0,0 @@
+-//
+-//  Use this file to import your target's public headers that you would like to expose to Swift.
+-//
+-
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 449b017..88f3bb4 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -36,8 +36,6 @@
+ 		A415698B9815C7305EDB7AA7 /* libPods-apolloschurchappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 560CBCD50AE7D282715D134E /* libPods-apolloschurchappTests.a */; };
+ 		AB3BD177B8A14193A5EEDDF8 /* Inter-UI-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A613256118404CB691DE2C8E /* Inter-UI-Regular.otf */; };
+ 		B02F194A3F6A4FE29AC799B4 /* DroidSerif-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A93F9D112A034626A9421759 /* DroidSerif-BoldItalic.ttf */; };
+-		BF29D647258A72450054DB47 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF29D646258A72450054DB47 /* Swift.swift */; };
+-		BF29D648258A72450054DB47 /* Swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF29D646258A72450054DB47 /* Swift.swift */; };
+ 		E875558F3FB8FA2024EF7DC2 /* libPods-apolloschurchapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB6B5B7B6A0D1ECB68CF0DD /* libPods-apolloschurchapp.a */; };
+ 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
+ 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
+@@ -93,9 +91,6 @@
+ 		AB44FC16DED929081698EDFD /* Pods-apolloschurchappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchappTests.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchappTests/Pods-apolloschurchappTests.debug.xcconfig"; sourceTree = "<group>"; };
+ 		ADC3D2DB245545ADB1CAB3FE /* DroidSerif-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DroidSerif-Italic.ttf"; path = "../assets/fonts/DroidSerif-Italic.ttf"; sourceTree = "<group>"; };
+ 		AE85030F59F256E90D5A4C2B /* Pods-apolloschurchapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOS/Pods-apolloschurchapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+-		BF29D644258A72450054DB47 /* apolloschurchapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "apolloschurchapp-Bridging-Header.h"; sourceTree = "<group>"; };
+-		BF29D645258A72450054DB47 /* apolloschurchapp-tvOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "apolloschurchapp-tvOS-Bridging-Header.h"; sourceTree = "<group>"; };
+-		BF29D646258A72450054DB47 /* Swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swift.swift; sourceTree = "<group>"; };
+ 		D394E3064D75710E81C51EB0 /* Pods-apolloschurchapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOSTests/Pods-apolloschurchapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+ 		D5157D807E164356ADE87867 /* Inter-UI-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Bold.otf"; path = "../assets/fonts/Inter-UI-Bold.otf"; sourceTree = "<group>"; };
+ 		DA9745795726553C6FA9E7A8 /* Pods-apolloschurchapp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOSTests/Pods-apolloschurchapp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+@@ -176,9 +171,6 @@
+ 				82AAE52D24187BB500D1EEC7 /* BootSplash.storyboard */,
+ 				13B07FB61A68108700A75B9A /* Info.plist */,
+ 				13B07FB71A68108700A75B9A /* main.m */,
+-				BF29D646258A72450054DB47 /* Swift.swift */,
+-				BF29D644258A72450054DB47 /* apolloschurchapp-Bridging-Header.h */,
+-				BF29D645258A72450054DB47 /* apolloschurchapp-tvOS-Bridging-Header.h */,
+ 			);
+ 			name = apolloschurchapp;
+ 			sourceTree = "<group>";
+@@ -369,12 +361,10 @@
+ 					};
+ 					13B07F861A680F5B00A75B9A = {
+ 						DevelopmentTeam = 7KS82J74VW;
+-						LastSwiftMigration = 1230;
+ 						ProvisioningStyle = Manual;
+ 					};
+ 					2D02E47A1E0B4A5D006451C7 = {
+ 						CreatedOnToolsVersion = 8.2.1;
+-						LastSwiftMigration = 1230;
+ 						ProvisioningStyle = Automatic;
+ 					};
+ 					2D02E48F1E0B4A5D006451C7 = {
+@@ -515,8 +505,8 @@
+ 			);
+ 			inputPaths = (
+ 				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-resources.sh",
+-				"${PODS_ROOT}/google-cast-sdk-no-bluetooth/GoogleCastSDK-ios-4.5.3_static/GoogleCast.framework/GoogleCastCoreResources.bundle",
+-				"${PODS_ROOT}/google-cast-sdk-no-bluetooth/GoogleCastSDK-ios-4.5.3_static/GoogleCast.framework/GoogleCastUIResources.bundle",
++				"${PODS_ROOT}/google-cast-sdk-no-bluetooth/GoogleCastSDK-ios-4.4.8_static/GoogleCast.framework/GoogleCastCoreResources.bundle",
++				"${PODS_ROOT}/google-cast-sdk-no-bluetooth/GoogleCastSDK-ios-4.4.8_static/GoogleCast.framework/GoogleCastUIResources.bundle",
+ 			);
+ 			name = "[CP] Copy Pods Resources";
+ 			outputPaths = (
+@@ -610,7 +600,6 @@
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+-				BF29D647258A72450054DB47 /* Swift.swift in Sources */,
+ 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -620,7 +609,6 @@
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
+-				BF29D648258A72450054DB47 /* Swift.swift in Sources */,
+ 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -653,7 +641,6 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = AB44FC16DED929081698EDFD /* Pods-apolloschurchappTests.debug.xcconfig */;
+ 			buildSettings = {
+-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				GCC_PREPROCESSOR_DEFINITIONS = (
+ 					"DEBUG=1",
+@@ -681,7 +668,6 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = E98AC9782C338F13632EF710 /* Pods-apolloschurchappTests.release.xcconfig */;
+ 			buildSettings = {
+-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				COPY_PHASE_STRIP = NO;
+ 				HEADER_SEARCH_PATHS = (
+@@ -707,7 +693,6 @@
+ 			baseConfigurationReference = 54F271B8EB67A4997A2C7D96 /* Pods-apolloschurchapp.debug.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CLANG_ENABLE_MODULES = YES;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development: Apollos Apps (58685TNK9H)";
+ 				CODE_SIGN_STYLE = Manual;
+@@ -728,9 +713,6 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = com.differential.apollos;
+ 				PRODUCT_NAME = apolloschurchapp;
+ 				PROVISIONING_PROFILE_SPECIFIER = "match Development com.differential.apollos";
+-				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-Bridging-Header.h";
+-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+-				SWIFT_VERSION = 5.0;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Debug;
+@@ -740,7 +722,6 @@
+ 			baseConfigurationReference = 1F8F5BC4745C8F22C695573D /* Pods-apolloschurchapp.release.xcconfig */;
+ 			buildSettings = {
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+-				CLANG_ENABLE_MODULES = YES;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Distribution: Differential Dev Shop, LLC (7KS82J74VW)";
+ 				CODE_SIGN_STYLE = Manual;
+@@ -760,8 +741,6 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = com.differential.apollos;
+ 				PRODUCT_NAME = apolloschurchapp;
+ 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.differential.apollos";
+-				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-Bridging-Header.h";
+-				SWIFT_VERSION = 5.0;
+ 				VERSIONING_SYSTEM = "apple-generic";
+ 			};
+ 			name = Release;
+@@ -773,7 +752,6 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+ 				CLANG_ANALYZER_NONNULL = YES;
+-				CLANG_ENABLE_MODULES = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_INFINITE_RECURSION = YES;
+ 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+@@ -794,9 +772,6 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.apolloschurchapp-tvOS";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = appletvos;
+-				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-tvOS-Bridging-Header.h";
+-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+-				SWIFT_VERSION = 5.0;
+ 				TARGETED_DEVICE_FAMILY = 3;
+ 				TVOS_DEPLOYMENT_TARGET = 9.2;
+ 			};
+@@ -809,7 +784,6 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+ 				CLANG_ANALYZER_NONNULL = YES;
+-				CLANG_ENABLE_MODULES = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_INFINITE_RECURSION = YES;
+ 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+@@ -830,8 +804,6 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.apolloschurchapp-tvOS";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = appletvos;
+-				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-tvOS-Bridging-Header.h";
+-				SWIFT_VERSION = 5.0;
+ 				TARGETED_DEVICE_FAMILY = 3;
+ 				TVOS_DEPLOYMENT_TARGET = 9.2;
+ 			};
+@@ -841,7 +813,6 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = D394E3064D75710E81C51EB0 /* Pods-apolloschurchapp-tvOSTests.debug.xcconfig */;
+ 			buildSettings = {
+-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+@@ -873,7 +844,6 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = DA9745795726553C6FA9E7A8 /* Pods-apolloschurchapp-tvOSTests.release.xcconfig */;
+ 			buildSettings = {
+-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 52a216b..4eea809 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -59,8 +59,6 @@
+ 	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
+ 	<key>NSLocationAlwaysUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>	
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSMicrophoneUsageDescription</key>
+diff --git a/apolloschurchapp/metro.config.js b/apolloschurchapp/metro.config.js
+deleted file mode 100644
+index 6aa2601..0000000
+--- a/apolloschurchapp/metro.config.js
++++ /dev/null
+@@ -1,26 +0,0 @@
+-const {
+-  applyConfigForLinkedDependencies,
+-} = require('@carimus/metro-symlinked-deps');
+-
+-module.exports = applyConfigForLinkedDependencies(
+-  {
+-    transformer: {
+-      getTransformOptions: async () => ({
+-        transform: {
+-          experimentalImportSupport: false,
+-          inlineRequires: false,
+-        },
+-      }),
+-    },
+-  },
+-  {
+-    projectRoot: __dirname,
+-    blacklistLinkedModules: [
+-      'react-native',
+-      'react-native-linear-gradient',
+-      'react-native-svg',
+-      '@storybook',
+-    ],
+-    resolveNodeModulesAtRoot: true,
+-  }
+-);
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index d1a5f42..13691f1 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -13,16 +13,14 @@
+     "android": "SIM=\"$($HOME/Library/Android/sdk/emulator/emulator -list-avds | sed -n 1p)\" && $HOME/Library/Android/sdk/emulator/emulator -avd \"${SIM}\" & react-native run-android --appId com.differential.apollos",
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "ios": "react-native run-ios --simulator=\"iPhone 11\"",
+-    "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove",
++    "link-packages": "yarn --check-files --ignore-scripts && node ./scripts/link-packages",
++    "unlink-packages": "rm -rf ./node_modules/@apollosproject/* && ../node_modules/.bin/wml rm all",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
+-    "get-schema": "eval $(grep ^APP_DATA_URL .env) && sleep 5 && get-graphql-schema $APP_DATA_URL > schema.graphql",
+-    "prestart": "yarn generate-stories & yarn get-schema && node ./scripts/get-introspection-data.js",
++    "prestart": "yarn generate-stories & node ./scripts/get-introspection-data.js",
+     "postinstall": "jetify && yarn pods",
+     "pods": "(bundle install && cd ios && bundle exec pod install --repo-update)",
+-    "start": "yarn start:dev",
+-    "start:dev": "react-native start",
++    "start": "react-native start",
+     "test": "TZ=UTC jest",
+     "upgrade": "npx @apollosproject/upgrade-tools upgrade",
+     "latest": "./scripts/add-packages.sh latest",
+@@ -50,25 +48,26 @@
+   },
+   "dependencies": {
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^1.8.0-beta.0",
++    "@apollosproject/config": "^1.7.0-beta.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^1.8.0-beta.0",
+-    "@apollosproject/ui-auth": "^1.8.0-beta.0",
+-    "@apollosproject/ui-connected": "^1.8.0-beta.0",
+-    "@apollosproject/ui-fragments": "^1.8.0-beta.0",
+-    "@apollosproject/ui-htmlview": "^1.8.0-beta.0",
+-    "@apollosproject/ui-kit": "^1.8.0-beta.0",
+-    "@apollosproject/ui-mapview": "^1.8.0-beta.0",
+-    "@apollosproject/ui-media-player": "^1.8.0-beta.0",
+-    "@apollosproject/ui-notifications": "^1.8.0-beta.0",
+-    "@apollosproject/ui-onboarding": "^1.8.0-beta.0",
+-    "@apollosproject/ui-passes": "^1.8.0-beta.0",
+-    "@apollosproject/ui-prayer": "^1.8.0-beta.0",
+-    "@apollosproject/ui-scripture": "^1.8.0-beta.0",
+-    "@apollosproject/ui-storybook": "^1.8.0-beta.0",
++    "@apollosproject/ui-analytics": "^1.7.0-beta.0",
++    "@apollosproject/ui-auth": "^1.7.0-beta.0",
++    "@apollosproject/ui-connected": "^1.7.0-beta.0",
++    "@apollosproject/ui-fragments": "^1.7.0-beta.0",
++    "@apollosproject/ui-htmlview": "^1.7.0-beta.0",
++    "@apollosproject/ui-kit": "^1.7.0-beta.0",
++    "@apollosproject/ui-mapview": "^1.7.0-beta.0",
++    "@apollosproject/ui-media-player": "^1.7.0-beta.0",
++    "@apollosproject/ui-notifications": "^1.7.0-beta.0",
++    "@apollosproject/ui-onboarding": "^1.7.0-beta.0",
++    "@apollosproject/ui-passes": "^1.7.0-beta.0",
++    "@apollosproject/ui-prayer": "^1.7.0-beta.0",
++    "@apollosproject/ui-scripture": "^1.7.0-beta.0",
++    "@apollosproject/ui-storybook": "^1.7.0-beta.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
++    "@react-native-community/geolocation": "^2.0.2",
+     "apollo-cache-inmemory": "1.5.1",
+     "apollo-cache-persist": "0.1.1",
+     "apollo-client": "2.6.8",
+@@ -95,7 +94,7 @@
+     "react-native-bootsplash": "^2.0.5",
+     "react-native-config": "^0.11.7",
+     "react-native-device-info": "^4.0.1",
+-    "react-native-geolocation-service": "^5.1.1",
++    "react-native-geolocation-service": "^3.0.0",
+     "react-native-gesture-handler": "^1.3.1",
+     "react-native-google-cast": "^3.3.0",
+     "react-native-image-picker": "0.28.0",
+@@ -119,11 +118,11 @@
+     "recompose": "^0.30.0",
+     "rn-fetch-blob": "^0.10.16",
+     "stream": "^0.0.2",
++    "wml": "^0.0.83",
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^1.8.0-beta.0",
+-    "@carimus/metro-symlinked-deps": "^1.1.0",
++    "@apollosproject/eslint-config": "^1.7.0-beta.0",
+     "babel-eslint": "10.0.1",
+     "babel-plugin-module-resolver": "^4.0.0",
+     "codecov": "3.7.2",
+@@ -140,7 +139,6 @@
+     "eslint-plugin-react-hooks": "^4.0.2",
+     "eslint-plugin-react-native": "^3.2.1",
+     "get-dev-paths": "^0.1.0",
+-    "get-graphql-schema": "^2.1.2",
+     "graphql-import": "^0.7.1",
+     "jest": "^25.1.0",
+     "jetifier": "^1.6.4",
+@@ -152,8 +150,7 @@
+     "react-native-storybook-loader": "1.8.0",
+     "react-native-version": "2.6.2",
+     "react-test-renderer": "16.8.6",
+-    "waait": "1.0.2",
+-    "yalc": "^1.0.0-pre.47"
++    "waait": "1.0.2"
+   },
+   "rnpm": {
+     "assets": [
+diff --git a/apolloschurchapp/schema.graphql b/apolloschurchapp/schema.graphql
+deleted file mode 100644
+index ff6a9f6..0000000
+--- a/apolloschurchapp/schema.graphql
++++ /dev/null
+@@ -1,742 +0,0 @@
+-directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
+-
+-enum ACTION_FEATURE_ACTION {
+-  READ_CONTENT
+-  READ_EVENT
+-  OPEN_URL
+-  OPEN_NODE
+-  OPEN_CHANNEL
+-}
+-
+-type ActionBarAction {
+-  id: ID!
+-  icon: String
+-  title: String
+-  action: ACTION_FEATURE_ACTION
+-  relatedNode: Node
+-}
+-
+-type ActionBarFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  actions: [ActionBarAction]
+-}
+-
+-type ActionListAction {
+-  id: ID!
+-  title: String
+-  subtitle: String
+-  image: ImageMedia
+-  relatedNode: Node
+-  action: ACTION_FEATURE_ACTION
+-}
+-
+-type ActionListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  subtitle: String
+-  actions: [ActionListAction]
+-  primaryAction: FeatureAction
+-}
+-
+-input AnalyticsDeviceInfo {
+-  platform: AnalyticsPlatform
+-  deviceId: String
+-  deviceModel: String
+-  osVersion: String
+-  appVersion: String
+-}
+-
+-input AnalyticsIdentifyInput {
+-  traits: [AnalyticsMetaField]
+-  anonymousId: String!
+-  deviceInfo: AnalyticsDeviceInfo
+-}
+-
+-input AnalyticsMetaField {
+-  field: String!
+-  value: AnalyticsValue
+-}
+-
+-enum AnalyticsPlatform {
+-  iOS
+-  Android
+-}
+-
+-type AnalyticsResult {
+-  success: Boolean
+-}
+-
+-input AnalyticsTrackInput {
+-  eventName: String!
+-  properties: [AnalyticsMetaField]
+-  anonymousId: String
+-  deviceInfo: AnalyticsDeviceInfo
+-}
+-
+-scalar AnalyticsValue
+-
+-type AudioMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [AudioMediaSource]
+-}
+-
+-type AudioMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-interface AudioNode {
+-  audios: [AudioMedia]
+-}
+-
+-type AuthenticatedUser {
+-  id: ID!
+-  profile: Person
+-  rock: RockPersonDetails
+-  rockToken: String @deprecated(reason: "Use rock.authCookie instead")
+-}
+-
+-type Authentication {
+-  user: AuthenticatedUser
+-  token: String
+-}
+-
+-enum CacheControlScope {
+-  PUBLIC
+-  PRIVATE
+-}
+-
+-type Campus implements Node {
+-  id: ID!
+-  name: String
+-  street1: String
+-  street2: String
+-  city: String
+-  state: String
+-  postalCode: String
+-  latitude: Float
+-  longitude: Float
+-  image: ImageMediaSource
+-  distanceFromLocation(location: CampusLocationInput): Float
+-  events: [Event]
+-}
+-
+-input CampusLocationInput {
+-  latitude: Float
+-  longitude: Float
+-}
+-
+-interface Card {
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  summary: String
+-}
+-
+-type CardListItem {
+-  id: ID!
+-  hasAction: Boolean
+-  actionIcon: String
+-  labelText: String
+-  summary: String
+-  coverImage: ImageMedia
+-  title(hyphenated: Boolean): String
+-  relatedNode: Node
+-  action: ACTION_FEATURE_ACTION
+-}
+-
+-"""A rgb color string"""
+-scalar Color
+-
+-type ContentChannel implements Node {
+-  id: ID!
+-  name: String
+-  description: String
+-  childContentChannels: [ContentChannel]
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  iconName: String
+-}
+-
+-interface ContentChildNode {
+-  parentChannel: ContentChannel
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-}
+-
+-interface ContentItem {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-type ContentItemsConnection {
+-  edges: [ContentItemsConnectionEdge]
+-  totalCount: Int
+-  pageInfo: PaginationInfo
+-}
+-
+-type ContentItemsConnectionEdge {
+-  node: ContentItem
+-  cursor: String
+-}
+-
+-input ContentItemsConnectionInput {
+-  first: Int
+-  after: String
+-}
+-
+-interface ContentNode {
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  htmlContent: String
+-}
+-
+-interface ContentParentNode {
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-}
+-
+-type ContentSeriesContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ProgressNode & LikableNode & ShareableNode & FeaturesNode {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  percentComplete: Float
+-  upNext: ContentItem
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-  features: [Feature] @deprecated(reason: "Use featureFeed")
+-  featureFeed: FeatureFeed
+-}
+-
+-type Device implements Node {
+-  id: ID!
+-  pushId: String!
+-  notificationsEnabled: Boolean!
+-}
+-
+-type DevotionalContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ScriptureNode & LikableNode & ShareableNode {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-type Event implements Node {
+-  id: ID!
+-  name: String
+-  description: String
+-  location: String
+-  start: String
+-  end: String
+-  image: ImageMedia
+-}
+-
+-interface Feature {
+-  id: ID!
+-  order: Int
+-}
+-
+-type FeatureAction {
+-  relatedNode: Node
+-  action: ACTION_FEATURE_ACTION
+-  title: String
+-}
+-
+-type FeatureFeed implements Node {
+-  id: ID!
+-  features: [Feature]
+-}
+-
+-interface FeaturesNode {
+-  features: [Feature] @deprecated(reason: "Use featureFeed")
+-  featureFeed: FeatureFeed
+-}
+-
+-enum GENDER {
+-  Male
+-  Female
+-  Unknown
+-}
+-
+-type Group implements Node {
+-  id: ID!
+-  name: String
+-  leader: Person @deprecated(reason: "No longer used, use 'leaders' instead")
+-  leaders: [Person]
+-  members: [Person]
+-}
+-
+-enum GROUP_TYPE {
+-  Serving
+-  Community
+-  Family
+-}
+-
+-type HeroListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  subtitle: String
+-  actions: [ActionListAction]
+-  heroCard: CardListItem
+-  primaryAction: FeatureAction
+-}
+-
+-type HorizontalCardListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  subtitle: String
+-  cards: [CardListItem]
+-  primaryAction: FeatureAction
+-}
+-
+-type ImageMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [ImageMediaSource]
+-}
+-
+-type ImageMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-enum InteractionAction {
+-  VIEW
+-  COMPLETE
+-  PRAY
+-}
+-
+-input InteractionDataField {
+-  field: String!
+-  value: InteractionValue
+-}
+-
+-type InteractionResult {
+-  success: Boolean
+-  node: Node
+-}
+-
+-scalar InteractionValue
+-
+-interface LikableNode {
+-  isLiked: Boolean
+-  likedCount: Int
+-}
+-
+-enum LIKE_OPERATION {
+-  Like
+-  Unlike
+-}
+-
+-input LikeEntityInput {
+-  nodeId: ID!
+-  operation: LIKE_OPERATION!
+-}
+-
+-interface LiveNode {
+-  liveStream: LiveStream
+-}
+-
+-type LiveStream {
+-  isLive: Boolean
+-  eventStartTime: String
+-  media: VideoMedia
+-  webViewUrl: String
+-  contentItem: ContentItem
+-}
+-
+-interface Media {
+-  name: String
+-  key: String
+-  sources: [MediaSource]
+-}
+-
+-type MediaContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & ScriptureNode & LikableNode & ShareableNode {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  scriptures: [Scripture]
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-enum MediaInputType {
+-  IMAGE
+-  VIDEO
+-  AUDIO
+-}
+-
+-interface MediaSource {
+-  uri: String
+-}
+-
+-type Mutation {
+-  _placeholder: Boolean
+-  updateLikeEntity(input: LikeEntityInput!): ContentItem @deprecated(reason: "Use the more general updateLikeNode instead")
+-  updateLikeNode(input: LikeEntityInput!): Node
+-  updateProfileField(input: UpdateProfileInput!): Person
+-  updateProfileFields(input: [UpdateProfileInput]!): Person
+-  uploadProfileImage(file: Upload!, size: Int!): Person
+-  authenticate(identity: String!, password: String!): Authentication
+-  changePassword(password: String!): Authentication
+-  registerPerson(email: String!, password: String!, userProfile: [UpdateProfileInput]): Authentication
+-  requestSmsLoginPin(phoneNumber: String!): SmsPinResult
+-  authenticateWithSms(phoneNumber: String!, pin: String!): Authentication
+-  registerWithSms(phoneNumber: String!, pin: String!, userProfile: [UpdateProfileInput]): Authentication
+-  interactWithNode(action: InteractionAction!, nodeId: ID!, data: [InteractionDataField]): InteractionResult
+-  identifySelf(input: AnalyticsIdentifyInput!): AnalyticsResult
+-  trackEvent(input: AnalyticsTrackInput!): AnalyticsResult
+-  updateUserPushSettings(input: PushSettingsInput!): Person
+-  updateUserCampus(campusId: String!): Person
+-  addPrayer(text: String!, isAnonymous: Boolean): PrayerRequest
+-}
+-
+-interface Node {
+-  id: ID!
+-}
+-
+-type PaginationInfo {
+-  startCursor: String
+-  endCursor: String
+-}
+-
+-type Pass implements Node {
+-  id: ID!
+-  type: PassType
+-  description: String
+-  logo: ImageMediaSource
+-  thumbnail: ImageMediaSource
+-  barcode: ImageMediaSource
+-  primaryFields: [PassField]
+-  secondaryFields: [PassField]
+-  backgroundColor: Color
+-  foregroundColor: Color
+-  labelColor: Color
+-  logoText: String
+-  passkitFileUrl: String
+-}
+-
+-type PassField {
+-  key: String!
+-  label: String
+-  value: String!
+-  textAlignment: PassFieldTextAlignment
+-}
+-
+-enum PassFieldTextAlignment {
+-  LEFT
+-  CENTER
+-  RIGHT
+-  NATURAL
+-}
+-
+-enum PassType {
+-  GENERIC
+-}
+-
+-type Person implements Node {
+-  id: ID!
+-  firstName: String
+-  lastName: String
+-  nickName: String
+-  email: String
+-  gender: GENDER
+-  birthDate: String
+-  photo: ImageMediaSource
+-  devices: [Device]
+-  campus: Campus
+-  groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
+-}
+-
+-type PrayerListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  isCard: Boolean
+-  title: String
+-  subtitle: String
+-  prayers: [PrayerRequest]
+-}
+-
+-type PrayerRequest implements Node {
+-  id: ID!
+-  text: String!
+-  requestor: Person
+-  isAnonymous: Boolean
+-  isPrayed: Boolean
+-}
+-
+-interface ProgressNode {
+-  percentComplete: Float
+-  upNext: ContentItem
+-}
+-
+-input PushSettingsInput {
+-  enabled: Boolean
+-  pushProviderUserId: String
+-}
+-
+-type Query {
+-  _placeholder: Boolean
+-  node(id: ID!): Node
+-  likedContent(first: Int, after: String): ContentItemsConnection
+-  contentChannels: [ContentChannel]
+-  campaigns: ContentItemsConnection
+-  userFeed(first: Int, after: String): ContentItemsConnection
+-  personaFeed(first: Int, after: String): ContentItemsConnection
+-  currentUser: AuthenticatedUser
+-  userExists(identity: String): USER_AUTH_STATUS
+-  liveStream: LiveStream @deprecated(reason: "Use liveStreams, there may be multiple.")
+-  liveStreams: [LiveStream]
+-  scripture(query: String!, version: VERSION): Scripture @deprecated(reason: "Use 'scriptures' instead.")
+-  scriptures(query: String!, version: VERSION): [Scripture]
+-  userPass: Pass
+-  search(query: String!, first: Int, after: String): SearchResultsConnection
+-  campuses(location: CampusLocationInput): [Campus]
+-  userFeedFeatures: [Feature] @deprecated(reason: "Use homeFeedFeatures or discoverFeedFeatures")
+-  homeFeedFeatures(campusId: ID): FeatureFeed
+-  discoverFeedFeatures: FeatureFeed
+-}
+-
+-type RockPersonDetails {
+-  authToken: String
+-  authCookie: String
+-}
+-
+-type Scripture implements Node {
+-  id: ID!
+-  html: String
+-  reference: String
+-  copyright: String
+-  version: String
+-}
+-
+-type ScriptureFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  scriptures: [Scripture]
+-  sharing: SharableFeature
+-}
+-
+-interface ScriptureNode {
+-  scriptures: [Scripture]
+-}
+-
+-type SearchResult {
+-  cursor: String
+-  title: String
+-  summary: String
+-  coverImage: ImageMedia
+-  node: Node
+-}
+-
+-type SearchResultsConnection {
+-  edges: [SearchResult]
+-  pageInfo: PaginationInfo
+-}
+-
+-interface Sharable {
+-  message: String
+-  title: String
+-  url: String @deprecated(reason: "Not supported on the interface")
+-}
+-
+-type SharableContentItem implements Sharable {
+-  message: String
+-  title: String
+-  url: String
+-}
+-
+-type SharableFeature implements Sharable {
+-  message: String
+-  title: String
+-  url: String @deprecated(reason: "Not supported on a feature")
+-}
+-
+-interface ShareableNode {
+-  sharing: SharableContentItem
+-}
+-
+-type SmsPinResult {
+-  success: Boolean
+-  userAuthStatus: USER_AUTH_STATUS
+-}
+-
+-type TextFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  body: String
+-  sharing: SharableFeature
+-}
+-
+-type Theme {
+-  type: ThemeType
+-  colors: ThemeColors
+-}
+-
+-type ThemeColors {
+-  primary: Color
+-  secondary: Color
+-  screen: Color
+-  paper: Color
+-  alert: Color
+-}
+-
+-interface ThemedNode {
+-  theme: Theme
+-}
+-
+-enum ThemeType {
+-  LIGHT
+-  DARK
+-}
+-
+-type UniversalContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & LikableNode & ShareableNode {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  sharing: SharableContentItem
+-}
+-
+-enum UPDATEABLE_PROFILE_FIELDS {
+-  FirstName
+-  LastName
+-  Email
+-  NickName
+-  Gender
+-  BirthDate
+-}
+-
+-input UpdateProfileInput {
+-  field: UPDATEABLE_PROFILE_FIELDS!
+-  value: String!
+-}
+-
+-"""The `Upload` scalar type represents a file upload."""
+-scalar Upload
+-
+-type Url implements Node {
+-  url: String
+-  id: ID!
+-}
+-
+-enum USER_AUTH_STATUS {
+-  NONE
+-  NEW_APP_USER
+-  EXISTING_APP_USER
+-}
+-
+-enum VERSION {
+-  WEB
+-  KJV
+-}
+-
+-type VerticalCardListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  title: String
+-  subtitle: String
+-  isFeatured: Boolean
+-  cards: [CardListItem]
+-}
+-
+-type VideoMedia implements Media {
+-  name: String
+-  key: String
+-  sources: [VideoMediaSource]
+-  embedHtml: String
+-}
+-
+-type VideoMediaSource implements MediaSource {
+-  uri: String
+-}
+-
+-interface VideoNode {
+-  videos: [VideoMedia]
+-}
+-
+-type WebviewFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  linkText: String
+-  title: String
+-  url: String
+-}
+-
+-type WeekendContentItem implements ContentItem & Node & ContentNode & Card & VideoNode & AudioNode & ContentChildNode & ContentParentNode & ThemedNode & LikableNode & LiveNode & ShareableNode & FeaturesNode {
+-  id: ID!
+-  title(hyphenated: Boolean): String
+-  coverImage: ImageMedia
+-  images: [ImageMedia]
+-  videos: [VideoMedia]
+-  audios: [AudioMedia]
+-  htmlContent: String
+-  summary: String
+-  childContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  siblingContentItemsConnection(first: Int, after: String): ContentItemsConnection
+-  parentChannel: ContentChannel
+-  theme: Theme
+-  isLiked: Boolean
+-  likedCount: Int
+-  liveStream: LiveStream
+-  sharing: SharableContentItem
+-  features: [Feature] @deprecated(reason: "Use featureFeed")
+-  featureFeed: FeatureFeed
+-}
+-
+diff --git a/apolloschurchapp/scripts/link-packages.js b/apolloschurchapp/scripts/link-packages.js
+index 7778c0a..be27903 100644
+--- a/apolloschurchapp/scripts/link-packages.js
++++ b/apolloschurchapp/scripts/link-packages.js
+@@ -1,16 +1,61 @@
+ const fs = require('fs');
+ const { execSync } = require('child_process');
++const chalk = require('chalk');
+ 
+-const direction = process.argv[2] || 'link';
++let apollosAppsLocation = null;
++const apollosAppsLocationFromEnv = fs
++  .readFileSync(`${__dirname}/../.env`, 'utf8')
++  .match(/APOLLOS_APPS_LOCATION=(.*)/);
+ 
+-const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
++if (apollosAppsLocationFromEnv && apollosAppsLocationFromEnv.length >= 2) {
++  apollosAppsLocation = apollosAppsLocationFromEnv[1];
++}
++
++if (!apollosAppsLocation) {
++  console.error(
++    chalk.red(
++      'In order to link the Apollos React Native packages to your local dev environment'
++    )
++  );
++  console.error(
++    chalk.red(
++      'you must configure the APOLLOS_APPS_LOCATION variable in your .env '
++    )
++  );
++  console.error(
++    chalk.red('to point at your local copy of the apollos-apps repo')
++  );
++  process.exit(1);
++}
+ 
++const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
+ const dependencies = [
+   ...Object.keys(packageJson.dependencies),
+   ...Object.keys(packageJson.devDependencies),
+ ].filter((d) => d.includes('@apollosproject'));
+ 
+ dependencies.forEach((dep) => {
+-  const output = execSync(`yalc ${direction} ${dep}`, { encoding: 'utf8' });
+-  console.log(output);
++  const folderName = dep.split('@apollosproject/')[1];
++
++  if (
++    fs.existsSync(
++      `${apollosAppsLocation}/packages/apollos-${folderName}/package.json`
++    )
++  ) {
++    const output = execSync(
++      `printf 'y\n' | yarn wml add ${apollosAppsLocation}/packages/apollos-${folderName} ${__dirname}/../node_modules/${dep}`,
++      { encoding: 'utf8' }
++    );
++    const watchmanConfig = JSON.parse(
++      fs.readFileSync(
++        `${apollosAppsLocation}/packages/apollos-${folderName}/.watchmanconfig`
++      )
++    );
++    watchmanConfig.ignore_dirs = [...watchmanConfig.ignore_dirs, 'coverage'];
++    fs.writeFileSync(
++      `${apollosAppsLocation}/packages/apollos-${folderName}/.watchmanconfig`,
++      JSON.stringify(watchmanConfig, null, 2)
++    );
++    console.log(output);
++  }
+ });
+diff --git a/apolloschurchapp/src/LandingScreen.js b/apolloschurchapp/src/LandingScreen.js
+new file mode 100644
+index 0000000..89e10ad
+--- /dev/null
++++ b/apolloschurchapp/src/LandingScreen.js
+@@ -0,0 +1,27 @@
++import React from 'react';
++import { StyleSheet } from 'react-native';
++import { styled, ConnectedImage } from '@apollosproject/ui-kit';
++
++import ApollosLandingScreen from './ui/LandingScreen';
++
++const FullScreenImage = styled({
++  resizeMode: 'cover',
++  ...StyleSheet.absoluteFill,
++})(ConnectedImage);
++
++const LandingScreen = ({ navigation }) => (
++  <ApollosLandingScreen
++    onPressPrimary={() => navigation.push('Auth')}
++    textColor={'white'}
++    BackgroundComponent={
++      <FullScreenImage source={'https://picsum.photos/375/812/?random'} />
++    }
++    primaryNavText={"Let's go!"}
++  />
++);
++
++LandingScreen.navigationOptions = {
++  header: null,
++};
++
++export default LandingScreen;
+diff --git a/apolloschurchapp/src/__tests__/index.test.js b/apolloschurchapp/src/__tests__/index.test.js
+new file mode 100644
+index 0000000..92aedcb
+--- /dev/null
++++ b/apolloschurchapp/src/__tests__/index.test.js
+@@ -0,0 +1,9 @@
++import renderer from 'react-test-renderer';
++import React from 'react';
++
++import App from '../index';
++
++it('renders without crashing', () => {
++  const rendered = renderer.create(<App />).toJSON();
++  expect(rendered).toBeTruthy();
++});
+diff --git a/apolloschurchapp/src/client/__mocks__/index.js b/apolloschurchapp/src/client/__mocks__/index.js
+index c982817..462244b 100644
+--- a/apolloschurchapp/src/client/__mocks__/index.js
++++ b/apolloschurchapp/src/client/__mocks__/index.js
+@@ -20,7 +20,9 @@ export default (props) => {
+ };
+ 
+ const serverSchema = makeExecutableSchema({
+-  typeDefs: importSchema(`${process.cwd()}/schema.graphql`),
++  typeDefs: importSchema(
++    `${process.cwd()}/../apollos-church-api/local.graphql`
++  ),
+   resolverValidationOptions: {
+     requireResolversForResolveType: false,
+   },
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 6d2775f..f8771c7 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index a1b79b7..08f439f 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -22,7 +22,8 @@ import Event from './event';
+ import Tabs from './tabs';
+ import PersonalDetails from './user-settings/PersonalDetails';
+ import ChangePassword from './user-settings/ChangePassword';
+-import LandingScreen from './ui/LandingScreen';
++import LandingScreen from './LandingScreen';
++import UserWebBrowser from './user-web-browser';
+ import Onboarding from './ui/Onboarding';
+ 
+ const AppStatusBar = withTheme(({ theme }) => ({
+@@ -53,6 +54,7 @@ const AppNavigator = createStackNavigator(
+     ChangePassword,
+     Location,
+     Passes,
++    UserWebBrowser,
+     Onboarding,
+     LandingScreen,
+   },
+diff --git a/apolloschurchapp/src/tabs/discover/discover.tests.js b/apolloschurchapp/src/tabs/discover/discover.tests.js
+new file mode 100644
+index 0000000..d729e7f
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/discover/discover.tests.js
+@@ -0,0 +1,570 @@
++import React from 'react';
++import { flatMap } from 'lodash';
++
++import { GET_CONTENT_CARD } from '@apollosproject/ui-connected';
++import Providers from '../../Providers';
++
++import { renderWithApolloData } from '../../utils/testUtils';
++
++import Discover, { GET_DISCOVER_FEED } from './Discover';
++
++describe('The Discover tab component', () => {
++  it('Should retrieve the Content Channel Feeds', async () => {
++    const mockFeedData = {
++      request: {
++        query: GET_DISCOVER_FEED,
++      },
++      result: {
++        data: {
++          contentChannels: [
++            {
++              id: 'ContentChannel:965b6e6d7046a885bea4e300b5c0400d',
++              name: 'News',
++              childContentItemsConnection: {
++                edges: [
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:00bb7b364911281c97fc50f2a0d17b11',
++                      title: 'Anderson Family Cookout!',
++                      hyphenatedTitle: 'Anderson Family Cookout!',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: 'Come join us!',
++                      coverImage: {
++                        name: 'Landscape Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D62e0e2ba-2dac-468b-a852-7e8cf2533efc',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:965b6e6d7046a885bea4e300b5c0400d',
++                        name: 'News',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:7db601b238aa4345a818654300f83dd2',
++                      title: 'Robert Madu is Coming to Christ Fellowship',
++                      hyphenatedTitle:
++                        'Robert Madu is Coming to Christ Fellowship',
++                      isLiked: false,
++                      likedCount: 5,
++                      summary:
++                        "Don't miss a powerful message from preacher and speaker, Robert Madu.",
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Df3ba0936-8aab-46c1-8245-0e5aef637ae3',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:965b6e6d7046a885bea4e300b5c0400d',
++                        name: 'News',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:296373ecb53580855cadffa0375ebe18',
++                      title: 'Guys Night!',
++                      hyphenatedTitle: 'Guys Night!',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary:
++                        'A time to connect with other guys who live nearby.',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D58c037fa-cc7f-4d72-9571-a0cc0558e346',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:965b6e6d7046a885bea4e300b5c0400d',
++                        name: 'News',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                ],
++                __typename: 'ContentItemsConnection',
++              },
++              __typename: 'ContentChannel',
++            },
++            {
++              id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++              name: 'Articles',
++              childContentItemsConnection: {
++                edges: [
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:604a4a763a5fc0edfe386684ca6b3515',
++                      title: 'Test Article',
++                      hyphenatedTitle: 'Test Article',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: 'Test article...',
++                      coverImage: null,
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++                        name: 'Articles',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:c495ff18cd998ed516a798b6218907cd',
++                      title: '10 ways to refresh your spirit every day',
++                      hyphenatedTitle:
++                        '10 ways to refresh your spirit every day',
++                      isLiked: false,
++                      likedCount: 2,
++                      summary:
++                        '1. Be slow What would it look like to live your life at half-speed?',
++                      coverImage: null,
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++                        name: 'Articles',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:95ff79f60a028b1b506aaeedf8b4c6ae',
++                      title: 'Live for Freedom Toolkit',
++                      hyphenatedTitle: 'Live for Freedom Toolkit',
++                      isLiked: false,
++                      likedCount: 1,
++                      summary:
++                        "Get in the Groove\nCelebrate your freedom in Christ — in the car, shower, cubicle or wherever you go — with this playlist of NewSpring Worship's favorite songs of the summer.",
++                      coverImage: null,
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++                        name: 'Articles',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                ],
++                __typename: 'ContentItemsConnection',
++              },
++              __typename: 'ContentChannel',
++            },
++            {
++              id: 'ContentChannel:a0f64573eabf00a607bec911794d50fb',
++              name: 'Sermon Series',
++              childContentItemsConnection: {
++                edges: [
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:6d8dc8e4bad017f815ae0cac8bf692bb',
++                      title: 'The New Weekend Experience',
++                      hyphenatedTitle: 'The New Weekend Experience',
++                      isLiked: false,
++                      likedCount: 1,
++                      summary:
++                        'Have you come into relationship with Jesus Christ?',
++                      coverImage: {
++                        name: 'Series Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D98be229f-dfed-4344-86ab-0d11666fc781',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:a0f64573eabf00a607bec911794d50fb',
++                        name: 'Sermon Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [
++                        { sources: [], __typename: 'VideoMedia' },
++                        { sources: [], __typename: 'VideoMedia' },
++                      ],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:08449058d438ebeaffe9adb7a8e633cc',
++                      title: 'Gathering',
++                      hyphenatedTitle: 'Gathering',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: '',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D50f4e3e3-2842-4991-9f64-8fc6fbb3067c',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:a0f64573eabf00a607bec911794d50fb',
++                        name: 'Sermon Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [
++                        { sources: [], __typename: 'VideoMedia' },
++                        { sources: [], __typename: 'VideoMedia' },
++                      ],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:b74c2d295a0cf1340232ffa8be856c00',
++                      title: 'Gauntlet 2018',
++                      hyphenatedTitle: 'Gauntlet 2018',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: '',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D3e3e38d2-d804-45db-b45a-3b7a82c415d1',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:a0f64573eabf00a607bec911794d50fb',
++                        name: 'Sermon Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [
++                        { sources: [], __typename: 'VideoMedia' },
++                        { sources: [], __typename: 'VideoMedia' },
++                      ],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                ],
++                __typename: 'ContentItemsConnection',
++              },
++              __typename: 'ContentChannel',
++            },
++            {
++              id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++              name: 'Devotion Series',
++              childContentItemsConnection: {
++                edges: [
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:b085ec27d53006e9e6b95f3ac57da581',
++                      title: 'Jeremiah: A 33-Day Devotional',
++                      hyphenatedTitle: 'Jeremiah: A 33-Day Devotional',
++                      isLiked: true,
++                      likedCount: 6,
++                      summary: 'Have you ever had to deliver difficult news?',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D31af1a61-360c-4b1e-8e62-45517c06a9a2',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++                        name: 'Devotion Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [{ sources: [], __typename: 'VideoMedia' }],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:71bfdac0b98ea1b72a63ff4ea64e3c5a',
++                      title: 'How To Be A Better Leader: A 7-Day Devotional',
++                      hyphenatedTitle:
++                        'How To Be A Better Leader: A 7-Day Devotional',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: '',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Dd3a96243-2558-4c04-bf41-3aadcf41771f',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++                        name: 'Devotion Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [{ sources: [], __typename: 'VideoMedia' }],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'ContentSeriesContentItem:44fd3b82373ea8f197bd1e1e77c4bed0',
++                      title: '2 Thessalonians: A 5-Day Devotional',
++                      hyphenatedTitle: '2 Thessalonians: A 5-Day Devotional',
++                      isLiked: false,
++                      likedCount: 0,
++                      summary: '',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D70b0b57c-5a15-4f46-8e6a-c759231685bf',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++                        name: 'Devotion Series',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [{ sources: [], __typename: 'VideoMedia' }],
++                      audios: [],
++                      __typename: 'ContentSeriesContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                ],
++                __typename: 'ContentItemsConnection',
++              },
++              __typename: 'ContentChannel',
++            },
++            {
++              id: 'ContentChannel:be7381e9c2fea9f41504cd98d4b14321',
++              name: 'Stories',
++              childContentItemsConnection: {
++                edges: [
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:cf8fa657f23af88a2d63f7e4a2237db8',
++                      title:
++                        'The surprising journey that changed me and my dad',
++                      hyphenatedTitle:
++                        'The surprising journey that changed me and my dad',
++                      isLiked: false,
++                      likedCount: 6,
++                      summary:
++                        'My father, Darwin, has always been involved in my life.',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D2a65e561-cd6e-4590-bb37-029a21c554e8',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:be7381e9c2fea9f41504cd98d4b14321',
++                        name: 'Stories',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:2e17f5a66407d114ab9f2392b03ebccd',
++                      title: 'When I lost hope, my church family had my back',
++                      hyphenatedTitle:
++                        'When I lost hope, my church family had my back',
++                      isLiked: true,
++                      likedCount: 5,
++                      summary:
++                        'Brian Kalwat was just trying to knock something off his honey-do list.',
++                      coverImage: {
++                        name: 'Square Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3D0305285f-1155-4405-ba38-a61b9c8558be',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:be7381e9c2fea9f41504cd98d4b14321',
++                        name: 'Stories',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                  {
++                    node: {
++                      id:
++                        'UniversalContentItem:ae8ec75906ba7437c49ad2534b5024db',
++                      title: 'A Place to Worship Free of Fear',
++                      hyphenatedTitle: 'A Place to Worship Free of Fear',
++                      isLiked: false,
++                      likedCount: 1,
++                      summary:
++                        'Cornelius &amp; Stephanie Mack, proud parents of a Special Friends adult, share about their experience\nOur son Cameron began attending Willow Creek Special Friends in 2015.',
++                      coverImage: {
++                        name: 'Portrait Image',
++                        sources: [
++                          {
++                            uri:
++                              'https://res.cloudinary.com/apollos/image/fetch/c_limit,f_auto,w_1600/https://apollosrock.newspring.cc/GetImage.ashx%3Fguid%3Da65bc45d-f961-4b7e-a899-63eb1f9b8da9',
++                            __typename: 'ImageMediaSource',
++                          },
++                        ],
++                        __typename: 'ImageMedia',
++                      },
++                      theme: null,
++                      parentChannel: {
++                        id: 'ContentChannel:be7381e9c2fea9f41504cd98d4b14321',
++                        name: 'Stories',
++                        __typename: 'ContentChannel',
++                      },
++                      videos: [],
++                      audios: [],
++                      __typename: 'UniversalContentItem',
++                    },
++                    __typename: 'ContentItemsConnectionEdge',
++                  },
++                ],
++                __typename: 'ContentItemsConnection',
++              },
++              __typename: 'ContentChannel',
++            },
++          ],
++        },
++      },
++    };
++    const mockChannelCardData = flatMap(
++      mockFeedData.result.data.contentChannels,
++      (contentChannel) =>
++        contentChannel.childContentItemsConnection.edges.map((edge) => ({
++          request: {
++            query: GET_CONTENT_CARD,
++            variables: { contentId: edge.node.id },
++          },
++          result: {
++            data: {
++              node: edge.node,
++            },
++          },
++        }))
++    );
++
++    const tree = await renderWithApolloData(
++      <Providers mocks={[mockFeedData, ...mockChannelCardData]}>
++        <Discover />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/tabs/home/Home.js b/apolloschurchapp/src/tabs/home/Home.js
+index d9fa499..2264f1b 100644
+--- a/apolloschurchapp/src/tabs/home/Home.js
++++ b/apolloschurchapp/src/tabs/home/Home.js
+@@ -31,7 +31,7 @@ function handleOnPress({ action, ...props }) {
+ // getHomeFeed uses the HOME_FEATURES in the config.yml
+ // You can also hardcode an ID if you are confident it will never change
+ // Or use some other strategy to get a FeatureFeed.id
+-export const GET_HOME_FEED = gql`
++const GET_HOME_FEED = gql`
+   query getHomeFeatureFeed {
+     homeFeedFeatures {
+       id
+diff --git a/apolloschurchapp/src/tabs/home/getCampaignContentItem.js b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+new file mode 100644
+index 0000000..ab5ea09
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/getCampaignContentItem.js
+@@ -0,0 +1,22 @@
++import gql from 'graphql-tag';
++
++import ApollosConfig from '@apollosproject/config';
++
++export default gql`
++  query campaigns {
++    campaigns {
++      edges {
++        node {
++          childContentItemsConnection {
++            edges {
++              node {
++                ...contentCardFragment
++              }
++            }
++          }
++        }
++      }
++    }
++  }
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
++`;
+diff --git a/apolloschurchapp/src/tabs/home/getUserFeed.js b/apolloschurchapp/src/tabs/home/getUserFeed.js
+new file mode 100644
+index 0000000..b19d647
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/getUserFeed.js
+@@ -0,0 +1,18 @@
++import gql from 'graphql-tag';
++import ApollosConfig from '@apollosproject/config';
++
++export default gql`
++  query getUserFeed($first: Int, $after: String) {
++    userFeed(first: $first, after: $after) {
++      pageInfo {
++        endCursor
++      }
++      edges {
++        node {
++          ...contentCardFragment
++        }
++      }
++    }
++  }
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
++`;
+diff --git a/apolloschurchapp/src/tabs/home/home.tests.js b/apolloschurchapp/src/tabs/home/home.tests.js
+new file mode 100644
+index 0000000..213e947
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/home.tests.js
+@@ -0,0 +1,79 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from '../../Providers';
++
++import Home from './Home';
++import GET_USER_FEED from './getUserFeed';
++
++describe('User Home Feed Query', () => {
++  it('should return correct query results', () => {
++    const mock = {
++      request: {
++        query: GET_USER_FEED,
++      },
++      result: {
++        data: {
++          userFeed: {
++            edges: [
++              {
++                node: {
++                  __typename: 'UniversalContentItem',
++                  id: 'UniversalContentItem:678b4a38968fc6004dd8b23e586c923e',
++                  coverImage: {
++                    name: 'Square Image',
++                    sources: [
++                      {
++                        uri:
++                          'https://apollosrock.newspring.cc/GetImage.ashx?guid=ed857076-2623-4fdc-8476-50b3a60e0b68',
++                      },
++                    ],
++                  },
++                  parentChannel: {
++                    id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++                    name: 'Devotion Series',
++                    iconName: 'text',
++                  },
++                  title: 'Psalms: A 28-Day Devotional',
++                },
++              },
++              {
++                node: {
++                  __typename: 'UniversalContentItem',
++                  id: 'UniversalContentItem:0f361c619b7e5dd511da181069498250',
++                  coverImage: {
++                    name: 'Square Image',
++                    sources: [
++                      {
++                        uri:
++                          'https://apollosrock.newspring.cc/GetImage.ashx?guid=aa68b674-9cf4-4f8a-8702-9564a4a9fa7b',
++                      },
++                    ],
++                  },
++                  parentChannel: {
++                    id: 'ContentChannel:7fba1b1ee253e0fd5f0795b4b8b1175e',
++                    name: 'Devotion Series',
++                    iconName: 'text',
++                  },
++                  title: '2 Samuel: A 5-Week Devotional',
++                },
++              },
++            ],
++          },
++        },
++      },
++    };
++
++    const navigation = {
++      getParam: jest.fn(),
++      setParams: jest.fn(),
++      navigate: jest.fn(),
++    };
++    const tree = renderer.create(
++      <Providers mocks={[mock]} addTypename={false}>
++        <Home navigation={navigation} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/tabs/tabBar.js b/apolloschurchapp/src/tabs/tabBar.js
+index f068e82..636293d 100644
+--- a/apolloschurchapp/src/tabs/tabBar.js
++++ b/apolloschurchapp/src/tabs/tabBar.js
+@@ -1,4 +1,3 @@
+-import { Platform } from 'react-native';
+ import { compose } from 'recompose';
+ import { BottomTabBar } from 'react-navigation';
+ 
+@@ -10,9 +9,7 @@ const ThemedBottomTabBar = compose(
+     showLabel: true,
+     activeTintColor: theme.colors.secondary,
+     inactiveTintColor: theme.colors.text.tertiary,
+-    safeAreaInset: {
+-      bottom: Platform.OS === 'android' ? theme.sizing.baseUnit * 0.5 : 0,
+-    },
++    safeAreaInset: { bottom: 0 },
+   })),
+   styled(({ theme }) => ({
+     borderTopWidth: 0,
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index f7027a1..cecfc1e 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,5 +1,7 @@
+ import React, { PureComponent } from 'react';
+ import { TableView } from '@apollosproject/ui-kit';
++import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
++import { UserWebBrowserConsumer } from '../user-web-browser';
+ import TouchableCell from './TouchableCell';
+ 
+ export default class TestingControlPanel extends PureComponent {
+@@ -15,6 +17,53 @@ export default class TestingControlPanel extends PureComponent {
+   render() {
+     return (
+       <TableView>
++        <UserWebBrowserConsumer>
++          {(openUserWebView) => (
++            <TouchableCell
++              handlePress={() =>
++                openUserWebView({
++                  url:
++                    'https://www.whatismybrowser.com/detect/what-http-headers-is-my-browser-sending',
++                })
++              }
++              iconName="share"
++              cellText={`Open Web Browser With User Cookie`}
++            />
++          )}
++        </UserWebBrowserConsumer>
++        <RockAuthedWebBrowser>
++          {(openUrl) => (
++            <>
++              <TouchableCell
++                handlePress={() =>
++                  openUrl(
++                    'https://apollosrock.newspring.cc',
++                    {},
++                    { useRockToken: true }
++                  )
++                }
++                iconName="share"
++                cellText={`Open InAppBrowser With Rock Token`}
++              />
++              <TouchableCell
++                handlePress={() =>
++                  openUrl(
++                    'https://apollosrock.newspring.cc',
++                    { externalBrowser: true },
++                    { useRockToken: true }
++                  )
++                }
++                iconName="share"
++                cellText={`Open Safari With Rock Token`}
++              />
++              <TouchableCell
++                handlePress={() => openUrl('mailto:fake@apollosproject.com')}
++                iconName="share"
++                cellText={`Open Email link`}
++              />
++            </>
++          )}
++        </RockAuthedWebBrowser>
+         <TouchableCell
+           handlePress={() => this.props.navigation.navigate('Onboarding')}
+           iconName="Avatar"
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.js
+deleted file mode 100644
+index d803a8d..0000000
+--- a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.js
++++ /dev/null
+@@ -1,86 +0,0 @@
+-import React from 'react';
+-import PropTypes from 'prop-types';
+-
+-import {
+-  styled,
+-  withTheme,
+-  Icon,
+-  H1,
+-  H4,
+-  PaddedView,
+-  BackgroundView,
+-} from '@apollosproject/ui-kit';
+-
+-import { Slide } from '@apollosproject/ui-onboarding';
+-
+-const Content = styled({
+-  flex: 1,
+-  justifyContent: 'center',
+-})(PaddedView);
+-
+-const BrandIcon = withTheme(({ theme, color }) => ({
+-  name: 'brand-icon',
+-  size: theme.sizing.baseUnit * 3,
+-  ...(color ? { fill: color } : {}),
+-  style: {
+-    marginBottom: theme.sizing.baseUnit,
+-  },
+-}))(Icon);
+-
+-const Title = styled(({ theme, color }) => ({
+-  marginBottom: theme.sizing.baseUnit,
+-  ...(color ? { color } : {}),
+-}))(H1);
+-
+-const StyledH4 = styled(({ color }) => ({
+-  ...(color ? { color } : {}),
+-}))(H4);
+-
+-const LandingScreen = ({
+-  slideTitle,
+-  description,
+-  textColor,
+-  BackgroundComponent,
+-  ...props
+-}) => (
+-  <BackgroundView>
+-    <Slide {...props} scrollEnabled={false}>
+-      {BackgroundComponent}
+-      <Content>
+-        <BrandIcon color={textColor} />
+-        <Title color={textColor}>{slideTitle}</Title>
+-        <StyledH4 color={textColor}>{description}</StyledH4>
+-      </Content>
+-    </Slide>
+-  </BackgroundView>
+-);
+-
+-LandingScreen.propTypes = {
+-  /* The `Swiper` component used in `<onBoarding>` looks for and hijacks the title prop of it's
+-   * children. Thus we have to use more unique name.
+-   */
+-  slideTitle: PropTypes.string,
+-  description: PropTypes.string,
+-  textColor: PropTypes.string, // Use for custom text and `BrandIcon` color when overlaying text on an image or video needs more clarity. Defaults to theme driven colors.
+-  /* Recommended usage:
+-   * - `Image` (react-native)
+-   * - `GradientOverlayImage` (@apollosproject/ui-kit) for increased readability
+-   * - `Video` (react-native-video) because moving pictures!
+-   */
+-  BackgroundComponent: PropTypes.oneOfType([
+-    PropTypes.arrayOf(PropTypes.node),
+-    PropTypes.node,
+-  ]),
+-};
+-
+-LandingScreen.defaultProps = {
+-  slideTitle: "We're glad you're here.",
+-  description:
+-    "We're not just a building you go to, but a family to belong to.",
+-};
+-
+-LandingScreen.navigationOptions = {
+-  header: null,
+-};
+-
+-export default LandingScreen;
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+index b6c5638..d9ebd3c 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.stories.js
+@@ -2,7 +2,7 @@ import React from 'react';
+ import { storiesOf } from '@apollosproject/ui-storybook';
+ import { GradientOverlayImage } from '@apollosproject/ui-kit';
+ 
+-import LandingScreen from './LandingScreen';
++import LandingScreen from '.';
+ 
+ storiesOf('LandingScreen', module)
+   .add('default', () => <LandingScreen />)
+diff --git a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+index 81c6304..c60a3b9 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
++++ b/apolloschurchapp/src/ui/LandingScreen/LandingScreen.tests.js
+@@ -4,7 +4,7 @@ import { GradientOverlayImage } from '@apollosproject/ui-kit';
+ 
+ import Providers from '../../Providers';
+ 
+-import LandingScreen from './LandingScreen';
++import LandingScreen from '.';
+ 
+ describe('The Onboarding LandingScreen component', () => {
+   it('should render', () => {
+diff --git a/apolloschurchapp/src/ui/LandingScreen/index.js b/apolloschurchapp/src/ui/LandingScreen/index.js
+index 58634ce..d803a8d 100644
+--- a/apolloschurchapp/src/ui/LandingScreen/index.js
++++ b/apolloschurchapp/src/ui/LandingScreen/index.js
+@@ -1,27 +1,86 @@
+ import React from 'react';
+-import { StyleSheet } from 'react-native';
+-import { styled, ConnectedImage } from '@apollosproject/ui-kit';
+-
+-import LandingScreen from './LandingScreen';
+-
+-const FullScreenImage = styled({
+-  resizeMode: 'cover',
+-  ...StyleSheet.absoluteFill,
+-})(ConnectedImage);
+-
+-const LandingScreenSlide = ({ navigation }) => (
+-  <LandingScreen
+-    onPressPrimary={() => navigation.push('Auth')}
+-    textColor={'white'}
+-    BackgroundComponent={
+-      <FullScreenImage source={'https://picsum.photos/375/812/?random'} />
+-    }
+-    primaryNavText={"Let's go!"}
+-  />
++import PropTypes from 'prop-types';
++
++import {
++  styled,
++  withTheme,
++  Icon,
++  H1,
++  H4,
++  PaddedView,
++  BackgroundView,
++} from '@apollosproject/ui-kit';
++
++import { Slide } from '@apollosproject/ui-onboarding';
++
++const Content = styled({
++  flex: 1,
++  justifyContent: 'center',
++})(PaddedView);
++
++const BrandIcon = withTheme(({ theme, color }) => ({
++  name: 'brand-icon',
++  size: theme.sizing.baseUnit * 3,
++  ...(color ? { fill: color } : {}),
++  style: {
++    marginBottom: theme.sizing.baseUnit,
++  },
++}))(Icon);
++
++const Title = styled(({ theme, color }) => ({
++  marginBottom: theme.sizing.baseUnit,
++  ...(color ? { color } : {}),
++}))(H1);
++
++const StyledH4 = styled(({ color }) => ({
++  ...(color ? { color } : {}),
++}))(H4);
++
++const LandingScreen = ({
++  slideTitle,
++  description,
++  textColor,
++  BackgroundComponent,
++  ...props
++}) => (
++  <BackgroundView>
++    <Slide {...props} scrollEnabled={false}>
++      {BackgroundComponent}
++      <Content>
++        <BrandIcon color={textColor} />
++        <Title color={textColor}>{slideTitle}</Title>
++        <StyledH4 color={textColor}>{description}</StyledH4>
++      </Content>
++    </Slide>
++  </BackgroundView>
+ );
+ 
+-LandingScreenSlide.navigationOptions = {
++LandingScreen.propTypes = {
++  /* The `Swiper` component used in `<onBoarding>` looks for and hijacks the title prop of it's
++   * children. Thus we have to use more unique name.
++   */
++  slideTitle: PropTypes.string,
++  description: PropTypes.string,
++  textColor: PropTypes.string, // Use for custom text and `BrandIcon` color when overlaying text on an image or video needs more clarity. Defaults to theme driven colors.
++  /* Recommended usage:
++   * - `Image` (react-native)
++   * - `GradientOverlayImage` (@apollosproject/ui-kit) for increased readability
++   * - `Video` (react-native-video) because moving pictures!
++   */
++  BackgroundComponent: PropTypes.oneOfType([
++    PropTypes.arrayOf(PropTypes.node),
++    PropTypes.node,
++  ]),
++};
++
++LandingScreen.defaultProps = {
++  slideTitle: "We're glad you're here.",
++  description:
++    "We're not just a building you go to, but a family to belong to.",
++};
++
++LandingScreen.navigationOptions = {
+   header: null,
+ };
+ 
+-export default LandingScreenSlide;
++export default LandingScreen;
+diff --git a/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js b/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js
+new file mode 100644
+index 0000000..cdaeb17
+--- /dev/null
++++ b/apolloschurchapp/src/ui/SearchInputHeader/SearchInputHeader.tests.js
+@@ -0,0 +1,34 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import Providers from '../../Providers';
++
++import SearchInputHeader from '.';
++
++describe('The Onboarding LandingScreen component', () => {
++  it('should render', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SearchInputHeader />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should be stylable', () => {
++    const style = { backgroundColor: 'salmon' };
++    const tree = renderer.create(
++      <Providers>
++        <SearchInputHeader style={style} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('should render pass props to SearchInput', () => {
++    const tree = renderer.create(
++      <Providers>
++        <SearchInputHeader cancelButtonText={'Boom'} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/ui/SearchInputHeader/index.js b/apolloschurchapp/src/ui/SearchInputHeader/index.js
+new file mode 100644
+index 0000000..b3265b8
+--- /dev/null
++++ b/apolloschurchapp/src/ui/SearchInputHeader/index.js
+@@ -0,0 +1,65 @@
++/* eslint-disable react-native/no-unused-styles */
++import React from 'react';
++import { Platform, StyleSheet, View } from 'react-native';
++
++import { styled, PaddedView, SearchInput } from '@apollosproject/ui-kit';
++
++const HeaderBorder = styled(
++  ({ theme }) => ({
++    paddingBottom: theme.sizing.baseUnit / 2,
++    /* It's unclear why this is necessary but without it the layout breaks on both platforms. Limited
++     * research suggest that without a background color the shadows don't know what to blend with so
++     * the view collapses. */
++    backgroundColor: theme.colors.background.paper,
++    // Renders the same shadows that React Navigation does.
++    ...Platform.select({
++      ios: {
++        shadowColor: 'rgba(0, 0, 0, 0.3)',
++        shadowOpacity: 0.85,
++        shadowRadius: 0,
++        shadowOffset: {
++          width: 0,
++          height: StyleSheet.hairlineWidth,
++        },
++      },
++      android: {
++        elevation: 4,
++      },
++    }),
++  }),
++  'SearchInputHeader.HeaderBorder'
++)(PaddedView);
++
++// This element is used to clip the Android shadow in every directection except the bottom.
++const AndroidClipElevationFix = styled(
++  {
++    ...Platform.select({
++      android: {
++        paddingBottom: 4,
++        overflow: 'hidden',
++      },
++    }),
++  },
++  'SearchInputHeader.AndroidClipElevationFix'
++)(View);
++
++const ReactNavigationStyleReset = StyleSheet.create({
++  header: {
++    borderBottomWidth: 0,
++    elevation: 0,
++  },
++});
++
++const SearchInputHeader = ({ style, ...props }) => (
++  <AndroidClipElevationFix style={style}>
++    <HeaderBorder vertical={false}>
++      <SearchInput {...props} />
++    </HeaderBorder>
++  </AndroidClipElevationFix>
++);
++
++SearchInputHeader.propTypes = {
++  ...SearchInput.propTypes,
++};
++
++export { SearchInputHeader as default, ReactNavigationStyleReset };
+diff --git a/apolloschurchapp/src/user-web-browser/Provider.js b/apolloschurchapp/src/user-web-browser/Provider.js
+new file mode 100644
+index 0000000..91280a7
+--- /dev/null
++++ b/apolloschurchapp/src/user-web-browser/Provider.js
+@@ -0,0 +1,12 @@
++import { createContext } from 'react';
++import { NavigationService } from '@apollosproject/ui-kit';
++
++// Can can either call the OpenUserWebView function directly, or call it using
++// the Consumer. Your choice.
++export const OpenUserWebView = ({ url }) =>
++  NavigationService.navigate('UserWebBrowser', { url });
++
++const { Provider, Consumer } = createContext(OpenUserWebView);
++
++export { Provider as UserWebBrowserProvider };
++export { Consumer as UserWebBrowserConsumer };
+diff --git a/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js b/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js
+new file mode 100644
+index 0000000..1c32e08
+--- /dev/null
++++ b/apolloschurchapp/src/user-web-browser/__tests__/BrowserWithUserCookie.tests.js
+@@ -0,0 +1,50 @@
++import React from 'react';
++import { NavigationService } from '@apollosproject/ui-kit';
++import { renderWithApolloData } from '../../utils/testUtils';
++import Providers from '../../Providers';
++import BrowserWithUserCookie, { WITH_USER_COOKIE } from '../index';
++import { OpenUserWebView } from '../Provider';
++
++const mocks = [
++  {
++    request: { query: WITH_USER_COOKIE },
++    result: {
++      data: {
++        __typename: 'AuthenticatedUser',
++        currentUser: {
++          __typename: 'Person',
++          id: 'Person:123',
++          rockToken: 'ABC',
++        },
++      },
++    },
++  },
++];
++const navigation = { navigate: jest.fn(), getParam: jest.fn() };
++
++describe('the BrowserWithUserCookie component', () => {
++  it('renders with a user', async () => {
++    const tree = await renderWithApolloData(
++      <Providers mocks={mocks}>
++        <BrowserWithUserCookie navigation={navigation} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++  it('renders with modal false', async () => {
++    const tree = await renderWithApolloData(
++      <Providers mocks={mocks}>
++        <BrowserWithUserCookie modal={false} navigation={navigation} />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
++describe('the OpenUserWebView', () => {
++  it('navigtes', () => {
++    OpenUserWebView({ url: 'fake.com' });
++    expect(NavigationService.navigate).toBeCalledWith('UserWebBrowser', {
++      url: 'fake.com',
++    });
++  });
++});
+diff --git a/apolloschurchapp/src/user-web-browser/index.js b/apolloschurchapp/src/user-web-browser/index.js
+new file mode 100644
+index 0000000..5a41635
+--- /dev/null
++++ b/apolloschurchapp/src/user-web-browser/index.js
+@@ -0,0 +1,66 @@
++// Provider API for WebBrowser that injects theme values and defaults to the web browser:
++// import { Platform } from 'react-native';
++import React from 'react';
++import gql from 'graphql-tag';
++import { Query } from 'react-apollo';
++import { ModalView } from '@apollosproject/ui-kit';
++import { WebView } from 'react-native-webview';
++import PropTypes from 'prop-types';
++import { get } from 'lodash';
++
++const Browser = ({ url, cookie, modal, navigation }) => {
++  if (modal) {
++    return (
++      <ModalView navigation={navigation}>
++        <WebView source={{ uri: url, headers: { Cookie: cookie } }} />
++      </ModalView>
++    );
++  }
++  return <WebView source={{ uri: url, headers: { Cookie: cookie } }} />;
++};
++
++Browser.propTypes = {
++  url: PropTypes.string.isRequired,
++  cookie: PropTypes.string,
++  modal: PropTypes.bool.isRequired,
++};
++
++export const WITH_USER_COOKIE = gql`
++  query currentUserCookie {
++    currentUser {
++      id
++      rockToken
++    }
++  }
++`;
++
++const BrowserWithUserCookie = ({ url, navigation, modal = true }) => {
++  // get the url from the navigation param or default to the url prop;
++  const uri = navigation.getParam('url', url);
++  return (
++    <Query query={WITH_USER_COOKIE}>
++      {({ data, loading }) => {
++        if (loading) {
++          return null;
++        }
++        const cookie = get(data, 'currentUser.rockToken', '');
++        return (
++          <Browser
++            cookie={cookie}
++            url={uri}
++            modal={modal}
++            navigation={navigation}
++          />
++        );
++      }}
++    </Query>
++  );
++};
++
++BrowserWithUserCookie.propTypes = {
++  url: PropTypes.string,
++  modal: PropTypes.bool,
++};
++
++export default BrowserWithUserCookie;
++export { UserWebBrowserProvider, UserWebBrowserConsumer } from './Provider';
+diff --git a/apolloschurchapp/src/utils/__tests__/utils.tests.js b/apolloschurchapp/src/utils/__tests__/utils.tests.js
+new file mode 100644
+index 0000000..0ea7b89
+--- /dev/null
++++ b/apolloschurchapp/src/utils/__tests__/utils.tests.js
+@@ -0,0 +1,70 @@
++import React from 'react';
++import { Text } from 'react-native';
++
++import { fetchMoreResolver } from '@apollosproject/ui-connected';
++
++import { renderWithApolloData } from '../testUtils';
++
++describe('the fetchMoreResolver function', () => {
++  const args = {
++    collectionName: 'userFeed',
++    variables: { first: 10, after: null },
++    fetchMore: jest.fn(),
++    data: {
++      userFeed: {
++        edges: [
++          {
++            node: { id: 'foo' },
++          },
++          {
++            node: { id: 'bar' },
++          },
++        ],
++        pageInfo: { endCursor: 'abc123' },
++      },
++    },
++  };
++  test('no endCursor', () => {
++    expect(
++      fetchMoreResolver({
++        ...args,
++        data: { userFeed: { edges: [], pageInfo: {} } },
++      })()
++    ).toBeUndefined();
++  });
++  test('combines data', () => {
++    fetchMoreResolver({ ...args })();
++    const previousResult = args.data;
++    const fetchMoreResult = {
++      userFeed: {
++        edges: [{ node: { id: 'baz' } }],
++        pageInfo: { endCursor: 'def456' },
++      },
++    };
++    expect(
++      args.fetchMore.mock.calls[0][0].updateQuery(previousResult, {
++        fetchMoreResult,
++      })
++    ).toEqual({
++      userFeed: {
++        edges: [
++          {
++            node: { id: 'foo' },
++          },
++          {
++            node: { id: 'bar' },
++          },
++          {
++            node: { id: 'baz' },
++          },
++        ],
++        pageInfo: { endCursor: 'def456' },
++      },
++    });
++  });
++});
++
++test('renderWithApolloData renders the component', async () => {
++  const tree = await renderWithApolloData(<Text>hello, world!</Text>);
++  expect(tree).toMatchSnapshot();
++});
+diff --git a/apolloschurchapp/src/utils/analytics/index.js b/apolloschurchapp/src/utils/analytics/index.js
+new file mode 100644
+index 0000000..2be6dca
+--- /dev/null
++++ b/apolloschurchapp/src/utils/analytics/index.js
+@@ -0,0 +1,86 @@
++// import Settings from '@utils/Settings';
++
++// import { Sentry } from 'react-native-sentry';
++
++// import instance from './instance';
++
++// Events
++const AppBecameInactive = 'AppBecameInactive';
++const AppBecameActive = 'AppBecameActive';
++const AppBecameBackgrounded = 'AppBecameBackgrounded';
++const OutboundLink = 'OutboundLink';
++const ScreenView = 'ScreenView';
++const Liked = 'Liked';
++const Shared = 'Shared';
++const Login = 'Login';
++const Register = 'Register';
++const ForgotPassword = 'ForgotPassword';
++const ContactedGroup = 'ContactedGroup';
++const GivingStarted = 'GivingStarted';
++const AudioPlayed = 'AudioPlayed';
++const AudioPaused = 'AudioPaused';
++
++export const events = {
++  AppBecameInactive,
++  AppBecameActive,
++  AppBecameBackgrounded,
++  OutboundLink,
++  ScreenView,
++  Liked,
++  Shared,
++  Login,
++  Register,
++  ForgotPassword,
++  ContactedGroup,
++  GivingStarted,
++  AudioPlayed,
++  AudioPaused,
++};
++
++// const nativeOnlyEvents = {
++//   AppBecameInactive,
++//   AppBecameActive,
++//   AppBecameBackgrounded,
++// };
++
++// thin wrappers over our client events so we have a consistent API
++// if we want to move away from Amplitude in the future:
++// export const track = (eventName, properties) => {
++//   if (Settings.NODE_ENV === 'development' || Settings.NODE_ENV === 'testing')
++//     return;
++//   if (Platform.OS === 'web' && nativeOnlyEvents[eventName]) return;
++//   if (properties) {
++//     instance.logEventWithProperties(eventName, properties);
++//   } else {
++//     instance.logEvent(eventName);
++//   }
++// };
++
++// export const identify = (userId, userProperties) => {
++//   if (Settings.NODE_ENV === 'development' || Settings.NODE_ENV === 'testing')
++//     return;
++//   instance.setUserId(userId);
++//   if (userProperties) instance.setUserProperties(userProperties);
++// };
++
++// export const trackScreen = (screenName, screenProperties) => {
++export const trackScreen = () => {
++  // (screenName) => {
++  // track(events.ScreenView, {
++  //   screen: screenName,
++  //   ...screenProperties,
++  // });
++  // Sentry.captureBreadcrumb({
++  //   message: 'ScreenView',
++  //   data: { screenName },
++  //   level: 'info',
++  // });
++};
++
++const Analytics = {
++  // track,
++  trackScreen,
++  // identify,
++};
++
++export default Analytics;
