@@ -1,0 +1,155 @@
+diff --git a/apolloschurchapp/android/app/src/debug/java/com/differential/apollos/ReactNativeFlipper.java b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/ReactNativeFlipper.java
+similarity index 100%
+rename from apolloschurchapp/android/app/src/debug/java/com/differential/apollos/ReactNativeFlipper.java
+rename to apolloschurchapp/android/app/src/main/java/com/differential/apollos/ReactNativeFlipper.java
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index dec27af..3952f7d 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.0.0-beta.1",
++    "version": "2.0.0-beta.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 3c3de59..c66575d 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -247,7 +247,7 @@ PODS:
+     - React-cxxreact (= 0.63.2)
+     - React-jsi (= 0.63.2)
+   - React-jsinspector (0.63.2)
+-  - react-native-apollos-player (2.0.0-beta.0):
++  - "react-native-apollos-player (2.0.0-alpha.15+9ef8d244)":
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -626,7 +626,7 @@ SPEC CHECKSUMS:
+   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
+   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
+   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
+-  react-native-apollos-player: 8d7cd85ef8a057c3ff7f10135155ca2548a0e1d9
++  react-native-apollos-player: 1d8cc7d9d36a87c91e8c9bf0e33c701a4160b1cc
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-google-cast: 410619ef162b8b91815ecf7271502224998dee8e
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 5349a24..7e1ecf7 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -14,7 +14,7 @@
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "ios": "react-native run-ios --simulator=\"iPhone 11\"",
+     "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
++    "unlink-packages": "node ./scripts/link-packages remove",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
+     "get-schema": "eval $(grep ^APP_DATA_URL .env) && sleep 5 && get-graphql-schema $APP_DATA_URL > schema.graphql",
+@@ -50,23 +50,22 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.0.0-beta.1",
++    "@apollosproject/config": "^2.0.0-beta.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.0.0-beta.1",
+-    "@apollosproject/ui-auth": "^2.0.0-beta.1",
+-    "@apollosproject/ui-connected": "^2.0.0-beta.1",
+-    "@apollosproject/ui-fragments": "^2.0.0-beta.1",
+-    "@apollosproject/ui-htmlview": "^2.0.0-beta.1",
+-    "@apollosproject/ui-kit": "^2.0.0-beta.1",
+-    "@apollosproject/ui-mapview": "^2.0.0-beta.1",
+-    "@apollosproject/ui-media-player": "^2.0.0-beta.1",
+-    "@apollosproject/ui-notifications": "^2.0.0-beta.1",
+-    "@apollosproject/ui-onboarding": "^2.0.0-beta.1",
+-    "@apollosproject/ui-passes": "^2.0.0-beta.1",
+-    "@apollosproject/ui-prayer": "^2.0.0-beta.1",
+-    "@apollosproject/ui-scripture": "^2.0.0-beta.1",
+-    "@apollosproject/ui-storybook": "^2.0.0-beta.1",
+-    "@apollosproject/ui-test-utils": "^2.0.0-beta.1",
++    "@apollosproject/ui-analytics": "^2.0.0-beta.0",
++    "@apollosproject/ui-auth": "^2.0.0-beta.0",
++    "@apollosproject/ui-connected": "^2.0.0-beta.0",
++    "@apollosproject/ui-fragments": "^2.0.0-beta.0",
++    "@apollosproject/ui-htmlview": "^2.0.0-beta.0",
++    "@apollosproject/ui-kit": "^2.0.0-beta.0",
++    "@apollosproject/ui-mapview": "^2.0.0-beta.0",
++    "@apollosproject/ui-media-player": "^2.0.0-beta.0",
++    "@apollosproject/ui-notifications": "^2.0.0-beta.0",
++    "@apollosproject/ui-onboarding": "^2.0.0-beta.0",
++    "@apollosproject/ui-passes": "^2.0.0-beta.0",
++    "@apollosproject/ui-prayer": "^2.0.0-beta.0",
++    "@apollosproject/ui-scripture": "^2.0.0-beta.0",
++    "@apollosproject/ui-storybook": "^2.0.0-beta.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
+@@ -125,7 +124,8 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.0.0-beta.1",
++    "@apollosproject/eslint-config": "^2.0.0-beta.0",
++    "@apollosproject/ui-test-utils": "^2.0.0-beta.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/schema.graphql b/apolloschurchapp/schema.graphql
+index 7161239..318f98c 100644
+--- a/apolloschurchapp/schema.graphql
++++ b/apolloschurchapp/schema.graphql
+@@ -4,7 +4,6 @@ enum ACTION_FEATURE_ACTION {
+   READ_CONTENT
+   READ_EVENT
+   OPEN_URL
+-  OPEN_AUTHENTICATED_URL
+   OPEN_NODE
+   OPEN_CHANNEL
+ }
+@@ -151,18 +150,6 @@ type CardListItem {
+ """A rgb color string"""
+ scalar Color
+ 
+-type Comment implements Node {
+-  id: ID!
+-  person: Person
+-  text: String
+-}
+-
+-type CommentListFeature implements Feature & Node {
+-  id: ID!
+-  order: Int
+-  comments: [Comment]
+-}
+-
+ type ContentChannel implements Node {
+   id: ID!
+   name: String
+@@ -452,7 +439,6 @@ type Mutation {
+   updateUserPushSettings(input: PushSettingsInput!): Person
+   updateUserCampus(campusId: String!): Person
+   addPrayer(text: String!, isAnonymous: Boolean): PrayerRequest
+-  addComment(parentId: ID!, text: String!): Comment
+ }
+ 
+ interface Node {
+@@ -543,7 +529,7 @@ type Query {
+   _placeholder: Boolean
+   node(id: ID!): Node
+   likedContent(first: Int, after: String): ContentItemsConnection
+-  contentChannels: [ContentChannel] @deprecated(reason: "No longer supported.")
++  contentChannels: [ContentChannel]
+   campaigns: ContentItemsConnection
+   userFeed(first: Int, after: String): ContentItemsConnection
+   personaFeed(first: Int, after: String): ContentItemsConnection
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 602282d..6d2775f 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"PrayerRequest"},{"name":"Comment"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"},{"name":"CommentListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"},{"name":"CommentListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
