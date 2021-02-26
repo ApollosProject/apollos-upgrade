@@ -1,0 +1,1573 @@
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+index 70433a614fb9b190c1ecff496f8d672ca87521ec..f0049d29581a696bde01f696a66a741244e424a1 100644
+GIT binary patch
+literal 368
+zcmV-$0gwJuVQh3|WM5xI%lGmZ@U@8)lAC`<r6B4!*Xb4*Bz23+ITn6$O6rw)!PZS0
+zf=T2`(CPwxHm^RidHloio}v*>)`3>S1ja&it7Z7DkOp0wx7s{1E{t2RV~uZfi|MON
+zu9KtVa;zBG&r=#BiFcldRX$}`T}u)~e!ql&(%)>H^$8)|2PG`$x=u7Ib~;Wh$k|Kz
+zSKQ2TI{(x0s$Jj7+ilc95coCD_H^Stw_SQSS$kRY85XJ{2%WUxxc+`e4ue0`puG%K
+z{imv559%aP;@VMwIHME1jtfD*bg>im#zM<Q^UB8}&f#SL<wE2T`d881i;;(_jy9O^
+z4(VL;I7ui_9%uNwcwB+4xj_g_Al0)Z;~-y=SGic6Z+N(sm@f{Lz#xy(<@uxP4Z^t-
+zC-AH$0d(W{ZEx|v&+@0~EdZu&#xg^~2Gu^;Poy4D4|b@tvh1N{8i?;q5bawKRVSkv
+OqL5~BW(#mlA#XH&F1eck
+
+literal 368
+zcmV-$0gwJuVQh3|WM5zKk+hJ)^3abTVpsiDM%$jM0e!1RM0WsC^b8a-%JV<NnHxj}
+zY{>nCD%^Q2)C7`fZ_aUA#Eu14t?wcXlOA>5<?S(lBz;e(NHex2zuj`cWE9+t^?|$v
+z@V(`h=U0E#zwv{z5eXmo`3llL(moGzuWKSrcGQ1xjpX2xK3Kb>W$MterNaw7Oz6@q
+z&z@|TZC?LoxV16c({74<-vc8^^##Oq=rm6|=l03mSAKUz#KJaS;NV#%ig=6-Kbt>7
+z9U=BYQ>me8#;qw%A;lJ%5l1nkp<{*OETrVbAuUBh$FW;!Cu#TJL*EdI9<8`SjQUt5
+zdZyG4Dxd?JtZ!RO(TjFmO0B1x*UlqnqF@O)9G+}<1-I+8^8OVu+vP*O%qB(&g)c_S
+zWMeU&{3&6%3Yy6nkmg2WtdXSiNde{Dh>hqsdmv|lW)^@&*J-?&SoDC}!5ah4i1@YO
+OpX+d79h}P>8vGdGDYzd1
+
+diff --git a/apolloschurchapp/.gitignore b/apolloschurchapp/.gitignore
+index 1d22180..60f8d4d 100644
+--- a/apolloschurchapp/.gitignore
++++ b/apolloschurchapp/.gitignore
+@@ -149,6 +149,9 @@ fastlane/report.xml
+ # symbols
+ apolloschurchapp.app.dSYM.zip
+ 
++# iOS keys
++*.p8
++
+ # Google Play authentication key
+ key.json
+ *.keystore
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+index 1792515ed25445a79a7725643f7647d5c7d90907..70939332fd22bd988de92684eae45c89899a710a 100644
+GIT binary patch
+literal 2272
+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
+
+literal 2272
+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
+
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/ReactNativeFlipper.java b/apolloschurchapp/android/app/src/debug/java/com/differential/apollos/ReactNativeFlipper.java
+similarity index 100%
+rename from apolloschurchapp/android/app/src/main/java/com/differential/apollos/ReactNativeFlipper.java
+rename to apolloschurchapp/android/app/src/debug/java/com/differential/apollos/ReactNativeFlipper.java
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index a75e919..887cc9c 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -40,7 +40,7 @@
+ 
+           <!-- Handle urls starting with "http://www.example.com/products" -->
+           <data android:scheme="https"
+-                android:host="apollos-church-api.herokuapp.com"
++                android:host="@string/APP_DATA_URL"
+                 android:pathPrefix="/app-link" />
+           <data android:scheme="http" />
+         </intent-filter>
+diff --git a/apolloschurchapp/android/build.gradle b/apolloschurchapp/android/build.gradle
+index c50120a..4200b87 100644
+--- a/apolloschurchapp/android/build.gradle
++++ b/apolloschurchapp/android/build.gradle
+@@ -3,7 +3,7 @@
+ buildscript {
+     ext {
+         buildToolsVersion = "29.0.2"
+-        minSdkVersion = 16
++        minSdkVersion = 21
+         compileSdkVersion = 29
+         targetSdkVersion = 29
+     }
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+index 2f384e868f55131f70a190fbac905a5af5ce23b2..c1b16731f8dca5d356338085bdcae7eddf976255 100644
+GIT binary patch
+literal 2384
+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
+C;-hi^
+
+literal 2384
+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
+CgQfid
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 3952f7d..a88c310 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.0.0-beta.0",
++    "version": "2.1.1",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/fastlane/Appfile b/apolloschurchapp/fastlane/Appfile
+index b647b9f..fb2e46e 100644
+--- a/apolloschurchapp/fastlane/Appfile
++++ b/apolloschurchapp/fastlane/Appfile
+@@ -1,7 +1,5 @@
+ # iOS
+ app_identifier("com.differential.apollos") # The bundle identifier of your app
+-apple_id("fastlane@differential.com") # Your Apple email address
+-
+ itc_team_id("121565707") # App Store Connect Team ID
+ team_id("7KS82J74VW") # Developer Portal Team ID
+ 
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 45aacb6..ac8237b 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -20,6 +20,7 @@ before_all do
+ end
+ 
+ platform :ios do
++
+   desc 'Fetch certificates and provisioning profiles'
+   lane :certificates do
+     match(app_identifier: 'com.differential.apollos', type: 'development', readonly: true)
+@@ -28,6 +29,11 @@ platform :ios do
+ 
+   desc "Push a new beta build to TestFlight"
+   lane :deploy do
++    app_store_connect_api_key(
++      key_id: "LV9F3XX57B",
++      issuer_id: "7943c4a3-c0cf-442e-93bd-b3c289bddec3",
++      key_filepath: "ios/apollos.p8",
++    )
+     setup_ci
+     certificates
+     increment_build_number(build_number: number_of_commits, xcodeproj: "ios/apolloschurchapp.xcodeproj")
+@@ -58,6 +64,6 @@ platform :android do
+     bump_version_code
+     gradle(task: 'clean', project_dir: 'android')
+     gradle(task: 'bundle', build_type: 'Release', project_dir: 'android')
+-    upload_to_play_store(track: "internal")
++    upload_to_play_store(track: "internal", skip_upload_apk: true)
+   end
+ end
+diff --git a/apolloschurchapp/fastlane/Matchfile b/apolloschurchapp/fastlane/Matchfile
+index 238d86b..7e36a41 100644
+--- a/apolloschurchapp/fastlane/Matchfile
++++ b/apolloschurchapp/fastlane/Matchfile
+@@ -3,4 +3,3 @@ git_url("https://github.com/ApollosProject/certificates")
+ storage_mode("git")
+ 
+ app_identifier(["com.differential.apollos"])
+-username("apps@apollos.app")
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index c66575d..20372e6 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -3,18 +3,18 @@ PODS:
+   - boost-for-react-native (1.63.0)
+   - BVLinearGradient (2.5.6):
+     - React
+-  - CocoaAsyncSocket (7.6.4)
++  - CocoaAsyncSocket (7.6.5)
+   - CocoaLibEvent (1.0.0)
+   - DoubleConversion (1.1.6)
+-  - FBLazyVector (0.63.2)
+-  - FBReactNativeSpec (0.63.2):
++  - FBLazyVector (0.63.4)
++  - FBReactNativeSpec (0.63.4):
+     - Folly (= 2020.01.13.00)
+-    - RCTRequired (= 0.63.2)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - Flipper (0.41.5):
++    - RCTRequired (= 0.63.4)
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - Flipper (0.54.0):
+     - Flipper-Folly (~> 2.2)
+     - Flipper-RSocket (~> 1.1)
+   - Flipper-DoubleConversion (1.1.7)
+@@ -28,36 +28,36 @@ PODS:
+   - Flipper-PeerTalk (0.0.4)
+   - Flipper-RSocket (1.1.0):
+     - Flipper-Folly (~> 2.2)
+-  - FlipperKit (0.41.5):
+-    - FlipperKit/Core (= 0.41.5)
+-  - FlipperKit/Core (0.41.5):
+-    - Flipper (~> 0.41.5)
++  - FlipperKit (0.54.0):
++    - FlipperKit/Core (= 0.54.0)
++  - FlipperKit/Core (0.54.0):
++    - Flipper (~> 0.54.0)
+     - FlipperKit/CppBridge
+     - FlipperKit/FBCxxFollyDynamicConvert
+     - FlipperKit/FBDefines
+     - FlipperKit/FKPortForwarding
+-  - FlipperKit/CppBridge (0.41.5):
+-    - Flipper (~> 0.41.5)
+-  - FlipperKit/FBCxxFollyDynamicConvert (0.41.5):
++  - FlipperKit/CppBridge (0.54.0):
++    - Flipper (~> 0.54.0)
++  - FlipperKit/FBCxxFollyDynamicConvert (0.54.0):
+     - Flipper-Folly (~> 2.2)
+-  - FlipperKit/FBDefines (0.41.5)
+-  - FlipperKit/FKPortForwarding (0.41.5):
++  - FlipperKit/FBDefines (0.54.0)
++  - FlipperKit/FKPortForwarding (0.54.0):
+     - CocoaAsyncSocket (~> 7.6)
+     - Flipper-PeerTalk (~> 0.0.4)
+-  - FlipperKit/FlipperKitHighlightOverlay (0.41.5)
+-  - FlipperKit/FlipperKitLayoutPlugin (0.41.5):
++  - FlipperKit/FlipperKitHighlightOverlay (0.54.0)
++  - FlipperKit/FlipperKitLayoutPlugin (0.54.0):
+     - FlipperKit/Core
+     - FlipperKit/FlipperKitHighlightOverlay
+     - FlipperKit/FlipperKitLayoutTextSearchable
+     - YogaKit (~> 1.18)
+-  - FlipperKit/FlipperKitLayoutTextSearchable (0.41.5)
+-  - FlipperKit/FlipperKitNetworkPlugin (0.41.5):
++  - FlipperKit/FlipperKitLayoutTextSearchable (0.54.0)
++  - FlipperKit/FlipperKitNetworkPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/FlipperKitReactPlugin (0.41.5):
++  - FlipperKit/FlipperKitReactPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/FlipperKitUserDefaultsPlugin (0.41.5):
++  - FlipperKit/FlipperKitUserDefaultsPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/SKIOSNetworkPlugin (0.41.5):
++  - FlipperKit/SKIOSNetworkPlugin (0.54.0):
+     - FlipperKit/Core
+     - FlipperKit/FlipperKitNetworkPlugin
+   - Folly (2020.01.13.00):
+@@ -81,178 +81,180 @@ PODS:
+     - RNPermissions
+   - Permission-PhotoLibrary (2.2.2):
+     - RNPermissions
+-  - RCTRequired (0.63.2)
+-  - RCTTypeSafety (0.63.2):
+-    - FBLazyVector (= 0.63.2)
++  - RCTRequired (0.63.4)
++  - RCTTypeSafety (0.63.4):
++    - FBLazyVector (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTRequired (= 0.63.2)
+-    - React-Core (= 0.63.2)
+-  - React (0.63.2):
+-    - React-Core (= 0.63.2)
+-    - React-Core/DevSupport (= 0.63.2)
+-    - React-Core/RCTWebSocket (= 0.63.2)
+-    - React-RCTActionSheet (= 0.63.2)
+-    - React-RCTAnimation (= 0.63.2)
+-    - React-RCTBlob (= 0.63.2)
+-    - React-RCTImage (= 0.63.2)
+-    - React-RCTLinking (= 0.63.2)
+-    - React-RCTNetwork (= 0.63.2)
+-    - React-RCTSettings (= 0.63.2)
+-    - React-RCTText (= 0.63.2)
+-    - React-RCTVibration (= 0.63.2)
+-  - React-callinvoker (0.63.2)
+-  - React-Core (0.63.2):
++    - RCTRequired (= 0.63.4)
++    - React-Core (= 0.63.4)
++  - React (0.63.4):
++    - React-Core (= 0.63.4)
++    - React-Core/DevSupport (= 0.63.4)
++    - React-Core/RCTWebSocket (= 0.63.4)
++    - React-RCTActionSheet (= 0.63.4)
++    - React-RCTAnimation (= 0.63.4)
++    - React-RCTBlob (= 0.63.4)
++    - React-RCTImage (= 0.63.4)
++    - React-RCTLinking (= 0.63.4)
++    - React-RCTNetwork (= 0.63.4)
++    - React-RCTSettings (= 0.63.4)
++    - React-RCTText (= 0.63.4)
++    - React-RCTVibration (= 0.63.4)
++  - React-callinvoker (0.63.4)
++  - React-Core (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-Core/Default (= 0.63.2)
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-Core/Default (= 0.63.4)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/CoreModulesHeaders (0.63.2):
++  - React-Core/CoreModulesHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/Default (0.63.2):
++  - React-Core/Default (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/DevSupport (0.63.2):
++  - React-Core/DevSupport (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-Core/Default (= 0.63.2)
+-    - React-Core/RCTWebSocket (= 0.63.2)
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
+-    - React-jsinspector (= 0.63.2)
++    - React-Core/Default (= 0.63.4)
++    - React-Core/RCTWebSocket (= 0.63.4)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
++    - React-jsinspector (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTActionSheetHeaders (0.63.2):
++  - React-Core/RCTActionSheetHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTAnimationHeaders (0.63.2):
++  - React-Core/RCTAnimationHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTBlobHeaders (0.63.2):
++  - React-Core/RCTBlobHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTImageHeaders (0.63.2):
++  - React-Core/RCTImageHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTLinkingHeaders (0.63.2):
++  - React-Core/RCTLinkingHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTNetworkHeaders (0.63.2):
++  - React-Core/RCTNetworkHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTSettingsHeaders (0.63.2):
++  - React-Core/RCTSettingsHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTTextHeaders (0.63.2):
++  - React-Core/RCTTextHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTVibrationHeaders (0.63.2):
++  - React-Core/RCTVibrationHeaders (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+     - React-Core/Default
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-Core/RCTWebSocket (0.63.2):
++  - React-Core/RCTWebSocket (0.63.4):
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-Core/Default (= 0.63.2)
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-jsiexecutor (= 0.63.2)
++    - React-Core/Default (= 0.63.4)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-jsiexecutor (= 0.63.4)
+     - Yoga
+-  - React-CoreModules (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++  - React-CoreModules (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core/CoreModulesHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-RCTImage (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-cxxreact (0.63.2):
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core/CoreModulesHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-RCTImage (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-cxxreact (0.63.4):
+     - boost-for-react-native (= 1.63.0)
+     - DoubleConversion
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-callinvoker (= 0.63.2)
+-    - React-jsinspector (= 0.63.2)
+-  - React-jsi (0.63.2):
++    - React-callinvoker (= 0.63.4)
++    - React-jsinspector (= 0.63.4)
++  - React-jsi (0.63.4):
+     - boost-for-react-native (= 1.63.0)
+     - DoubleConversion
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-jsi/Default (= 0.63.2)
+-  - React-jsi/Default (0.63.2):
++    - React-jsi/Default (= 0.63.4)
++  - React-jsi/Default (0.63.4):
+     - boost-for-react-native (= 1.63.0)
+     - DoubleConversion
+     - Folly (= 2020.01.13.00)
+     - glog
+-  - React-jsiexecutor (0.63.2):
++  - React-jsiexecutor (0.63.4):
+     - DoubleConversion
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-  - React-jsinspector (0.63.2)
+-  - "react-native-apollos-player (2.0.0-alpha.15+9ef8d244)":
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
++  - React-jsinspector (0.63.4)
++  - react-native-apollos-player (2.0.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+   - react-native-geolocation (2.0.2):
+     - React
++  - react-native-geolocation-service (5.1.1):
++    - React
+   - react-native-google-cast (3.3.0):
+     - React
+     - react-native-google-cast/Default (= 3.3.0)
+@@ -262,9 +264,9 @@ PODS:
+     - react-native-google-cast/RNGoogleCast
+   - react-native-google-cast/RNGoogleCast (3.3.0):
+     - React
+-  - react-native-image-picker (0.28.0):
+-    - React
+-  - react-native-maps (0.26.1):
++  - react-native-image-picker (3.1.4):
++    - React-Core
++  - react-native-maps (0.27.1):
+     - React
+   - react-native-music-control (0.10.8):
+     - React
+@@ -286,66 +288,66 @@ PODS:
+     - React
+   - react-native-webview (7.6.0):
+     - React
+-  - React-RCTActionSheet (0.63.2):
+-    - React-Core/RCTActionSheetHeaders (= 0.63.2)
+-  - React-RCTAnimation (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++  - React-RCTActionSheet (0.63.4):
++    - React-Core/RCTActionSheetHeaders (= 0.63.4)
++  - React-RCTAnimation (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core/RCTAnimationHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTBlob (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core/RCTAnimationHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTBlob (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - React-Core/RCTBlobHeaders (= 0.63.2)
+-    - React-Core/RCTWebSocket (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-RCTNetwork (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTImage (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++    - React-Core/RCTBlobHeaders (= 0.63.4)
++    - React-Core/RCTWebSocket (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-RCTNetwork (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTImage (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core/RCTImageHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - React-RCTNetwork (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTLinking (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
+-    - React-Core/RCTLinkingHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTNetwork (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core/RCTImageHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - React-RCTNetwork (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTLinking (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
++    - React-Core/RCTLinkingHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTNetwork (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core/RCTNetworkHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTSettings (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core/RCTNetworkHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTSettings (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - RCTTypeSafety (= 0.63.2)
+-    - React-Core/RCTSettingsHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - React-RCTText (0.63.2):
+-    - React-Core/RCTTextHeaders (= 0.63.2)
+-  - React-RCTVibration (0.63.2):
+-    - FBReactNativeSpec (= 0.63.2)
++    - RCTTypeSafety (= 0.63.4)
++    - React-Core/RCTSettingsHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - React-RCTText (0.63.4):
++    - React-Core/RCTTextHeaders (= 0.63.4)
++  - React-RCTVibration (0.63.4):
++    - FBReactNativeSpec (= 0.63.4)
+     - Folly (= 2020.01.13.00)
+-    - React-Core/RCTVibrationHeaders (= 0.63.2)
+-    - React-jsi (= 0.63.2)
+-    - ReactCommon/turbomodule/core (= 0.63.2)
+-  - ReactCommon/turbomodule/core (0.63.2):
++    - React-Core/RCTVibrationHeaders (= 0.63.4)
++    - React-jsi (= 0.63.4)
++    - ReactCommon/turbomodule/core (= 0.63.4)
++  - ReactCommon/turbomodule/core (0.63.4):
+     - DoubleConversion
+     - Folly (= 2020.01.13.00)
+     - glog
+-    - React-callinvoker (= 0.63.2)
+-    - React-Core (= 0.63.2)
+-    - React-cxxreact (= 0.63.2)
+-    - React-jsi (= 0.63.2)
++    - React-callinvoker (= 0.63.4)
++    - React-Core (= 0.63.4)
++    - React-cxxreact (= 0.63.4)
++    - React-jsi (= 0.63.4)
+   - rn-fetch-blob (0.10.16):
+     - React-Core
+   - RNAirplay (1.0.0):
+@@ -384,25 +386,25 @@ DEPENDENCIES:
+   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
+   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+-  - Flipper (~> 0.41.1)
++  - Flipper (~> 0.54.0)
+   - Flipper-DoubleConversion (= 1.1.7)
+   - Flipper-Folly (~> 2.2)
+   - Flipper-Glog (= 0.3.6)
+   - Flipper-PeerTalk (~> 0.0.4)
+   - Flipper-RSocket (~> 1.1)
+-  - FlipperKit (~> 0.41.1)
+-  - FlipperKit/Core (~> 0.41.1)
+-  - FlipperKit/CppBridge (~> 0.41.1)
+-  - FlipperKit/FBCxxFollyDynamicConvert (~> 0.41.1)
+-  - FlipperKit/FBDefines (~> 0.41.1)
+-  - FlipperKit/FKPortForwarding (~> 0.41.1)
+-  - FlipperKit/FlipperKitHighlightOverlay (~> 0.41.1)
+-  - FlipperKit/FlipperKitLayoutPlugin (~> 0.41.1)
+-  - FlipperKit/FlipperKitLayoutTextSearchable (~> 0.41.1)
+-  - FlipperKit/FlipperKitNetworkPlugin (~> 0.41.1)
+-  - FlipperKit/FlipperKitReactPlugin (~> 0.41.1)
+-  - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.41.1)
+-  - FlipperKit/SKIOSNetworkPlugin (~> 0.41.1)
++  - FlipperKit (~> 0.54.0)
++  - FlipperKit/Core (~> 0.54.0)
++  - FlipperKit/CppBridge (~> 0.54.0)
++  - FlipperKit/FBCxxFollyDynamicConvert (~> 0.54.0)
++  - FlipperKit/FBDefines (~> 0.54.0)
++  - FlipperKit/FKPortForwarding (~> 0.54.0)
++  - FlipperKit/FlipperKitHighlightOverlay (~> 0.54.0)
++  - FlipperKit/FlipperKitLayoutPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitLayoutTextSearchable (~> 0.54.0)
++  - FlipperKit/FlipperKitNetworkPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitReactPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.54.0)
++  - FlipperKit/SKIOSNetworkPlugin (~> 0.54.0)
+   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+   - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
+@@ -422,6 +424,7 @@ DEPENDENCIES:
+   - "react-native-apollos-player (from `../node_modules/@apollosproject/ui-media-player`)"
+   - react-native-config (from `../node_modules/react-native-config`)
+   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
++  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
+   - react-native-google-cast (from `../node_modules/react-native-google-cast/ios`)
+   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+   - react-native-maps (from `../node_modules/react-native-maps`)
+@@ -520,6 +523,8 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-config"
+   react-native-geolocation:
+     :path: "../node_modules/@react-native-community/geolocation"
++  react-native-geolocation-service:
++    :path: "../node_modules/react-native-geolocation-service"
+   react-native-google-cast:
+     :path: "../node_modules/react-native-google-cast/ios"
+   react-native-image-picker:
+@@ -597,18 +602,18 @@ SPEC CHECKSUMS:
+   AstronomerAnalytics: 36f48678a387e41481650edd6247c6c95d994131
+   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
+-  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
++  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
+   DoubleConversion: cde416483dac037923206447da6e1454df403714
+-  FBLazyVector: 3ef4a7f62e7db01092f9d517d2ebc0d0677c4a37
+-  FBReactNativeSpec: dc7fa9088f0f2a998503a352b0554d69a4391c5a
+-  Flipper: 33585e2d9810fe5528346be33bcf71b37bb7ae13
++  FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
++  FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
++  Flipper: be611d4b742d8c87fbae2ca5f44603a02539e365
+   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
+   Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
+   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
+   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
+   Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
+-  FlipperKit: bc68102cd4952a258a23c9c1b316c7bec1fecf83
++  FlipperKit: ab353d41aea8aae2ea6daaf813e67496642f3d7d
+   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
+   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
+   google-cast-sdk: 57cd67b4a0966802b2738fcbbc103125c98cc8a1
+@@ -616,22 +621,23 @@ SPEC CHECKSUMS:
+   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
+   Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
+   Permission-PhotoLibrary: 8227a6ed9f6a971537afe63742d54f5f23a38fe2
+-  RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
+-  RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
+-  React: e1c65dd41cb9db13b99f24608e47dd595f28ca9a
+-  React-callinvoker: 552a6a6bc8b3bb794cf108ad59e5a9e2e3b4fc98
+-  React-Core: 9d341e725dc9cd2f49e4c49ad1fc4e8776aa2639
+-  React-CoreModules: 5335e168165da7f7083ce7147768d36d3e292318
+-  React-cxxreact: d3261ec5f7d11743fbf21e263a34ea51d1f13ebc
+-  React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
+-  React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
+-  React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
+-  react-native-apollos-player: 1d8cc7d9d36a87c91e8c9bf0e33c701a4160b1cc
++  RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
++  RCTTypeSafety: 8c9c544ecbf20337d069e4ae7fd9a377aadf504b
++  React: b0a957a2c44da4113b0c4c9853d8387f8e64e615
++  React-callinvoker: c3f44dd3cb195b6aa46621fff95ded79d59043fe
++  React-Core: d3b2a1ac9a2c13c3bcde712d9281fc1c8a5b315b
++  React-CoreModules: 0581ff36cb797da0943d424f69e7098e43e9be60
++  React-cxxreact: c1480d4fda5720086c90df537ee7d285d4c57ac3
++  React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
++  React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
++  React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
++  react-native-apollos-player: 407ae8570ca05a666aea3036a346fb9a0c59a6d1
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
++  react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+   react-native-google-cast: 410619ef162b8b91815ecf7271502224998dee8e
+-  react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
+-  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
++  react-native-image-picker: 28d8d1f5a643119876b8b2c7d4d1dcfb2b232dd4
++  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+   react-native-music-control: dcfe5b61e56a15898c4618579cb8ce612c9d21a8
+   react-native-onesignal: ad2eaab1517951e50d19fa3eccd16d3048167181
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+@@ -640,16 +646,16 @@ SPEC CHECKSUMS:
+   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
+   react-native-webview: db4682f1698ab4b17a5e88f951031d203ff8aea8
+-  React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
+-  React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
+-  React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
+-  React-RCTImage: de355d738727b09ad3692f2a979affbd54b5f378
+-  React-RCTLinking: 8122f221d395a63364b2c0078ce284214bd04575
+-  React-RCTNetwork: 8f96c7b49ea6a0f28f98258f347b6ad218bc0830
+-  React-RCTSettings: 8a49622aff9c1925f5455fa340b6fe4853d64ab6
+-  React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
+-  React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
+-  ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
++  React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
++  React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
++  React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
++  React-RCTImage: c1b1f2d3f43a4a528c8946d6092384b5c880d2f0
++  React-RCTLinking: 35ae4ab9dc0410d1fcbdce4d7623194a27214fb2
++  React-RCTNetwork: 29ec2696f8d8cfff7331fac83d3e893c95ef43ae
++  React-RCTSettings: 60f0691bba2074ef394f95d4c2265ec284e0a46a
++  React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
++  React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
++  ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
+   rn-fetch-blob: 651b8d076b43d0d7aa294a3d9ec16c00aab8bef9
+   RNAirplay: 75777dd55dafbd3687703c3eb9c290ea6cc43248
+   RNAnalytics: 360b0680753d0e1d37152a25d47aa34a015cab72
+@@ -664,7 +670,7 @@ SPEC CHECKSUMS:
+   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+-  Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
++  Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
+   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+ 
+ PODFILE CHECKSUM: ff0b6ccfe0571b896a44f129ac11790a8b809329
+diff --git a/apolloschurchapp/ios/Swift.swift b/apolloschurchapp/ios/Swift.swift
+new file mode 100644
+index 0000000..00a17ca
+--- /dev/null
++++ b/apolloschurchapp/ios/Swift.swift
+@@ -0,0 +1,9 @@
++//
++//  Swift.swift
++//  apolloschurchapp
++//
++//  Created by Vincent Wilson on 12/16/20.
++//  Copyright © 2020 Facebook. All rights reserved.
++//
++
++import Foundation
+diff --git a/apolloschurchapp/ios/apollos.p8.enc b/apolloschurchapp/ios/apollos.p8.enc
+new file mode 100644
+index 0000000000000000000000000000000000000000..1770af9b501caeb22e611bb865209586d6b9bf3e
+GIT binary patch
+literal 288
+zcmV+*0pI>pVQh3|WM5yjEET~l;Wvl94TCB^>_}xMtxWvMQO(&vMAXk~Y-23p4x~u@
+zHgoO~vSpla6%)B=eb<|YDq;a;m2&C@gnt5QU~B@@B~c_{s*ZB-<wB&Z(bxgZ^$9qB
+z=Nbz1E?K*z=YPJZp~J{R%suq|SU8+^_{RzW;P*awqyOFHjvd$=i3J=Io_i6VodpOS
+z8Q#Var29Nb1A$l^o!4_}e=jJ39Pss9Mmor2g>+EP8N)@tYk_)w{xqR1d}Fj?OBGBI
+z=Xp{7ygsVoS6hM=8iCrZ|6@FdWb**vwlTPuS!U3^8cfzM$RQM7NDHW|)1Qt>MB9`y
+mk)bMH8k5~*|ITGDKdtFfZPnifx_A9HJyWQ=O6gmR$V=2VVT&99
+
+literal 0
+HcmV?d00001
+
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h b/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h
+new file mode 100644
+index 0000000..1b2cb5d
+--- /dev/null
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS-Bridging-Header.h
+@@ -0,0 +1,4 @@
++//
++//  Use this file to import your target's public headers that you would like to expose to Swift.
++//
++
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index facf021..a29992c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>274</string>
++	<string>507</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index 9433cce..a9ab744 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>274</string>
++	<string>507</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 5f46242..0018068 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -14,7 +14,7 @@
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		1C48DCDE11AC47C48E918489 /* Inter-UI-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DC74A378C1CC40E4B6192D7F /* Inter-UI-Medium.otf */; };
+-		2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
++		2AE17F608689DAE577F28E4D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+ 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+@@ -115,7 +115,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */,
++				2AE17F608689DAE577F28E4D /* (null) in Frameworks */,
+ 				EF3A30A2E55D4F8352E116D3 /* libPods-apolloschurchapp-apolloschurchappTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -382,6 +382,7 @@
+ 					};
+ 					2D02E47A1E0B4A5D006451C7 = {
+ 						CreatedOnToolsVersion = 8.2.1;
++						LastSwiftMigration = 1230;
+ 						ProvisioningStyle = Automatic;
+ 					};
+ 					2D02E48F1E0B4A5D006451C7 = {
+@@ -768,7 +769,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development: Apollos Apps (58685TNK9H)";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 21;
++				CURRENT_PROJECT_VERSION = 507;
+ 				DEAD_CODE_STRIPPING = YES;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+@@ -802,7 +803,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Distribution: Differential Dev Shop, LLC (7KS82J74VW)";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 21;
++				CURRENT_PROJECT_VERSION = 507;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+@@ -831,6 +832,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+ 				CLANG_ANALYZER_NONNULL = YES;
++				CLANG_ENABLE_MODULES = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_INFINITE_RECURSION = YES;
+ 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+@@ -851,6 +853,9 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.apolloschurchapp-tvOS";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = appletvos;
++				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-tvOS-Bridging-Header.h";
++				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
++				SWIFT_VERSION = 5.0;
+ 				TARGETED_DEVICE_FAMILY = 3;
+ 				TVOS_DEPLOYMENT_TARGET = 9.2;
+ 			};
+@@ -863,6 +868,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+ 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+ 				CLANG_ANALYZER_NONNULL = YES;
++				CLANG_ENABLE_MODULES = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+ 				CLANG_WARN_INFINITE_RECURSION = YES;
+ 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+@@ -883,6 +889,8 @@
+ 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.apolloschurchapp-tvOS";
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
+ 				SDKROOT = appletvos;
++				SWIFT_OBJC_BRIDGING_HEADER = "apolloschurchapp-tvOS-Bridging-Header.h";
++				SWIFT_VERSION = 5.0;
+ 				TARGETED_DEVICE_FAMILY = 3;
+ 				TVOS_DEPLOYMENT_TARGET = 9.2;
+ 			};
+@@ -892,6 +900,7 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = 1ECA88A0369BB1DDE56EE65D /* Pods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.debug.xcconfig */;
+ 			buildSettings = {
++				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+@@ -923,6 +932,7 @@
+ 			isa = XCBuildConfiguration;
+ 			baseConfigurationReference = 4D3B523797B74698347A5317 /* Pods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.release.xcconfig */;
+ 			buildSettings = {
++				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+ 				BUNDLE_LOADER = "$(TEST_HOST)";
+ 				CLANG_ANALYZER_NONNULL = YES;
+ 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 4600413..8582802 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -30,7 +30,7 @@
+ 		</dict>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>274</string>
++	<string>507</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+@@ -55,18 +55,18 @@
+ 	</dict>
+ 	<key>NSBluetoothAlwaysUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like access to bluetooth (for playing audio)</string>
+-	<key>NSCameraUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to use your camera (for uploading profile pictures)</string>
++	<key>NSBluetoothPeripheralUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like access to bluetooth (for playing audio)</string>
++	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSLocationAlwaysUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSMicrophoneUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to your microphone (for videos)</string>
+-	<key>NSPhotoLibraryAddUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery (for uploading profile pictures)</string>
++	<string>$(PRODUCT_NAME) would like to access your microphone (for videos)</string>
+ 	<key>NSPhotoLibraryUsageDescription</key>
+-	<string>$(PRODUCT_NAME) would like access to your photo gallery (for uploading profile pictures)</string>
++	<string>$(PRODUCT_NAME) would like to access your photos</string>
+ 	<key>UIAppFonts</key>
+ 	<array>
+ 		<string>DroidSerif-Bold.ttf</string>
+@@ -82,6 +82,10 @@
+ 		<string>Inter-UI-MediumItalic.otf</string>
+ 		<string>Inter-UI-Regular.otf</string>
+ 	</array>
++	<key>UIBackgroundModes</key>
++	<array>
++		<string>audio</string>
++	</array>
+ 	<key>UILaunchStoryboardName</key>
+ 	<string>SplashScreen</string>
+ 	<key>UIRequiredDeviceCapabilities</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+index 984fdb2..6c79704 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
++++ b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+@@ -8,7 +8,7 @@
+ 	<true/>
+ 	<key>com.apple.developer.associated-domains</key>
+ 	<array>
+-		<string>applink:apollos-church-api.herokuapp.com</string>
++		<string>applink:$(APP_DATA_URL)</string>
+ 	</array>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index bb87423..d51806d 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>274</string>
++	<string>507</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index 68cbef0..af40368 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -87,7 +87,7 @@ jest.mock('@apollosproject/ui-media-player', () => ({
+ 
+ jest.mock('react-native-video', () => 'Video');
+ 
+-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
++// jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+ 
+ jest.mock(
+   'react-native/Libraries/Components/DatePicker/DatePickerIOS',
+diff --git a/apolloschurchapp/loadConfig.js b/apolloschurchapp/loadConfig.js
+index 922e5d0..8eb6c28 100644
+--- a/apolloschurchapp/loadConfig.js
++++ b/apolloschurchapp/loadConfig.js
+@@ -1,4 +1,19 @@
+ import ApollosConfig from '@apollosproject/config';
+ import FRAGMENTS from '@apollosproject/ui-fragments';
++import fragmentTypes from './src/client/fragmentTypes.json';
+ 
+-ApollosConfig.loadJs({ FRAGMENTS });
++// Create a map all the interfaces each type implements.
++// If UniversalContentItem implements Node, Card, and ContentNode,
++// our typemap would be { UniversalContentItem: ['Node', 'Card', 'ContentNode'] }
++const TYPEMAP = fragmentTypes.__schema.types.reduce((acc, curr) => {
++  const { name } = curr;
++  const types = Object.fromEntries(
++    curr.possibleTypes.map((type) => [type.name, name])
++  );
++  Object.keys(types).forEach((key) => {
++    acc[key] = acc[key] ? [...acc[key], types[key]] : [types[key]];
++  });
++  return acc;
++}, {});
++
++ApollosConfig.loadJs({ FRAGMENTS, TYPEMAP });
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 7e1ecf7..2beac57 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -3,7 +3,7 @@
+   "version": "1.0.0",
+   "private": true,
+   "engines": {
+-    "node": ">=10.x.x"
++    "node": ">=12.x.x"
+   },
+   "files": [
+     "src"
+@@ -14,7 +14,7 @@
+     "codecov": "cat ./coverage/lcov.info | codecov",
+     "ios": "react-native run-ios --simulator=\"iPhone 11\"",
+     "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove",
++    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
+     "get-schema": "eval $(grep ^APP_DATA_URL .env) && sleep 5 && get-graphql-schema $APP_DATA_URL > schema.graphql",
+@@ -50,22 +50,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.0.0-beta.0",
++    "@apollosproject/config": "^2.0.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.0.0-beta.0",
+-    "@apollosproject/ui-auth": "^2.0.0-beta.0",
+-    "@apollosproject/ui-connected": "^2.0.0-beta.0",
+-    "@apollosproject/ui-fragments": "^2.0.0-beta.0",
+-    "@apollosproject/ui-htmlview": "^2.0.0-beta.0",
+-    "@apollosproject/ui-kit": "^2.0.0-beta.0",
+-    "@apollosproject/ui-mapview": "^2.0.0-beta.0",
+-    "@apollosproject/ui-media-player": "^2.0.0-beta.0",
+-    "@apollosproject/ui-notifications": "^2.0.0-beta.0",
+-    "@apollosproject/ui-onboarding": "^2.0.0-beta.0",
+-    "@apollosproject/ui-passes": "^2.0.0-beta.0",
+-    "@apollosproject/ui-prayer": "^2.0.0-beta.0",
+-    "@apollosproject/ui-scripture": "^2.0.0-beta.0",
+-    "@apollosproject/ui-storybook": "^2.0.0-beta.0",
++    "@apollosproject/ui-analytics": "^2.0.0",
++    "@apollosproject/ui-auth": "^2.0.0",
++    "@apollosproject/ui-connected": "^2.0.0",
++    "@apollosproject/ui-fragments": "^2.0.0",
++    "@apollosproject/ui-htmlview": "^2.0.0",
++    "@apollosproject/ui-kit": "^2.0.0",
++    "@apollosproject/ui-mapview": "^2.0.0",
++    "@apollosproject/ui-media-player": "^2.0.0",
++    "@apollosproject/ui-notifications": "^2.0.0",
++    "@apollosproject/ui-onboarding": "^2.0.0",
++    "@apollosproject/ui-passes": "^2.0.0",
++    "@apollosproject/ui-prayer": "^2.0.0",
++    "@apollosproject/ui-scripture": "^2.0.0",
++    "@apollosproject/ui-storybook": "^2.0.0",
++    "@apollosproject/ui-test-utils": "^2.0.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
+@@ -94,16 +95,16 @@
+     "moment": "2.22.2",
+     "node-fetch": "2.6.1",
+     "react": "16.13.1",
+-    "react-native": "0.63.2",
++    "react-native": "0.63.4",
+     "react-native-config": "^0.11.7",
+     "react-native-device-info": "^4.0.1",
+-    "react-native-geolocation-service": "^3.0.0",
++    "react-native-geolocation-service": "^5.1.1",
+     "react-native-gesture-handler": "^1.6.1",
+     "react-native-google-cast": "^3.3.0",
+-    "react-native-image-picker": "0.28.0",
++    "react-native-image-picker": "^3.1.4",
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+-    "react-native-maps": "0.26.1",
++    "react-native-maps": "^0.27.1",
+     "react-native-modal-datetime-picker": "9.0.0",
+     "react-native-music-control": "0.10.8",
+     "react-native-onesignal": "3.9.1",
+@@ -124,8 +125,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.0.0-beta.0",
+-    "@apollosproject/ui-test-utils": "^2.0.0-beta.0",
++    "@apollosproject/eslint-config": "^2.0.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/schema.graphql b/apolloschurchapp/schema.graphql
+index 318f98c..985def1 100644
+--- a/apolloschurchapp/schema.graphql
++++ b/apolloschurchapp/schema.graphql
+@@ -4,6 +4,7 @@ enum ACTION_FEATURE_ACTION {
+   READ_CONTENT
+   READ_EVENT
+   OPEN_URL
++  OPEN_AUTHENTICATED_URL
+   OPEN_NODE
+   OPEN_CHANNEL
+ }
+@@ -41,6 +42,14 @@ type ActionListFeature implements Feature & Node {
+   primaryAction: FeatureAction
+ }
+ 
++type AddCommentFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  relatedNode: Node!
++  addPrompt: String
++  initialPrompt: String
++}
++
+ input AnalyticsDeviceInfo {
+   platform: AnalyticsPlatform
+   deviceId: String
+@@ -150,6 +159,25 @@ type CardListItem {
+ """A rgb color string"""
+ scalar Color
+ 
++type Comment implements Node {
++  id: ID!
++  person: Person
++  text: String
++  visibility: CommentVisibility
++}
++
++type CommentListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  comments: [Comment]
++}
++
++enum CommentVisibility {
++  PUBLIC
++  PRIVATE
++  FOLLOWERS
++}
++
+ type ContentChannel implements Node {
+   id: ID!
+   name: String
+@@ -439,6 +467,8 @@ type Mutation {
+   updateUserPushSettings(input: PushSettingsInput!): Person
+   updateUserCampus(campusId: String!): Person
+   addPrayer(text: String!, isAnonymous: Boolean): PrayerRequest
++  addComment(parentId: ID!, text: String!, visibility: CommentVisibility): Comment
++  flagComment(commentId: ID!): Comment
+ }
+ 
+ interface Node {
+@@ -496,6 +526,7 @@ type Person implements Node {
+   devices: [Device]
+   campus: Campus
+   groups(type: GROUP_TYPE, asLeader: Boolean): [Group]
++  prayers: [PrayerRequest]
+ }
+ 
+ type PrayerListFeature implements Feature & Node {
+@@ -529,7 +560,7 @@ type Query {
+   _placeholder: Boolean
+   node(id: ID!): Node
+   likedContent(first: Int, after: String): ContentItemsConnection
+-  contentChannels: [ContentChannel]
++  contentChannels: [ContentChannel] @deprecated(reason: "No longer supported.")
+   campaigns: ContentItemsConnection
+   userFeed(first: Int, after: String): ContentItemsConnection
+   personaFeed(first: Int, after: String): ContentItemsConnection
+@@ -701,6 +732,14 @@ type VerticalCardListFeature implements Feature & Node {
+   cards: [CardListItem]
+ }
+ 
++type VerticalPrayerListFeature implements Feature & Node {
++  id: ID!
++  order: Int
++  title: String
++  subtitle: String
++  prayers: [PrayerRequest]
++}
++
+ type VideoMedia implements Media {
+   name: String
+   key: String
+diff --git a/apolloschurchapp/src/client/fragmentTypes.json b/apolloschurchapp/src/client/fragmentTypes.json
+index 6d2775f..7bf866f 100644
+--- a/apolloschurchapp/src/client/fragmentTypes.json
++++ b/apolloschurchapp/src/client/fragmentTypes.json
+@@ -1 +1 @@
+-{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"PrayerRequest"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
++{"__schema":{"types":[{"kind":"INTERFACE","name":"Node","possibleTypes":[{"name":"ContentChannel"},{"name":"Person"},{"name":"Device"},{"name":"Campus"},{"name":"Event"},{"name":"Group"},{"name":"PrayerRequest"},{"name":"Scripture"},{"name":"Pass"},{"name":"FeatureFeed"},{"name":"Comment"},{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"},{"name":"Url"},{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"},{"name":"VerticalPrayerListFeature"},{"name":"CommentListFeature"},{"name":"AddCommentFeature"}]},{"kind":"INTERFACE","name":"ContentItem","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Media","possibleTypes":[{"name":"ImageMedia"},{"name":"VideoMedia"},{"name":"AudioMedia"}]},{"kind":"INTERFACE","name":"MediaSource","possibleTypes":[{"name":"ImageMediaSource"},{"name":"VideoMediaSource"},{"name":"AudioMediaSource"}]},{"kind":"INTERFACE","name":"Sharable","possibleTypes":[{"name":"SharableContentItem"},{"name":"SharableFeature"}]},{"kind":"INTERFACE","name":"Feature","possibleTypes":[{"name":"ActionListFeature"},{"name":"ActionBarFeature"},{"name":"HeroListFeature"},{"name":"VerticalCardListFeature"},{"name":"HorizontalCardListFeature"},{"name":"TextFeature"},{"name":"ScriptureFeature"},{"name":"WebviewFeature"},{"name":"PrayerListFeature"},{"name":"VerticalPrayerListFeature"},{"name":"CommentListFeature"},{"name":"AddCommentFeature"}]},{"kind":"INTERFACE","name":"ContentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"Card","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"VideoNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"AudioNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentParentNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ContentChildNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ThemedNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ProgressNode","possibleTypes":[{"name":"ContentSeriesContentItem"}]},{"kind":"INTERFACE","name":"ScriptureNode","possibleTypes":[{"name":"DevotionalContentItem"},{"name":"MediaContentItem"}]},{"kind":"INTERFACE","name":"LikableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"ShareableNode","possibleTypes":[{"name":"UniversalContentItem"},{"name":"DevotionalContentItem"},{"name":"MediaContentItem"},{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"FeaturesNode","possibleTypes":[{"name":"ContentSeriesContentItem"},{"name":"WeekendContentItem"}]},{"kind":"INTERFACE","name":"LiveNode","possibleTypes":[{"name":"WeekendContentItem"}]}]}}
+\ No newline at end of file
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 058129c..7133347 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -40,6 +40,21 @@ export const client = new ApolloClient({
+   typeDefs: schema,
+   name: getApplicationName(),
+   version: getVersion(),
++  // NOTE: this is because we have some very taxing queries that we want to avoid running twice
++  // see if it's still an issue after we're operating mostly on Postgres and have less loading states
++  defaultOptions: {
++    watchQuery: {
++      nextFetchPolicy(lastFetchPolicy) {
++        if (
++          lastFetchPolicy === 'cache-and-network' ||
++          lastFetchPolicy === 'network-only'
++        ) {
++          return 'cache-first';
++        }
++        return lastFetchPolicy;
++      },
++    },
++  },
+ });
+ 
+ // Hack to give auth link access to method on client;
+diff --git a/apolloschurchapp/src/content-feed/content-feed.tests.js b/apolloschurchapp/src/content-feed/content-feed.tests.js
+index 18905ac..3c96793 100644
+--- a/apolloschurchapp/src/content-feed/content-feed.tests.js
++++ b/apolloschurchapp/src/content-feed/content-feed.tests.js
+@@ -97,7 +97,7 @@ describe('content feed query component', () => {
+       })
+     );
+ 
+-    const tree = await renderWithApolloData(
++    const initialTree = await renderWithApolloData(
+       <Providers
+         MockedProvider={MockedProvider}
+         mocks={[mock, ...additionalMocks]}
+@@ -105,6 +105,15 @@ describe('content feed query component', () => {
+         <ContentFeed route={{ params: { itemId: 'ContentChannel:123' } }} />
+       </Providers>
+     );
++    const tree = await renderWithApolloData(
++      <Providers
++        MockedProvider={MockedProvider}
++        mocks={[mock, ...additionalMocks]}
++      >
++        <ContentFeed route={{ params: { itemId: 'ContentChannel:123' } }} />
++      </Providers>,
++      initialTree
++    );
+     expect(tree).toMatchSnapshot();
+   });
+ });
+diff --git a/apolloschurchapp/src/content-single/ContentSingle.js b/apolloschurchapp/src/content-single/ContentSingle.js
+index 01158ce..8037b11 100644
+--- a/apolloschurchapp/src/content-single/ContentSingle.js
++++ b/apolloschurchapp/src/content-single/ContentSingle.js
+@@ -15,7 +15,7 @@ const ContentSingle = (props) => {
+   const nodeId = props.route?.params?.itemId;
+   const { data, loading } = useQuery(
+     gql`
+-      query getContentNodeTitle($nodeId: ID) {
++      query getContentNodeTitle($nodeId: ID!) {
+         node(id: $nodeId) {
+           ... on ContentNode {
+             id
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 66796db..1d54e33 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -1,3 +1,5 @@
++/* eslint-disable react/jsx-handler-names */
++
+ import hoistNonReactStatic from 'hoist-non-react-statics';
+ import React from 'react';
+ import { StatusBar, Platform } from 'react-native';
+@@ -63,7 +65,10 @@ const App = (props) => (
+   <Providers>
+     <BackgroundView>
+       <AppStatusBar />
+-      <NavigationContainer ref={NavigationService.setTopLevelNavigator}>
++      <NavigationContainer
++        ref={NavigationService.setTopLevelNavigator}
++        onReady={NavigationService.setIsReady}
++      >
+         <ThemedNavigator initialRouteName="ProtectedRoute" {...props}>
+           <Screen
+             name="ProtectedRoute"
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 3e5474c..1af0a2d 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -14,9 +14,7 @@ import {
+ } from '@apollosproject/ui-kit';
+ import {
+   AskNotificationsConnected,
+-  AskNameConnected,
+   FeaturesConnected,
+-  AboutYouConnected,
+   LocationFinderConnected,
+   OnboardingSwiper,
+   onboardingComplete,
+@@ -40,7 +38,6 @@ function Onboarding({ navigation }) {
+       <OnboardingSwiper>
+         {({ swipeForward }) => (
+           <>
+-            <AskNameConnected onPressPrimary={swipeForward} />
+             <FeaturesConnected
+               onPressPrimary={swipeForward}
+               BackgroundComponent={
+@@ -49,14 +46,6 @@ function Onboarding({ navigation }) {
+                 />
+               }
+             />
+-            <AboutYouConnected
+-              onPressPrimary={swipeForward}
+-              BackgroundComponent={
+-                <StyledGradient
+-                  source={'https://picsum.photos/640/640/?random'}
+-                />
+-              }
+-            />
+             <LocationFinderConnected
+               onPressPrimary={swipeForward}
+               onNavigate={() => {
