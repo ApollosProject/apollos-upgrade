@@ -17359,7 +17359,7 @@ index 3fd17bb..f246ea2 100644
  
  @implementation AppDelegate
  
-@@ -26,34 +45,41 @@
+@@ -26,34 +45,41 @@ - (BOOL)application:(UIApplication *)application
  }
  
  // Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).

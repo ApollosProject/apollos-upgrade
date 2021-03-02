@@ -17359,7 +17359,7 @@ index f246ea2..3fd17bb 100644
  
  @implementation AppDelegate
  
-@@ -45,41 +26,34 @@ static void InitializeFlipper(UIApplication *application) {
+@@ -45,41 +26,34 @@ - (BOOL)application:(UIApplication *)application
  }
  
  // Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).

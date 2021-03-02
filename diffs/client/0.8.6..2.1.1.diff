@@ -19764,7 +19764,7 @@ index af4f8d1..f246ea2 100644
  
  @implementation AppDelegate
  
-@@ -24,24 +45,31 @@
+@@ -24,24 +45,31 @@ - (BOOL)application:(UIApplication *)application
  }
  
  // Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
@@ -19807,7 +19807,7 @@ index af4f8d1..f246ea2 100644
    rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
  
    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-@@ -51,7 +79,17 @@
+@@ -51,7 +79,17 @@ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(
    [self.window makeKeyAndVisible];
  
    [RNSplashScreen show];
