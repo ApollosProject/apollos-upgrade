@@ -152,14 +152,14 @@ const applyPatch = async (
           ),
       ].filter(Boolean);
 
-      filesToFullDiff = [
+      filesToFullDiff = [...new Set([
         ...error.stderr
           .split('\n')
-          .filter((x) => x.includes('patch does not apply'))
+          .filter((x) => x.includes('patch does not apply') || x.includes('patch failed'))
           .map((x) =>
-            x.replace(/^error: (.*): patch does not apply$/, '$1').replace(relativePathFromRoot, '')
+            x.replace(/^error: (.*): patch does not apply$/, '$1').replace(/^error: patch failed: (.*):\d+$/, '$1').replace(relativePathFromRoot, '')
           ),
-      ].filter(Boolean);
+      ].filter(Boolean))];
 
 
       filesToExclude = [
