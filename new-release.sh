@@ -94,10 +94,10 @@ function generateNewReleaseBranch() {
     git push --set-upstream origin "$branchName"
 
     # go back to master
-    cd ..
-    rm -rf wt-app
     git checkout "$AppBaseBranch"
     git branch -D "$branchName"
+    cd ..
+    rm -rf wt-app
 
     rm -rf tmp
     git worktree prune
