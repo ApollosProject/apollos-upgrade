@@ -96,6 +96,7 @@ function generateNewReleaseBranch() {
     # go back to master
     cd ..
     rm -rf wt-app
+    git checkout "$AppBaseBranch"
     git branch -D "$branchName"
 
     rm -rf tmp
