@@ -57,6 +57,7 @@ function generateNewReleaseBranch() {
     # Go back to master
     rm -rf "$AppName"
     git checkout "$AppBaseBranch"
+    git branch -D "$branchName"
 
     # clear any existing stuff
     rm -rf "$ApiName"
@@ -76,6 +77,7 @@ function generateNewReleaseBranch() {
     # Go back to master
     rm -rf "$ApiName"
     git checkout "$AppBaseBranch"
+    git branch -D "$branchName"
 
     # make a new branch
     branchName=release/"$newRelease"
@@ -94,6 +96,7 @@ function generateNewReleaseBranch() {
     # go back to master
     cd ..
     rm -rf wt-app
+    git branch -D "$branchName"
 
     rm -rf tmp
     git worktree prune
