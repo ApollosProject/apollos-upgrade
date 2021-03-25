@@ -1,0 +1,713 @@
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+index 8c5018ee..7604bb4c 100644
+--- a/apolloschurchapp/.env.production
++++ b/apolloschurchapp/.env.production
+@@ -1,4 +1,4 @@
+ APP_DATA_URL=$APP_DATA_URL
+-ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID
++ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+ GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+ SCHEMA_VERSION=$SCHEMA_VERSION
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index eeff79b5..01b6829f 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -89,7 +89,7 @@ import com.android.build.OutputFile
+ 
+ project.ext.react = [
+     entryFile: "index.js",
+-    enableHermes: false,  // clean and rebuild if changing
++    enableHermes: true,  // clean and rebuild if changing
+ ]
+ 
+ apply from: "../../node_modules/react-native/react.gradle"
+@@ -128,7 +128,17 @@ def jscFlavor = 'org.webkit:android-jsc:+'
+  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+  * and the benefits of using Hermes will therefore be sharply reduced.
+  */
+-def enableHermes = project.ext.react.get("enableHermes", false);
++def enableHermes = project.ext.react.get("enableHermes", true);
++
++/**
++ * Trying to fix Hermes:
++ * https://github.com/facebook/react-native/issues/26400#issuecomment-539395814
++ */
++configurations.all {
++  resolutionStrategy {
++    force "com.facebook.soloader:soloader:0.8.2"
++  }
++}
+ 
+ android {
+     compileSdkVersion rootProject.ext.compileSdkVersion
+diff --git a/apolloschurchapp/android/app/proguard-rules.pro b/apolloschurchapp/android/app/proguard-rules.pro
+index 11b02572..c9523bda 100644
+--- a/apolloschurchapp/android/app/proguard-rules.pro
++++ b/apolloschurchapp/android/app/proguard-rules.pro
+@@ -8,3 +8,6 @@
+ #   http://developer.android.com/guide/developing/tools/proguard.html
+ 
+ # Add any project specific keep options here:
++-keep class com.facebook.react.turbomodule.** { *; }
++-keep class com.facebook.hermes.unicode.** { *; }
++-keep class com.facebook.jni.** { *; }
+\ No newline at end of file
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
+index 641c3368..655987f3 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
++++ b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
+@@ -12,6 +12,9 @@ import com.facebook.react.ReactPackage;
+ import com.facebook.react.shell.MainReactPackage;
+ import com.facebook.soloader.SoLoader;
+ 
++import com.facebook.react.bridge.JSIModulePackage;
++import com.swmansion.reanimated.ReanimatedJSIModulePackage;
++
+ import java.util.Arrays;
+ import java.util.List;
+ 
+@@ -36,6 +39,11 @@ public class MainApplication extends Application implements ReactApplication {
+     protected String getJSMainModuleName() {
+       return "index";
+     }
++
++    @Override
++    protected JSIModulePackage getJSIModulePackage() {
++      return new ReanimatedJSIModulePackage();
++    }
+   };
+ 
+   @Override
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 85666c93..41c9947d 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.3.1",
++    "version": "2.7.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/babel.config.js b/apolloschurchapp/babel.config.js
+index f842b77f..983e075d 100644
+--- a/apolloschurchapp/babel.config.js
++++ b/apolloschurchapp/babel.config.js
+@@ -1,3 +1,4 @@
+ module.exports = {
+   presets: ['module:metro-react-native-babel-preset'],
++  plugins: ['react-native-reanimated/plugin'],
+ };
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 8b95ed11..70abf33a 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -32,6 +32,7 @@ platform :ios do
+     match(type: 'appstore', readonly: true)
+     increment_build_number(build_number: number_of_commits, xcodeproj: "ios/apolloschurchapp.xcodeproj")
+     build_app(workspace: "ios/apolloschurchapp.xcworkspace", scheme: "apolloschurchappprod")
++    changelog_from_git_commits
+     upload_to_testflight
+   end
+ end
+@@ -58,6 +59,7 @@ platform :android do
+     bump_version_code
+     gradle(task: 'clean', project_dir: 'android')
+     gradle(task: 'bundle', build_type: 'Release', project_dir: 'android')
++    changelog_from_git_commits
+     upload_to_play_store(track: "internal", skip_upload_apk: true)
+   end
+ end
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index c00880d2..8e2ae0e0 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -247,7 +247,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.3.1):
++  - react-native-apollos-player (2.7.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -365,16 +365,43 @@ PODS:
+     - React-Core
+   - RNDeviceInfo (4.0.1):
+     - React
+-  - RNGestureHandler (1.6.1):
+-    - React
++  - RNGestureHandler (1.10.3):
++    - React-Core
+   - RNInAppBrowser (3.5.1):
+     - React-Core
+   - RNPermissions (2.2.2):
+     - React-Core
+-  - RNReanimated (1.9.0):
+-    - React
+-  - RNScreens (2.9.0):
++  - RNReanimated (2.0.0):
++    - DoubleConversion
++    - FBLazyVector
++    - FBReactNativeSpec
++    - Folly
++    - glog
++    - RCTRequired
++    - RCTTypeSafety
+     - React
++    - React-callinvoker
++    - React-Core
++    - React-Core/DevSupport
++    - React-Core/RCTWebSocket
++    - React-CoreModules
++    - React-cxxreact
++    - React-jsi
++    - React-jsiexecutor
++    - React-jsinspector
++    - React-RCTActionSheet
++    - React-RCTAnimation
++    - React-RCTBlob
++    - React-RCTImage
++    - React-RCTLinking
++    - React-RCTNetwork
++    - React-RCTSettings
++    - React-RCTText
++    - React-RCTVibration
++    - ReactCommon/turbomodule/core
++    - Yoga
++  - RNScreens (2.18.1):
++    - React-Core
+   - RNSVG (9.13.6):
+     - React
+   - Yoga (1.14.0)
+@@ -631,7 +658,7 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 2baeeec9a5ac6b8ea50c46be3221b24e2907dc80
++  react-native-apollos-player: d4bcd7dd7e7b7206eded4e0007b8fdbb6b268021
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+@@ -664,11 +691,11 @@ SPEC CHECKSUMS:
+   RNCPicker: 2c31098349f499e7ab4da6c1ce26f7537d271062
+   RNDateTimePicker: 3d1931e387248cb8f1d1d33740d4a1a82dfe622a
+   RNDeviceInfo: 687c1b2ab6d86ff1ca1208783320cd144138c7f2
+-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
++  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+   RNInAppBrowser: 48b95ba7a4eaff5cc223bca338d3e319561dbd1b
+   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
+-  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
++  RNReanimated: 5231286440b796e09df3bfa5c1b12b02bfe07664
++  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
+   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
+   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index c0b7f9ee..cc826b79 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -29,6 +29,10 @@
+ 			</array>
+ 		</dict>
+ 	</array>
++	<key>LSApplicationQueriesSchemes</key>
++	<array>
++		<string>mailto</string>
++	</array>
+ 	<key>CFBundleVersion</key>
+ 	<string>0</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index c6e802cd..e824de8a 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -24,3 +24,22 @@ Animated.spring = (value, config) => ({
+ });
+ 
+ jest.mock('./src/client/index');
++
++jest.mock('react-native-reanimated', () => {
++  const Reanimated = require('react-native-reanimated/mock');
++
++  const Easing = {
++    exp: jest.fn(),
++    out: jest.fn(),
++  };
++
++  // The mock for `call` immediately calls the callback which is incorrect
++  // So we override it with a no-op
++  Reanimated.default.call = () => {};
++  Reanimated.Easing = Easing;
++  Reanimated.EasingNode = Easing;
++
++  return Reanimated;
++});
++
++global.__reanimatedWorkletInit = jest.fn();
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index fafb004d..bda2a1b8 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -46,34 +46,34 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.4.0",
++    "@apollosproject/config": "^2.7.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.4.0",
+-    "@apollosproject/ui-auth": "^2.4.0",
+-    "@apollosproject/ui-connected": "^2.4.0",
+-    "@apollosproject/ui-fragments": "^2.4.0",
+-    "@apollosproject/ui-htmlview": "^2.4.0",
+-    "@apollosproject/ui-kit": "^2.4.0",
+-    "@apollosproject/ui-mapview": "^2.4.0",
+-    "@apollosproject/ui-media-player": "^2.4.0",
+-    "@apollosproject/ui-notifications": "^2.4.0",
+-    "@apollosproject/ui-onboarding": "^2.4.0",
+-    "@apollosproject/ui-passes": "^2.4.0",
+-    "@apollosproject/ui-prayer": "^2.4.0",
+-    "@apollosproject/ui-scripture": "^2.4.0",
+-    "@apollosproject/ui-storybook": "^2.4.0",
+-    "@apollosproject/ui-test-utils": "^2.4.0",
++    "@apollosproject/ui-analytics": "^2.7.0",
++    "@apollosproject/ui-auth": "^2.7.0",
++    "@apollosproject/ui-connected": "^2.7.0",
++    "@apollosproject/ui-fragments": "^2.7.0",
++    "@apollosproject/ui-htmlview": "^2.7.0",
++    "@apollosproject/ui-kit": "^2.7.0",
++    "@apollosproject/ui-mapview": "^2.7.0",
++    "@apollosproject/ui-media-player": "^2.7.0",
++    "@apollosproject/ui-notifications": "^2.7.0",
++    "@apollosproject/ui-onboarding": "^2.7.0",
++    "@apollosproject/ui-passes": "^2.7.0",
++    "@apollosproject/ui-prayer": "^2.7.0",
++    "@apollosproject/ui-scripture": "^2.7.0",
++    "@apollosproject/ui-storybook": "^2.7.0",
++    "@apollosproject/ui-test-utils": "^2.7.0",
++    "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
+     "@react-native-community/geolocation": "^2.0.2",
+     "@react-native-community/masked-view": "^0.1.10",
+     "@react-native-picker/picker": "^1.9.4",
+-    "@react-navigation/bottom-tabs": "^5.6.1",
++    "@react-navigation/bottom-tabs": "^5.11.8",
+     "@react-navigation/compat": "^5.1.28",
+-    "@react-navigation/drawer": "^5.8.4",
+-    "@react-navigation/native": "^5.6.1",
+-    "@react-navigation/stack": "^5.6.2",
++    "@react-navigation/native": "^5.9.3",
++    "@react-navigation/stack": "^5.14.3",
+     "apollo-storybook-react-native": "0.2.12",
+     "apollo-upload-client": "14.1.3",
+     "apollo3-cache-persist": "^0.8.0",
+@@ -95,7 +95,7 @@
+     "react-native-config": "^0.11.7",
+     "react-native-device-info": "^4.0.1",
+     "react-native-geolocation-service": "^5.1.1",
+-    "react-native-gesture-handler": "^1.6.1",
++    "react-native-gesture-handler": "^1.10.3",
+     "react-native-google-cast": "^3.3.0",
+     "react-native-image-picker": "^3.1.4",
+     "react-native-inappbrowser-reborn": "^3.0.0",
+@@ -106,10 +106,10 @@
+     "react-native-onesignal": "3.9.1",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-permissions": "^2.0.5",
+-    "react-native-reanimated": "^1.9.0",
++    "react-native-reanimated": "^2.0.0",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-context": "^3.0.7",
+-    "react-native-screens": "^2.9.0",
++    "react-native-screens": "^2.18.1",
+     "react-native-splash-screen": "^3.2.0",
+     "react-native-svg": "^9.4.0",
+     "react-native-video": "^5.0.0",
+@@ -121,7 +121,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.4.0",
++    "@apollosproject/eslint-config": "^2.7.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index 16e263cd..38982089 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -4,8 +4,12 @@ import { Providers, NavigationService } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
+ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+-import { LiveProvider } from '@apollosproject/ui-connected';
++import {
++  LiveProvider,
++  ACCEPT_FOLLOW_REQUEST,
++} from '@apollosproject/ui-connected';
+ import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
++import { ONBOARDING_VERSION } from './ui/Onboarding';
+ 
+ import ClientProvider, { client } from './client';
+ import customTheme, { customIcons } from './theme';
+@@ -13,8 +17,16 @@ import customTheme, { customIcons } from './theme';
+ const AppProviders = (props) => (
+   <ClientProvider {...props}>
+     <NotificationsProvider
+-      oneSignalKey={ApollosConfig.ONE_SIGNAL_APP_ID}
++      oneSignalKey={ApollosConfig.ONE_SIGNAL_KEY}
+       navigate={NavigationService.navigate}
++      actionMap={{
++        // accept a follow request when someone taps "accept" in a follow request push notification
++        acceptFollowRequest: ({ requestPersonId }) =>
++          client.mutate({
++            mutation: ACCEPT_FOLLOW_REQUEST,
++            variables: { personId: requestPersonId },
++          }),
++      }}
+     >
+       <AuthProvider
+         navigateToAuth={() => NavigationService.navigate('Auth')}
+@@ -23,6 +35,7 @@ const AppProviders = (props) => (
+           checkOnboardingStatusAndNavigate({
+             client,
+             navigation: NavigationService,
++            latestOnboardingVersion: ONBOARDING_VERSION,
+           })
+         }
+       >
+diff --git a/apolloschurchapp/src/content-single/index.js b/apolloschurchapp/src/content-single/index.js
+index a9a268a5..b75aa4f7 100644
+--- a/apolloschurchapp/src/content-single/index.js
++++ b/apolloschurchapp/src/content-single/index.js
+@@ -18,6 +18,7 @@ const ContentSingleNavigator = ({ route, navigation, ...props }) => (
+       headerRight: ModalCloseButton,
+       headerLeft: ModalBackButton,
+       headerTitle: '',
++      headerTopInsetEnabled: false,
+     }}
+   >
+     <Screen
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index ac4a808a..14c77d7e 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -79,7 +79,10 @@ const App = (props) => (
+           <Screen
+             name="ContentSingle"
+             component={ContentSingle}
+-            options={{ title: 'Content' }}
++            options={{
++              title: 'Content',
++              stackPresentation: 'push',
++            }}
+           />
+           <Screen
+             name="NodeSingle"
+diff --git a/apolloschurchapp/src/tabs/home/index.js b/apolloschurchapp/src/tabs/home/index.js
+index 56fb95b8..91f9323c 100644
+--- a/apolloschurchapp/src/tabs/home/index.js
++++ b/apolloschurchapp/src/tabs/home/index.js
+@@ -1,18 +1,25 @@
+-import React from 'react';
++import React, { useEffect } from 'react';
+ import { Image } from 'react-native';
+ import { SafeAreaView } from 'react-native-safe-area-context';
+-import gql from 'graphql-tag';
+ import { Query } from '@apollo/client/react/components';
++import { gql, useApolloClient } from '@apollo/client';
+ import { useNavigation } from '@react-navigation/native';
+ 
+-import { styled, BackgroundView } from '@apollosproject/ui-kit';
++import {
++  styled,
++  BackgroundView,
++  NavigationService,
++} from '@apollosproject/ui-kit';
+ import {
+   FeaturesFeedConnected,
+   FEATURE_FEED_ACTION_MAP,
+   RockAuthedWebBrowser,
+ } from '@apollosproject/ui-connected';
+ 
++import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
++
+ import { SearchButton } from '../../ui/Search';
++import { ONBOARDING_VERSION } from '../../ui/Onboarding';
+ 
+ const LogoTitle = styled(({ theme }) => ({
+   height: theme.sizing.baseUnit,
+@@ -43,6 +50,17 @@ export const GET_HOME_FEED = gql`
+ 
+ const Home = () => {
+   const navigation = useNavigation();
++  const client = useApolloClient();
++
++  useEffect(() => {
++    checkOnboardingStatusAndNavigate({
++      client,
++      navigation: NavigationService,
++      latestOnboardingVersion: ONBOARDING_VERSION,
++      navigateHome: false,
++    });
++  }, []);
++
+   return (
+     <RockAuthedWebBrowser>
+       {(openUrl) => (
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index 9a27a8fb..7f77a7cc 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,19 +1,54 @@
+-import React, { PureComponent } from 'react';
+-import { TableView, BackgroundView } from '@apollosproject/ui-kit';
++import React from 'react';
++import {
++  TableView,
++  BackgroundView,
++  NavigationService,
++} from '@apollosproject/ui-kit';
++import {
++  checkOnboardingStatusAndNavigate,
++  onboardingComplete,
++} from '@apollosproject/ui-onboarding';
++import { useApolloClient, useQuery, gql } from '@apollo/client';
+ import TouchableCell from './TouchableCell';
+ 
+-export default class TestingControlPanel extends PureComponent {
+-  render() {
+-    return (
+-      <BackgroundView>
+-        <TableView>
+-          <TouchableCell
+-            handlePress={() => this.props.navigation.navigate('Onboarding')}
+-            iconName="Avatar"
+-            cellText={`Launch Onboarding`}
+-          />
+-        </TableView>
+-      </BackgroundView>
+-    );
+-  }
++export default function TestingControlPanel() {
++  const client = useApolloClient();
++  const { data } = useQuery(gql`
++    query currentUserId {
++      currentUser {
++        id
++      }
++    }
++  `);
++  return (
++    <BackgroundView>
++      <TableView>
++        <TouchableCell
++          handlePress={() =>
++            checkOnboardingStatusAndNavigate({
++              latestOnboardingVersion: 2,
++              navigation: NavigationService,
++              client,
++            })
++          }
++          iconName="Avatar"
++          cellText={`Launch Onboarding`}
++        />
++      </TableView>
++      <TouchableCell
++        handlePress={() =>
++          onboardingComplete({ version: 0, userId: data?.currentUser?.id })
++        }
++        iconName="Avatar"
++        cellText={`Reset Onboarding to Unseen`}
++      />
++      <TouchableCell
++        handlePress={() =>
++          onboardingComplete({ version: 1, userId: data?.currentUser?.id })
++        }
++        iconName="Avatar"
++        cellText={`Reset Onboarding to Seen v1`}
++      />
++    </BackgroundView>
++  );
+ }
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index e5b65296..842305a1 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,6 +1,7 @@
+ import React from 'react';
+ import { View, Image } from 'react-native';
+ import { Query } from '@apollo/client/react/components';
++import PropTypes from 'prop-types';
+ import {
+   checkNotifications,
+   openSettings,
+@@ -37,52 +38,58 @@ const StyledImage = styled({
+   width: '100%',
+ })(Image);
+ 
+-function Onboarding({ navigation }) {
++// Represents the current version of onboarding.
++// Some slides will be "older", they shouldn't be shown to existing users.
++// Some slides will be the same version as teh current onboarding version.
++// Those slides will be shown to any user with an older version than the version of those slides.
++export const ONBOARDING_VERSION = 2;
++
++function Onboarding({ navigation, route }) {
++  const userVersion = route?.params?.userVersion || 0;
+   return (
+-    <>
+-      <FullscreenBackgroundView />
+-      <OnboardingSwiper>
+-        {({ swipeForward }) => (
+-          <>
+-            <FeaturesConnected
+-              onPressPrimary={swipeForward}
+-              BackgroundComponent={
+-                <ImageContainer>
+-                  <StyledImage source={require('./img/personalize.jpg')} />
+-                </ImageContainer>
+-              }
+-            />
+-            <LocationFinderConnected
+-              onPressPrimary={swipeForward}
+-              onNavigate={() => {
+-                navigation.navigate('Location');
+-              }}
+-              BackgroundComponent={
+-                <ImageContainer>
+-                  <StyledImage source={require('./img/locations.jpg')} />
+-                </ImageContainer>
+-              }
+-            />
+-            <FollowConnected
+-              onPressPrimary={swipeForward}
+-              BackgroundComponent={
+-                <ImageContainer>
+-                  <StyledImage source={require('./img/follow.jpg')} />
+-                </ImageContainer>
+-              }
+-            />
+-            <Query query={WITH_USER_ID} fetchPolicy="network-only">
+-              {({ data }) => (
+-                <AskNotificationsConnected
+-                  onPressPrimary={() => {
+-                    onboardingComplete({ userId: data?.currentUser?.id });
+-                    navigation.dispatch(
+-                      NavigationService.resetAction({
+-                        navigatorName: 'Tabs',
+-                        routeName: 'Home',
+-                      })
+-                    );
++    <Query query={WITH_USER_ID} fetchPolicy="network-only">
++      {({ data }) => (
++        <>
++          <FullscreenBackgroundView />
++          <OnboardingSwiper
++            navigation={navigation}
++            userVersion={userVersion}
++            onComplete={() => {
++              onboardingComplete({
++                userId: data?.currentUser?.id,
++                version: ONBOARDING_VERSION,
++              });
++              navigation.dispatch(
++                NavigationService.resetAction({
++                  navigatorName: 'Tabs',
++                  routeName: 'Home',
++                })
++              );
++            }}
++          >
++            {({ swipeForward }) => (
++              <>
++                <FeaturesConnected
++                  onPressPrimary={swipeForward}
++                  BackgroundComponent={
++                    <ImageContainer>
++                      <StyledImage source={require('./img/personalize.jpg')} />
++                    </ImageContainer>
++                  }
++                />
++                <LocationFinderConnected
++                  onPressPrimary={swipeForward}
++                  onNavigate={() => {
++                    navigation.navigate('Location');
+                   }}
++                  BackgroundComponent={
++                    <ImageContainer>
++                      <StyledImage source={require('./img/locations.jpg')} />
++                    </ImageContainer>
++                  }
++                />
++                <AskNotificationsConnected
++                  onPressPrimary={swipeForward}
+                   onRequestPushPermissions={(update) => {
+                     checkNotifications().then((checkRes) => {
+                       if (checkRes.status === RESULTS.DENIED) {
+@@ -96,7 +103,6 @@ function Onboarding({ navigation }) {
+                       }
+                     });
+                   }}
+-                  primaryNavText={'Finish'}
+                   BackgroundComponent={
+                     <ImageContainer>
+                       <StyledImage
+@@ -105,13 +111,31 @@ function Onboarding({ navigation }) {
+                     </ImageContainer>
+                   }
+                 />
+-              )}
+-            </Query>
+-          </>
+-        )}
+-      </OnboardingSwiper>
+-    </>
++                <FollowConnected
++                  onPressPrimary={swipeForward}
++                  primaryNavText={'Finish'}
++                  version={2}
++                  BackgroundComponent={
++                    <ImageContainer>
++                      <StyledImage source={require('./img/follow.jpg')} />
++                    </ImageContainer>
++                  }
++                />
++              </>
++            )}
++          </OnboardingSwiper>
++        </>
++      )}
++    </Query>
+   );
+ }
+ 
++Onboarding.propTypes = {
++  route: PropTypes.shape({
++    params: PropTypes.shape({
++      userVersion: PropTypes.number,
++    }),
++  }),
++};
++
+ export default Onboarding;
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 2e70ea6c..a33ed280 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -79,9 +79,9 @@ class UserSettings extends PureComponent {
+                       </TableView>
+                       <TableView>
+                         <Touchable
+-                          onPress={() =>
+-                            openUrl('https://apollosrock.newspring.cc/')
+-                          }
++                          onPress={() => {
++                            openUrl('mailto:support@apollos.app');
++                          }}
+                         >
+                           <Cell>
+                             <CellText>Give Feedback</CellText>
