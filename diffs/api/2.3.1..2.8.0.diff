@@ -1,0 +1,493 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index e82a4e48..f01890c1 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.3.0",
++  "version": "2.8.0",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index b7ad37c2..53f9185e 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -5,9 +5,8 @@
+   "main": "lib/index.js",
+   "scripts": {
+     "setup": "./scripts/init.sh",
+-    "start": "yarn start:prod",
++    "start": "NODE_ENV=production node ./lib/index.js",
+     "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+-    "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "postinstall": "yarn build",
+     "link-packages": "node ./scripts/link-packages && yarn yalc update",
+     "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
+@@ -20,22 +19,22 @@
+     "node": ">=12.x.x"
+   },
+   "dependencies": {
+-    "@apollosproject/bugsnag": "^2.3.1",
+-    "@apollosproject/config": "^2.3.1",
+-    "@apollosproject/data-connector-algolia-search": "^2.3.1",
+-    "@apollosproject/data-connector-analytics": "^2.3.1",
+-    "@apollosproject/data-connector-bible": "^2.3.1",
+-    "@apollosproject/data-connector-church-online": "^2.3.1",
+-    "@apollosproject/data-connector-cloudinary": "^2.3.1",
+-    "@apollosproject/data-connector-onesignal": "^2.3.1",
+-    "@apollosproject/data-connector-passes": "^2.3.1",
+-    "@apollosproject/data-connector-postgres": "^2.3.1",
+-    "@apollosproject/data-connector-redis-cache": "^2.3.1",
+-    "@apollosproject/data-connector-rock": "^2.3.1",
+-    "@apollosproject/data-connector-twilio": "^2.3.1",
+-    "@apollosproject/data-schema": "^2.3.1",
+-    "@apollosproject/rock-apollo-data-source": "^2.3.1",
+-    "@apollosproject/server-core": "^2.3.1",
++    "@apollosproject/bugsnag": "^2.8.0",
++    "@apollosproject/config": "^2.8.0",
++    "@apollosproject/data-connector-algolia-search": "^2.8.0",
++    "@apollosproject/data-connector-analytics": "^2.8.0",
++    "@apollosproject/data-connector-bible": "^2.8.0",
++    "@apollosproject/data-connector-church-online": "^2.8.0",
++    "@apollosproject/data-connector-cloudinary": "^2.8.0",
++    "@apollosproject/data-connector-onesignal": "^2.8.0",
++    "@apollosproject/data-connector-passes": "^2.8.0",
++    "@apollosproject/data-connector-postgres": "^2.8.0",
++    "@apollosproject/data-connector-redis-cache": "^2.8.0",
++    "@apollosproject/data-connector-rock": "^2.8.0",
++    "@apollosproject/data-connector-twilio": "^2.8.0",
++    "@apollosproject/data-schema": "^2.8.0",
++    "@apollosproject/rock-apollo-data-source": "^2.8.0",
++    "@apollosproject/server-core": "^2.8.0",
+     "apollo-server": "^2.14.2",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+@@ -45,12 +44,13 @@
+     "graphql": "14.6.0",
+     "prettier": "1.12.1",
+     "randomcolor": "0.5.3",
+-    "sqlite3": "^5.0.1"
++    "sqlite3": "^5.0.1",
++    "umzug": "^3.0.0-beta.15"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.3.1",
+-    "@apollosproject/babel-preset-apollos": "^2.3.1",
+-    "@apollosproject/eslint-config": "^2.3.1",
++    "@apollosproject/apollo-server-env-mock": "^2.8.0",
++    "@apollosproject/babel-preset-apollos": "^2.8.0",
++    "@apollosproject/eslint-config": "^2.8.0",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index 7f73dd94..b9886fb3 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -27,44 +27,31 @@ import {
+   AuthSms,
+   Campus,
+   Group,
+-  BinaryFiles,
+   Feature,
+   FeatureFeed,
+   ActionAlgorithm,
+   Event,
+   PrayerRequest,
+   Persona,
+-  Person as RockPerson,
++  Person,
++  BinaryFiles,
+ } from '@apollosproject/data-connector-rock';
+ 
+-import {
+-  Comment,
+-  UserFlag,
+-  Follow,
+-  Campus as PostgresCampus,
+-  Person as PostgresPerson,
+-} from '@apollosproject/data-connector-postgres';
+-// import * as PostgresPerson from '@apollosproject/data-connector-postgres/lib/people';
+-// import * as PostgresCampus from '@apollosproject/data-connector-postgres/lib/campus';
+-
+ import * as Theme from './theme';
+ 
+ // This module is used to attach Rock User updating to the OneSignal module.
+ // This module includes a Resolver that overides a resolver defined in `OneSignal`
+ import * as OneSignalWithRock from './oneSignalWithRock';
+ 
+-// This modules ties together certain updates so they occurs in both Rock and Postgres.
+-// Will be eliminated in the future through an enhancement to the Shovel
+-import * as Person from './rockWithPostgres';
++// This is to mock any postgres resolvers so we don't throw API errors for unresolved
++// typedefs
++import NoPostgres from './noPostgres';
+ 
+ const data = {
+   Interfaces,
+   Followings,
+   ContentChannel,
+   ContentItem,
+-  RockPerson, // This entry needs to come before (postgres) Person
+-  BinaryFiles, // This entry needs to come before (postgres) Person
+-  PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
+   Cloudinary,
+   Auth,
+   AuthSms,
+@@ -90,12 +77,10 @@ const data = {
+   Event,
+   Cache,
+   PrayerRequest,
+-  Comment,
+-  UserFlag,
+-  Follow,
+-  PostgresCampus,
+   Persona,
+-  Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
++  Person,
++  BinaryFiles,
++  NoPostgres,
+ };
+ 
+ const {
+@@ -105,6 +90,7 @@ const {
+   context,
+   applyServerMiddleware,
+   setupJobs,
++  migrations,
+ } = createApolloServerConfig(data);
+ 
+ export {
+@@ -114,6 +100,7 @@ export {
+   context,
+   applyServerMiddleware,
+   setupJobs,
++  migrations,
+ };
+ 
+ // the upload Scalar is added
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+new file mode 100644
+index 00000000..63052d6f
+--- /dev/null
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -0,0 +1,121 @@
++import { gql } from 'apollo-server';
++
++import {
++  createApolloServerConfig,
++  Interfaces,
++} from '@apollosproject/server-core';
++
++import * as Analytics from '@apollosproject/data-connector-analytics';
++import * as Scripture from '@apollosproject/data-connector-bible';
++import * as LiveStream from '@apollosproject/data-connector-church-online';
++import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
++import * as Search from '@apollosproject/data-connector-algolia-search';
++import * as Pass from '@apollosproject/data-connector-passes';
++import * as Cache from '@apollosproject/data-connector-redis-cache';
++import * as Sms from '@apollosproject/data-connector-twilio';
++import {
++  Followings,
++  Interactions,
++  RockConstants,
++  ContentItem,
++  ContentChannel,
++  Sharable,
++  Auth,
++  PersonalDevice,
++  Template,
++  AuthSms,
++  Campus,
++  Group,
++  BinaryFiles,
++  Feature,
++  FeatureFeed,
++  ActionAlgorithm,
++  Event,
++  PrayerRequest,
++  Persona,
++  Person as RockPerson,
++} from '@apollosproject/data-connector-rock';
++
++import {
++  Comment,
++  UserFlag,
++  UserLike,
++  Follow,
++  Campus as PostgresCampus,
++  Person as PostgresPerson,
++} from '@apollosproject/data-connector-postgres';
++
++import * as Theme from './theme';
++
++// This modules ties together certain updates so they occurs in both Rock and Postgres.
++// Will be eliminated in the future through an enhancement to the Shovel
++import { Person, OneSignal } from './rockWithPostgres';
++
++const data = {
++  Interfaces,
++  Followings,
++  ContentChannel,
++  ContentItem,
++  RockPerson, // This entry needs to come before (postgres) Person
++  BinaryFiles, // This entry needs to come before (postgres) Person
++  PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
++  Cloudinary,
++  Auth,
++  AuthSms,
++  Sms,
++  LiveStream,
++  Theme,
++  Scripture,
++  Interactions,
++  RockConstants,
++  Sharable,
++  Analytics,
++  OneSignal,
++  PersonalDevice,
++  Pass,
++  Search,
++  Template,
++  Campus,
++  Group,
++  Feature,
++  FeatureFeed,
++  ActionAlgorithm,
++  Event,
++  Cache,
++  PrayerRequest,
++  Comment,
++  UserLike,
++  UserFlag,
++  Follow,
++  PostgresCampus,
++  Persona,
++  Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
++};
++
++const {
++  dataSources,
++  resolvers,
++  schema,
++  context,
++  applyServerMiddleware,
++  setupJobs,
++  migrations,
++} = createApolloServerConfig(data);
++
++export {
++  dataSources,
++  resolvers,
++  schema,
++  context,
++  applyServerMiddleware,
++  setupJobs,
++  migrations,
++};
++
++// the upload Scalar is added
++export const testSchema = [
++  gql`
++    scalar Upload
++  `,
++  ...schema,
++];
+diff --git a/apollos-church-api/src/data/noPostgres.js b/apollos-church-api/src/data/noPostgres.js
+new file mode 100644
+index 00000000..bd292eac
+--- /dev/null
++++ b/apollos-church-api/src/data/noPostgres.js
+@@ -0,0 +1,46 @@
++// The purpose of this file is to mock the postgres resolvers to null so the API doesn't fail when
++// there's no database. This will not be necessary when Postgres is required by all Apollos APIs.
++import gql from 'graphql-tag';
++import { Comment, Follow } from '@apollosproject/data-connector-postgres';
++
++export default {
++  schema: gql`
++    ${Comment.schema}
++    ${Follow.schema}
++  `,
++  resolver: {
++    Query: {
++      followRequests: () => [],
++      suggestedFollows: () => [],
++      searchPeople: () => {},
++    },
++    Mutation: {
++      addComment: () => null,
++      flagComment: () => null,
++      requestFollow: () => null,
++      acceptFollowRequest: () => null,
++      ignoreFollowRequest: () => null,
++    },
++    Comment: {
++      person: () => null,
++      id: () => null,
++    },
++    CommentListFeature: {
++      id: () => null,
++    },
++    AddCommentFeature: {
++      id: () => null,
++      initialPrompt: () => null,
++      addPrompt: () => null,
++      relatedNode: () => null,
++    },
++    Person: {
++      currentUserFollowing: () => null,
++      followingCurrentUser: () => null,
++    },
++    SearchPeopleResultsConnection: {
++      edges: () => [],
++      pageInfo: () => null,
++    },
++  },
++};
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+index c833fdad..cc1696f0 100644
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ b/apollos-church-api/src/data/rockWithPostgres.js
+@@ -1,8 +1,9 @@
+-/* eslint-disable import/prefer-default-export */
++/* eslint-disable import/prefer-default-export, max-classes-per-file */
+ import { parseGlobalId } from '@apollosproject/server-core';
+-import { Person } from '@apollosproject/data-connector-postgres';
++import { Person as postgresPerson } from '@apollosproject/data-connector-postgres';
++import * as OneSignalOriginal from '@apollosproject/data-connector-onesignal';
+ 
+-export class dataSource extends Person.dataSource {
++class personDataSource extends postgresPerson.dataSource {
+   async create(attributes) {
+     const rockPersonId = await this.context.dataSources.RockPerson.create(
+       attributes
+@@ -17,7 +18,7 @@ export class dataSource extends Person.dataSource {
+ }
+ 
+ // These resolvers make sure that calls to updating profile fields update both the
+-export const resolver = {
++const personResolver = {
+   Mutation: {
+     updateProfileField: async (
+       root,
+@@ -56,5 +57,71 @@ export const resolver = {
+         { field: 'campusId', value: campus.id },
+       ]); // updates in Postgres
+     },
++    updateUserPushSettings: async (root, { input }, { dataSources }) => {
++      // register the changes w/ one signal
++      const returnValue = await dataSources.OneSignal.updatePushSettings(input);
++
++      // if the pushProviderUserId is changing, we need ot register the device with rock.
++      if (input.pushProviderUserId != null) {
++        await dataSources.PersonalDevice.addPersonalDevice({
++          pushId: input.pushProviderUserId,
++        });
++      }
++
++      try {
++        await dataSources.Person.updateProfile([
++          {
++            field: 'apollosUser',
++            value: true,
++          },
++        ]);
++      } catch (e) {
++        console.warn(e);
++      }
++
++      // return the original return value (which is currentPerson)
++      return returnValue;
++    },
+   },
+ };
++
++export const Person = {
++  dataSource: personDataSource,
++  resolver: personResolver,
++};
++
++class oneSignalDataSource extends OneSignalOriginal.dataSource {
++  async createNotification({
++    toUserIds = [],
++    to,
++    content = '',
++    heading,
++    subtitle,
++    ...args
++  }) {
++    if (to && to.originId && to.originType === 'rock') {
++      const person = await this.context.dataSources.RockPerson.getFromId(
++        to.originId
++      );
++      return super.createNotification({
++        toUserIds: [person.primaryAliasId],
++        content,
++        heading,
++        subtitle,
++        ...args,
++      });
++    }
++    return super.createNotification({
++      toUserIds,
++      content,
++      heading,
++      subtitle,
++      ...args,
++    });
++  }
++}
++
++export const OneSignal = {
++  ...OneSignalOriginal,
++  dataSource: oneSignalDataSource,
++};
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 8b6d732e..a62d5e24 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -8,9 +8,17 @@ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+ import { get } from 'lodash';
+ import { setupUniversalLinks } from '@apollosproject/server-core';
+ import { BugsnagPlugin } from '@apollosproject/bugsnag';
+-import { sync } from '@apollosproject/data-connector-postgres';
+-// import { seed } from '../seeds';
+-import {
++import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
++
++let dataObj;
++
++if (ApollosConfig?.DATABASE?.URL) {
++  dataObj = require('./data/index.postgres');
++} else {
++  dataObj = require('./data/index');
++}
++
++const {
+   resolvers,
+   schema,
+   testSchema,
+@@ -18,7 +26,8 @@ import {
+   dataSources,
+   applyServerMiddleware,
+   setupJobs,
+-} from './data';
++  migrations,
++} = dataObj;
+ 
+ export { resolvers, schema, testSchema };
+ 
+@@ -92,8 +101,10 @@ apolloServer.applyMiddleware({ app, path: '/' });
+ // make sure this is called last.
+ // (or at least after the apollos server setup)
+ (async () => {
+-  await sync();
+-  // await seed();
++  if (ApollosConfig?.DATABASE?.URL) {
++    const migrationRunner = await createMigrationRunner({ migrations });
++    await migrationRunner.up();
++  }
+ })();
+ 
+ export default app;
