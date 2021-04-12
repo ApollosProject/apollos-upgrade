@@ -1,0 +1,286 @@
+diff --git a/apolloschurchapp/Gemfile b/apolloschurchapp/Gemfile
+index 9947ac13..307e9509 100644
+--- a/apolloschurchapp/Gemfile
++++ b/apolloschurchapp/Gemfile
+@@ -1,3 +1,3 @@
+ source 'https://rubygems.org'
+ gem 'cocoapods', '1.8.4'
+-gem 'fastlane', '2.160.0'
++gem 'fastlane', '2.179.0'
+diff --git a/apolloschurchapp/Gemfile.lock b/apolloschurchapp/Gemfile.lock
+index bc2021d7..93c71c41 100644
+--- a/apolloschurchapp/Gemfile.lock
++++ b/apolloschurchapp/Gemfile.lock
+@@ -12,24 +12,25 @@ GEM
+     algoliasearch (1.27.3)
+       httpclient (~> 2.8, >= 2.8.3)
+       json (>= 1.5.1)
++    artifactory (3.0.15)
+     atomos (0.1.3)
+-    aws-eventstream (1.1.0)
+-    aws-partitions (1.371.0)
+-    aws-sdk-core (3.107.0)
++    aws-eventstream (1.1.1)
++    aws-partitions (1.442.0)
++    aws-sdk-core (3.113.1)
+       aws-eventstream (~> 1, >= 1.0.2)
+       aws-partitions (~> 1, >= 1.239.0)
+       aws-sigv4 (~> 1.1)
+       jmespath (~> 1.0)
+-    aws-sdk-kms (1.38.0)
+-      aws-sdk-core (~> 3, >= 3.99.0)
++    aws-sdk-kms (1.43.0)
++      aws-sdk-core (~> 3, >= 3.112.0)
+       aws-sigv4 (~> 1.1)
+-    aws-sdk-s3 (1.81.0)
+-      aws-sdk-core (~> 3, >= 3.104.3)
++    aws-sdk-s3 (1.93.0)
++      aws-sdk-core (~> 3, >= 3.112.0)
+       aws-sdk-kms (~> 1)
+       aws-sigv4 (~> 1.1)
+-    aws-sigv4 (1.2.2)
++    aws-sigv4 (1.2.3)
+       aws-eventstream (~> 1, >= 1.0.2)
+-    babosa (1.0.3)
++    babosa (1.0.4)
+     claide (1.0.3)
+     cocoapods (1.8.4)
+       activesupport (>= 4.0.2, < 5)
+@@ -73,25 +74,29 @@ GEM
+     concurrent-ruby (1.1.7)
+     declarative (0.0.20)
+     declarative-option (0.1.0)
+-    digest-crc (0.6.1)
+-      rake (~> 13.0)
++    digest-crc (0.6.3)
++      rake (>= 12.0.0, < 14.0.0)
+     domain_name (0.5.20190701)
+       unf (>= 0.0.5, < 1.0.0)
+     dotenv (2.7.6)
+-    emoji_regex (3.0.0)
++    emoji_regex (3.2.2)
+     escape (0.0.4)
+-    excon (0.76.0)
+-    faraday (1.0.1)
++    excon (0.79.0)
++    faraday (1.3.0)
++      faraday-net_http (~> 1.0)
+       multipart-post (>= 1.2, < 3)
++      ruby2_keywords
+     faraday-cookie_jar (0.0.7)
+       faraday (>= 0.8.0)
+       http-cookie (~> 1.0.0)
++    faraday-net_http (1.0.1)
+     faraday_middleware (1.0.0)
+       faraday (~> 1.0)
+-    fastimage (2.2.0)
+-    fastlane (2.160.0)
++    fastimage (2.2.3)
++    fastlane (2.179.0)
+       CFPropertyList (>= 2.3, < 4.0.0)
+       addressable (>= 2.3, < 3.0.0)
++      artifactory (~> 3.0)
+       aws-sdk-s3 (~> 1.0)
+       babosa (>= 1.0.3, < 2.0.0)
+       bundler (>= 1.12.0, < 3.0.0)
+@@ -112,6 +117,7 @@ GEM
+       jwt (>= 2.1.0, < 3)
+       mini_magick (>= 4.9.4, < 5.0.0)
+       multipart-post (~> 2.0.0)
++      naturally (~> 2.2)
+       plist (>= 3.1.0, < 4.0.0)
+       rubyzip (>= 2.0.0, < 3.0.0)
+       security (= 0.1.3)
+@@ -136,20 +142,35 @@ GEM
+       representable (~> 3.0)
+       retriable (>= 2.0, < 4.0)
+       signet (~> 0.12)
+-    google-cloud-core (1.5.0)
++    google-apis-core (0.3.0)
++      addressable (~> 2.5, >= 2.5.1)
++      googleauth (~> 0.14)
++      httpclient (>= 2.8.1, < 3.0)
++      mini_mime (~> 1.0)
++      representable (~> 3.0)
++      retriable (>= 2.0, < 4.0)
++      rexml
++      signet (~> 0.14)
++      webrick
++    google-apis-iamcredentials_v1 (0.3.0)
++      google-apis-core (~> 0.1)
++    google-apis-storage_v1 (0.3.0)
++      google-apis-core (~> 0.1)
++    google-cloud-core (1.6.0)
+       google-cloud-env (~> 1.0)
+       google-cloud-errors (~> 1.0)
+-    google-cloud-env (1.3.3)
++    google-cloud-env (1.5.0)
+       faraday (>= 0.17.3, < 2.0)
+-    google-cloud-errors (1.0.1)
+-    google-cloud-storage (1.28.0)
++    google-cloud-errors (1.1.0)
++    google-cloud-storage (1.31.0)
+       addressable (~> 2.5)
+       digest-crc (~> 0.4)
+-      google-api-client (~> 0.33)
++      google-apis-iamcredentials_v1 (~> 0.1)
++      google-apis-storage_v1 (~> 0.1)
+       google-cloud-core (~> 1.2)
+       googleauth (~> 0.9)
+       mini_mime (~> 1.0)
+-    googleauth (0.13.1)
++    googleauth (0.16.1)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.4, < 3.0)
+       memoist (~> 0.16)
+@@ -166,30 +187,32 @@ GEM
+     json (2.3.1)
+     jwt (2.2.2)
+     memoist (0.16.2)
+-    mini_magick (4.10.1)
+-    mini_mime (1.0.2)
++    mini_magick (4.11.0)
++    mini_mime (1.1.0)
+     minitest (5.14.1)
+     molinillo (0.6.6)
+     multi_json (1.15.0)
+     multipart-post (2.0.0)
+     nanaimo (0.3.0)
+     nap (1.1.0)
+-    naturally (2.2.0)
++    naturally (2.2.1)
+     netrc (0.11.0)
+     os (1.1.1)
+-    plist (3.5.0)
++    plist (3.6.0)
+     public_suffix (4.0.6)
+-    rake (13.0.1)
++    rake (13.0.3)
+     representable (3.0.4)
+       declarative (< 0.1.0)
+       declarative-option (< 0.2.0)
+       uber (< 0.2.0)
+     retriable (3.1.2)
++    rexml (3.2.5)
+     rouge (2.0.7)
+     ruby-macho (1.4.0)
++    ruby2_keywords (0.0.4)
+     rubyzip (2.3.0)
+     security (0.1.3)
+-    signet (0.14.0)
++    signet (0.15.0)
+       addressable (~> 2.3)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.5, < 3.0)
+@@ -213,6 +236,7 @@ GEM
+       unf_ext
+     unf_ext (0.0.7.7)
+     unicode-display_width (1.7.0)
++    webrick (1.7.0)
+     word_wrap (1.0.0)
+     xcodeproj (1.18.0)
+       CFPropertyList (>= 2.3.3, < 4.0)
+@@ -222,7 +246,7 @@ GEM
+       nanaimo (~> 0.3.0)
+     xcpretty (0.3.0)
+       rouge (~> 2.0.7)
+-    xcpretty-travis-formatter (1.0.0)
++    xcpretty-travis-formatter (1.0.1)
+       xcpretty (~> 0.2, >= 0.0.7)
+ 
+ PLATFORMS
+@@ -230,7 +254,7 @@ PLATFORMS
+ 
+ DEPENDENCIES
+   cocoapods (= 1.8.4)
+-  fastlane (= 2.160.0)
++  fastlane (= 2.179.0)
+ 
+ BUNDLED WITH
+-   2.1.4
++   2.2.4
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 5d1fbd90..0f6fb300 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.10.0",
++    "version": "2.11.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 77742992..bc88f331 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -247,7 +247,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.10.0):
++  - react-native-apollos-player (2.11.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -658,7 +658,7 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 8ae695218e6f855ae1c1fdd1f94f5a49d4f8bdfc
++  react-native-apollos-player: 48e38b8e198b2591eb5bf01c89f8d4fba847168d
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 9f1c51d2..f5e918e1 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -46,23 +46,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.10.0",
++    "@apollosproject/config": "^2.11.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.10.0",
+-    "@apollosproject/ui-auth": "^2.10.0",
+-    "@apollosproject/ui-connected": "^2.10.0",
+-    "@apollosproject/ui-fragments": "^2.10.0",
+-    "@apollosproject/ui-htmlview": "^2.10.0",
+-    "@apollosproject/ui-kit": "^2.10.0",
+-    "@apollosproject/ui-mapview": "^2.10.0",
+-    "@apollosproject/ui-media-player": "^2.10.0",
+-    "@apollosproject/ui-notifications": "^2.10.0",
+-    "@apollosproject/ui-onboarding": "^2.10.0",
+-    "@apollosproject/ui-passes": "^2.10.0",
+-    "@apollosproject/ui-prayer": "^2.10.0",
+-    "@apollosproject/ui-scripture": "^2.10.0",
+-    "@apollosproject/ui-storybook": "^2.10.0",
+-    "@apollosproject/ui-test-utils": "^2.10.0",
++    "@apollosproject/ui-analytics": "^2.11.0",
++    "@apollosproject/ui-auth": "^2.11.0",
++    "@apollosproject/ui-connected": "^2.11.0",
++    "@apollosproject/ui-fragments": "^2.11.0",
++    "@apollosproject/ui-htmlview": "^2.11.0",
++    "@apollosproject/ui-kit": "^2.11.0",
++    "@apollosproject/ui-mapview": "^2.11.0",
++    "@apollosproject/ui-media-player": "^2.11.0",
++    "@apollosproject/ui-notifications": "^2.11.0",
++    "@apollosproject/ui-onboarding": "^2.11.0",
++    "@apollosproject/ui-passes": "^2.11.0",
++    "@apollosproject/ui-prayer": "^2.11.0",
++    "@apollosproject/ui-scripture": "^2.11.0",
++    "@apollosproject/ui-storybook": "^2.11.0",
++    "@apollosproject/ui-test-utils": "^2.11.0",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+@@ -121,7 +121,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.10.0",
++    "@apollosproject/eslint-config": "^2.11.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
