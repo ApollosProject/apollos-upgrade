@@ -1,0 +1,618 @@
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+deleted file mode 100644
+index 7604bb4c..00000000
+--- a/apolloschurchapp/.env.production
++++ /dev/null
+@@ -1,4 +0,0 @@
+-APP_DATA_URL=$APP_DATA_URL
+-ONE_SIGNAL_KEY=$ONE_SIGNAL_KEY
+-GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
+-SCHEMA_VERSION=$SCHEMA_VERSION
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+index f0049d29581a696bde01f696a66a741244e424a1..771bfa91a7e1c023fecb862c55e77660b032ddd0 100644
+GIT binary patch
+literal 368
+zcmV-$0gwJuVQh3|WM5yJ)t@WsV;nuW8z5R1h!|oELQxI>Pgs!ZMNIjJn`8>+OT1+j
+zxfW!*=nUMeAbs4-j*D-<{7_YFzgO5yIsa-6S!#e>E;KF?fEd8%+a0i)zyk39aS2Pi
+zuHZ#xHJ$#L%iW}Zk4_&jrOt_%`ytHOIh&m5-TcEw5|QLjI~Zn@B;^om18K6#(%`rY
+zWrTIHQ~qPo@wMd0wR5sUHMW~ENW!qE_foRNgbAMr2|nl+w@Ws3o{w>~2DPhlcJC>b
+zJco!D1+y~x$q*QsUdh}DnxoV$63->N+tsXR0H<(q7=bUBDhMrG&iO*GT07lXsnwoT
+zlU!912EhnZR1YAE|6>W5h1tjKx<IL9H1GdSE24)D4fT1;D#FXknI;{H7o2i&&zS9Y
+z1XW#Kj#*WmIh8JaE@1yrW8BW1$uXWPS41b4$QS*7i`k;Cs4R+&4T>yOw{IE18oZvP
+O6<XMbyT_5_EJ0qZE3)AL
+
+literal 368
+zcmV-$0gwJuVQh3|WM5xI%lGmZ@U@8)lAC`<r6B4!*Xb4*Bz23+ITn6$O6rw)!PZS0
+zf=T2`(CPwxHm^RidHloio}v*>)`3>S1ja&it7Z7DkOp0wx7s{1E{t2RV~uZfi|MON
+zu9KtVa;zBG&r=#BiFcldRX$}`T}u)~e!ql&(%)>H^$8)|2PG`$x=u7Ib~;Wh$k|Kz
+zSKQ2TI{(x0s$Jj7+ilc95coCD_H^Stw_SQSS$kRY85XJ{2%WUxxc+`e4ue0`puG%K
+z{imv559%aP;@VMwIHME1jtfD*bg>im#zM<Q^UB8}&f#SL<wE2T`d881i;;(_jy9O^
+z4(VL;I7ui_9%uNwcwB+4xj_g_Al0)Z;~-y=SGic6Z+N(sm@f{Lz#xy(<@uxP4Z^t-
+zC-AH$0d(W{ZEx|v&+@0~EdZu&#xg^~2Gu^;Poy4D4|b@tvh1N{8i?;q5bawKRVSkv
+OqL5~BW(#mlA#XH&F1eck
+
+diff --git a/apolloschurchapp/Gemfile b/apolloschurchapp/Gemfile
+index 9947ac13..307e9509 100644
+--- a/apolloschurchapp/Gemfile
++++ b/apolloschurchapp/Gemfile
+@@ -1,3 +1,3 @@
+ source 'https://rubygems.org'
+ gem 'cocoapods', '1.8.4'
+-gem 'fastlane', '2.160.0'
++gem 'fastlane', '2.179.0'
+diff --git a/apolloschurchapp/Gemfile.lock b/apolloschurchapp/Gemfile.lock
+index bc2021d7..93c71c41 100644
+--- a/apolloschurchapp/Gemfile.lock
++++ b/apolloschurchapp/Gemfile.lock
+@@ -12,24 +12,25 @@ GEM
+     algoliasearch (1.27.3)
+       httpclient (~> 2.8, >= 2.8.3)
+       json (>= 1.5.1)
++    artifactory (3.0.15)
+     atomos (0.1.3)
+-    aws-eventstream (1.1.0)
+-    aws-partitions (1.371.0)
+-    aws-sdk-core (3.107.0)
++    aws-eventstream (1.1.1)
++    aws-partitions (1.442.0)
++    aws-sdk-core (3.113.1)
+       aws-eventstream (~> 1, >= 1.0.2)
+       aws-partitions (~> 1, >= 1.239.0)
+       aws-sigv4 (~> 1.1)
+       jmespath (~> 1.0)
+-    aws-sdk-kms (1.38.0)
+-      aws-sdk-core (~> 3, >= 3.99.0)
++    aws-sdk-kms (1.43.0)
++      aws-sdk-core (~> 3, >= 3.112.0)
+       aws-sigv4 (~> 1.1)
+-    aws-sdk-s3 (1.81.0)
+-      aws-sdk-core (~> 3, >= 3.104.3)
++    aws-sdk-s3 (1.93.0)
++      aws-sdk-core (~> 3, >= 3.112.0)
+       aws-sdk-kms (~> 1)
+       aws-sigv4 (~> 1.1)
+-    aws-sigv4 (1.2.2)
++    aws-sigv4 (1.2.3)
+       aws-eventstream (~> 1, >= 1.0.2)
+-    babosa (1.0.3)
++    babosa (1.0.4)
+     claide (1.0.3)
+     cocoapods (1.8.4)
+       activesupport (>= 4.0.2, < 5)
+@@ -73,25 +74,29 @@ GEM
+     concurrent-ruby (1.1.7)
+     declarative (0.0.20)
+     declarative-option (0.1.0)
+-    digest-crc (0.6.1)
+-      rake (~> 13.0)
++    digest-crc (0.6.3)
++      rake (>= 12.0.0, < 14.0.0)
+     domain_name (0.5.20190701)
+       unf (>= 0.0.5, < 1.0.0)
+     dotenv (2.7.6)
+-    emoji_regex (3.0.0)
++    emoji_regex (3.2.2)
+     escape (0.0.4)
+-    excon (0.76.0)
+-    faraday (1.0.1)
++    excon (0.79.0)
++    faraday (1.3.0)
++      faraday-net_http (~> 1.0)
+       multipart-post (>= 1.2, < 3)
++      ruby2_keywords
+     faraday-cookie_jar (0.0.7)
+       faraday (>= 0.8.0)
+       http-cookie (~> 1.0.0)
++    faraday-net_http (1.0.1)
+     faraday_middleware (1.0.0)
+       faraday (~> 1.0)
+-    fastimage (2.2.0)
+-    fastlane (2.160.0)
++    fastimage (2.2.3)
++    fastlane (2.179.0)
+       CFPropertyList (>= 2.3, < 4.0.0)
+       addressable (>= 2.3, < 3.0.0)
++      artifactory (~> 3.0)
+       aws-sdk-s3 (~> 1.0)
+       babosa (>= 1.0.3, < 2.0.0)
+       bundler (>= 1.12.0, < 3.0.0)
+@@ -112,6 +117,7 @@ GEM
+       jwt (>= 2.1.0, < 3)
+       mini_magick (>= 4.9.4, < 5.0.0)
+       multipart-post (~> 2.0.0)
++      naturally (~> 2.2)
+       plist (>= 3.1.0, < 4.0.0)
+       rubyzip (>= 2.0.0, < 3.0.0)
+       security (= 0.1.3)
+@@ -136,20 +142,35 @@ GEM
+       representable (~> 3.0)
+       retriable (>= 2.0, < 4.0)
+       signet (~> 0.12)
+-    google-cloud-core (1.5.0)
++    google-apis-core (0.3.0)
++      addressable (~> 2.5, >= 2.5.1)
++      googleauth (~> 0.14)
++      httpclient (>= 2.8.1, < 3.0)
++      mini_mime (~> 1.0)
++      representable (~> 3.0)
++      retriable (>= 2.0, < 4.0)
++      rexml
++      signet (~> 0.14)
++      webrick
++    google-apis-iamcredentials_v1 (0.3.0)
++      google-apis-core (~> 0.1)
++    google-apis-storage_v1 (0.3.0)
++      google-apis-core (~> 0.1)
++    google-cloud-core (1.6.0)
+       google-cloud-env (~> 1.0)
+       google-cloud-errors (~> 1.0)
+-    google-cloud-env (1.3.3)
++    google-cloud-env (1.5.0)
+       faraday (>= 0.17.3, < 2.0)
+-    google-cloud-errors (1.0.1)
+-    google-cloud-storage (1.28.0)
++    google-cloud-errors (1.1.0)
++    google-cloud-storage (1.31.0)
+       addressable (~> 2.5)
+       digest-crc (~> 0.4)
+-      google-api-client (~> 0.33)
++      google-apis-iamcredentials_v1 (~> 0.1)
++      google-apis-storage_v1 (~> 0.1)
+       google-cloud-core (~> 1.2)
+       googleauth (~> 0.9)
+       mini_mime (~> 1.0)
+-    googleauth (0.13.1)
++    googleauth (0.16.1)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.4, < 3.0)
+       memoist (~> 0.16)
+@@ -166,30 +187,32 @@ GEM
+     json (2.3.1)
+     jwt (2.2.2)
+     memoist (0.16.2)
+-    mini_magick (4.10.1)
+-    mini_mime (1.0.2)
++    mini_magick (4.11.0)
++    mini_mime (1.1.0)
+     minitest (5.14.1)
+     molinillo (0.6.6)
+     multi_json (1.15.0)
+     multipart-post (2.0.0)
+     nanaimo (0.3.0)
+     nap (1.1.0)
+-    naturally (2.2.0)
++    naturally (2.2.1)
+     netrc (0.11.0)
+     os (1.1.1)
+-    plist (3.5.0)
++    plist (3.6.0)
+     public_suffix (4.0.6)
+-    rake (13.0.1)
++    rake (13.0.3)
+     representable (3.0.4)
+       declarative (< 0.1.0)
+       declarative-option (< 0.2.0)
+       uber (< 0.2.0)
+     retriable (3.1.2)
++    rexml (3.2.5)
+     rouge (2.0.7)
+     ruby-macho (1.4.0)
++    ruby2_keywords (0.0.4)
+     rubyzip (2.3.0)
+     security (0.1.3)
+-    signet (0.14.0)
++    signet (0.15.0)
+       addressable (~> 2.3)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.5, < 3.0)
+@@ -213,6 +236,7 @@ GEM
+       unf_ext
+     unf_ext (0.0.7.7)
+     unicode-display_width (1.7.0)
++    webrick (1.7.0)
+     word_wrap (1.0.0)
+     xcodeproj (1.18.0)
+       CFPropertyList (>= 2.3.3, < 4.0)
+@@ -222,7 +246,7 @@ GEM
+       nanaimo (~> 0.3.0)
+     xcpretty (0.3.0)
+       rouge (~> 2.0.7)
+-    xcpretty-travis-formatter (1.0.0)
++    xcpretty-travis-formatter (1.0.1)
+       xcpretty (~> 0.2, >= 0.0.7)
+ 
+ PLATFORMS
+@@ -230,7 +254,7 @@ PLATFORMS
+ 
+ DEPENDENCIES
+   cocoapods (= 1.8.4)
+-  fastlane (= 2.160.0)
++  fastlane (= 2.179.0)
+ 
+ BUNDLED WITH
+-   2.1.4
++   2.2.4
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+index 70939332fd22bd988de92684eae45c89899a710a..a8b963351a8ab7ca68b0564dc8a224f74808ec3f 100644
+GIT binary patch
+literal 2272
+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
+
+literal 2272
+zcmV<62p{)TVQh3|WM5yM;_}&+$Sec4+!$=<l{>h>y-skQcEEuF8d761ipWf4OQj|+
+z?FF&H87eX;sHQh*L@zRuWqu3SD6DKPX16-UjFo;|Cp{fBwhV^&;~>~a<x{}b>+QxN
+zZZp90hA0<eM7gkQ{R)$6JVUM%_TKLTnYHyO<Zn6hhZr<W`ZL2+y$0q#*YJKIgEKeK
+zcqBWt7Y7%-f-imP{ZPW?0>KaOk9sn>>!FJY|DPRX$AyU$YSPB83qqY&xr`gI?(hv9
+zyvGp*Tth}yWMVCPv7I2k(@$hH@>7Rkr_<30lkM@IgP#`jb<l{-CgfxX>84fyEBUZp
+zT*ytS3;3zFu!r14q)Gbz7*m^<L>SB@z>+*4W<zTVw@^_WJ{WXO4P8fS<z|J$B0<$O
+z`ZZH2_%Y6G{Q9=l<eYF}iqzd>XrMZCNTzU5UU0dP>ZH+xZ7n*JC0~za+MGRbwj)dJ
+zj<9Y_oYIW;TLPvF$Q51Jg{WQb@jw~zUg`A*CadrXx?%o@nJ++~+mar~;PHOkVCy2S
+zn@!hPf(X3qQ-I{iq6Z_2;gklT2RE@uq_;-iF#YcXAGH2q(yE_V$51#)qm|ut4}3lZ
+zZ8NTYS*cWVX%4iz<oRFD_q7*oy;45^7gnWfa=$iHeYeI6uG6<x^T0=8(N+%g#%}q)
+z^AS4lXh)!$#&4-)O%j0jH(fPMFn!wWQ9rtGS+)sM>_wvin@1<?<}rcIT-HYMA)nZP
+zYIv(?91pa_e75+;-Lz64f0$y})swB%aYZ#k%Ai?_rIXzHw1|ioSodyEgOVxiA9pG^
+zy$pu^7@QhbUh4-1yg#P;i5Yq9(B_xL<_X=sDL~Y6V4Jc+;BB3E%qzG1Z03kKAJ+un
+zAecobGuRlY`g0})vRJ8c6zf1-SKvAZNB1Kp`Q_!DwtVH&$r8sCMl_9l!vU`$fkHaL
+zxYaPQXsy65W97VTD0<n_aU}9QH@{~XJx^_#uGW&}@fOE~sZk(F>_kjQ7eyn_^s48&
+zaq_rLM8-7=&%69_8YxYg=uwPJ0M;h8P%ByEe<gkm1EM*-1r3KfWin%CnGY&Iy=?DN
+zRmKg!{roPC?z==mf;iS{ElCkyJ`z#Vo|wgOYgCo+fjnF9da)#}2&P4F(GZ@yn#|#3
+z1;iIwULmcN%G*Lv|CxGwpFk`67=p`X2?rE0Ju!`0VRd}MQB#!=W2UP*fSwzwt%^LL
+zuutXIXsJ)b)si3Z@Nb@b3E}O6_0+hZx+GQubj{w2Yy)AcA8569OuYbY7F(Ms)A1g=
+z5A%aZjkiIiC?rAFESV*MZi7y3f*)N;+6X}aKQ?J$voTJL!F=KZmn)K@6G`Roa;FJw
+zAY7N};x<~O!|0fQu?+8Nqqd0JeAD5$H$rkc)0qOIikY4qY*$Hy0(7qc0U=rv?MW)q
+zK+03g43(6H>@f>|#R7xb3we<*yaRrgu(yY*#}XmvSw;T>?+0rw$!zOGe$%Dq_DVXh
+zD*UW`yQ15rVdW7geSyuU{i)4wfwNA=RZo@TSC#x0((7Uz_G&2X`SGJ3bpTq*_w*FB
+zB->MoRuD*q`_YoXtaxzBmbRg#H3ilNrBeaJgAxcViUff<CXV9+AcmtI1O|y-wR%=e
+z(Qz{64m*tRf5Q*76D;%3cZ5D)2HOQqLYK1+6CGf}UVyk!nIm_kIA;L@j8!%2D6Ue_
+zXR5VQ!xVcnj97U(I^WMI31QQ%Z=~4;hnK4!Gy9I2kPoZoWI=x`Pe#FLYv0?MG?A3W
+z3Vnhbcg779nGK{n0qhiBJGOpW7fTw`FwAdv>FD?!4~3e66H;aYDX}atAd%4E0fFfu
+z@^&&RA0-3`kq8FdJe|EEIF?bR-wJxS6)OUJl5OZqp%V6~3h11@C`CZAqJ0jk-_+x?
+zOQGMd&y^E%U1RmJ)^O}s44-^nvQR~aP*Pin%mBT}v{fZsD*zG7m)IRGY<&^mpZXqk
+zgA>xAk<z_b(zz9*Zl1y4q~0$x+z?zjwx?xZ6BVsRnp=nPx;!X9nY#_Wt`M+F``a+W
+z0C)r|_R3Eh3BvOu1JLcO9Ug%!C%+TGZB^`>n=ix{H;oGe@oawIGr{2*G<Cg_G)m2N
+zsao|xqC=_}*o2;jB}5s#nZL&#qKy`qX_+4^uoKE}8_NU7=R@mJJAVP7#59AGaT>G3
+zi2EF~kNYo4g|S8cBFv2}Dfp1@3#QL8-^geaEL!8su$t$>Fh~pj|1{j?{NwCbVb@34
+zJ65r6jGEbw9O1<2sH9toeT_x+bDY`7DcbcTb^+BcX<bo6&B>E~-MH(kyfno@9*VhO
+z-_`fRB{3QC2~j@gmIH!n-U79JlB6&ko@e{ie0KZC1LMusRil=_cXp_Z3SVT%38GD(
+zd1s>2pLLt^;3AF>-LrO=DKsfH2N_lOK~vJm6s14>ouUB!w1sv`3E{Ko0Ito3Ldkdu
+z9VD;}vEQ!WvZFPi>oEz=J|XO4j|<i|l-p|@{O`Z6xSjt7oO0Y`X^wph(tt35*aoJs
+zUL-K$udY6xE-lnNQ;{q@Y(tr)bTfVu$e3dWas=!Yu#lApet%Bf6<3^^u%AaU1+fQ-
+zJGU$v4Mh;J@Mj<znW#m?(#7k+pu%W!yW+McN~%t)=p%9WXo?~tEgCHG%Ww^yw9@Ep
+z_^i`IzOmQop1R2viEN+DneU6!9)+xI46fc`ZPciH?i`0qX1C;X9>{IS!nA(D(dXAm
+z!Di3lt?(@dkx4iDD%B$lAcEI<20UR%r>c&s#lnFm_Qoe+n`V_}`C6CoQ~eyU0&TLu
+zhS3@ntF%~Wh~OoM0s;W>Io?o2rWJe`iM4p><tqmywOMaA3|1>mj^!kK+n?%Z*Qgf>
+z7+`AeA03#IBK`mTlK^LsTvF8;#P9j?t7ih-sX*imF!BT^GbTsRXbY8u!}fawqrWXf
+uULp3aV~7t-+g0&}NY;!hrqGN(y}Gs;GkapFoJXTMdm2lwpPgz!zI5r#09mL2
+
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+index c1b16731f8dca5d356338085bdcae7eddf976255..7c680913f47e9d5d0a2ade0182ae92333f3896b9 100644
+GIT binary patch
+literal 2384
+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
+C1&Zka
+
+literal 2384
+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
+C;-hi^
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 74dc365b..4bac1aa6 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.8.0",
++    "version": "2.13.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 4131822a..aaaa63cd 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -247,7 +247,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.8.0):
++  - react-native-apollos-player (2.13.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -658,7 +658,7 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 8752c5c60ba0ac63e9b9cd30451d3d6d2d567388
++  react-native-apollos-player: 4367c015952b145a541c0904c52bf2fb973f8182
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+diff --git a/apolloschurchapp/ios/apollos.p8.enc b/apolloschurchapp/ios/apollos.p8.enc
+index 1770af9b501caeb22e611bb865209586d6b9bf3e..20f497384324d2d2ba630234c671f48354b9e6ee 100644
+GIT binary patch
+literal 288
+zcmV+*0pI>pVQh3|WM5y30uO~q6y^1I6XI1WVtdI~K++o{;TqMT!FmNr_kPu~kos_(
+zEw=og7SmBjV5cG_P6fYlAS!#ZF13GnQ%)PC6w|(K3=*~;VD1A8&ae$FJ*W)du_!_q
+z%M%y`-2H!+-{bv8NQejCqzE2ULs`ro*^*+B?Dh-o@}dFyTo;IHx4UYJm~Lq@1p*LA
+z0DP#4@G4V5IBl{Lsc=8GSR#XwV@+4!?98qnu*uo&x;vLFcKd1lbea7G8V$Fbq^v6g
+z<9YTKpn7bZFns;S7~Zm7)-Gecd)+wRjK7u~hEo(!FLl_=s+)O7D9TWjXSpBgg6;1c
+mf3wmoIH>A$uAvo-ByCahf*#Wt@PyuMA)?Xw-ezmg4t=TVE{ci(
+
+literal 288
+zcmV+*0pI>pVQh3|WM5yjEET~l;Wvl94TCB^>_}xMtxWvMQO(&vMAXk~Y-23p4x~u@
+zHgoO~vSpla6%)B=eb<|YDq;a;m2&C@gnt5QU~B@@B~c_{s*ZB-<wB&Z(bxgZ^$9qB
+z=Nbz1E?K*z=YPJZp~J{R%suq|SU8+^_{RzW;P*awqyOFHjvd$=i3J=Io_i6VodpOS
+z8Q#Var29Nb1A$l^o!4_}e=jJ39Pss9Mmor2g>+EP8N)@tYk_)w{xqR1d}Fj?OBGBI
+z=Xp{7ygsVoS6hM=8iCrZ|6@FdWb**vwlTPuS!U3^8cfzM$RQM7NDHW|)1Qt>MB9`y
+mk)bMH8k5~*|ITGDKdtFfZPnifx_A9HJyWQ=O6gmR$V=2VVT&99
+
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 0fa257db..e4caeb5c 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -46,23 +46,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.8.0",
++    "@apollosproject/config": "^2.13.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.8.0",
+-    "@apollosproject/ui-auth": "^2.8.0",
+-    "@apollosproject/ui-connected": "^2.8.0",
+-    "@apollosproject/ui-fragments": "^2.8.0",
+-    "@apollosproject/ui-htmlview": "^2.8.0",
+-    "@apollosproject/ui-kit": "^2.8.0",
+-    "@apollosproject/ui-mapview": "^2.8.0",
+-    "@apollosproject/ui-media-player": "^2.8.0",
+-    "@apollosproject/ui-notifications": "^2.8.0",
+-    "@apollosproject/ui-onboarding": "^2.8.0",
+-    "@apollosproject/ui-passes": "^2.8.0",
+-    "@apollosproject/ui-prayer": "^2.8.0",
+-    "@apollosproject/ui-scripture": "^2.8.0",
+-    "@apollosproject/ui-storybook": "^2.8.0",
+-    "@apollosproject/ui-test-utils": "^2.8.0",
++    "@apollosproject/ui-analytics": "^2.13.0",
++    "@apollosproject/ui-auth": "^2.13.0",
++    "@apollosproject/ui-connected": "^2.13.0",
++    "@apollosproject/ui-fragments": "^2.13.0",
++    "@apollosproject/ui-htmlview": "^2.13.0",
++    "@apollosproject/ui-kit": "^2.13.0",
++    "@apollosproject/ui-mapview": "^2.13.0",
++    "@apollosproject/ui-media-player": "^2.13.0",
++    "@apollosproject/ui-notifications": "^2.13.0",
++    "@apollosproject/ui-onboarding": "^2.13.0",
++    "@apollosproject/ui-passes": "^2.13.0",
++    "@apollosproject/ui-prayer": "^2.13.0",
++    "@apollosproject/ui-scripture": "^2.13.0",
++    "@apollosproject/ui-storybook": "^2.13.0",
++    "@apollosproject/ui-test-utils": "^2.13.0",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+@@ -121,7 +121,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.8.0",
++    "@apollosproject/eslint-config": "^2.13.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/src/tabs/connect/index.js b/apolloschurchapp/src/tabs/connect/index.js
+index d75c8a08..da182421 100644
+--- a/apolloschurchapp/src/tabs/connect/index.js
++++ b/apolloschurchapp/src/tabs/connect/index.js
+@@ -2,6 +2,7 @@ import React from 'react';
+ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+ import { withTheme } from '@apollosproject/ui-kit';
+ import { LikedContentFeedConnected } from '@apollosproject/ui-connected';
++import { NotificationSettingsConnected } from '@apollosproject/ui-notifications';
+ 
+ import UserSettings from '../../user-settings';
+ import PersonalDetails from '../../user-settings/PersonalDetails';
+@@ -24,6 +25,11 @@ const ConnectNavigator = (props) => (
+       name="TestingControlPanel"
+       options={{ headerTitle: 'Testing' }}
+     />
++    <Screen
++      component={NotificationSettingsConnected}
++      name="Notifications"
++      options={{ headerTitle: 'Notifications' }}
++    />
+     <Screen
+       component={UserSettings}
+       name="UserSettings"
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index 842305a1..ff46d7a2 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -2,12 +2,7 @@ import React from 'react';
+ import { View, Image } from 'react-native';
+ import { Query } from '@apollo/client/react/components';
+ import PropTypes from 'prop-types';
+-import {
+-  checkNotifications,
+-  openSettings,
+-  requestNotifications,
+-  RESULTS,
+-} from 'react-native-permissions';
++import { requestPermissions } from '@apollosproject/ui-notifications';
+ import {
+   styled,
+   BackgroundView,
+@@ -90,19 +85,7 @@ function Onboarding({ navigation, route }) {
+                 />
+                 <AskNotificationsConnected
+                   onPressPrimary={swipeForward}
+-                  onRequestPushPermissions={(update) => {
+-                    checkNotifications().then((checkRes) => {
+-                      if (checkRes.status === RESULTS.DENIED) {
+-                        requestNotifications(['alert', 'badge', 'sound']).then(
+-                          () => {
+-                            update();
+-                          }
+-                        );
+-                      } else {
+-                        openSettings();
+-                      }
+-                    });
+-                  }}
++                  onRequestPushPermissions={requestPermissions}
+                   BackgroundComponent={
+                     <ImageContainer>
+                       <StyledImage
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index a33ed280..1db143da 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -76,6 +76,16 @@ class UserSettings extends PureComponent {
+                             <CellIcon name="arrow-next" />
+                           </Cell>
+                         </Touchable>
++                        <Touchable
++                          onPress={() => {
++                            this.props.navigation.navigate('Notifications');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Notification Settings</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
+                       </TableView>
+                       <TableView>
+                         <Touchable
