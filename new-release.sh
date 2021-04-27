@@ -184,7 +184,7 @@ function cleanUp() {
 
 newRelease=$(
     curl -s "https://api.github.com/repos/apollosproject/apollos-templates/tags" |
-        python -c "import sys, json; print json.load(sys.stdin)[0]['name']"
+        python -c "import sys, json; print json.load(sys.stdin)[0]['name'][1:]"
 )
 
 guardExisting
