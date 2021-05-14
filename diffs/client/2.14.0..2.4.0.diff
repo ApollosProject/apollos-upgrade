@@ -1,0 +1,2382 @@
+diff --git a/apolloschurchapp/.env.production b/apolloschurchapp/.env.production
+new file mode 100644
+index 00000000..8c5018ee
+--- /dev/null
++++ b/apolloschurchapp/.env.production
+@@ -0,0 +1,4 @@
++APP_DATA_URL=$APP_DATA_URL
++ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID
++GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY
++SCHEMA_VERSION=$SCHEMA_VERSION
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+index fba5c68711b7b60a358381b2e9cfbd57bd8ad591..f0049d29581a696bde01f696a66a741244e424a1 100644
+GIT binary patch
+literal 368
+zcmV-$0gwJuVQh3|WM5xI%lGmZ@U@8)lAC`<r6B4!*Xb4*Bz23+ITn6$O6rw)!PZS0
+zf=T2`(CPwxHm^RidHloio}v*>)`3>S1ja&it7Z7DkOp0wx7s{1E{t2RV~uZfi|MON
+zu9KtVa;zBG&r=#BiFcldRX$}`T}u)~e!ql&(%)>H^$8)|2PG`$x=u7Ib~;Wh$k|Kz
+zSKQ2TI{(x0s$Jj7+ilc95coCD_H^Stw_SQSS$kRY85XJ{2%WUxxc+`e4ue0`puG%K
+z{imv559%aP;@VMwIHME1jtfD*bg>im#zM<Q^UB8}&f#SL<wE2T`d881i;;(_jy9O^
+z4(VL;I7ui_9%uNwcwB+4xj_g_Al0)Z;~-y=SGic6Z+N(sm@f{Lz#xy(<@uxP4Z^t-
+zC-AH$0d(W{ZEx|v&+@0~EdZu&#xg^~2Gu^;Poy4D4|b@tvh1N{8i?;q5bawKRVSkv
+OqL5~BW(#mlA#XH&F1eck
+
+literal 800
+zcmV+*1K<2pVQh3|WM5wfcegMKIZ7fPD@EUEqbsHJ(FR%S4eEND;NHld`<G#T*Mt#O
+z`K-hIx{Nu@3%upTPt}*5aDE^p-xF#3R*&(`fxU2@JtI5a0Y%cO#`pGxD|N)NC~Nx0
+zg1GGFAyUKLeX%aF``$rn^Unds6ydfgklG0fJh8~x%Z1OV+$U~%+`Dg&XQW_G)p66s
+zT0JZrf+XaiI<>zG*(I)Uo^VUwr|tB9C|x|R$kf_P$zMnu{~8~Mzo#9nAod{>)?l}M
+z;nfzE62f<;kp$Bkst)s`p4lYk8|(00g)f$aFzE?mrtai0*=~FaVN}C-Kv_()_d$t3
+zLevoI(OGPXtc3)HA-_sg(L)9_X=~yVyAVZXr&w64biaT)rs`pvtA-DG;2WSAjel97
+zaAp!GdrLsSTf8YR#SQa%DEJ8Xk9sj<HvO@TF&!hltf?}l%8J|6A7`gEqI*kNlyyTO
+zwGF6zsRjzMtc*KK@ZW~bsew?ZEa`q0bTu7@H!h-#OutV0n|@RNTsBUvJv0t}?Ai~8
+z1o`msh47=D-O{5;mTAgVp1c`O`AL@88SMNNPUzIP7|&Un+HF9ujqm{LU<(+i4P2D`
+zc4nQipmHY@J27YPZXf|w!AP5qI=H?_966~Z5XNJ`?`B?*V-D&83=I=wJnr^-2mt)`
+zfbgsnCdlI1!LU{7A;t|pFUV7CR$;q<aq9$Wk#WG&3w1$+BlHIa&5Ty}vr2)E45#nD
+z$bHqESPN7)qOIx3Zp*QeHHS|<hx!)P{fjT7kJhBfN5DfO$MQf^R>#Ya-#gxZkvxBV
+z$wH#lc&X0Ijk3#-svuL@v2qQ3;NyP@+u}tkDqF_^3a6#zc@jwwp>%dZunLD3{i=_3
+zOS%O5k*SzvQ5ATGP(NVqGELz`Cjp3Y&Ii)(pfhZVA$wl@14wtQ^|IxzIo4}Pou1bV
+z2l9o7woS459raS(Rj><K@@>kSi@J%EzJV-^|2~*e@y=xtNt4PE62~Da>JL)s<~w9l
+e&-dyV+A+BCkur%dOVKP0a%nSZW|X!;U0X<sW{~~>
+
+diff --git a/apolloschurchapp/.gitignore b/apolloschurchapp/.gitignore
+index ee91441b..7bd49399 100644
+--- a/apolloschurchapp/.gitignore
++++ b/apolloschurchapp/.gitignore
+@@ -147,7 +147,7 @@ DerivedData
+ fastlane/report.xml
+ 
+ # symbols
+-*.app.dSYM.zip
++apolloschurchapp.app.dSYM.zip
+ 
+ # iOS keys
+ *.p8
+diff --git a/apolloschurchapp/Gemfile b/apolloschurchapp/Gemfile
+index 77041843..9947ac13 100644
+--- a/apolloschurchapp/Gemfile
++++ b/apolloschurchapp/Gemfile
+@@ -1,3 +1,3 @@
+ source 'https://rubygems.org'
+-gem 'cocoapods', '1.10.1'
+-gem 'fastlane', '2.179.0'
++gem 'cocoapods', '1.8.4'
++gem 'fastlane', '2.160.0'
+diff --git a/apolloschurchapp/Gemfile.lock b/apolloschurchapp/Gemfile.lock
+index a0fa52db..bc2021d7 100644
+--- a/apolloschurchapp/Gemfile.lock
++++ b/apolloschurchapp/Gemfile.lock
+@@ -1,45 +1,45 @@
+ GEM
+   remote: https://rubygems.org/
+   specs:
+-    CFPropertyList (3.0.3)
+-    activesupport (5.2.5)
+-      concurrent-ruby (~> 1.0, >= 1.0.2)
+-      i18n (>= 0.7, < 2)
++    CFPropertyList (3.0.2)
++    activesupport (4.2.11.3)
++      i18n (~> 0.7)
+       minitest (~> 5.1)
++      thread_safe (~> 0.3, >= 0.3.4)
+       tzinfo (~> 1.1)
+     addressable (2.7.0)
+       public_suffix (>= 2.0.2, < 5.0)
+-    algoliasearch (1.27.5)
++    algoliasearch (1.27.3)
+       httpclient (~> 2.8, >= 2.8.3)
+       json (>= 1.5.1)
+-    artifactory (3.0.15)
+     atomos (0.1.3)
+-    aws-eventstream (1.1.1)
+-    aws-partitions (1.449.0)
+-    aws-sdk-core (3.114.0)
++    aws-eventstream (1.1.0)
++    aws-partitions (1.371.0)
++    aws-sdk-core (3.107.0)
+       aws-eventstream (~> 1, >= 1.0.2)
+       aws-partitions (~> 1, >= 1.239.0)
+       aws-sigv4 (~> 1.1)
+       jmespath (~> 1.0)
+-    aws-sdk-kms (1.43.0)
+-      aws-sdk-core (~> 3, >= 3.112.0)
++    aws-sdk-kms (1.38.0)
++      aws-sdk-core (~> 3, >= 3.99.0)
+       aws-sigv4 (~> 1.1)
+-    aws-sdk-s3 (1.94.0)
+-      aws-sdk-core (~> 3, >= 3.112.0)
++    aws-sdk-s3 (1.81.0)
++      aws-sdk-core (~> 3, >= 3.104.3)
+       aws-sdk-kms (~> 1)
+       aws-sigv4 (~> 1.1)
+-    aws-sigv4 (1.2.3)
++    aws-sigv4 (1.2.2)
+       aws-eventstream (~> 1, >= 1.0.2)
+-    babosa (1.0.4)
++    babosa (1.0.3)
+     claide (1.0.3)
+-    cocoapods (1.10.1)
+-      addressable (~> 2.6)
++    cocoapods (1.8.4)
++      activesupport (>= 4.0.2, < 5)
+       claide (>= 1.0.2, < 2.0)
+-      cocoapods-core (= 1.10.1)
++      cocoapods-core (= 1.8.4)
+       cocoapods-deintegrate (>= 1.0.3, < 2.0)
+-      cocoapods-downloader (>= 1.4.0, < 2.0)
++      cocoapods-downloader (>= 1.2.2, < 2.0)
+       cocoapods-plugins (>= 1.0.0, < 2.0)
+       cocoapods-search (>= 1.0.0, < 2.0)
++      cocoapods-stats (>= 1.0.0, < 2.0)
+       cocoapods-trunk (>= 1.4.0, < 2.0)
+       cocoapods-try (>= 1.1.0, < 2.0)
+       colored2 (~> 3.1)
+@@ -49,22 +49,19 @@ GEM
+       molinillo (~> 0.6.6)
+       nap (~> 1.0)
+       ruby-macho (~> 1.4)
+-      xcodeproj (>= 1.19.0, < 2.0)
+-    cocoapods-core (1.10.1)
+-      activesupport (> 5.0, < 6)
+-      addressable (~> 2.6)
++      xcodeproj (>= 1.11.1, < 2.0)
++    cocoapods-core (1.8.4)
++      activesupport (>= 4.0.2, < 6)
+       algoliasearch (~> 1.0)
+       concurrent-ruby (~> 1.1)
+       fuzzy_match (~> 2.0.4)
+       nap (~> 1.0)
+-      netrc (~> 0.11)
+-      public_suffix
+-      typhoeus (~> 1.0)
+     cocoapods-deintegrate (1.0.4)
+     cocoapods-downloader (1.4.0)
+     cocoapods-plugins (1.0.0)
+       nap
+     cocoapods-search (1.0.0)
++    cocoapods-stats (1.1.0)
+     cocoapods-trunk (1.5.0)
+       nap (>= 0.8, < 2.0)
+       netrc (~> 0.11)
+@@ -73,37 +70,28 @@ GEM
+     colored2 (3.1.2)
+     commander-fastlane (4.4.6)
+       highline (~> 1.7.2)
+-    concurrent-ruby (1.1.8)
++    concurrent-ruby (1.1.7)
+     declarative (0.0.20)
+-    digest-crc (0.6.3)
+-      rake (>= 12.0.0, < 14.0.0)
++    declarative-option (0.1.0)
++    digest-crc (0.6.1)
++      rake (~> 13.0)
+     domain_name (0.5.20190701)
+       unf (>= 0.0.5, < 1.0.0)
+     dotenv (2.7.6)
+-    emoji_regex (3.2.2)
++    emoji_regex (3.0.0)
+     escape (0.0.4)
+-    ethon (0.14.0)
+-      ffi (>= 1.15.0)
+-    excon (0.81.0)
+-    faraday (1.4.1)
+-      faraday-excon (~> 1.1)
+-      faraday-net_http (~> 1.0)
+-      faraday-net_http_persistent (~> 1.1)
++    excon (0.76.0)
++    faraday (1.0.1)
+       multipart-post (>= 1.2, < 3)
+-      ruby2_keywords (>= 0.0.4)
+     faraday-cookie_jar (0.0.7)
+       faraday (>= 0.8.0)
+       http-cookie (~> 1.0.0)
+-    faraday-excon (1.1.0)
+-    faraday-net_http (1.0.1)
+-    faraday-net_http_persistent (1.1.0)
+     faraday_middleware (1.0.0)
+       faraday (~> 1.0)
+-    fastimage (2.2.3)
+-    fastlane (2.179.0)
++    fastimage (2.2.0)
++    fastlane (2.160.0)
+       CFPropertyList (>= 2.3, < 4.0.0)
+       addressable (>= 2.3, < 3.0.0)
+-      artifactory (~> 3.0)
+       aws-sdk-s3 (~> 1.0)
+       babosa (>= 1.0.3, < 2.0.0)
+       bundler (>= 1.12.0, < 3.0.0)
+@@ -124,7 +112,6 @@ GEM
+       jwt (>= 2.1.0, < 3)
+       mini_magick (>= 4.9.4, < 5.0.0)
+       multipart-post (~> 2.0.0)
+-      naturally (~> 2.2)
+       plist (>= 3.1.0, < 4.0.0)
+       rubyzip (>= 2.0.0, < 3.0.0)
+       security (= 0.1.3)
+@@ -138,7 +125,6 @@ GEM
+       xcodeproj (>= 1.13.0, < 2.0.0)
+       xcpretty (~> 0.3.0)
+       xcpretty-travis-formatter (>= 0.0.3)
+-    ffi (1.15.0)
+     fourflusher (2.3.1)
+     fuzzy_match (2.0.4)
+     gh_inspector (1.1.3)
+@@ -150,35 +136,20 @@ GEM
+       representable (~> 3.0)
+       retriable (>= 2.0, < 4.0)
+       signet (~> 0.12)
+-    google-apis-core (0.3.0)
+-      addressable (~> 2.5, >= 2.5.1)
+-      googleauth (~> 0.14)
+-      httpclient (>= 2.8.1, < 3.0)
+-      mini_mime (~> 1.0)
+-      representable (~> 3.0)
+-      retriable (>= 2.0, < 4.0)
+-      rexml
+-      signet (~> 0.14)
+-      webrick
+-    google-apis-iamcredentials_v1 (0.3.0)
+-      google-apis-core (~> 0.1)
+-    google-apis-storage_v1 (0.3.0)
+-      google-apis-core (~> 0.1)
+-    google-cloud-core (1.6.0)
++    google-cloud-core (1.5.0)
+       google-cloud-env (~> 1.0)
+       google-cloud-errors (~> 1.0)
+-    google-cloud-env (1.5.0)
++    google-cloud-env (1.3.3)
+       faraday (>= 0.17.3, < 2.0)
+-    google-cloud-errors (1.1.0)
+-    google-cloud-storage (1.31.0)
++    google-cloud-errors (1.0.1)
++    google-cloud-storage (1.28.0)
+       addressable (~> 2.5)
+       digest-crc (~> 0.4)
+-      google-apis-iamcredentials_v1 (~> 0.1)
+-      google-apis-storage_v1 (~> 0.1)
++      google-api-client (~> 0.33)
+       google-cloud-core (~> 1.2)
+       googleauth (~> 0.9)
+       mini_mime (~> 1.0)
+-    googleauth (0.16.2)
++    googleauth (0.13.1)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.4, < 3.0)
+       memoist (~> 0.16)
+@@ -189,38 +160,36 @@ GEM
+     http-cookie (1.0.3)
+       domain_name (~> 0.5)
+     httpclient (2.8.3)
+-    i18n (1.8.10)
++    i18n (0.9.5)
+       concurrent-ruby (~> 1.0)
+     jmespath (1.4.0)
+-    json (2.5.1)
+-    jwt (2.2.3)
++    json (2.3.1)
++    jwt (2.2.2)
+     memoist (0.16.2)
+-    mini_magick (4.11.0)
+-    mini_mime (1.1.0)
+-    minitest (5.14.4)
++    mini_magick (4.10.1)
++    mini_mime (1.0.2)
++    minitest (5.14.1)
+     molinillo (0.6.6)
+     multi_json (1.15.0)
+     multipart-post (2.0.0)
+     nanaimo (0.3.0)
+     nap (1.1.0)
+-    naturally (2.2.1)
++    naturally (2.2.0)
+     netrc (0.11.0)
+     os (1.1.1)
+-    plist (3.6.0)
++    plist (3.5.0)
+     public_suffix (4.0.6)
+-    rake (13.0.3)
+-    representable (3.1.1)
++    rake (13.0.1)
++    representable (3.0.4)
+       declarative (< 0.1.0)
+-      trailblazer-option (>= 0.1.1, < 0.2.0)
++      declarative-option (< 0.2.0)
+       uber (< 0.2.0)
+     retriable (3.1.2)
+-    rexml (3.2.5)
+     rouge (2.0.7)
+     ruby-macho (1.4.0)
+-    ruby2_keywords (0.0.4)
+     rubyzip (2.3.0)
+     security (0.1.3)
+-    signet (0.15.0)
++    signet (0.14.0)
+       addressable (~> 2.3)
+       faraday (>= 0.17.3, < 2.0)
+       jwt (>= 1.5, < 3.0)
+@@ -233,23 +202,19 @@ GEM
+     terminal-table (1.8.0)
+       unicode-display_width (~> 1.1, >= 1.1.1)
+     thread_safe (0.3.6)
+-    trailblazer-option (0.1.1)
+     tty-cursor (0.7.1)
+     tty-screen (0.8.1)
+     tty-spinner (0.9.3)
+       tty-cursor (~> 0.7)
+-    typhoeus (1.4.0)
+-      ethon (>= 0.9.0)
+-    tzinfo (1.2.9)
++    tzinfo (1.2.7)
+       thread_safe (~> 0.1)
+     uber (0.1.0)
+     unf (0.1.4)
+       unf_ext
+     unf_ext (0.0.7.7)
+     unicode-display_width (1.7.0)
+-    webrick (1.7.0)
+     word_wrap (1.0.0)
+-    xcodeproj (1.19.0)
++    xcodeproj (1.18.0)
+       CFPropertyList (>= 2.3.3, < 4.0)
+       atomos (~> 0.1.3)
+       claide (>= 1.0.2, < 2.0)
+@@ -257,15 +222,15 @@ GEM
+       nanaimo (~> 0.3.0)
+     xcpretty (0.3.0)
+       rouge (~> 2.0.7)
+-    xcpretty-travis-formatter (1.0.1)
++    xcpretty-travis-formatter (1.0.0)
+       xcpretty (~> 0.2, >= 0.0.7)
+ 
+ PLATFORMS
+   ruby
+ 
+ DEPENDENCIES
+-  cocoapods (= 1.10.1)
+-  fastlane (= 2.179.0)
++  cocoapods (= 1.8.4)
++  fastlane (= 2.160.0)
+ 
+ BUNDLED WITH
+-   2.2.4
++   2.1.4
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+index 08bbda40e135673e93b4cb1f0c86e9f71b1bdd76..70939332fd22bd988de92684eae45c89899a710a 100644
+GIT binary patch
+literal 2272
+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
+
+literal 2272
+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
+
+diff --git a/apolloschurchapp/android/app/build.gradle b/apolloschurchapp/android/app/build.gradle
+index 01b6829f..eeff79b5 100644
+--- a/apolloschurchapp/android/app/build.gradle
++++ b/apolloschurchapp/android/app/build.gradle
+@@ -89,7 +89,7 @@ import com.android.build.OutputFile
+ 
+ project.ext.react = [
+     entryFile: "index.js",
+-    enableHermes: true,  // clean and rebuild if changing
++    enableHermes: false,  // clean and rebuild if changing
+ ]
+ 
+ apply from: "../../node_modules/react-native/react.gradle"
+@@ -128,17 +128,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
+  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+  * and the benefits of using Hermes will therefore be sharply reduced.
+  */
+-def enableHermes = project.ext.react.get("enableHermes", true);
+-
+-/**
+- * Trying to fix Hermes:
+- * https://github.com/facebook/react-native/issues/26400#issuecomment-539395814
+- */
+-configurations.all {
+-  resolutionStrategy {
+-    force "com.facebook.soloader:soloader:0.8.2"
+-  }
+-}
++def enableHermes = project.ext.react.get("enableHermes", false);
+ 
+ android {
+     compileSdkVersion rootProject.ext.compileSdkVersion
+diff --git a/apolloschurchapp/android/app/proguard-rules.pro b/apolloschurchapp/android/app/proguard-rules.pro
+index c9523bda..11b02572 100644
+--- a/apolloschurchapp/android/app/proguard-rules.pro
++++ b/apolloschurchapp/android/app/proguard-rules.pro
+@@ -8,6 +8,3 @@
+ #   http://developer.android.com/guide/developing/tools/proguard.html
+ 
+ # Add any project specific keep options here:
+--keep class com.facebook.react.turbomodule.** { *; }
+--keep class com.facebook.hermes.unicode.** { *; }
+--keep class com.facebook.jni.** { *; }
+\ No newline at end of file
+diff --git a/apolloschurchapp/android/app/src/main/AndroidManifest.xml b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+index 9b213950..887cc9cf 100644
+--- a/apolloschurchapp/android/app/src/main/AndroidManifest.xml
++++ b/apolloschurchapp/android/app/src/main/AndroidManifest.xml
+@@ -18,6 +18,10 @@
+         android:name="com.google.android.geo.API_KEY"
+         android:value="@string/GOOGLE_MAPS_API_KEY"/>
+ 
++      <meta-data
++        android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
++        android:value="com.reactnative.googlecast.GoogleCastOptionsProvider" />
++
+       <activity
+         android:name=".MainActivity"
+         android:label="@string/app_name"
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java
+index 89affa60..db0a876b 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java
++++ b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainActivity.java
+@@ -5,8 +5,9 @@ import com.facebook.react.ReactActivity;
+ import com.facebook.react.ReactActivityDelegate;
+ import com.facebook.react.ReactRootView;
+ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
++import com.facebook.react.GoogleCastActivity;
+ 
+-public class MainActivity extends ReactActivity {
++public class MainActivity extends GoogleCastActivity {
+     /**
+      * Returns the name of the main component registered from JavaScript.
+      * This is used to schedule rendering of the component.
+diff --git a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
+index 655987f3..641c3368 100644
+--- a/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
++++ b/apolloschurchapp/android/app/src/main/java/com/differential/apollos/MainApplication.java
+@@ -12,9 +12,6 @@ import com.facebook.react.ReactPackage;
+ import com.facebook.react.shell.MainReactPackage;
+ import com.facebook.soloader.SoLoader;
+ 
+-import com.facebook.react.bridge.JSIModulePackage;
+-import com.swmansion.reanimated.ReanimatedJSIModulePackage;
+-
+ import java.util.Arrays;
+ import java.util.List;
+ 
+@@ -39,11 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
+     protected String getJSMainModuleName() {
+       return "index";
+     }
+-
+-    @Override
+-    protected JSIModulePackage getJSIModulePackage() {
+-      return new ReanimatedJSIModulePackage();
+-    }
+   };
+ 
+   @Override
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+index f384332894c356853e0032197cf83f21c942fbe1..c1b16731f8dca5d356338085bdcae7eddf976255 100644
+GIT binary patch
+literal 2384
+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
+C;-hi^
+
+literal 2384
+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
+Cw3VL#
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index f5c5dd88..85666c93 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.14.0",
++    "version": "2.3.1",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/babel.config.js b/apolloschurchapp/babel.config.js
+index 983e075d..f842b77f 100644
+--- a/apolloschurchapp/babel.config.js
++++ b/apolloschurchapp/babel.config.js
+@@ -1,4 +1,3 @@
+ module.exports = {
+   presets: ['module:metro-react-native-babel-preset'],
+-  plugins: ['react-native-reanimated/plugin'],
+ };
+diff --git a/apolloschurchapp/fastlane/Appfile b/apolloschurchapp/fastlane/Appfile
+new file mode 100644
+index 00000000..fb2e46e3
+--- /dev/null
++++ b/apolloschurchapp/fastlane/Appfile
+@@ -0,0 +1,8 @@
++# iOS
++app_identifier("com.differential.apollos") # The bundle identifier of your app
++itc_team_id("121565707") # App Store Connect Team ID
++team_id("7KS82J74VW") # Developer Portal Team ID
++
++# Android
++json_key_file("android/key.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
++package_name("com.differential.apollos") # e.g. com.krausefx.app
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 00b6651a..8b95ed11 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -23,28 +23,28 @@ platform :ios do
+ 
+   desc "Push a new beta build to TestFlight"
+   lane :deploy do
+-
+-    # get project name
+-    proj = Dir.glob("../ios/*.xcworkspace")[0][7..-13]
+-
+-    app_store_connect_api_key(key_filepath: "ios/apollos.p8")
++    app_store_connect_api_key(
++      key_id: "LV9F3XX57B",
++      issuer_id: "7943c4a3-c0cf-442e-93bd-b3c289bddec3",
++      key_filepath: "ios/apollos.p8",
++    )
+     setup_ci
+     match(type: 'appstore', readonly: true)
+-    increment_build_number(build_number: number_of_commits, xcodeproj: "ios/" << proj << ".xcodeproj")
+-    build_app(workspace: "ios/" << proj << ".xcworkspace", scheme: proj)
+-    changelog_from_git_commits
+-    testflight
++    increment_build_number(build_number: number_of_commits, xcodeproj: "ios/apolloschurchapp.xcodeproj")
++    build_app(workspace: "ios/apolloschurchapp.xcworkspace", scheme: "apolloschurchappprod")
++    upload_to_testflight
+   end
+ end
+ 
+ platform :android do
+ 
++  # necessary because setting gradle properties doesn't seem to be working
+   desc "Bumps Android versionCode"
+   lane :bump_version_code do
+     path = '../android/app/build.gradle'
+     re = /versionCode\s+(\d+)/
+ 
+-    s = File.read("../android/app/build.gradle")
++    s = File.read(path)
+     versionCode = number_of_commits
+     s[re, 1] = (versionCode).to_s
+ 
+@@ -58,7 +58,6 @@ platform :android do
+     bump_version_code
+     gradle(task: 'clean', project_dir: 'android')
+     gradle(task: 'bundle', build_type: 'Release', project_dir: 'android')
+-    changelog_from_git_commits
+-    upload_to_play_store(track: "internal", skip_upload_apk: true, json_key_file: "android/key.json")
++    upload_to_play_store(track: "internal", skip_upload_apk: true)
+   end
+ end
+diff --git a/apolloschurchapp/fastlane/Matchfile b/apolloschurchapp/fastlane/Matchfile
+new file mode 100644
+index 00000000..d01001cc
+--- /dev/null
++++ b/apolloschurchapp/fastlane/Matchfile
+@@ -0,0 +1,2 @@
++git_url("https://github.com/ApollosProject/certificates")
++app_identifier("com.differential.apollos")
+diff --git a/apolloschurchapp/ios/Podfile b/apolloschurchapp/ios/Podfile
+index 40454274..26b192b8 100644
+--- a/apolloschurchapp/ios/Podfile
++++ b/apolloschurchapp/ios/Podfile
+@@ -11,6 +11,7 @@ target 'apolloschurchapp' do
+ 
+   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
+   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications.podspec"
++  # pod 'react-native-google-cast/NoBluetooth', path: '../node_modules/react-native-google-cast/ios/'
+ 
+   target 'apolloschurchappTests' do
+     inherit! :complete
+@@ -21,7 +22,7 @@ target 'apolloschurchapp' do
+   #
+   # Note that if you have use_frameworks! enabled, Flipper will not work and
+   # you should disable these next few lines.
+-  use_flipper!('Flipper' => '0.75.1', 'Flipper-Folly' => '2.5.3', 'Flipper-RSocket' => '1.3.1')
++  use_flipper!
+   post_install do |installer|
+     flipper_post_install(installer)
+       installer.pods_project.targets.each do |target|
+@@ -35,7 +36,7 @@ target 'apolloschurchapp' do
+          target.build_phases << phase
+          target.build_phases.move(phase,0)
+        end
+-      end
++      end    
+   end
+ end
+ 
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 30739b2b..c00880d2 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -4,6 +4,7 @@ PODS:
+   - BVLinearGradient (2.5.6):
+     - React
+   - CocoaAsyncSocket (7.6.5)
++  - CocoaLibEvent (1.0.0)
+   - DoubleConversion (1.1.6)
+   - FBLazyVector (0.63.4)
+   - FBReactNativeSpec (0.63.4):
+@@ -13,50 +14,50 @@ PODS:
+     - React-Core (= 0.63.4)
+     - React-jsi (= 0.63.4)
+     - ReactCommon/turbomodule/core (= 0.63.4)
+-  - Flipper (0.75.1):
+-    - Flipper-Folly (~> 2.5)
+-    - Flipper-RSocket (~> 1.3)
++  - Flipper (0.54.0):
++    - Flipper-Folly (~> 2.2)
++    - Flipper-RSocket (~> 1.1)
+   - Flipper-DoubleConversion (1.1.7)
+-  - Flipper-Folly (2.5.3):
++  - Flipper-Folly (2.3.0):
+     - boost-for-react-native
++    - CocoaLibEvent (~> 1.0)
+     - Flipper-DoubleConversion
+     - Flipper-Glog
+-    - libevent (~> 2.1.12)
+-    - OpenSSL-Universal (= 1.1.180)
++    - OpenSSL-Universal (= 1.0.2.20)
+   - Flipper-Glog (0.3.6)
+   - Flipper-PeerTalk (0.0.4)
+-  - Flipper-RSocket (1.3.1):
+-    - Flipper-Folly (~> 2.5)
+-  - FlipperKit (0.75.1):
+-    - FlipperKit/Core (= 0.75.1)
+-  - FlipperKit/Core (0.75.1):
+-    - Flipper (~> 0.75.1)
++  - Flipper-RSocket (1.1.0):
++    - Flipper-Folly (~> 2.2)
++  - FlipperKit (0.54.0):
++    - FlipperKit/Core (= 0.54.0)
++  - FlipperKit/Core (0.54.0):
++    - Flipper (~> 0.54.0)
+     - FlipperKit/CppBridge
+     - FlipperKit/FBCxxFollyDynamicConvert
+     - FlipperKit/FBDefines
+     - FlipperKit/FKPortForwarding
+-  - FlipperKit/CppBridge (0.75.1):
+-    - Flipper (~> 0.75.1)
+-  - FlipperKit/FBCxxFollyDynamicConvert (0.75.1):
+-    - Flipper-Folly (~> 2.5)
+-  - FlipperKit/FBDefines (0.75.1)
+-  - FlipperKit/FKPortForwarding (0.75.1):
++  - FlipperKit/CppBridge (0.54.0):
++    - Flipper (~> 0.54.0)
++  - FlipperKit/FBCxxFollyDynamicConvert (0.54.0):
++    - Flipper-Folly (~> 2.2)
++  - FlipperKit/FBDefines (0.54.0)
++  - FlipperKit/FKPortForwarding (0.54.0):
+     - CocoaAsyncSocket (~> 7.6)
+     - Flipper-PeerTalk (~> 0.0.4)
+-  - FlipperKit/FlipperKitHighlightOverlay (0.75.1)
+-  - FlipperKit/FlipperKitLayoutPlugin (0.75.1):
++  - FlipperKit/FlipperKitHighlightOverlay (0.54.0)
++  - FlipperKit/FlipperKitLayoutPlugin (0.54.0):
+     - FlipperKit/Core
+     - FlipperKit/FlipperKitHighlightOverlay
+     - FlipperKit/FlipperKitLayoutTextSearchable
+     - YogaKit (~> 1.18)
+-  - FlipperKit/FlipperKitLayoutTextSearchable (0.75.1)
+-  - FlipperKit/FlipperKitNetworkPlugin (0.75.1):
++  - FlipperKit/FlipperKitLayoutTextSearchable (0.54.0)
++  - FlipperKit/FlipperKitNetworkPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/FlipperKitReactPlugin (0.75.1):
++  - FlipperKit/FlipperKitReactPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/FlipperKitUserDefaultsPlugin (0.75.1):
++  - FlipperKit/FlipperKitUserDefaultsPlugin (0.54.0):
+     - FlipperKit/Core
+-  - FlipperKit/SKIOSNetworkPlugin (0.75.1):
++  - FlipperKit/SKIOSNetworkPlugin (0.54.0):
+     - FlipperKit/Core
+     - FlipperKit/FlipperKitNetworkPlugin
+   - Folly (2020.01.13.00):
+@@ -69,9 +70,13 @@ PODS:
+     - DoubleConversion
+     - glog
+   - glog (0.3.5)
+-  - libevent (2.1.12)
++  - google-cast-sdk (4.3.0):
++    - google-cast-sdk/Core (= 4.3.0)
++  - google-cast-sdk/Core (4.3.0)
+   - OneSignal (2.15.2)
+-  - OpenSSL-Universal (1.1.180)
++  - OpenSSL-Universal (1.0.2.20):
++    - OpenSSL-Universal/Static (= 1.0.2.20)
++  - OpenSSL-Universal/Static (1.0.2.20)
+   - Permission-Notifications (2.2.2):
+     - RNPermissions
+   - Permission-PhotoLibrary (2.2.2):
+@@ -242,7 +247,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.14.0):
++  - react-native-apollos-player (2.3.1):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -250,6 +255,15 @@ PODS:
+     - React
+   - react-native-geolocation-service (5.1.1):
+     - React
++  - react-native-google-cast (3.3.0):
++    - React
++    - react-native-google-cast/Default (= 3.3.0)
++  - react-native-google-cast/Default (3.3.0):
++    - google-cast-sdk (<= 4.3.0)
++    - React
++    - react-native-google-cast/RNGoogleCast
++  - react-native-google-cast/RNGoogleCast (3.3.0):
++    - React
+   - react-native-image-picker (3.1.4):
+     - React-Core
+   - react-native-maps (0.27.1):
+@@ -272,8 +286,8 @@ PODS:
+     - react-native-video/Video (= 5.0.2)
+   - react-native-video/Video (5.0.2):
+     - React
+-  - react-native-webview (11.4.1):
+-    - React-Core
++  - react-native-webview (7.6.0):
++    - React
+   - React-RCTActionSheet (0.63.4):
+     - React-Core/RCTActionSheetHeaders (= 0.63.4)
+   - React-RCTAnimation (0.63.4):
+@@ -351,43 +365,16 @@ PODS:
+     - React-Core
+   - RNDeviceInfo (4.0.1):
+     - React
+-  - RNGestureHandler (1.10.3):
+-    - React-Core
++  - RNGestureHandler (1.6.1):
++    - React
+   - RNInAppBrowser (3.5.1):
+     - React-Core
+   - RNPermissions (2.2.2):
+     - React-Core
+-  - RNReanimated (2.0.0):
+-    - DoubleConversion
+-    - FBLazyVector
+-    - FBReactNativeSpec
+-    - Folly
+-    - glog
+-    - RCTRequired
+-    - RCTTypeSafety
++  - RNReanimated (1.9.0):
++    - React
++  - RNScreens (2.9.0):
+     - React
+-    - React-callinvoker
+-    - React-Core
+-    - React-Core/DevSupport
+-    - React-Core/RCTWebSocket
+-    - React-CoreModules
+-    - React-cxxreact
+-    - React-jsi
+-    - React-jsiexecutor
+-    - React-jsinspector
+-    - React-RCTActionSheet
+-    - React-RCTAnimation
+-    - React-RCTBlob
+-    - React-RCTImage
+-    - React-RCTLinking
+-    - React-RCTNetwork
+-    - React-RCTSettings
+-    - React-RCTText
+-    - React-RCTVibration
+-    - ReactCommon/turbomodule/core
+-    - Yoga
+-  - RNScreens (3.2.0):
+-    - React-Core
+   - RNSVG (9.13.6):
+     - React
+   - Yoga (1.14.0)
+@@ -399,25 +386,25 @@ DEPENDENCIES:
+   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
+   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+-  - Flipper (= 0.75.1)
++  - Flipper (~> 0.54.0)
+   - Flipper-DoubleConversion (= 1.1.7)
+-  - Flipper-Folly (= 2.5.3)
++  - Flipper-Folly (~> 2.2)
+   - Flipper-Glog (= 0.3.6)
+   - Flipper-PeerTalk (~> 0.0.4)
+-  - Flipper-RSocket (= 1.3.1)
+-  - FlipperKit (= 0.75.1)
+-  - FlipperKit/Core (= 0.75.1)
+-  - FlipperKit/CppBridge (= 0.75.1)
+-  - FlipperKit/FBCxxFollyDynamicConvert (= 0.75.1)
+-  - FlipperKit/FBDefines (= 0.75.1)
+-  - FlipperKit/FKPortForwarding (= 0.75.1)
+-  - FlipperKit/FlipperKitHighlightOverlay (= 0.75.1)
+-  - FlipperKit/FlipperKitLayoutPlugin (= 0.75.1)
+-  - FlipperKit/FlipperKitLayoutTextSearchable (= 0.75.1)
+-  - FlipperKit/FlipperKitNetworkPlugin (= 0.75.1)
+-  - FlipperKit/FlipperKitReactPlugin (= 0.75.1)
+-  - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.75.1)
+-  - FlipperKit/SKIOSNetworkPlugin (= 0.75.1)
++  - Flipper-RSocket (~> 1.1)
++  - FlipperKit (~> 0.54.0)
++  - FlipperKit/Core (~> 0.54.0)
++  - FlipperKit/CppBridge (~> 0.54.0)
++  - FlipperKit/FBCxxFollyDynamicConvert (~> 0.54.0)
++  - FlipperKit/FBDefines (~> 0.54.0)
++  - FlipperKit/FKPortForwarding (~> 0.54.0)
++  - FlipperKit/FlipperKitHighlightOverlay (~> 0.54.0)
++  - FlipperKit/FlipperKitLayoutPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitLayoutTextSearchable (~> 0.54.0)
++  - FlipperKit/FlipperKitNetworkPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitReactPlugin (~> 0.54.0)
++  - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.54.0)
++  - FlipperKit/SKIOSNetworkPlugin (~> 0.54.0)
+   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+   - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
+@@ -438,6 +425,7 @@ DEPENDENCIES:
+   - react-native-config (from `../node_modules/react-native-config`)
+   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
++  - react-native-google-cast (from `../node_modules/react-native-google-cast/ios`)
+   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+   - react-native-maps (from `../node_modules/react-native-maps`)
+   - react-native-music-control (from `../node_modules/react-native-music-control`)
+@@ -479,6 +467,7 @@ SPEC REPOS:
+     - AstronomerAnalytics
+     - boost-for-react-native
+     - CocoaAsyncSocket
++    - CocoaLibEvent
+     - Flipper
+     - Flipper-DoubleConversion
+     - Flipper-Folly
+@@ -486,7 +475,7 @@ SPEC REPOS:
+     - Flipper-PeerTalk
+     - Flipper-RSocket
+     - FlipperKit
+-    - libevent
++    - google-cast-sdk
+     - OneSignal
+     - OpenSSL-Universal
+     - YogaKit
+@@ -536,6 +525,8 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/@react-native-community/geolocation"
+   react-native-geolocation-service:
+     :path: "../node_modules/react-native-geolocation-service"
++  react-native-google-cast:
++    :path: "../node_modules/react-native-google-cast/ios"
+   react-native-image-picker:
+     :path: "../node_modules/react-native-image-picker"
+   react-native-maps:
+@@ -612,21 +603,22 @@ SPEC CHECKSUMS:
+   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
+   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
++  CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
+   DoubleConversion: cde416483dac037923206447da6e1454df403714
+   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
+   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
+-  Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
++  Flipper: be611d4b742d8c87fbae2ca5f44603a02539e365
+   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
+-  Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
++  Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
+   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
+   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
+-  Flipper-RSocket: 127954abe8b162fcaf68d2134d34dc2bd7076154
+-  FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
++  Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
++  FlipperKit: ab353d41aea8aae2ea6daaf813e67496642f3d7d
+   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
+   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
+-  libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
++  google-cast-sdk: 57cd67b4a0966802b2738fcbbc103125c98cc8a1
+   OneSignal: 9531e385388565f4d31797ddadbe0fcc786430ec
+-  OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
++  OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
+   Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
+   Permission-PhotoLibrary: 8227a6ed9f6a971537afe63742d54f5f23a38fe2
+   RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
+@@ -639,10 +631,11 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 74f9763544b42cf4a3208d3f546a562be7566004
++  react-native-apollos-player: 2baeeec9a5ac6b8ea50c46be3221b24e2907dc80
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
++  react-native-google-cast: 410619ef162b8b91815ecf7271502224998dee8e
+   react-native-image-picker: 28d8d1f5a643119876b8b2c7d4d1dcfb2b232dd4
+   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+   react-native-music-control: dcfe5b61e56a15898c4618579cb8ce612c9d21a8
+@@ -652,7 +645,7 @@ SPEC CHECKSUMS:
+   react-native-safe-area-context: ef6f16c66b0797ecae1bf86c103dfb3dc16fc33d
+   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+   react-native-video: d01ed7ff1e38fa7dcc6c15c94cf505e661b7bfd0
+-  react-native-webview: 4024b67e9c91810450a5960dff60ae708fd5acd1
++  react-native-webview: db4682f1698ab4b17a5e88f951031d203ff8aea8
+   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
+   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
+   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
+@@ -671,15 +664,15 @@ SPEC CHECKSUMS:
+   RNCPicker: 2c31098349f499e7ab4da6c1ce26f7537d271062
+   RNDateTimePicker: 3d1931e387248cb8f1d1d33740d4a1a82dfe622a
+   RNDeviceInfo: 687c1b2ab6d86ff1ca1208783320cd144138c7f2
+-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
++  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+   RNInAppBrowser: 48b95ba7a4eaff5cc223bca338d3e319561dbd1b
+   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+-  RNReanimated: 5231286440b796e09df3bfa5c1b12b02bfe07664
+-  RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
++  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
++  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
+   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
+   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+ 
+-PODFILE CHECKSUM: 6de27767413bc4f48feeecbc37bbce2b733bfe20
++PODFILE CHECKSUM: ff0b6ccfe0571b896a44f129ac11790a8b809329
+ 
+-COCOAPODS: 1.10.1
++COCOAPODS: 1.8.4
+diff --git a/apolloschurchapp/ios/apollos.p8.enc b/apolloschurchapp/ios/apollos.p8.enc
+index 6e961fce2051515987d83cdf79ac0f1a9c2ecbaf..1770af9b501caeb22e611bb865209586d6b9bf3e 100644
+GIT binary patch
+literal 288
+zcmV+*0pI>pVQh3|WM5yjEET~l;Wvl94TCB^>_}xMtxWvMQO(&vMAXk~Y-23p4x~u@
+zHgoO~vSpla6%)B=eb<|YDq;a;m2&C@gnt5QU~B@@B~c_{s*ZB-<wB&Z(bxgZ^$9qB
+z=Nbz1E?K*z=YPJZp~J{R%suq|SU8+^_{RzW;P*awqyOFHjvd$=i3J=Io_i6VodpOS
+z8Q#Var29Nb1A$l^o!4_}e=jJ39Pss9Mmor2g>+EP8N)@tYk_)w{xqR1d}Fj?OBGBI
+z=Xp{7ygsVoS6hM=8iCrZ|6@FdWb**vwlTPuS!U3^8cfzM$RQM7NDHW|)1Qt>MB9`y
+mk)bMH8k5~*|ITGDKdtFfZPnifx_A9HJyWQ=O6gmR$V=2VVT&99
+
+literal 288
+zcmV+*0pI>pVQh3|WM5yaDW=n?N$sy5`<MP+-NK9QU-`3ZFqwvBct~oLvP0B0GVA2W
+z%xwyws*h@PdtDH_5Ea~bM~Ou`8a(*2L%`*>hm(a+qFHYlJfXm*1m1;HVU?|+@OPK@
+zV(<lUyvDc8kedc<fjHQ}Ob3y<yHzMFexsC!6%Tii+@d&bW>o-1Tw77z<JEeFp(FYt
+zNWQ~t`~7%4jQ6-_{@kGspiEM;$jRHVs@x0{tcqmgn;>q@i2D9Jrn>M3VG+?%p3USa
+z&TIk$OrX05wTNd$&7H)}e4@VEvzUNu-ATBPRj}_aEAZG~XE0V{cpfd5#j1(Ted&^-
+mL0eaFWLOppIc{WyQe$Bz@}n|1nmgr6d78O7uz3^4Rkt!@os)V1
+
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 0ffd1038..00180682 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -14,7 +14,7 @@
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		1C48DCDE11AC47C48E918489 /* Inter-UI-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DC74A378C1CC40E4B6192D7F /* Inter-UI-Medium.otf */; };
+-		2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
++		2AE17F608689DAE577F28E4D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+ 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+@@ -115,7 +115,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */,
++				2AE17F608689DAE577F28E4D /* (null) in Frameworks */,
+ 				EF3A30A2E55D4F8352E116D3 /* libPods-apolloschurchapp-apolloschurchappTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -290,8 +290,8 @@
+ 				00E356EA1AD99517003FC87E /* Sources */,
+ 				00E356EB1AD99517003FC87E /* Frameworks */,
+ 				00E356EC1AD99517003FC87E /* Resources */,
++				C7A5ADB714711CE3B4CC0EAA /* [CP] Embed Pods Frameworks */,
+ 				892ED59C47CEB9B13B75EC71 /* [CP] Copy Pods Resources */,
+-				3E2635F41ADA8FBB628BB92D /* [CP] Embed Pods Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
+@@ -313,7 +313,7 @@
+ 				13B07F8E1A680F5B00A75B9A /* Resources */,
+ 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+ 				43D579D8398224D7B09F58F6 /* [CP] Copy Pods Resources */,
+-				84E19E444A56C704431362B6 /* [CP] Embed Pods Frameworks */,
++				3C01FFABD3A7274D34564996 /* [CP] Embed Pods Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
+@@ -514,22 +514,22 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		3E2635F41ADA8FBB628BB92D /* [CP] Embed Pods Frameworks */ = {
++		3C01FFABD3A7274D34564996 /* [CP] Embed Pods Frameworks */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 			);
+ 			inputPaths = (
+-				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh",
+-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
++				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh",
++				"${PODS_ROOT}/google-cast-sdk/GoogleCastSDK-ios-4.3.0/GoogleCast.framework",
+ 			);
+ 			name = "[CP] Embed Pods Frameworks";
+ 			outputPaths = (
+-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
++				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleCast.framework",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh\"\n";
++			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+ 		43D579D8398224D7B09F58F6 /* [CP] Copy Pods Resources */ = {
+@@ -550,24 +550,6 @@
+ 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-resources.sh\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		84E19E444A56C704431362B6 /* [CP] Embed Pods Frameworks */ = {
+-			isa = PBXShellScriptBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			inputPaths = (
+-				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh",
+-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+-			);
+-			name = "[CP] Embed Pods Frameworks";
+-			outputPaths = (
+-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-			shellPath = /bin/sh;
+-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh\"\n";
+-			showEnvVarsInLog = 0;
+-		};
+ 		892ED59C47CEB9B13B75EC71 /* [CP] Copy Pods Resources */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+@@ -630,6 +612,24 @@
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
++		C7A5ADB714711CE3B4CC0EAA /* [CP] Embed Pods Frameworks */ = {
++			isa = PBXShellScriptBuildPhase;
++			buildActionMask = 2147483647;
++			files = (
++			);
++			inputPaths = (
++				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh",
++				"${PODS_ROOT}/google-cast-sdk/GoogleCastSDK-ios-4.3.0/GoogleCast.framework",
++			);
++			name = "[CP] Embed Pods Frameworks";
++			outputPaths = (
++				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleCast.framework",
++			);
++			runOnlyForDeploymentPostprocessing = 0;
++			shellPath = /bin/sh;
++			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh\"\n";
++			showEnvVarsInLog = 0;
++		};
+ 		DEEF24CE4F76789E5E8C369D /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+@@ -767,7 +767,7 @@
+ 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+ 				CLANG_ENABLE_MODULES = YES;
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+-				CODE_SIGN_IDENTITY = "iPhone Developer";
++				CODE_SIGN_IDENTITY = "Apple Development: Apollos Apps (58685TNK9H)";
+ 				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 507;
+ 				DEAD_CODE_STRIPPING = YES;
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchapp-tvOS.xcscheme b/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchapp-tvOS.xcscheme
+deleted file mode 100644
+index a24d4f12..00000000
+--- a/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchapp-tvOS.xcscheme
++++ /dev/null
+@@ -1,88 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<Scheme
+-   LastUpgradeVersion = "1250"
+-   version = "1.3">
+-   <BuildAction
+-      parallelizeBuildables = "YES"
+-      buildImplicitDependencies = "YES">
+-      <BuildActionEntries>
+-         <BuildActionEntry
+-            buildForTesting = "YES"
+-            buildForRunning = "YES"
+-            buildForProfiling = "YES"
+-            buildForArchiving = "YES"
+-            buildForAnalyzing = "YES">
+-            <BuildableReference
+-               BuildableIdentifier = "primary"
+-               BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+-               BuildableName = "apolloschurchapp-tvOS.app"
+-               BlueprintName = "apolloschurchapp-tvOS"
+-               ReferencedContainer = "container:apolloschurchapp.xcodeproj">
+-            </BuildableReference>
+-         </BuildActionEntry>
+-      </BuildActionEntries>
+-   </BuildAction>
+-   <TestAction
+-      buildConfiguration = "Debug"
+-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+-      shouldUseLaunchSchemeArgsEnv = "YES">
+-      <Testables>
+-         <TestableReference
+-            skipped = "NO">
+-            <BuildableReference
+-               BuildableIdentifier = "primary"
+-               BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
+-               BuildableName = "apolloschurchapp-tvOSTests.xctest"
+-               BlueprintName = "apolloschurchapp-tvOSTests"
+-               ReferencedContainer = "container:apolloschurchapp.xcodeproj">
+-            </BuildableReference>
+-         </TestableReference>
+-      </Testables>
+-   </TestAction>
+-   <LaunchAction
+-      buildConfiguration = "Debug"
+-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+-      launchStyle = "0"
+-      useCustomWorkingDirectory = "NO"
+-      ignoresPersistentStateOnLaunch = "NO"
+-      debugDocumentVersioning = "YES"
+-      debugServiceExtension = "internal"
+-      allowLocationSimulation = "YES">
+-      <BuildableProductRunnable
+-         runnableDebuggingMode = "0">
+-         <BuildableReference
+-            BuildableIdentifier = "primary"
+-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+-            BuildableName = "apolloschurchapp-tvOS.app"
+-            BlueprintName = "apolloschurchapp-tvOS"
+-            ReferencedContainer = "container:apolloschurchapp.xcodeproj">
+-         </BuildableReference>
+-      </BuildableProductRunnable>
+-   </LaunchAction>
+-   <ProfileAction
+-      buildConfiguration = "Release"
+-      shouldUseLaunchSchemeArgsEnv = "YES"
+-      savedToolIdentifier = ""
+-      useCustomWorkingDirectory = "NO"
+-      debugDocumentVersioning = "YES">
+-      <BuildableProductRunnable
+-         runnableDebuggingMode = "0">
+-         <BuildableReference
+-            BuildableIdentifier = "primary"
+-            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+-            BuildableName = "apolloschurchapp-tvOS.app"
+-            BlueprintName = "apolloschurchapp-tvOS"
+-            ReferencedContainer = "container:apolloschurchapp.xcodeproj">
+-         </BuildableReference>
+-      </BuildableProductRunnable>
+-   </ProfileAction>
+-   <AnalyzeAction
+-      buildConfiguration = "Debug">
+-   </AnalyzeAction>
+-   <ArchiveAction
+-      buildConfiguration = "Release"
+-      revealArchiveInOrganizer = "YES">
+-   </ArchiveAction>
+-</Scheme>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchappprod.xcscheme b/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchappprod.xcscheme
+new file mode 100644
+index 00000000..572c21d6
+--- /dev/null
++++ b/apolloschurchapp/ios/apolloschurchapp.xcworkspace/xcshareddata/xcschemes/apolloschurchappprod.xcscheme
+@@ -0,0 +1,134 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Scheme
++   LastUpgradeVersion = "1170"
++   version = "1.3">
++   <BuildAction
++      parallelizeBuildables = "NO"
++      buildImplicitDependencies = "YES">
++      <PreActions>
++         <ExecutionAction
++            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
++            <ActionContent
++               title = "Run Script"
++               scriptText = "echo &quot;.env.production&quot; &gt; /tmp/envfile&#10;">
++            </ActionContent>
++         </ExecutionAction>
++      </PreActions>
++      <BuildActionEntries>
++         <BuildActionEntry
++            buildForTesting = "YES"
++            buildForRunning = "YES"
++            buildForProfiling = "YES"
++            buildForArchiving = "YES"
++            buildForAnalyzing = "YES">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "83CBBA2D1A601D0E00E9B192"
++               BuildableName = "libReact.a"
++               BlueprintName = "React"
++               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
++            </BuildableReference>
++         </BuildActionEntry>
++         <BuildActionEntry
++            buildForTesting = "YES"
++            buildForRunning = "YES"
++            buildForProfiling = "YES"
++            buildForArchiving = "YES"
++            buildForAnalyzing = "YES">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
++               BuildableName = "apolloschurchapp.app"
++               BlueprintName = "apolloschurchapp"
++               ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++            </BuildableReference>
++         </BuildActionEntry>
++         <BuildActionEntry
++            buildForTesting = "YES"
++            buildForRunning = "YES"
++            buildForProfiling = "NO"
++            buildForArchiving = "NO"
++            buildForAnalyzing = "YES">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
++               BuildableName = "apolloschurchappTests.xctest"
++               BlueprintName = "apolloschurchappTests"
++               ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++            </BuildableReference>
++         </BuildActionEntry>
++      </BuildActionEntries>
++   </BuildAction>
++   <TestAction
++      buildConfiguration = "Debug"
++      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
++      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
++      shouldUseLaunchSchemeArgsEnv = "YES">
++      <MacroExpansion>
++         <BuildableReference
++            BuildableIdentifier = "primary"
++            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
++            BuildableName = "apolloschurchapp.app"
++            BlueprintName = "apolloschurchapp"
++            ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++         </BuildableReference>
++      </MacroExpansion>
++      <Testables>
++         <TestableReference
++            skipped = "NO">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
++               BuildableName = "apolloschurchappTests.xctest"
++               BlueprintName = "apolloschurchappTests"
++               ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++            </BuildableReference>
++         </TestableReference>
++      </Testables>
++   </TestAction>
++   <LaunchAction
++      buildConfiguration = "Release"
++      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
++      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
++      launchStyle = "0"
++      useCustomWorkingDirectory = "NO"
++      ignoresPersistentStateOnLaunch = "NO"
++      debugDocumentVersioning = "YES"
++      debugServiceExtension = "internal"
++      allowLocationSimulation = "YES">
++      <BuildableProductRunnable
++         runnableDebuggingMode = "0">
++         <BuildableReference
++            BuildableIdentifier = "primary"
++            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
++            BuildableName = "apolloschurchapp.app"
++            BlueprintName = "apolloschurchapp"
++            ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++         </BuildableReference>
++      </BuildableProductRunnable>
++   </LaunchAction>
++   <ProfileAction
++      buildConfiguration = "Release"
++      shouldUseLaunchSchemeArgsEnv = "YES"
++      savedToolIdentifier = ""
++      useCustomWorkingDirectory = "NO"
++      debugDocumentVersioning = "YES">
++      <BuildableProductRunnable
++         runnableDebuggingMode = "0">
++         <BuildableReference
++            BuildableIdentifier = "primary"
++            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
++            BuildableName = "apolloschurchapp.app"
++            BlueprintName = "apolloschurchapp"
++            ReferencedContainer = "container:apolloschurchapp.xcodeproj">
++         </BuildableReference>
++      </BuildableProductRunnable>
++   </ProfileAction>
++   <AnalyzeAction
++      buildConfiguration = "Debug">
++   </AnalyzeAction>
++   <ArchiveAction
++      buildConfiguration = "Release"
++      revealArchiveInOrganizer = "YES">
++   </ArchiveAction>
++</Scheme>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m b/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
+index 9267aa24..f246ea29 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
++++ b/apolloschurchapp/ios/apolloschurchapp/AppDelegate.m
+@@ -12,6 +12,7 @@
+ #import <React/RCTBundleURLProvider.h>
+ #import <React/RCTRootView.h>
+ #import <React/RCTLinkingManager.h>
++#import <GoogleCast/GoogleCast.h>
+ #import "RNSplashScreen.h"
+ 
+ #ifdef FB_SONARKIT_ENABLED
+@@ -63,6 +64,12 @@ static void InitializeFlipper(UIApplication *application) {
+                                                    moduleName:@"apolloschurchapp"
+                                             initialProperties:nil];
+ 
++  // Initialize Google Cast
++  GCKDiscoveryCriteria *criteria = [[GCKDiscoveryCriteria alloc] initWithApplicationID:kGCKDefaultMediaReceiverApplicationID];
++  GCKCastOptions* options = [[GCKCastOptions alloc] initWithDiscoveryCriteria:criteria];
++  options.physicalVolumeButtonsWillControlDeviceVolume = YES;
++  [GCKCastContext setSharedInstanceWithOptions:options];
++
+   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+ 
+   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 41c62da6..c0b7f9ee 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -29,10 +29,6 @@
+ 			</array>
+ 		</dict>
+ 	</array>
+-	<key>LSApplicationQueriesSchemes</key>
+-	<array>
+-		<string>mailto</string>
+-	</array>
+ 	<key>CFBundleVersion</key>
+ 	<string>0</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+@@ -57,12 +53,18 @@
+ 			</dict>
+ 		</dict>
+ 	</dict>
++	<key>NSBluetoothAlwaysUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like access to bluetooth (for playing audio)</string>
++	<key>NSBluetoothPeripheralUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like access to bluetooth (for playing audio)</string>
+ 	<key>NSLocationAlwaysUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to use your location for determining your closest campus</string>
++	<key>NSMicrophoneUsageDescription</key>
++	<string>$(PRODUCT_NAME) would like to access your microphone (for videos)</string>
+ 	<key>NSPhotoLibraryUsageDescription</key>
+ 	<string>$(PRODUCT_NAME) would like to access your photos</string>
+ 	<key>UIAppFonts</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+index 676be42e..6c79704c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
++++ b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+@@ -4,6 +4,8 @@
+ <dict>
+ 	<key>aps-environment</key>
+ 	<string>development</string>
++	<key>com.apple.developer.networking.wifi-info</key>
++	<true/>
+ 	<key>com.apple.developer.associated-domains</key>
+ 	<array>
+ 		<string>applink:$(APP_DATA_URL)</string>
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+index e824de8a..c6e802cd 100644
+--- a/apolloschurchapp/jest.setup.js
++++ b/apolloschurchapp/jest.setup.js
+@@ -24,22 +24,3 @@ Animated.spring = (value, config) => ({
+ });
+ 
+ jest.mock('./src/client/index');
+-
+-jest.mock('react-native-reanimated', () => {
+-  const Reanimated = require('react-native-reanimated/mock');
+-
+-  const Easing = {
+-    exp: jest.fn(),
+-    out: jest.fn(),
+-  };
+-
+-  // The mock for `call` immediately calls the callback which is incorrect
+-  // So we override it with a no-op
+-  Reanimated.default.call = () => {};
+-  Reanimated.Easing = Easing;
+-  Reanimated.EasingNode = Easing;
+-
+-  return Reanimated;
+-});
+-
+-global.__reanimatedWorkletInit = jest.fn();
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 1d5d1c85..fafb004d 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -46,34 +46,34 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.14.0",
++    "@apollosproject/config": "^2.4.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.14.0",
+-    "@apollosproject/ui-auth": "^2.14.0",
+-    "@apollosproject/ui-connected": "^2.14.0",
+-    "@apollosproject/ui-fragments": "^2.14.0",
+-    "@apollosproject/ui-htmlview": "^2.14.0",
+-    "@apollosproject/ui-kit": "^2.14.0",
+-    "@apollosproject/ui-mapview": "^2.14.0",
+-    "@apollosproject/ui-media-player": "^2.14.0",
+-    "@apollosproject/ui-notifications": "^2.14.0",
+-    "@apollosproject/ui-onboarding": "^2.14.0",
+-    "@apollosproject/ui-passes": "^2.14.0",
+-    "@apollosproject/ui-prayer": "^2.14.0",
+-    "@apollosproject/ui-scripture": "^2.14.0",
+-    "@apollosproject/ui-storybook": "^2.14.0",
+-    "@apollosproject/ui-test-utils": "^2.14.0",
+-    "@gorhom/bottom-sheet": "3.4.1",
++    "@apollosproject/ui-analytics": "^2.4.0",
++    "@apollosproject/ui-auth": "^2.4.0",
++    "@apollosproject/ui-connected": "^2.4.0",
++    "@apollosproject/ui-fragments": "^2.4.0",
++    "@apollosproject/ui-htmlview": "^2.4.0",
++    "@apollosproject/ui-kit": "^2.4.0",
++    "@apollosproject/ui-mapview": "^2.4.0",
++    "@apollosproject/ui-media-player": "^2.4.0",
++    "@apollosproject/ui-notifications": "^2.4.0",
++    "@apollosproject/ui-onboarding": "^2.4.0",
++    "@apollosproject/ui-passes": "^2.4.0",
++    "@apollosproject/ui-prayer": "^2.4.0",
++    "@apollosproject/ui-scripture": "^2.4.0",
++    "@apollosproject/ui-storybook": "^2.4.0",
++    "@apollosproject/ui-test-utils": "^2.4.0",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
+     "@react-native-community/geolocation": "^2.0.2",
+     "@react-native-community/masked-view": "^0.1.10",
+     "@react-native-picker/picker": "^1.9.4",
+-    "@react-navigation/bottom-tabs": "^5.11.8",
++    "@react-navigation/bottom-tabs": "^5.6.1",
+     "@react-navigation/compat": "^5.1.28",
+-    "@react-navigation/native": "^5.9.3",
+-    "@react-navigation/stack": "^5.14.3",
++    "@react-navigation/drawer": "^5.8.4",
++    "@react-navigation/native": "^5.6.1",
++    "@react-navigation/stack": "^5.6.2",
+     "apollo-storybook-react-native": "0.2.12",
+     "apollo-upload-client": "14.1.3",
+     "apollo3-cache-persist": "^0.8.0",
+@@ -95,7 +95,8 @@
+     "react-native-config": "^0.11.7",
+     "react-native-device-info": "^4.0.1",
+     "react-native-geolocation-service": "^5.1.1",
+-    "react-native-gesture-handler": "^1.10.3",
++    "react-native-gesture-handler": "^1.6.1",
++    "react-native-google-cast": "^3.3.0",
+     "react-native-image-picker": "^3.1.4",
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+@@ -105,22 +106,22 @@
+     "react-native-onesignal": "3.9.1",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-permissions": "^2.0.5",
+-    "react-native-reanimated": "^2.0.0",
++    "react-native-reanimated": "^1.9.0",
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-context": "^3.0.7",
+-    "react-native-screens": "3.2.0",
++    "react-native-screens": "^2.9.0",
+     "react-native-splash-screen": "^3.2.0",
+     "react-native-svg": "^9.4.0",
+     "react-native-video": "^5.0.0",
+     "react-native-video-controls": "2.2.3",
+-    "react-native-webview": "^11.0.0",
++    "react-native-webview": "^7.0.0",
+     "recompose": "^0.30.0",
+     "rn-fetch-blob": "^0.10.16",
+     "stream": "^0.0.2",
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.14.0",
++    "@apollosproject/eslint-config": "^2.4.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/scripts/init.sh b/apolloschurchapp/scripts/init.sh
+index 5a8c884a..6e73f7c9 100755
+--- a/apolloschurchapp/scripts/init.sh
++++ b/apolloschurchapp/scripts/init.sh
+@@ -3,34 +3,5 @@ if test -f .env; then
+ 	echo ".env file already exists!"
+ 	exit 1
+ fi
+-
+-echo "You will need the following before beginning:
+-Google Maps API Key
+-
+-Are you ready to proceed? [y/n]: "
+-read -r ANSWER
+-if $ANSWER != "y"; then
+-	exit 1
+-fi
+-
+-# config variables
+-echo "Google Maps API Key: "
+-read -r GOOGLE
+-
+ echo "APP_DATA_URL=http://localhost:4000
+-GOOGLE_MAPS_API_KEY=$GOOGLE" >.env
+-
+-# remove template encrypted files
+-rm .env.shared.enc
+-rm android/key.json.enc
+-rm android/app/apollos.keystore.enc
+-rm ios/apollos.p8.enc
+-
+-# app name
+-echo "App name: "
+-read -r APP
+-CLEAN_APP=$(echo "$APP" | tr -d '[:space:]')
+-npx react-native-rename "$CLEAN_APP"
+-
+-sed -i "" -E "s/Apollos Church/$APP/g" apolloschurchapp/ios/Info.plist
+-sed -i "" -E "s/Apollos Church/$APP/g" apolloschurchapp/android/app/src/main/res/values/strings.xml
++GOOGLE_MAPS_API_KEY=" >.env
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index bd1f2b26..16e263cd 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -4,12 +4,8 @@ import { Providers, NavigationService } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
+ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+-import {
+-  LiveProvider,
+-  ACCEPT_FOLLOW_REQUEST,
+-} from '@apollosproject/ui-connected';
++import { LiveProvider } from '@apollosproject/ui-connected';
+ import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+-import { ONBOARDING_VERSION } from './ui/Onboarding';
+ 
+ import ClientProvider, { client } from './client';
+ import customTheme, { customIcons } from './theme';
+@@ -17,28 +13,8 @@ import customTheme, { customIcons } from './theme';
+ const AppProviders = (props) => (
+   <ClientProvider {...props}>
+     <NotificationsProvider
+-      oneSignalKey={ApollosConfig.ONE_SIGNAL_KEY}
+-      // TODO deprecated prop
++      oneSignalKey={ApollosConfig.ONE_SIGNAL_APP_ID}
+       navigate={NavigationService.navigate}
+-      handleExternalLink={(url) => {
+-        const path = url.split('app-link/')[1];
+-        const [route, location] = path.split('/');
+-        if (route === 'content')
+-          NavigationService.navigate('ContentSingle', { itemId: location });
+-        if (route === 'nav')
+-          NavigationService.navigate(
+-            // turns "home" into "Home"
+-            location[0].toUpperCase() + location.substring(1)
+-          );
+-      }}
+-      actionMap={{
+-        // accept a follow request when someone taps "accept" in a follow request push notification
+-        acceptFollowRequest: ({ requestPersonId }) =>
+-          client.mutate({
+-            mutation: ACCEPT_FOLLOW_REQUEST,
+-            variables: { personId: requestPersonId },
+-          }),
+-      }}
+     >
+       <AuthProvider
+         navigateToAuth={() => NavigationService.navigate('Auth')}
+@@ -47,7 +23,6 @@ const AppProviders = (props) => (
+           checkOnboardingStatusAndNavigate({
+             client,
+             navigation: NavigationService,
+-            latestOnboardingVersion: ONBOARDING_VERSION,
+           })
+         }
+       >
+diff --git a/apolloschurchapp/src/content-single/index.js b/apolloschurchapp/src/content-single/index.js
+index b75aa4f7..a9a268a5 100644
+--- a/apolloschurchapp/src/content-single/index.js
++++ b/apolloschurchapp/src/content-single/index.js
+@@ -18,7 +18,6 @@ const ContentSingleNavigator = ({ route, navigation, ...props }) => (
+       headerRight: ModalCloseButton,
+       headerLeft: ModalBackButton,
+       headerTitle: '',
+-      headerTopInsetEnabled: false,
+     }}
+   >
+     <Screen
+diff --git a/apolloschurchapp/src/event/Event.tests.js b/apolloschurchapp/src/event/Event.tests.js
+index 5717420c..8164746c 100644
+--- a/apolloschurchapp/src/event/Event.tests.js
++++ b/apolloschurchapp/src/event/Event.tests.js
+@@ -1,13 +1,14 @@
+ import React from 'react';
++import renderer from 'react-test-renderer';
+ import moment from 'moment';
+ 
+-import { Providers, renderWithApolloData } from '@apollosproject/ui-test-utils';
++import { Providers } from '@apollosproject/ui-test-utils';
+ 
+ import Event from './Event';
+ 
+ describe('The Event component', () => {
+-  it('should render', async () => {
+-    const tree = await renderWithApolloData(
++  it('should render', () => {
++    const tree = renderer.create(
+       <Providers>
+         <Event
+           event={{
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 89028440..ac4a808a 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -17,10 +17,10 @@ import {
+ import Passes from '@apollosproject/ui-passes';
+ import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
+-import ApollosConfig from '@apollosproject/config';
+ 
+ import Providers from './Providers';
+ import ContentSingle from './content-single';
++import NodeSingle from './node-single';
+ import Event from './event';
+ import Tabs from './tabs';
+ import LandingScreen from './ui/LandingScreen';
+@@ -40,16 +40,8 @@ const ProtectedRouteWithSplashScreen = (props) => {
+   return <ProtectedRoute {...props} onRouteChange={handleOnRouteChange} />;
+ };
+ 
+-const { APP_DATA_URL } = ApollosConfig;
+-
+ // Hack to avoid needing to pass emailRequired through the navigator.navigate
+-const EnhancedAuth = (props) => (
+-  <Auth
+-    {...props}
+-    emailRequired
+-    forgotPasswordURL={`${APP_DATA_URL}/forgot-password`}
+-  />
+-);
++const EnhancedAuth = (props) => <Auth {...props} emailRequired />;
+ // 😑
+ hoistNonReactStatic(EnhancedAuth, Auth);
+ 
+@@ -87,10 +79,12 @@ const App = (props) => (
+           <Screen
+             name="ContentSingle"
+             component={ContentSingle}
+-            options={{
+-              title: 'Content',
+-              stackPresentation: 'push',
+-            }}
++            options={{ title: 'Content' }}
++          />
++          <Screen
++            name="NodeSingle"
++            component={NodeSingle}
++            options={{ title: 'Node' }}
+           />
+           <Screen name="Event" component={Event} options={{ title: 'Event' }} />
+           <Screen
+diff --git a/apolloschurchapp/src/node-single/NodeSingle.js b/apolloschurchapp/src/node-single/NodeSingle.js
+new file mode 100644
+index 00000000..230826bd
+--- /dev/null
++++ b/apolloschurchapp/src/node-single/NodeSingle.js
+@@ -0,0 +1,49 @@
++import React, { PureComponent } from 'react';
++import { get } from 'lodash';
++import PropTypes from 'prop-types';
++
++import { ThemeMixin } from '@apollosproject/ui-kit';
++
++import {
++  InteractWhenLoadedConnected,
++  NodeSingleConnected,
++} from '@apollosproject/ui-connected';
++
++import NavigationHeader from '../ui/NavigationHeader';
++
++class NodeSingle extends PureComponent {
++  static propTypes = {
++    route: PropTypes.shape({
++      params: PropTypes.shape({ nodeId: PropTypes.string }),
++    }),
++    navigation: PropTypes.shape({
++      push: PropTypes.func,
++    }),
++  };
++
++  get nodeId() {
++    return this.props.route?.params?.nodeId;
++  }
++
++  static navigationOptions = {
++    header: NavigationHeader,
++    headerTransparent: true,
++    headerMode: 'float',
++  };
++
++  render() {
++    return (
++      <ThemeMixin
++        mixin={{
++          type: get(this.props, 'theme.type'),
++          colors: get(this.props, 'theme.colors'),
++        }}
++      >
++        <InteractWhenLoadedConnected nodeId={this.nodeId} action={'COMPLETE'} />
++        <NodeSingleConnected nodeId={this.nodeId} />
++      </ThemeMixin>
++    );
++  }
++}
++
++export default NodeSingle;
+diff --git a/apolloschurchapp/src/node-single/index.js b/apolloschurchapp/src/node-single/index.js
+new file mode 100644
+index 00000000..e208efc0
+--- /dev/null
++++ b/apolloschurchapp/src/node-single/index.js
+@@ -0,0 +1,37 @@
++import React from 'react';
++import PropTypes from 'prop-types';
++import { createNativeStackNavigator } from 'react-native-screens/native-stack';
++
++import { ModalCloseButton, ModalBackButton } from '@apollosproject/ui-kit';
++import NodeSingle from './NodeSingle';
++
++const { Screen, Navigator } = createNativeStackNavigator();
++
++const NodeSingleNavigator = ({ route, navigation, ...props }) => (
++  <Navigator
++    {...props}
++    headerMode="float"
++    screenOptions={{
++      headerTranslucent: true,
++      headerStyle: { backgroundColor: 'transparent' },
++      headerHideShadow: true,
++      headerRight: ModalCloseButton,
++      headerLeft: ModalBackButton,
++      headerTitle: '',
++    }}
++  >
++    <Screen
++      name="NodeSingle"
++      component={NodeSingle}
++      initialParams={route.params}
++    />
++  </Navigator>
++);
++
++NodeSingleNavigator.propTypes = {
++  route: PropTypes.shape({
++    params: PropTypes.shape({}),
++  }),
++};
++
++export default NodeSingleNavigator;
+diff --git a/apolloschurchapp/src/tabs/connect/index.js b/apolloschurchapp/src/tabs/connect/index.js
+index da182421..d75c8a08 100644
+--- a/apolloschurchapp/src/tabs/connect/index.js
++++ b/apolloschurchapp/src/tabs/connect/index.js
+@@ -2,7 +2,6 @@ import React from 'react';
+ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+ import { withTheme } from '@apollosproject/ui-kit';
+ import { LikedContentFeedConnected } from '@apollosproject/ui-connected';
+-import { NotificationSettingsConnected } from '@apollosproject/ui-notifications';
+ 
+ import UserSettings from '../../user-settings';
+ import PersonalDetails from '../../user-settings/PersonalDetails';
+@@ -25,11 +24,6 @@ const ConnectNavigator = (props) => (
+       name="TestingControlPanel"
+       options={{ headerTitle: 'Testing' }}
+     />
+-    <Screen
+-      component={NotificationSettingsConnected}
+-      name="Notifications"
+-      options={{ headerTitle: 'Notifications' }}
+-    />
+     <Screen
+       component={UserSettings}
+       name="UserSettings"
+diff --git a/apolloschurchapp/src/tabs/home/index.js b/apolloschurchapp/src/tabs/home/index.js
+index 91f9323c..56fb95b8 100644
+--- a/apolloschurchapp/src/tabs/home/index.js
++++ b/apolloschurchapp/src/tabs/home/index.js
+@@ -1,25 +1,18 @@
+-import React, { useEffect } from 'react';
++import React from 'react';
+ import { Image } from 'react-native';
+ import { SafeAreaView } from 'react-native-safe-area-context';
++import gql from 'graphql-tag';
+ import { Query } from '@apollo/client/react/components';
+-import { gql, useApolloClient } from '@apollo/client';
+ import { useNavigation } from '@react-navigation/native';
+ 
+-import {
+-  styled,
+-  BackgroundView,
+-  NavigationService,
+-} from '@apollosproject/ui-kit';
++import { styled, BackgroundView } from '@apollosproject/ui-kit';
+ import {
+   FeaturesFeedConnected,
+   FEATURE_FEED_ACTION_MAP,
+   RockAuthedWebBrowser,
+ } from '@apollosproject/ui-connected';
+ 
+-import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+-
+ import { SearchButton } from '../../ui/Search';
+-import { ONBOARDING_VERSION } from '../../ui/Onboarding';
+ 
+ const LogoTitle = styled(({ theme }) => ({
+   height: theme.sizing.baseUnit,
+@@ -50,17 +43,6 @@ export const GET_HOME_FEED = gql`
+ 
+ const Home = () => {
+   const navigation = useNavigation();
+-  const client = useApolloClient();
+-
+-  useEffect(() => {
+-    checkOnboardingStatusAndNavigate({
+-      client,
+-      navigation: NavigationService,
+-      latestOnboardingVersion: ONBOARDING_VERSION,
+-      navigateHome: false,
+-    });
+-  }, []);
+-
+   return (
+     <RockAuthedWebBrowser>
+       {(openUrl) => (
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+index 7f77a7cc..9a27a8fb 100644
+--- a/apolloschurchapp/src/testing-control-panel/index.js
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -1,54 +1,19 @@
+-import React from 'react';
+-import {
+-  TableView,
+-  BackgroundView,
+-  NavigationService,
+-} from '@apollosproject/ui-kit';
+-import {
+-  checkOnboardingStatusAndNavigate,
+-  onboardingComplete,
+-} from '@apollosproject/ui-onboarding';
+-import { useApolloClient, useQuery, gql } from '@apollo/client';
++import React, { PureComponent } from 'react';
++import { TableView, BackgroundView } from '@apollosproject/ui-kit';
+ import TouchableCell from './TouchableCell';
+ 
+-export default function TestingControlPanel() {
+-  const client = useApolloClient();
+-  const { data } = useQuery(gql`
+-    query currentUserId {
+-      currentUser {
+-        id
+-      }
+-    }
+-  `);
+-  return (
+-    <BackgroundView>
+-      <TableView>
+-        <TouchableCell
+-          handlePress={() =>
+-            checkOnboardingStatusAndNavigate({
+-              latestOnboardingVersion: 2,
+-              navigation: NavigationService,
+-              client,
+-            })
+-          }
+-          iconName="Avatar"
+-          cellText={`Launch Onboarding`}
+-        />
+-      </TableView>
+-      <TouchableCell
+-        handlePress={() =>
+-          onboardingComplete({ version: 0, userId: data?.currentUser?.id })
+-        }
+-        iconName="Avatar"
+-        cellText={`Reset Onboarding to Unseen`}
+-      />
+-      <TouchableCell
+-        handlePress={() =>
+-          onboardingComplete({ version: 1, userId: data?.currentUser?.id })
+-        }
+-        iconName="Avatar"
+-        cellText={`Reset Onboarding to Seen v1`}
+-      />
+-    </BackgroundView>
+-  );
++export default class TestingControlPanel extends PureComponent {
++  render() {
++    return (
++      <BackgroundView>
++        <TableView>
++          <TouchableCell
++            handlePress={() => this.props.navigation.navigate('Onboarding')}
++            iconName="Avatar"
++            cellText={`Launch Onboarding`}
++          />
++        </TableView>
++      </BackgroundView>
++    );
++  }
+ }
+diff --git a/apolloschurchapp/src/ui/Onboarding/index.js b/apolloschurchapp/src/ui/Onboarding/index.js
+index ff46d7a2..e5b65296 100644
+--- a/apolloschurchapp/src/ui/Onboarding/index.js
++++ b/apolloschurchapp/src/ui/Onboarding/index.js
+@@ -1,8 +1,12 @@
+ import React from 'react';
+ import { View, Image } from 'react-native';
+ import { Query } from '@apollo/client/react/components';
+-import PropTypes from 'prop-types';
+-import { requestPermissions } from '@apollosproject/ui-notifications';
++import {
++  checkNotifications,
++  openSettings,
++  requestNotifications,
++  RESULTS,
++} from 'react-native-permissions';
+ import {
+   styled,
+   BackgroundView,
+@@ -33,59 +37,66 @@ const StyledImage = styled({
+   width: '100%',
+ })(Image);
+ 
+-// Represents the current version of onboarding.
+-// Some slides will be "older", they shouldn't be shown to existing users.
+-// Some slides will be the same version as teh current onboarding version.
+-// Those slides will be shown to any user with an older version than the version of those slides.
+-export const ONBOARDING_VERSION = 2;
+-
+-function Onboarding({ navigation, route }) {
+-  const userVersion = route?.params?.userVersion || 0;
++function Onboarding({ navigation }) {
+   return (
+-    <Query query={WITH_USER_ID} fetchPolicy="network-only">
+-      {({ data }) => (
+-        <>
+-          <FullscreenBackgroundView />
+-          <OnboardingSwiper
+-            navigation={navigation}
+-            userVersion={userVersion}
+-            onComplete={() => {
+-              onboardingComplete({
+-                userId: data?.currentUser?.id,
+-                version: ONBOARDING_VERSION,
+-              });
+-              navigation.dispatch(
+-                NavigationService.resetAction({
+-                  navigatorName: 'Tabs',
+-                  routeName: 'Home',
+-                })
+-              );
+-            }}
+-          >
+-            {({ swipeForward }) => (
+-              <>
+-                <FeaturesConnected
+-                  onPressPrimary={swipeForward}
+-                  BackgroundComponent={
+-                    <ImageContainer>
+-                      <StyledImage source={require('./img/personalize.jpg')} />
+-                    </ImageContainer>
+-                  }
+-                />
+-                <LocationFinderConnected
+-                  onPressPrimary={swipeForward}
+-                  onNavigate={() => {
+-                    navigation.navigate('Location');
+-                  }}
+-                  BackgroundComponent={
+-                    <ImageContainer>
+-                      <StyledImage source={require('./img/locations.jpg')} />
+-                    </ImageContainer>
+-                  }
+-                />
++    <>
++      <FullscreenBackgroundView />
++      <OnboardingSwiper>
++        {({ swipeForward }) => (
++          <>
++            <FeaturesConnected
++              onPressPrimary={swipeForward}
++              BackgroundComponent={
++                <ImageContainer>
++                  <StyledImage source={require('./img/personalize.jpg')} />
++                </ImageContainer>
++              }
++            />
++            <LocationFinderConnected
++              onPressPrimary={swipeForward}
++              onNavigate={() => {
++                navigation.navigate('Location');
++              }}
++              BackgroundComponent={
++                <ImageContainer>
++                  <StyledImage source={require('./img/locations.jpg')} />
++                </ImageContainer>
++              }
++            />
++            <FollowConnected
++              onPressPrimary={swipeForward}
++              BackgroundComponent={
++                <ImageContainer>
++                  <StyledImage source={require('./img/follow.jpg')} />
++                </ImageContainer>
++              }
++            />
++            <Query query={WITH_USER_ID} fetchPolicy="network-only">
++              {({ data }) => (
+                 <AskNotificationsConnected
+-                  onPressPrimary={swipeForward}
+-                  onRequestPushPermissions={requestPermissions}
++                  onPressPrimary={() => {
++                    onboardingComplete({ userId: data?.currentUser?.id });
++                    navigation.dispatch(
++                      NavigationService.resetAction({
++                        navigatorName: 'Tabs',
++                        routeName: 'Home',
++                      })
++                    );
++                  }}
++                  onRequestPushPermissions={(update) => {
++                    checkNotifications().then((checkRes) => {
++                      if (checkRes.status === RESULTS.DENIED) {
++                        requestNotifications(['alert', 'badge', 'sound']).then(
++                          () => {
++                            update();
++                          }
++                        );
++                      } else {
++                        openSettings();
++                      }
++                    });
++                  }}
++                  primaryNavText={'Finish'}
+                   BackgroundComponent={
+                     <ImageContainer>
+                       <StyledImage
+@@ -94,31 +105,13 @@ function Onboarding({ navigation, route }) {
+                     </ImageContainer>
+                   }
+                 />
+-                <FollowConnected
+-                  onPressPrimary={swipeForward}
+-                  primaryNavText={'Finish'}
+-                  version={2}
+-                  BackgroundComponent={
+-                    <ImageContainer>
+-                      <StyledImage source={require('./img/follow.jpg')} />
+-                    </ImageContainer>
+-                  }
+-                />
+-              </>
+-            )}
+-          </OnboardingSwiper>
+-        </>
+-      )}
+-    </Query>
++              )}
++            </Query>
++          </>
++        )}
++      </OnboardingSwiper>
++    </>
+   );
+ }
+ 
+-Onboarding.propTypes = {
+-  route: PropTypes.shape({
+-    params: PropTypes.shape({
+-      userVersion: PropTypes.number,
+-    }),
+-  }),
+-};
+-
+ export default Onboarding;
+diff --git a/apolloschurchapp/src/ui/Search/Search.js b/apolloschurchapp/src/ui/Search/Search.js
+index 01c6476a..0f9c4b95 100644
+--- a/apolloschurchapp/src/ui/Search/Search.js
++++ b/apolloschurchapp/src/ui/Search/Search.js
+@@ -4,22 +4,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
+ import PropTypes from 'prop-types';
+ import { throttle } from 'lodash';
+ 
+-import { styled } from '@apollosproject/ui-kit';
++import { styled, BackgroundView } from '@apollosproject/ui-kit';
+ import {
+   SearchFeedConnected,
+   SearchInputHeader,
+ } from '@apollosproject/ui-connected';
+ 
+-const SearchBackground = styled(({ theme }) => ({
+-  backgroundColor: theme.colors.background.paper,
+-}))(View);
+-
+ const HeaderContainer = styled({
+   paddingTop: 8,
+ })(View);
+ 
+-const SearchContainer = styled({ height: '100%' })(View);
+-
+ function Search(props) {
+   const [searchText, setSearchText] = useState('');
+   const [isFocused, setIsFocused] = useState(true);
+@@ -40,8 +34,8 @@ function Search(props) {
+   );
+ 
+   return (
+-    <SearchBackground>
+-      <SafeAreaView edges={['right', 'left']}>
++    <BackgroundView>
++      <SafeAreaView edges={['right', 'top', 'left']}>
+         <HeaderContainer>
+           <SearchInputHeader
+             onChangeText={throttle(setSearchText, 300)}
+@@ -49,11 +43,11 @@ function Search(props) {
+             inputRef={searchRef}
+           />
+         </HeaderContainer>
+-        <SearchContainer>
++        <View>
+           <SearchFeedConnected searchText={searchText} />
+-        </SearchContainer>
++        </View>
+       </SafeAreaView>
+-    </SearchBackground>
++    </BackgroundView>
+   );
+ }
+ 
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 1db143da..2e70ea6c 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -76,22 +76,12 @@ class UserSettings extends PureComponent {
+                             <CellIcon name="arrow-next" />
+                           </Cell>
+                         </Touchable>
+-                        <Touchable
+-                          onPress={() => {
+-                            this.props.navigation.navigate('Notifications');
+-                          }}
+-                        >
+-                          <Cell>
+-                            <CellText>Notification Settings</CellText>
+-                            <CellIcon name="arrow-next" />
+-                          </Cell>
+-                        </Touchable>
+                       </TableView>
+                       <TableView>
+                         <Touchable
+-                          onPress={() => {
+-                            openUrl('mailto:support@apollos.app');
+-                          }}
++                          onPress={() =>
++                            openUrl('https://apollosrock.newspring.cc/')
++                          }
+                         >
+                           <Cell>
+                             <CellText>Give Feedback</CellText>
