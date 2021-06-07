@@ -1,0 +1,2299 @@
+diff --git a/apollos-church-api/.dockerignore b/apollos-church-api/.dockerignore
+new file mode 100644
+index 00000000..66a32251
+--- /dev/null
++++ b/apollos-church-api/.dockerignore
+@@ -0,0 +1,4 @@
++packages/apolloschurchapp
++packages/apollos-ui-kit
++packages/apollos-church-api/.env
++packages/*/node_modules
+diff --git a/apollos-church-api/.env.shared.enc b/apollos-church-api/.env.shared.enc
+deleted file mode 100644
+index 201059a5426c35b02de5bbc6e48adc38fb450262..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 7040
+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
+
+diff --git a/apollos-church-api/.envExample b/apollos-church-api/.envExample
+new file mode 100644
+index 00000000..8a33ffe1
+--- /dev/null
++++ b/apollos-church-api/.envExample
+@@ -0,0 +1,4 @@
++ROCK_API=
++ROCK_TOKEN=
++ESV_KEY=
++CLOUDINARY_URL=
+\ No newline at end of file
+diff --git a/apollos-church-api/.eslintrc.js b/apollos-church-api/.eslintrc.js
+deleted file mode 100644
+index 7681348f..00000000
+--- a/apollos-church-api/.eslintrc.js
++++ /dev/null
+@@ -1,5 +0,0 @@
+-module.exports = {
+-  extends: [
+-    '@apollosproject/eslint-config/api',
+-  ],
+-}
+\ No newline at end of file
+diff --git a/apollos-church-api/.gitignore b/apollos-church-api/.gitignore
+index 93c0f8f5..a65b4177 100644
+--- a/apollos-church-api/.gitignore
++++ b/apollos-church-api/.gitignore
+@@ -1,101 +1 @@
+ lib
+-# Logs
+-logs
+-*.log
+-npm-debug.log*
+-yarn-debug.log*
+-yarn-error.log*
+-coverage*
+-
+-# operating system files
+-.DS_Store
+-.DS_Store?
+-.Spotlight-V100
+-.Trashes
+-ehthumbs.db
+-Thumbs.db
+-*.swp
+-
+-# Runtime data
+-pids
+-*.pid
+-*.seed
+-*.pid.lock
+-
+-
+-# Directory for instrumented libs generated by jscoverage/JSCover
+-lib-cov
+-
+-# Coverage directory used by tools like istanbul
+-coverage
+-
+-# nyc test coverage
+-.nyc_output
+-
+-# node-waf configuration
+-.lock-wscript
+-
+-# Compiled binary addons (https://nodejs.org/api/addons.html)
+-build/Release
+-
+-# Dependency directories
+-node_modules/
+-jspm_packages/
+-
+-# TypeScript v1 declaration files
+-typings/
+-
+-# Optional npm cache directory
+-.npm
+-
+-# Optional terraform
+-.terraform
+-source-*.tar.gz
+-terraform.tfstate
+-terraform.tfstate.backup
+-terraform.tfvars
+-
+-# Optional eslint cache
+-.eslintcache
+-
+-# Optional REPL history
+-.node_repl_history
+-
+-# Output of 'npm pack'
+-*.tgz
+-
+-# Yarn Integrity file
+-.yarn-integrity
+-
+-# dotenv environment variables file
+-.env
+-.env.storybook
+-
+-# next.js build output
+-.next
+-
+-# xcode
+-build/
+-
+-# storybook
+-storyLoader.js
+-*.xcworkspacedata
+-
+-# sublime text settings
+-*.sublime-project
+-*.sublime-workspace
+-
+-# compiled code
+-
+-**/lib
+-
+-.watchmanconfig
+-
+-# generated markdown docs
+-packages/**/docs/generated/*
+-
+-# shared secrets
+-.env.shared
+-
+-# development database
+-development.db
+diff --git a/apollos-church-api/.npmignore b/apollos-church-api/.npmignore
+new file mode 100644
+index 00000000..93f39291
+--- /dev/null
++++ b/apollos-church-api/.npmignore
+@@ -0,0 +1,2 @@
++*
++!lib/**
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+deleted file mode 100644
+index de9f91e6..00000000
+--- a/apollos-church-api/apollos.json
++++ /dev/null
+@@ -1,4 +0,0 @@
+-{
+-  "version": "2.19.0",
+-  "environment": "api"
+-}
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index be7c7293..564a740a 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -10,34 +10,17 @@
+ APP:
+   # This variable is used for generating deep links.
+   # It should match whatver is in your Info.plist `CFBundleURLTypes`
+-  DEEP_LINK_HOST: ${DEEP_LINK_HOST}
+-  UNIVERSAL_LINK_HOST: ${UNIVERSAL_LINK_HOST}
++  DEEP_LINK_HOST: apolloschurchapp
+   ROOT_API_URL: ${ROOT_URL}
+-  JOBS_USERNAME: ${JOBS_USERNAME}
+-  JOBS_PASSWORD: ${JOBS_PASSWORD}
+-DATABASE:
+-  URL: ${DATABASE_URL}
+-BUGSNAG:
+-  API_KEY: ${BUGSNAG_KEY}
+ ROCK:
+-  URL: ${ROCK_URL}
++  API_URL: https://apollosrock.newspring.cc/api
+   API_TOKEN: ${ROCK_TOKEN}
+-UNIVERSAL_LINKS:
+-  APPLE_APP_ID: ${APPLE_APP_ID}
+-  APPLE_TEAM_ID: ${APPLE_TEAM_ID}
+-  APP_STORE_LINK: ${IOS_REDIRECT}
+-  PLAY_STORE_LINK: ${ANDROID_REDIRECT}
+-  GOOGLE_APP_ID: ${GOOGLE_APP_ID}
+-  GOOGLE_KEYSTORE_SHA256: ${GOOGLE_KEYSTORE_SHA256}
++  IMAGE_URL: https://apollosrock.newspring.cc/GetImage.ashx
++  # This should match the timezone of the Rock server
++  TIMEZONE: 'America/New_York'
+ ONE_SIGNAL:
+-  APP_ID: ${ONE_SIGNAL_APP_ID}
++  APP_ID: b6e75a77-003f-4466-95ca-82cc5cdc407b
+   REST_KEY: ${ONE_SIGNAL_REST_KEY}
+-CHURCH_ONLINE:
+-  URL: ${CHURCH_ONLINE_URL}
+-  WEB_VIEW_URL: https://apollos.online.church/
+-ALGOLIA:
+-  APPLICATION_ID: ${ALGOLIASEARCH_APPLICATION_ID}
+-  API_KEY: ${ALGOLIASEARCH_API_KEY}
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+@@ -50,205 +33,173 @@ PASS:
+     SIGNER_CERT: ${PASS_SIGNER_CERT}
+     SIGNER_KEY: ${PASS_SIGNER_KEY}
+     SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
++ANALYTICS:
++  # Filling out these fields will automatically enable analytics tracking
++  # on the accompanying service
++  SEGMENT_KEY:
++  GA_ID:
+ BIBLE_API:
+   KEY: ${BIBLE_API_KEY}
+-  BIBLE_ID:
+-    WEB: '9879dbb7cfe39e4d-01'
+-    KJV: 'de4e12af7f28f599-02'
++  BIBLE_ID: '9879dbb7cfe39e4d-01'
+ CLOUDINARY:
++  # Cloudinary is used to improve image loading
++  # value should look something like
++  # cloudinary://123123123:adkfnla_adASDv_adAS@test
+   URL: ${CLOUDINARY_URL}
+ 
+ # This key holds various properties that allow our GraphQL server to map to your Rock Instance
+ ROCK_MAPPINGS:
++  INTERACTIONS:
++    # Name of the InteractionChannel that will be created
++    CHANNEL_NAME: Apollos App
++    # Name of the InteractionComponent that will be created for Content Items
++    COMPONENT_NAME: Apollos Content Item
++    # 512 is "Mobile App"
++    CHANNEL_MEDIUM_TYPE_ID: 512
++
+   CONTENT_ITEM:
+     ContentSeriesContentItem:
+       # When resolving "ContentSeriesContentItem" look in rock for a "ContentChannelItem"
+       EntityType: ContentChannelItem
+       # Used to define the subset of content channels types that use this specific type.
+-      ContentChannelTypeId: [6]
++      ContentChannelTypeId: [6, 7]
+     DevotionalContentItem:
+       EntityType: ContentChannelItem
+-      ContentChannelId: [7]
++      ContentChannelTypeId: [1]
+     MediaContentItem:
+       EntityType: ContentChannelItem
+     UniversalContentItem:
+       EntityType: ContentChannelItem
+-    WeekendContentItem:
+-      ContentChannelId: [5]
+-      EntityType: ContentChannelItem
+     ContentItem:
+       EntityType: ContentChannelItem
+ 
+-  DATAVIEW_CATEGORIES:
+-    # Id of the category used to store all persona dataviews
+-    PersonaId: 210
+-
+-  ALL_CONTENT_CHANNELS:
++  # Apollos will pull these content channels and expose them in the app on the discover screen.
++  DISCOVER_CONTENT_CHANNEL_IDS:
++    - 2
++    - 3
++    - 4
++    - 6
++    - 8
++  # Apollos will pull content items from these channels and expose them on the user feed
++  # However, it will not expose the channel itself.
++  FEED_CONTENT_CHANNEL_IDS:
++    - 1
++    - 2
+     - 3
++    - 4
+     - 5
+     - 6
+     - 8
+ 
+-  SERMON_CHANNEL_ID: 5
+-
+-TABS:
+-  HOME:
+-    - type: ActionBar
+-      title: Welcome to Apollos
+-      actions:
+-        [
+-          {
+-            title: Check In,
+-            icon: check,
+-            action: OPEN_URL,
+-            relatedNode: { __typename: Url, url: 'https://www.google.com' },
+-          },
+-        ]
+-    - algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
+-          channelIds:
+-            - 6
+-      type: HeroList
+-      primaryAction:
+-        # Right now, you hardcode exactly what GraphQL should return.
+-        # Long term, we hope to have a more sophisticated mechanism for driving this field
+-        action: OPEN_NODE
+-        title: 'Read More'
+-        relatedNode:
+-          __typename: UniversalContentItem
+-          id: 21
+-    - algorithms: [DAILY_PRAYER]
+-      isCard: false
+-      type: PrayerList
+-      title: Daily Prayer
+-    - algorithms:
+-        - type: CAMPAIGN_ITEMS
+-          channelIds:
+-            - 9
+-      type: HeroList
+-      isFeatured: true
+-      subtitle: Featured
+-    - title: FOR YOU
+-      algorithms: [SERMON_CHILDREN, PERSONA_FEED]
+-      subtitle: Explore what God calls you to today
+-      type: ActionList
+-    - algorithms: [PERSONA_FEED]
+-      subtitle: Continue
+-      type: HorizontalCardList
+-    - title: RECOMMENDED
+-      algorithms: [SERMON_CHILDREN]
+-      subtitle: For Him
+-      type: VerticalCardList
+-    - title: BULLETIN
+-      subtitle: What's happening at apollos?
+-      type: ActionList
+-      algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 13
+-        - type: UPCOMING_EVENTS
+-
+-  READ:
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 7
+-            limit: 3
+-      type: HorizontalCardList
+-      subtitle: Devotionals
+-      primaryAction:
+-        action: OPEN_CHANNEL
+-        title: 'Read More'
+-        relatedNode:
+-          __typename: ContentChannel
+-          id: 7
+-          name: Devotionals
+-
+-  WATCH:
+-    - algorithms:
+-        - type: LATEST_SERIES_CHILDREN
+-          arguments:
+-            channelId: 4
+-      type: HeroList
+-      title: Catch up
+-      subtitle: Latest Series
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 4
+-      type: VerticalCardList
+-      subtitle: All series
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 3
+-            limit: 3
+-      type: HorizontalCardList
+-      subtitle: Sermons
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 5
+-            limit: 3
+-      type: HorizontalCardList
+-      subtitle: Podcasts
+-      primaryAction:
+-        action: OPEN_CHANNEL
+-        title: 'Read More'
+-        relatedNode:
+-          __typename: ContentChannel
+-          id: 5
+-          name: Podcasts
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 6
+-            limit: 3
+-      type: HorizontalCardList
+-      title: Videos
+-      primaryAction:
+-        action: OPEN_CHANNEL
+-        title: 'Read More'
+-        relatedNode:
+-          __typename: ContentChannel
+-          id: 6
+-          name: Videos
+-    - algorithms:
+-        - type: CONTENT_FEED
+-          arguments:
+-            channelIds:
+-              - 8
+-            limit: 3
+-      type: HorizontalCardList
+-      subtitle: Something Else
+-
+-  PRAY:
+-    - algorithms: [DAILY_PRAYER]
+-      isCard: false
+-      type: PrayerList
+-      title: Daily Prayer
+-    - type: VerticalPrayerList
+-      title: Your Prayers
+-  CONNECT:
+-    - type: ActionTable
+-      title: Connect to Apollos
+-      actions:
+-        [
+-          {
+-            title: Google,
+-            action: OPEN_URL,
+-            relatedNode: { __typename: Url, url: 'https://www.google.com' },
+-          },
+-          {
+-            title: Facebook,
+-            action: OPEN_URL,
+-            relatedNode: { __typename: Url, url: 'https://www.facebook.com' },
+-          },
+-        ]
++# Default mapping of field types -> ids. There's probably no reason to edit this.
++ROCK_CONSTANTS:
++  TEXT: 1
++  MULTI_SELECT: 2
++  BOOLEAN: 3
++  COLOR: 4
++  SINGLE_SELECT: 6
++  INTEGER: 7
++  PAGE_REFERENCE: 8
++  IMAGE: 10
++  DATE: 11
++  DECIMAL: 14
++  DEFINED_TYPE: 15
++  DEFINED_VALUE: 16
++  PERSON: 18
++  HTML: 20
++  MEMO: 21
++  GROUP_TYPES: 22
++  GROUP: 23
++  CAMPUSES: 26
++  ENTITY_TYPE: 29
++  CAMPUS: 30
++  EMAIL_TEMPLATE: 31
++  FILE: 32
++  GROUP_TYPE: 33
++  KEY_VALUE_LIST: 34
++  BINARY_FILE_TYPE: 35
++  WORKFLOW_TYPE: 36
++  BINARY_FILE: 37
++  FINANCIAL_ACCOUNT: 38
++  FINANCIAL_ACCOUNTS: 39
++  COMPONENT: 40
++  COMPONENTS: 41
++  CATEGORIES: 42
++  GROUP_ROLE: 43
++  CATEGORY: 44
++  LOCATION: 45
++  DATE_RANGE: 46
++  DECIMAL_RANGE: 47
++  INTEGER_RANGE: 48
++  TIME: 49
++  GROUP_LOCATION_TYPE: 50
++  CODE_EDITOR: 51
++  PERSON_BADGES: 52
++  SITE: 53
++  COMMUNICATION_TEMPLATE: 54
++  DAY_OF_WEEK: 55
++  DAYS_OF_WEEK: 56
++  REMOTE_AUTHS: 57
++  COMPARISON: 58
++  METRIC_ENTITY: 59
++  WORKFLOW_ACTIVITY: 60
++  WORKFLOW_ATTRIBUTE: 61
++  METRICS: 62
++  ENTITY: 63
++  METRIC_CATEGORIES: 64
++  WORKFLOW_TEXT_OR_ATTRIBUTE: 65
++  SLIDING_DATE_RANGE: 66
++  GROUP_TYPE_GROUP: 67
++  SECURITY_ROLE: 68
++  VALUE_LIST: 69
++  CURRENCY: 70
++  EMAIL: 71
++  URL_LINK: 72
++  WORKFLOW_TYPES: 73
++  ATTRIBUTE: 74
++  SCHEDULES: 75
++  CONTENT_CHANNEL: 76
++  AUDIO_FILE: 77
++  AUDIO_URL: 78
++  VIDEO_FILE: 79
++  VIDEO_URL: 80
++  ENCRYPTED_TEXT: 81
++  FILTER_DATE: 82
++  DATE_TIME: 83
++  DEFINED_VALUE_RANGE: 84
++  RATING: 85
++  SYSTEM_EMAIL: 86
++  FINANCIAL_GATEWAY: 87
++  GROUP_AND_ROLE: 88
++  NOTE_TYPE: 89
++  NOTE_TYPES: 90
++  EVENT_CALENDAR: 91
++  EVENT_ITEM: 92
++  CONNECTION_ACTIVITY_TYPE: 93
++  CONNECTION_OPPORTUNITY: 94
++  CONNECTION_REQUEST: 95
++  CONNECTION_STATE: 96
++  CONNECTION_STATUS: 97
++  CONNECTION_TYPE: 98
++  CONNECTION_TYPES: 99
++  MERGE_TEMPLATE: 100
++  RANGE_SLIDER: 101
++  BINARY_FILE_TYPES: 102
++  MARKDOWN: 103
++  DATA_VIEW: 104
++  PHONE_NUMBER: 105
++  SCHEDULE: 106
++  LAVA_COMMANDS: 107
++  ADDRESS: 108
++  BENEVOLENCE_REQUEST: 109
++  CONTENT_CHANNEL_TYPES: 110
++  WORKFLOW: 111
++  SSN: 112
++  MATRIX: 113
++  LAVA: 114
++  DATA_VIEWS: 115
++  COMMUNICATION_PREFERENCE: 116
++  INTERACTION_CHANNEL: 117
++  GROUP_MEMBER: 118
++  TIME_ZONE: 119
++  LABEL: 120
+diff --git a/apollos-church-api/load-tests/Apollos App Testing.jmx b/apollos-church-api/load-tests/Apollos App Testing.jmx
+deleted file mode 100644
+index e81ef7b3..00000000
+--- a/apollos-church-api/load-tests/Apollos App Testing.jmx	
++++ /dev/null
+@@ -1,774 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1.1 r1855137">
+-  <hashTree>
+-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Apollos App Testing" enabled="true">
+-      <stringProp name="TestPlan.comments"></stringProp>
+-      <boolProp name="TestPlan.functional_mode">false</boolProp>
+-      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+-      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+-        <collectionProp name="Arguments.arguments">
+-          <elementProp name="ApollosTestUser" elementType="Argument">
+-            <stringProp name="Argument.name">ApollosTestUser</stringProp>
+-            <stringProp name="Argument.value">vincent@differential.com</stringProp>
+-            <stringProp name="Argument.metadata">=</stringProp>
+-          </elementProp>
+-          <elementProp name="ApollosTestPassword" elementType="Argument">
+-            <stringProp name="Argument.name">ApollosTestPassword</stringProp>
+-            <stringProp name="Argument.value">password</stringProp>
+-            <stringProp name="Argument.metadata">=</stringProp>
+-          </elementProp>
+-          <elementProp name="ServerUrl" elementType="Argument">
+-            <stringProp name="Argument.name">ServerUrl</stringProp>
+-            <stringProp name="Argument.value">apollos-church-api.herokuapp.com</stringProp>
+-            <stringProp name="Argument.metadata">=</stringProp>
+-          </elementProp>
+-        </collectionProp>
+-      </elementProp>
+-      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+-    </TestPlan>
+-    <hashTree>
+-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Test Home Feed" enabled="true">
+-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+-          <boolProp name="LoopController.continue_forever">false</boolProp>
+-          <stringProp name="LoopController.loops">1</stringProp>
+-        </elementProp>
+-        <stringProp name="ThreadGroup.num_threads">3</stringProp>
+-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+-        <stringProp name="ThreadGroup.duration"></stringProp>
+-        <stringProp name="ThreadGroup.delay"></stringProp>
+-      </ThreadGroup>
+-      <hashTree>
+-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-          <collectionProp name="HeaderManager.headers">
+-            <elementProp name="" elementType="Header">
+-              <stringProp name="Header.name">Content-Type</stringProp>
+-              <stringProp name="Header.value">application/json</stringProp>
+-            </elementProp>
+-          </collectionProp>
+-        </HeaderManager>
+-        <hashTree/>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login" enabled="true">
+-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">{&quot;operationName&quot;:&quot;login&quot;,&quot;variables&quot;:{},&quot;query&quot;:&quot;mutation login {\n  authenticate(identity: \&quot;${ApollosTestUser}\&quot;, password: \&quot;${ApollosTestPassword}\&quot;) {\n    token\n  }\n}\n&quot;}</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">POST</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+-            <stringProp name="JSONPostProcessor.referenceNames">authToken</stringProp>
+-            <stringProp name="JSONPostProcessor.jsonPathExprs">data.authenticate.token</stringProp>
+-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+-          </JSONPostProcessor>
+-          <hashTree/>
+-        </hashTree>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Home Feed" enabled="true">
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="query" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">query%20getUserFeed(%24first%3A%20Int%2C%20%24after%3A%20String)%20%7B%0A%20%20userFeed(first%3A%20%24first%2C%20after%3A%20%24after)%20%7B%0A%20%20%20%20pageInfo%20%7B%0A%20%20%20%20%20%20endCursor%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20edges%20%7B%0A%20%20%20%20%20%20node%20%7B%0A%20%20%20%20%20%20%20%20...largeCardFragment%0A%20%20%20%20%20%20%20%20...contentItemFragment%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20contentItemFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20title%0A%20%20isLiked%0A%20%20likedCount%0A%20%20summary%0A%20%20coverImage%20%7B%0A%20%20%20%20name%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20parentChannel%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20videos%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20audios%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20largeCardFragment%20on%20ContentItem%20%7B%0A%20%20...baseCardFragment%0A%20%20__typename%0A%7D%0A%0Afragment%20baseCardFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20__typename%0A%20%20...coverImageFragment%0A%20%20...themeFragment%0A%20%20title%0A%20%20summary%0A%20%20isLiked%0A%20%20...%20on%20MediaContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20DevotionalContentItem%20%7B%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20coverImageFragment%20on%20ContentItem%20%7B%0A%20%20coverImage%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20themeFragment%20on%20ContentItem%20%7B%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">query</stringProp>
+-              </elementProp>
+-              <elementProp name="operationName" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">getUserFeed</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">operationName</stringProp>
+-              </elementProp>
+-              <elementProp name="variables" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">%7B%22first%22%3A10%2C%22after%22%3Anull%7D</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">variables</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">GET</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-            <collectionProp name="HeaderManager.headers">
+-              <elementProp name="" elementType="Header">
+-                <stringProp name="Header.name">Authorization</stringProp>
+-                <stringProp name="Header.value">${authToken}</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </HeaderManager>
+-          <hashTree/>
+-        </hashTree>
+-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+-          <objProp>
+-            <name>saveConfig</name>
+-            <value class="SampleSaveConfiguration">
+-              <time>true</time>
+-              <latency>true</latency>
+-              <timestamp>true</timestamp>
+-              <success>true</success>
+-              <label>true</label>
+-              <code>true</code>
+-              <message>true</message>
+-              <threadName>true</threadName>
+-              <dataType>true</dataType>
+-              <encoding>false</encoding>
+-              <assertions>true</assertions>
+-              <subresults>true</subresults>
+-              <responseData>false</responseData>
+-              <samplerData>false</samplerData>
+-              <xml>false</xml>
+-              <fieldNames>true</fieldNames>
+-              <responseHeaders>false</responseHeaders>
+-              <requestHeaders>false</requestHeaders>
+-              <responseDataOnError>false</responseDataOnError>
+-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-              <assertionsResultsToSave>0</assertionsResultsToSave>
+-              <bytes>true</bytes>
+-              <sentBytes>true</sentBytes>
+-              <url>true</url>
+-              <threadCounts>true</threadCounts>
+-              <idleTime>true</idleTime>
+-              <connectTime>true</connectTime>
+-            </value>
+-          </objProp>
+-          <stringProp name="filename"></stringProp>
+-        </ResultCollector>
+-        <hashTree/>
+-      </hashTree>
+-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Test Discover Feed" enabled="true">
+-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+-          <boolProp name="LoopController.continue_forever">false</boolProp>
+-          <stringProp name="LoopController.loops">1</stringProp>
+-        </elementProp>
+-        <stringProp name="ThreadGroup.num_threads">3</stringProp>
+-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+-        <stringProp name="ThreadGroup.duration"></stringProp>
+-        <stringProp name="ThreadGroup.delay"></stringProp>
+-      </ThreadGroup>
+-      <hashTree>
+-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-          <collectionProp name="HeaderManager.headers">
+-            <elementProp name="" elementType="Header">
+-              <stringProp name="Header.name">Content-Type</stringProp>
+-              <stringProp name="Header.value">application/json</stringProp>
+-            </elementProp>
+-          </collectionProp>
+-        </HeaderManager>
+-        <hashTree/>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login" enabled="true">
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">{&quot;operationName&quot;:&quot;login&quot;,&quot;variables&quot;:{},&quot;query&quot;:&quot;mutation login {\n  authenticate(identity: \&quot;${ApollosTestUser}\&quot;, password: \&quot;${ApollosTestPassword}\&quot;) {\n    token\n  }\n}\n&quot;}</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">POST</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+-            <stringProp name="JSONPostProcessor.referenceNames">authToken</stringProp>
+-            <stringProp name="JSONPostProcessor.jsonPathExprs">data.authenticate.token</stringProp>
+-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+-          </JSONPostProcessor>
+-          <hashTree/>
+-        </hashTree>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Discover Feed" enabled="true">
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="query" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">query%20getContentChannels%20%7B%0A%20%20contentChannels%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20childContentItemsConnection(first%3A%203)%20%7B%0A%20%20%20%20%20%20edges%20%7B%0A%20%20%20%20%20%20%20%20node%20%7B%0A%20%20%20%20%20%20%20%20%20%20id%0A%20%20%20%20%20%20%20%20%20%20...contentItemFragment%0A%20%20%20%20%20%20%20%20%20%20...largeCardFragment%0A%20%20%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20contentItemFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20title%0A%20%20isLiked%0A%20%20likedCount%0A%20%20summary%0A%20%20coverImage%20%7B%0A%20%20%20%20name%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20parentChannel%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20videos%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20audios%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20largeCardFragment%20on%20ContentItem%20%7B%0A%20%20...baseCardFragment%0A%20%20__typename%0A%7D%0A%0Afragment%20baseCardFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20__typename%0A%20%20...coverImageFragment%0A%20%20...themeFragment%0A%20%20title%0A%20%20summary%0A%20%20isLiked%0A%20%20...%20on%20MediaContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20DevotionalContentItem%20%7B%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20coverImageFragment%20on%20ContentItem%20%7B%0A%20%20coverImage%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20themeFragment%20on%20ContentItem%20%7B%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">query</stringProp>
+-              </elementProp>
+-              <elementProp name="operationName" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">getContentChannels</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">operationName</stringProp>
+-              </elementProp>
+-              <elementProp name="variables" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">%7B%7D</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">variables</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">GET</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-            <collectionProp name="HeaderManager.headers">
+-              <elementProp name="" elementType="Header">
+-                <stringProp name="Header.name">Authorization</stringProp>
+-                <stringProp name="Header.value">${authToken}</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </HeaderManager>
+-          <hashTree/>
+-        </hashTree>
+-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+-          <objProp>
+-            <name>saveConfig</name>
+-            <value class="SampleSaveConfiguration">
+-              <time>true</time>
+-              <latency>true</latency>
+-              <timestamp>true</timestamp>
+-              <success>true</success>
+-              <label>true</label>
+-              <code>true</code>
+-              <message>true</message>
+-              <threadName>true</threadName>
+-              <dataType>true</dataType>
+-              <encoding>false</encoding>
+-              <assertions>true</assertions>
+-              <subresults>true</subresults>
+-              <responseData>false</responseData>
+-              <samplerData>false</samplerData>
+-              <xml>false</xml>
+-              <fieldNames>true</fieldNames>
+-              <responseHeaders>false</responseHeaders>
+-              <requestHeaders>false</requestHeaders>
+-              <responseDataOnError>false</responseDataOnError>
+-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-              <assertionsResultsToSave>0</assertionsResultsToSave>
+-              <bytes>true</bytes>
+-              <sentBytes>true</sentBytes>
+-              <url>true</url>
+-              <threadCounts>true</threadCounts>
+-              <idleTime>true</idleTime>
+-              <connectTime>true</connectTime>
+-            </value>
+-          </objProp>
+-          <stringProp name="filename"></stringProp>
+-        </ResultCollector>
+-        <hashTree/>
+-      </hashTree>
+-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Test Register " enabled="true">
+-        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+-          <boolProp name="LoopController.continue_forever">false</boolProp>
+-          <stringProp name="LoopController.loops">1</stringProp>
+-        </elementProp>
+-        <stringProp name="ThreadGroup.num_threads">3</stringProp>
+-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+-        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+-        <stringProp name="ThreadGroup.duration"></stringProp>
+-        <stringProp name="ThreadGroup.delay"></stringProp>
+-      </ThreadGroup>
+-      <hashTree>
+-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-          <collectionProp name="HeaderManager.headers">
+-            <elementProp name="" elementType="Header">
+-              <stringProp name="Header.name">Content-Type</stringProp>
+-              <stringProp name="Header.value">application/json</stringProp>
+-            </elementProp>
+-          </collectionProp>
+-        </HeaderManager>
+-        <hashTree/>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Register" enabled="true">
+-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">{&quot;operationName&quot;:&quot;register&quot;,&quot;variables&quot;:{},&quot;query&quot;:&quot;mutation register {\n  registerPerson(email: \&quot;${__RandomString(10,abcdefghijklmnopqrstuvwxyz,)}@jmeter-test.com\&quot;, password: \&quot;password\&quot;) {\n    token\n  }\n}\n&quot;}</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">POST</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+-            <stringProp name="JSONPostProcessor.referenceNames">authToken</stringProp>
+-            <stringProp name="JSONPostProcessor.jsonPathExprs">data.registerPerson.token</stringProp>
+-            <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+-          </JSONPostProcessor>
+-          <hashTree/>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-        </hashTree>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Profile Field" enabled="true">
+-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">{&quot;operationName&quot;:&quot;update&quot;,&quot;variables&quot;:{},&quot;query&quot;:&quot;mutation update {\n  updateProfileFields(input: [{field: FirstName, value: \&quot;${__RandomString(10,abcdefghijklmnopqrstuvwxyz,)}\&quot;}]) {\n    firstName\n  }\n}\n&quot;}</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">POST</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-            <collectionProp name="HeaderManager.headers">
+-              <elementProp name="" elementType="Header">
+-                <stringProp name="Header.name">Authorization</stringProp>
+-                <stringProp name="Header.value">${authToken}</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </HeaderManager>
+-          <hashTree/>
+-        </hashTree>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Campuses" enabled="true">
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="query" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">query%20getAllCampuses(%24latitude%3A%20Float!%2C%20%24longitude%3A%20Float!)%20%7B%0A%20%20campuses(location%3A%20%7Blatitude%3A%20%24latitude%2C%20longitude%3A%20%24longitude%7D)%20%7B%0A%20%20%20%20...CampusParts%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20CampusParts%20on%20Campus%20%7B%0A%20%20id%0A%20%20name%0A%20%20latitude%0A%20%20longitude%0A%20%20distanceFromLocation%0A%20%20street1%0A%20%20street2%0A%20%20city%0A%20%20state%0A%20%20postalCode%0A%20%20image%20%7B%0A%20%20%20%20uri%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">query</stringProp>
+-              </elementProp>
+-              <elementProp name="operationName" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">getAllCampuses</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">operationName</stringProp>
+-              </elementProp>
+-              <elementProp name="variables" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">%7B%22latitude%22%3A39.103119%2C%22longitude%22%3A-84.512016%7D</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">variables</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">GET</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-            <collectionProp name="HeaderManager.headers">
+-              <elementProp name="" elementType="Header">
+-                <stringProp name="Header.name">Authorization</stringProp>
+-                <stringProp name="Header.value">${authToken}</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </HeaderManager>
+-          <hashTree/>
+-        </hashTree>
+-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Home Feed" enabled="true">
+-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+-            <collectionProp name="Arguments.arguments">
+-              <elementProp name="query" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">query%20getUserFeed(%24first%3A%20Int%2C%20%24after%3A%20String)%20%7B%0A%20%20userFeed(first%3A%20%24first%2C%20after%3A%20%24after)%20%7B%0A%20%20%20%20pageInfo%20%7B%0A%20%20%20%20%20%20endCursor%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20edges%20%7B%0A%20%20%20%20%20%20node%20%7B%0A%20%20%20%20%20%20%20%20...largeCardFragment%0A%20%20%20%20%20%20%20%20...contentItemFragment%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20contentItemFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20title%0A%20%20isLiked%0A%20%20likedCount%0A%20%20summary%0A%20%20coverImage%20%7B%0A%20%20%20%20name%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20parentChannel%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20videos%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20audios%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20largeCardFragment%20on%20ContentItem%20%7B%0A%20%20...baseCardFragment%0A%20%20__typename%0A%7D%0A%0Afragment%20baseCardFragment%20on%20ContentItem%20%7B%0A%20%20id%0A%20%20__typename%0A%20%20...coverImageFragment%0A%20%20...themeFragment%0A%20%20title%0A%20%20summary%0A%20%20isLiked%0A%20%20...%20on%20MediaContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20WeekendContentItem%20%7B%0A%20%20%20%20videos%20%7B%0A%20%20%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20%20%20uri%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20liveStream%20%7B%0A%20%20%20%20%20%20isLive%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20...%20on%20DevotionalContentItem%20%7B%0A%20%20%20%20parentChannel%20%7B%0A%20%20%20%20%20%20id%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%7D%0A%0Afragment%20coverImageFragment%20on%20ContentItem%20%7B%0A%20%20coverImage%20%7B%0A%20%20%20%20sources%20%7B%0A%20%20%20%20%20%20uri%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A%0Afragment%20themeFragment%20on%20ContentItem%20%7B%0A%20%20theme%20%7B%0A%20%20%20%20type%0A%20%20%20%20colors%20%7B%0A%20%20%20%20%20%20primary%0A%20%20%20%20%20%20secondary%0A%20%20%20%20%20%20screen%0A%20%20%20%20%20%20paper%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%20%20__typename%0A%20%20%7D%0A%20%20__typename%0A%7D%0A</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">query</stringProp>
+-              </elementProp>
+-              <elementProp name="operationName" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">getUserFeed</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">operationName</stringProp>
+-              </elementProp>
+-              <elementProp name="variables" elementType="HTTPArgument">
+-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+-                <stringProp name="Argument.value">%7B%22first%22%3A10%2C%22after%22%3Anull%7D</stringProp>
+-                <stringProp name="Argument.metadata">=</stringProp>
+-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+-                <stringProp name="Argument.name">variables</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </elementProp>
+-          <stringProp name="HTTPSampler.domain">${ServerUrl}</stringProp>
+-          <stringProp name="HTTPSampler.port"></stringProp>
+-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+-          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+-          <stringProp name="HTTPSampler.path">/graphql</stringProp>
+-          <stringProp name="HTTPSampler.method">GET</stringProp>
+-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+-          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+-          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+-          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+-        </HTTPSamplerProxy>
+-        <hashTree>
+-          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+-            <boolProp name="ResultCollector.error_logging">false</boolProp>
+-            <objProp>
+-              <name>saveConfig</name>
+-              <value class="SampleSaveConfiguration">
+-                <time>true</time>
+-                <latency>true</latency>
+-                <timestamp>true</timestamp>
+-                <success>true</success>
+-                <label>true</label>
+-                <code>true</code>
+-                <message>true</message>
+-                <threadName>true</threadName>
+-                <dataType>true</dataType>
+-                <encoding>false</encoding>
+-                <assertions>true</assertions>
+-                <subresults>true</subresults>
+-                <responseData>false</responseData>
+-                <samplerData>false</samplerData>
+-                <xml>false</xml>
+-                <fieldNames>true</fieldNames>
+-                <responseHeaders>false</responseHeaders>
+-                <requestHeaders>false</requestHeaders>
+-                <responseDataOnError>false</responseDataOnError>
+-                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-                <assertionsResultsToSave>0</assertionsResultsToSave>
+-                <bytes>true</bytes>
+-                <sentBytes>true</sentBytes>
+-                <url>true</url>
+-                <threadCounts>true</threadCounts>
+-                <idleTime>true</idleTime>
+-                <connectTime>true</connectTime>
+-              </value>
+-            </objProp>
+-            <stringProp name="filename"></stringProp>
+-          </ResultCollector>
+-          <hashTree/>
+-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+-            <collectionProp name="HeaderManager.headers">
+-              <elementProp name="" elementType="Header">
+-                <stringProp name="Header.name">Authorization</stringProp>
+-                <stringProp name="Header.value">${authToken}</stringProp>
+-              </elementProp>
+-            </collectionProp>
+-          </HeaderManager>
+-          <hashTree/>
+-        </hashTree>
+-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+-          <boolProp name="ResultCollector.error_logging">false</boolProp>
+-          <objProp>
+-            <name>saveConfig</name>
+-            <value class="SampleSaveConfiguration">
+-              <time>true</time>
+-              <latency>true</latency>
+-              <timestamp>true</timestamp>
+-              <success>true</success>
+-              <label>true</label>
+-              <code>true</code>
+-              <message>true</message>
+-              <threadName>true</threadName>
+-              <dataType>true</dataType>
+-              <encoding>false</encoding>
+-              <assertions>true</assertions>
+-              <subresults>true</subresults>
+-              <responseData>false</responseData>
+-              <samplerData>false</samplerData>
+-              <xml>false</xml>
+-              <fieldNames>true</fieldNames>
+-              <responseHeaders>false</responseHeaders>
+-              <requestHeaders>false</requestHeaders>
+-              <responseDataOnError>false</responseDataOnError>
+-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+-              <assertionsResultsToSave>0</assertionsResultsToSave>
+-              <bytes>true</bytes>
+-              <sentBytes>true</sentBytes>
+-              <url>true</url>
+-              <threadCounts>true</threadCounts>
+-              <idleTime>true</idleTime>
+-              <connectTime>true</connectTime>
+-            </value>
+-          </objProp>
+-          <stringProp name="filename"></stringProp>
+-        </ResultCollector>
+-        <hashTree/>
+-      </hashTree>
+-    </hashTree>
+-  </hashTree>
+-</jmeterTestPlan>
+\ No newline at end of file
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 54be22c8..a44b5972 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -1,66 +1,61 @@
+ {
+   "name": "apollos-church-api",
+-  "version": "1.0.0",
++  "version": "0.8.0-alpha.9",
+   "private": true,
+   "main": "lib/index.js",
+   "scripts": {
+-    "setup": "./scripts/init.sh",
+-    "start": "NODE_ENV=production node ./lib/index.js",
+-    "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+-    "postinstall": "yarn build",
+-    "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
++    "start": "if test \"$NOW_ENV\" = \"true\" ; then yarn start:now ; else yarn start:dev ; fi",
++    "start:dev": "nodemon ./src/index.js --exec babel-node --delay 2",
++    "start:now": "babel-node ./src/index.js",
++    "start:prod": "NODE_ENV=production node ./lib/index.js",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
++    "test:watch": "jest --maxWorkers=2 --watch",
+     "lint": "eslint ./src --ext .js",
+-    "translate": "node scripts/translate.js"
++    "fixlint": "eslint ./src --ext .js --fix",
++    "codecov": "cat ./coverage/lcov.info | codecov",
++    "release": "standard-version --release-as minor"
+   },
+   "engines": {
+-    "node": ">=12.x.x"
++    "node": ">=8.11.x"
++  },
++  "jest": {
++    "collectCoverage": true,
++    "collectCoverageFrom": [
++      "src/**/*.{js,jsx}"
++    ],
++    "testMatch": [
++      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
++      "<rootDir>/src/**/?(*.)(spec|test|tests).{js,jsx,mjs}"
++    ],
++    "testEnvironment": "node",
++    "reporters": [
++      "<rootDir>/../../scripts/fingers-crossed-reporter.js"
++    ]
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^2.19.0",
+-    "@apollosproject/data-connector-algolia-search": "^2.19.0",
+-    "@apollosproject/data-connector-analytics": "^2.19.0",
+-    "@apollosproject/data-connector-bible": "^2.19.0",
+-    "@apollosproject/data-connector-church-online": "^2.19.0",
+-    "@apollosproject/data-connector-cloudinary": "^2.19.0",
+-    "@apollosproject/data-connector-onesignal": "^2.19.0",
+-    "@apollosproject/data-connector-passes": "^2.19.0",
+-    "@apollosproject/data-connector-postgres": "^2.19.0",
+-    "@apollosproject/data-connector-redis-cache": "^2.19.0",
+-    "@apollosproject/data-connector-rock": "^2.19.0",
+-    "@apollosproject/data-connector-twilio": "^2.19.0",
+-    "@apollosproject/data-schema": "^2.19.0",
+-    "@apollosproject/rock-apollo-data-source": "^2.19.0",
+-    "@apollosproject/server-core": "^2.19.0",
+-    "apollo-server": "^2.24.1",
+-    "apollo-server-express": "2.14.2",
++    "@apollosproject/config": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-analytics": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-bible": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-church-online": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-cloudinary": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-onesignal": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-passes": "^0.8.0-alpha.9",
++    "@apollosproject/data-connector-rock": "^0.8.0-alpha.9",
++    "@apollosproject/server-core": "^0.8.0-alpha.9",
++    "apollo-server": "^2.0.5",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+-    "express": "^4.17.0",
+-    "graphql": "14.6.0",
++    "graphql": "0.13.2",
++    "prettier": "1.12.1",
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.19.0",
+-    "@apollosproject/babel-preset-apollos": "^2.19.0",
+-    "@apollosproject/eslint-config": "^2.19.0",
+-    "@babel/cli": "^7.4.5",
+-    "@babel/core": "^7.4.5",
+-    "@babel/node": "^7.7.4",
+-    "babel-eslint": "^10.0.3",
+-    "eslint": "^5.16.0",
+-    "eslint-config-airbnb-base": "^14.0.0",
+-    "eslint-config-prettier": "^2.9.0",
+-    "eslint-import-resolver-babel-module": "^5.0.0-beta.0",
+-    "eslint-plugin-babel": "^5.1.0",
+-    "eslint-plugin-import": "^2.12.0",
+-    "eslint-plugin-jest": "^21.15.2",
+-    "eslint-plugin-prettier": "^2.6.0",
+-    "linkemon": "^0.1.1",
+-    "nodemon": "1.18.7",
+-    "prettier": "1.12.1",
+-    "yalc": "^1.0.0-pre.47"
++    "@apollosproject/apollo-server-env-mock": "^0.8.0-alpha.9",
++    "@apollosproject/babel-preset-apollos": "^0.8.0-alpha.9",
++    "@babel/cli": "7.1.5",
++    "@babel/core": "7.1.6",
++    "codecov": "3.0.2",
++    "nodemon": "1.18.7"
+   }
+ }
+diff --git a/apollos-church-api/scripts/init.sh b/apollos-church-api/scripts/init.sh
+deleted file mode 100755
+index b0a810e5..00000000
+--- a/apollos-church-api/scripts/init.sh
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# create .env file
+-if test -f .env; then
+-	echo ".env file already exists!"
+-	exit 1
+-fi
+-
+-echo "You will need the following before beginning:
+-Rock URL
+-Rock API Token
+-
+-Are you ready to proceed? [y/n]: "
+-read -r ANSWER
+-if $ANSWER != "y"; then
+-	exit 1
+-fi
+-
+-echo "Rock URL: "
+-read -r ROCK_URL
+-echo "Rock API Token: "
+-read -r ROCK_TOKEN
+-
+-echo "ROCK_URL=$ROCK_URL
+-ROCK_TOKEN=$ROCK_TOKEN" >.env
+-
+-# remove template encrypted files
+-rm .env.shared.enc
+diff --git a/apollos-church-api/scripts/link-packages.js b/apollos-church-api/scripts/link-packages.js
+deleted file mode 100644
+index 7778c0a4..00000000
+--- a/apollos-church-api/scripts/link-packages.js
++++ /dev/null
+@@ -1,16 +0,0 @@
+-const fs = require('fs');
+-const { execSync } = require('child_process');
+-
+-const direction = process.argv[2] || 'link';
+-
+-const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
+-
+-const dependencies = [
+-  ...Object.keys(packageJson.dependencies),
+-  ...Object.keys(packageJson.devDependencies),
+-].filter((d) => d.includes('@apollosproject'));
+-
+-dependencies.forEach((dep) => {
+-  const output = execSync(`yalc ${direction} ${dep}`, { encoding: 'utf8' });
+-  console.log(output);
+-});
+diff --git a/apollos-church-api/scripts/translate.js b/apollos-church-api/scripts/translate.js
+deleted file mode 100644
+index af1db91d..00000000
+--- a/apollos-church-api/scripts/translate.js
++++ /dev/null
+@@ -1,15 +0,0 @@
+-const {
+-  createGlobalId,
+-  parseGlobalId,
+-} = require('@apollosproject/server-core');
+-
+-const [id] = process.argv.slice(2);
+-if (!id) {
+-  console.log(
+-    'Pass Rock or Apollos ID: translate.js AuthenticatedUser:8sad98fd89sadf98uasdf'
+-  );
+-  process.exit(1);
+-}
+-
+-if (id.includes(':')) console.log(parseGlobalId(id).id);
+-else console.log(createGlobalId(id, 'Generic').split(':')[1]);
+diff --git a/apollos-church-api/src/config.js b/apollos-church-api/src/config.js
+index f73a2aa3..59a48535 100644
+--- a/apollos-church-api/src/config.js
++++ b/apollos-church-api/src/config.js
+@@ -1,42 +1,7 @@
+ import path from 'path';
+-import fetch from 'node-fetch';
+-import dotenv from "dotenv/config"; // eslint-disable-line
++import dotenv from 'dotenv/config'; // eslint-disable-line
+ import ApollosConfig from '@apollosproject/config';
+ 
+ ApollosConfig.loadYaml({
+   configPath: path.join(__dirname, '..', 'config.yml'),
+ });
+-
+-// defaults
+-ApollosConfig.loadJs({
+-  ROCK: { TIMEZONE: ApollosConfig?.ROCK?.TIMEZONE || 'America/New_York' },
+-});
+-
+-// autodetect some settings
+-(async () => {
+-  if (!ApollosConfig.ROCK) return;
+-  if (!ApollosConfig.ROCK.URL || !ApollosConfig.ROCK.API_TOKEN)
+-    throw new Error('ROCK_URL and ROCK_TOKEN variables are required!');
+-
+-  let res;
+-
+-  // plugin
+-  res = await fetch(
+-    `${ApollosConfig.ROCK.URL}/api/RestControllers?$select=Name`,
+-    { headers: { 'Authorization-Token': ApollosConfig.ROCK.API_TOKEN } }
+-  );
+-  const hasPlugin = (await res.json())
+-    .map(({ Name }) => Name)
+-    .includes('Apollos');
+-  if (hasPlugin) console.log('Apollos Rock plugin detected!');
+-  ApollosConfig.loadJs({ ROCK: { USE_PLUGIN: hasPlugin } });
+-
+-  // version
+-  res = await fetch(
+-    `${ApollosConfig.ROCK.URL}/api/Utility/GetRockSemanticVersionNumber`,
+-    { headers: { 'Authorization-Token': ApollosConfig.ROCK.API_TOKEN } }
+-  );
+-  const version = (await res.text()).split('.');
+-  console.log(`Rock Version: ${version[1]}`);
+-  ApollosConfig.loadJs({ ROCK: { VERSION: version[1] } });
+-})();
+diff --git a/apollos-church-api/src/data/index.js b/apollos-church-api/src/data/index.js
+index b9886fb3..b59d9365 100644
+--- a/apollos-church-api/src/data/index.js
++++ b/apollos-church-api/src/data/index.js
+@@ -1,23 +1,20 @@
+ import { gql } from 'apollo-server';
+ 
+-import {
+-  createApolloServerConfig,
+-  Interfaces,
+-} from '@apollosproject/server-core';
++import { createApolloServerConfig } from '@apollosproject/server-core';
+ 
+ import * as Analytics from '@apollosproject/data-connector-analytics';
+ import * as Scripture from '@apollosproject/data-connector-bible';
+ import * as LiveStream from '@apollosproject/data-connector-church-online';
+ import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+ import * as OneSignal from '@apollosproject/data-connector-onesignal';
+-import * as Search from '@apollosproject/data-connector-algolia-search';
+ import * as Pass from '@apollosproject/data-connector-passes';
+-import * as Cache from '@apollosproject/data-connector-redis-cache';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+   Interactions,
+   RockConstants,
++  Family,
++  Person,
+   ContentItem,
+   ContentChannel,
+   Sharable,
+@@ -26,32 +23,18 @@ import {
+   Template,
+   AuthSms,
+   Campus,
+-  Group,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+-  Event,
+-  PrayerRequest,
+-  Persona,
+-  Person,
+-  BinaryFiles,
+ } from '@apollosproject/data-connector-rock';
+-
+ import * as Theme from './theme';
+ 
+ // This module is used to attach Rock User updating to the OneSignal module.
+ // This module includes a Resolver that overides a resolver defined in `OneSignal`
+ import * as OneSignalWithRock from './oneSignalWithRock';
+ 
+-// This is to mock any postgres resolvers so we don't throw API errors for unresolved
+-// typedefs
+-import NoPostgres from './noPostgres';
+-
+ const data = {
+-  Interfaces,
+   Followings,
+   ContentChannel,
+   ContentItem,
++  Person,
+   Cloudinary,
+   Auth,
+   AuthSms,
+@@ -63,24 +46,25 @@ const data = {
+   RockConstants,
+   Sharable,
+   Analytics,
++  Family,
+   OneSignal,
++  UniversalContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
++  DevotionalContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
++  ContentSeriesContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
++  MediaContentItem: {
++    dataSource: ContentItem.dataSource,
++  }, // alias
+   PersonalDevice,
+   OneSignalWithRock,
+   Pass,
+-  Search,
+   Template,
+   Campus,
+-  Group,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+-  Event,
+-  Cache,
+-  PrayerRequest,
+-  Persona,
+-  Person,
+-  BinaryFiles,
+-  NoPostgres,
+ };
+ 
+ const {
+@@ -89,19 +73,9 @@ const {
+   schema,
+   context,
+   applyServerMiddleware,
+-  setupJobs,
+-  migrations,
+ } = createApolloServerConfig(data);
+ 
+-export {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-  migrations,
+-};
++export { dataSources, resolvers, schema, context, applyServerMiddleware };
+ 
+ // the upload Scalar is added
+ export const testSchema = [
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+deleted file mode 100644
+index 9dcb0245..00000000
+--- a/apollos-church-api/src/data/index.postgres.js
++++ /dev/null
+@@ -1,125 +0,0 @@
+-import { gql } from 'apollo-server';
+-
+-import {
+-  createApolloServerConfig,
+-  Interfaces,
+-} from '@apollosproject/server-core';
+-
+-import * as Analytics from '@apollosproject/data-connector-analytics';
+-import * as Scripture from '@apollosproject/data-connector-bible';
+-import * as LiveStream from '@apollosproject/data-connector-church-online';
+-import * as Cloudinary from '@apollosproject/data-connector-cloudinary';
+-import * as Search from '@apollosproject/data-connector-algolia-search';
+-import * as Pass from '@apollosproject/data-connector-passes';
+-import * as Cache from '@apollosproject/data-connector-redis-cache';
+-import * as Sms from '@apollosproject/data-connector-twilio';
+-import {
+-  Followings,
+-  Interactions,
+-  RockConstants,
+-  ContentItem,
+-  ContentChannel,
+-  Sharable,
+-  Auth,
+-  PersonalDevice,
+-  Template,
+-  AuthSms,
+-  Campus,
+-  Group,
+-  BinaryFiles,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+-  Event,
+-  PrayerRequest,
+-  Persona,
+-  Person as RockPerson,
+-} from '@apollosproject/data-connector-rock';
+-
+-import {
+-  Comment,
+-  UserFlag,
+-  UserLike,
+-  Follow,
+-  Notification,
+-  NotificationPreference,
+-  Campus as PostgresCampus,
+-  Person as PostgresPerson,
+-} from '@apollosproject/data-connector-postgres';
+-
+-import * as Theme from './theme';
+-
+-// This modules ties together certain updates so they occurs in both Rock and Postgres.
+-// Will be eliminated in the future through an enhancement to the Shovel
+-import { Person, OneSignal } from './rockWithPostgres';
+-
+-const data = {
+-  Interfaces,
+-  Followings,
+-  ContentChannel,
+-  ContentItem,
+-  RockPerson, // This entry needs to come before (postgres) Person
+-  BinaryFiles, // This entry needs to come before (postgres) Person
+-  PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
+-  Cloudinary,
+-  Auth,
+-  AuthSms,
+-  Sms,
+-  LiveStream,
+-  Theme,
+-  Scripture,
+-  Interactions,
+-  RockConstants,
+-  Sharable,
+-  Analytics,
+-  PersonalDevice,
+-  Pass,
+-  Search,
+-  Template,
+-  Campus,
+-  Group,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+-  Event,
+-  Cache,
+-  PrayerRequest,
+-  Comment,
+-  UserLike,
+-  UserFlag,
+-  Follow,
+-  PostgresCampus,
+-  Persona,
+-  Notification,
+-  NotificationPreference,
+-  Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
+-  OneSignal,
+-};
+-
+-const {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-  migrations,
+-} = createApolloServerConfig(data);
+-
+-export {
+-  dataSources,
+-  resolvers,
+-  schema,
+-  context,
+-  applyServerMiddleware,
+-  setupJobs,
+-  migrations,
+-};
+-
+-// the upload Scalar is added
+-export const testSchema = [
+-  gql`
+-    scalar Upload
+-  `,
+-  ...schema,
+-];
+diff --git a/apollos-church-api/src/data/noPostgres.js b/apollos-church-api/src/data/noPostgres.js
+deleted file mode 100644
+index bd292eac..00000000
+--- a/apollos-church-api/src/data/noPostgres.js
++++ /dev/null
+@@ -1,46 +0,0 @@
+-// The purpose of this file is to mock the postgres resolvers to null so the API doesn't fail when
+-// there's no database. This will not be necessary when Postgres is required by all Apollos APIs.
+-import gql from 'graphql-tag';
+-import { Comment, Follow } from '@apollosproject/data-connector-postgres';
+-
+-export default {
+-  schema: gql`
+-    ${Comment.schema}
+-    ${Follow.schema}
+-  `,
+-  resolver: {
+-    Query: {
+-      followRequests: () => [],
+-      suggestedFollows: () => [],
+-      searchPeople: () => {},
+-    },
+-    Mutation: {
+-      addComment: () => null,
+-      flagComment: () => null,
+-      requestFollow: () => null,
+-      acceptFollowRequest: () => null,
+-      ignoreFollowRequest: () => null,
+-    },
+-    Comment: {
+-      person: () => null,
+-      id: () => null,
+-    },
+-    CommentListFeature: {
+-      id: () => null,
+-    },
+-    AddCommentFeature: {
+-      id: () => null,
+-      initialPrompt: () => null,
+-      addPrompt: () => null,
+-      relatedNode: () => null,
+-    },
+-    Person: {
+-      currentUserFollowing: () => null,
+-      followingCurrentUser: () => null,
+-    },
+-    SearchPeopleResultsConnection: {
+-      edges: () => [],
+-      pageInfo: () => null,
+-    },
+-  },
+-};
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+deleted file mode 100644
+index 9abcc996..00000000
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ /dev/null
+@@ -1,135 +0,0 @@
+-/* eslint-disable import/prefer-default-export, max-classes-per-file */
+-import { parseGlobalId } from '@apollosproject/server-core';
+-import { Person as postgresPerson } from '@apollosproject/data-connector-postgres';
+-import * as OneSignalOriginal from '@apollosproject/data-connector-onesignal';
+-
+-class personDataSource extends postgresPerson.dataSource {
+-  async create(attributes) {
+-    const rockPersonId = await this.context.dataSources.RockPerson.create(
+-      attributes
+-    );
+-    super.create({
+-      ...attributes,
+-      originType: 'rock',
+-      originId: String(rockPersonId),
+-    });
+-    return rockPersonId;
+-  }
+-}
+-
+-// These resolvers make sure that calls to updating profile fields update both the
+-const personResolver = {
+-  Mutation: {
+-    updateProfileField: async (
+-      root,
+-      { input: { field, value } },
+-      { dataSources }
+-    ) => {
+-      await dataSources.RockPerson.updateProfile([{ field, value }]); // Update in Rock
+-      return dataSources.Person.updateProfile([{ field, value }]); // updates in Postgres
+-    },
+-    updateProfileFields: async (root, { input }, { dataSources }) => {
+-      await dataSources.RockPerson.updateProfile(input); // Update in Rock
+-      return dataSources.Person.updateProfile(input); // updates in Postgres
+-    },
+-    uploadProfileImage: async (root, { file, size }, { dataSources }) => {
+-      const person = await dataSources.RockPerson.uploadProfileImage(
+-        file,
+-        size
+-      ); // Update in Rock
+-      return dataSources.Person.updateProfile([
+-        { field: 'profileImageUrl', value: person.photo.url },
+-      ]); // updates in Postgres. Reuses already uploaded imageUrl
+-      // return dataSources.Person.uploadProfileImage(file, size); // updates in Postgres. Performs the upload again.
+-    },
+-    updateUserCampus: async (root, { campusId }, { dataSources }) => {
+-      await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
+-
+-      const { id: rockCampusId } = parseGlobalId(campusId);
+-      const campus = await dataSources.PostgresCampus.getFromId(
+-        rockCampusId,
+-        null,
+-        {
+-          originType: 'rock',
+-        }
+-      ); // finds the postgres campus id
+-      return dataSources.Person.updateProfile([
+-        { field: 'campusId', value: campus.id },
+-      ]); // updates in Postgres
+-    },
+-    updateUserPushSettings: async (root, { input }, { dataSources }) => {
+-      // register the changes w/ postgres
+-      await dataSources.NotificationPreference.updateUserNotificationPreference(
+-        {
+-          notificationProviderId: input.pushProviderUserId,
+-          notificationProviderType: 'one_signal', // hard coded for now
+-          enabled: input.enabled,
+-        }
+-      );
+-      // register the changes w/ one signal
+-      const returnValue = await dataSources.OneSignal.updatePushSettings(input);
+-
+-      // if the pushProviderUserId is changing, we need ot register the device with rock.
+-      if (input.pushProviderUserId != null) {
+-        await dataSources.PersonalDevice.addPersonalDevice({
+-          pushId: input.pushProviderUserId,
+-        });
+-      }
+-
+-      try {
+-        await dataSources.Person.updateProfile([
+-          {
+-            field: 'apollosUser',
+-            value: true,
+-          },
+-        ]);
+-      } catch (e) {
+-        console.warn(e);
+-      }
+-
+-      // return the original return value (which is currentPerson)
+-      return returnValue;
+-    },
+-  },
+-};
+-
+-export const Person = {
+-  dataSource: personDataSource,
+-  resolver: personResolver,
+-};
+-
+-class oneSignalDataSource extends OneSignalOriginal.dataSource {
+-  async createNotification({
+-    toUserIds = [],
+-    to,
+-    content = '',
+-    heading,
+-    subtitle,
+-    ...args
+-  }) {
+-    if (to && to.originId && to.originType === 'rock') {
+-      const person = await this.context.dataSources.RockPerson.getFromId(
+-        to.originId
+-      );
+-      return super.createNotification({
+-        toUserIds: [person.primaryAliasId],
+-        content,
+-        heading,
+-        subtitle,
+-        ...args,
+-      });
+-    }
+-    return super.createNotification({
+-      toUserIds,
+-      content,
+-      heading,
+-      subtitle,
+-      ...args,
+-    });
+-  }
+-}
+-
+-export const OneSignal = {
+-  ...OneSignalOriginal,
+-  dataSource: oneSignalDataSource,
+-};
+diff --git a/apollos-church-api/src/index.js b/apollos-church-api/src/index.js
+index 613e7219..796ad4db 100644
+--- a/apollos-church-api/src/index.js
++++ b/apollos-church-api/src/index.js
+@@ -1,5 +1,4 @@
+ import dotenv from 'dotenv/config'; // eslint-disable-line
+-import '@apollosproject/data-connector-postgres/lib/postgres/pgEnum-fix';
+ import config from './config'; // eslint-disable-line
+ import server from './server';
+ 
+@@ -9,9 +8,9 @@ export { testSchema } from './server'; // eslint-disable-line import/prefer-defa
+ const { PORT } = process.env;
+ if (!PORT && process.env.NODE_ENV !== 'test')
+   console.warn(
+-    'Add `PORT=XXXX` if you are having trouble connecting to the server. By default, PORT is 4000.'
++    'Add `ENV=4000` if you are having trouble connecting to the server. By default, PORT is random.'
+   );
+ 
+-server.listen({ port: PORT || 4000 }, () => {
+-  console.log(`🚀 Server ready at http://0.0.0.0:${PORT || 4000}`);
++server.listen({ port: PORT }, () => {
++  console.log(`🚀 Server ready at http://0.0.0.0:${PORT}`);
+ });
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index b200cb5c..5b23c66e 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,29 +1,15 @@
+ import { ApolloServer } from 'apollo-server-express';
+-import ApollosConfig from '@apollosproject/config';
+ import express from 'express';
+ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+-import { get } from 'lodash';
+-import { setupUniversalLinks } from '@apollosproject/server-core';
+-import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
+ 
+-let dataObj;
+-
+-if (ApollosConfig?.DATABASE?.URL) {
+-  dataObj = require('./data/index.postgres');
+-} else {
+-  dataObj = require('./data/index');
+-}
+-
+-const {
++import {
+   resolvers,
+   schema,
+   testSchema,
+   context,
+   dataSources,
+   applyServerMiddleware,
+-  setupJobs,
+-  migrations,
+-} = dataObj;
++} from './data';
+ 
+ export { resolvers, schema, testSchema };
+ 
+@@ -32,18 +18,6 @@ const isDev =
+ 
+ const extensions = isDev ? [() => new RockLoggingExtension()] : [];
+ 
+-const cacheOptions = isDev
+-  ? {}
+-  : {
+-      cacheControl: {
+-        stripFormattedExtensions: false,
+-        calculateHttpHeaders: true,
+-        defaultMaxAge: 3600,
+-      },
+-    };
+-
+-const { ROCK, APP } = ApollosConfig;
+-
+ const apolloServer = new ApolloServer({
+   typeDefs: schema,
+   resolvers,
+@@ -52,7 +26,7 @@ const apolloServer = new ApolloServer({
+   introspection: true,
+   extensions,
+   formatError: (error) => {
+-    console.error(get(error, 'extensions.exception.stacktrace', []).join('\n'));
++    console.error(error.extensions.exception.stacktrace.join('\n'));
+     return error;
+   },
+   playground: {
+@@ -60,31 +34,17 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
+-  ...cacheOptions,
++  cacheControl: {
++    stripFormattedExtensions: false,
++    calculateHttpHeaders: true,
++    defaultMaxAge: 600,
++  },
+ });
+ 
+ const app = express();
+ 
+-// password reset
+-app.get('/forgot-password', (req, res) => {
+-  res.redirect(APP.FORGOT_PASSWORD_URL || `${ROCK.URL}/page/56`);
+-});
+-
+-applyServerMiddleware({ app, dataSources, context });
+-setupJobs({ app, dataSources, context });
+-// Comment out if you don't want the API serving apple-app-site-association or assetlinks manifests.
+-setupUniversalLinks({ app });
+-
+ apolloServer.applyMiddleware({ app });
+ apolloServer.applyMiddleware({ app, path: '/' });
+-
+-// make sure this is called last.
+-// (or at least after the apollos server setup)
+-(async () => {
+-  if (ApollosConfig?.DATABASE?.URL) {
+-    const migrationRunner = await createMigrationRunner({ migrations });
+-    await migrationRunner.up();
+-  }
+-})();
++applyServerMiddleware({ app, dataSources, context });
+ 
+ export default app;
+diff --git a/apollos-church-api/wallet-passes/checkin.pass/pass.json b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+index a3916b31..8909bd14 100644
+--- a/apollos-church-api/wallet-passes/checkin.pass/pass.json
++++ b/apollos-church-api/wallet-passes/checkin.pass/pass.json
+@@ -7,7 +7,6 @@
+   "logoText": "Apollos Church",
+   "backgroundColor": "rgb(0,103,109)",
+   "foregroundColor": "rgb(248,247,244)",
+-  "labelColor": "rgb(248,247,244)",
+   "serialNumber": "checkinpass-{{ person | GetPersonAlternateId }}",
+   "thumbnail": {
+     "uri": "{{ person.Photo.Url }}&format=png&height=200"
