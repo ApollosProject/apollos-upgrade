@@ -1,0 +1,1648 @@
+diff --git a/apolloschurchapp/.env.shared.enc b/apolloschurchapp/.env.shared.enc
+index 96c36f9c525a5de3589b79678a0f77b69d42e7fd..fba5c68711b7b60a358381b2e9cfbd57bd8ad591 100644
+GIT binary patch
+literal 800
+zcmV+*1K<2pVQh3|WM5wfcegMKIZ7fPD@EUEqbsHJ(FR%S4eEND;NHld`<G#T*Mt#O
+z`K-hIx{Nu@3%upTPt}*5aDE^p-xF#3R*&(`fxU2@JtI5a0Y%cO#`pGxD|N)NC~Nx0
+zg1GGFAyUKLeX%aF``$rn^Unds6ydfgklG0fJh8~x%Z1OV+$U~%+`Dg&XQW_G)p66s
+zT0JZrf+XaiI<>zG*(I)Uo^VUwr|tB9C|x|R$kf_P$zMnu{~8~Mzo#9nAod{>)?l}M
+z;nfzE62f<;kp$Bkst)s`p4lYk8|(00g)f$aFzE?mrtai0*=~FaVN}C-Kv_()_d$t3
+zLevoI(OGPXtc3)HA-_sg(L)9_X=~yVyAVZXr&w64biaT)rs`pvtA-DG;2WSAjel97
+zaAp!GdrLsSTf8YR#SQa%DEJ8Xk9sj<HvO@TF&!hltf?}l%8J|6A7`gEqI*kNlyyTO
+zwGF6zsRjzMtc*KK@ZW~bsew?ZEa`q0bTu7@H!h-#OutV0n|@RNTsBUvJv0t}?Ai~8
+z1o`msh47=D-O{5;mTAgVp1c`O`AL@88SMNNPUzIP7|&Un+HF9ujqm{LU<(+i4P2D`
+zc4nQipmHY@J27YPZXf|w!AP5qI=H?_966~Z5XNJ`?`B?*V-D&83=I=wJnr^-2mt)`
+zfbgsnCdlI1!LU{7A;t|pFUV7CR$;q<aq9$Wk#WG&3w1$+BlHIa&5Ty}vr2)E45#nD
+z$bHqESPN7)qOIx3Zp*QeHHS|<hx!)P{fjT7kJhBfN5DfO$MQf^R>#Ya-#gxZkvxBV
+z$wH#lc&X0Ijk3#-svuL@v2qQ3;NyP@+u}tkDqF_^3a6#zc@jwwp>%dZunLD3{i=_3
+zOS%O5k*SzvQ5ATGP(NVqGELz`Cjp3Y&Ii)(pfhZVA$wl@14wtQ^|IxzIo4}Pou1bV
+z2l9o7woS459raS(Rj><K@@>kSi@J%EzJV-^|2~*e@y=xtNt4PE62~Da>JL)s<~w9l
+e&-dyV+A+BCkur%dOVKP0a%nSZW|X!;U0X<sW{~~>
+
+literal 880
+zcmV-$1CRVuVQh3|WM5xU6sf6H-B9vL#T~x$tZk%IB35iLI^>LmVYRT6aqyVavD`V{
+zPc_DrzRXODm79dnBJZ9vWM|67Nl3dGHyeJu)L9vIJP*d)i6^kNPUg7!s9|g1w{}3t
+zl4~FZBC5QFB;m`2lD-Cgr;8u}8elsu261IuCk3*rqYX5%;4KuS0Pxla=8kWp>ykQ(
+zK;{|-wmYav62sakkw;CFLz*R(Yd0<koOK<&m-=27fTjwVFOZ6WvfOkmcGBJ2T&47H
+z78yxd*Qir28c<YS9n2S+zYnn>q67DSUQB3Kd7S|GcR~5TgqnmGj8*jA<SfkAGW79H
+zc(5h)^H`|FE@2IVXfg<bO6$)6eU+Tm#sYP^c?O7j6|*L=hV-s10jW1YHQ2V02sS^G
+z?(URc(cl<leVyOLDGF+f8}AxM$DqyoQ(_hwcx>WDlce@eTH1L!OZj$rFcic1ViMSq
+zcQU_&5DD&4jWCxv%>TIY$e1FqUV^<e0y7Es{&_QNBfhw<5w<-A^wGuNXk~<s-Tx4N
+zBs>YD3W6_;d!rTqNt^`t0n>uHZ*yDt@luocWD{mVbF@aNMa$ygH!(0sG}U5d+1uLq
+zwle%rnO8~n2e~+3k6VR_fVIP~(_X34v!sp$t~aQLrzFT!PfU6AW*P#EEbggriaBob
+zV!#1{_=BOP=P*~3^yn(N95!CZPOPUuEB0N(6fGGPJ_X}HTEMg?(rdsPtpMK)rAz;z
+zi$bZ#IEG=Sn7_cJiVT>9Ad*B|!i0}^Mh$77xIec(NzF}w#f~yYj&W9Z22t~SGW&s@
+zE|zi-P+K5h3#Xdc#Jk9@yhU1!qQfzpEuB3q4p&vEppk}@<nVW>ODgbHK$>DaUXHwN
+zw8lf%Z087IlNn8|l3^p#%-ZQns>XLIn9EV=-_65mQSR0Ko`Wtl;zvl!xI|W#$Lw4j
+zxQYgWUjW2776DNa3$+bRM%U(>0_^y{1<^A@_31D{8D2XXxf*dBLkMEe7+Ky2z5jjA
+zwm)kCB}ucXFbDd=iJ#zz9Pi2`(a0l2PX-^luOU*VaPbE;jvirn#wSApQZ_frQb1&N
+zm`Qka;NZSH7&G^U_){w_61b_FA2!Ojp0^*p4C(FSFjWG|L9h}94S0%oU~5jlL|1sB
+GuRtx4c&6Y0
+
+diff --git a/apolloschurchapp/.gitignore b/apolloschurchapp/.gitignore
+index caf99aad..ee91441b 100644
+--- a/apolloschurchapp/.gitignore
++++ b/apolloschurchapp/.gitignore
+@@ -160,4 +160,5 @@ key.json
+ .env.shared
+ 
+ # GraphQL info
++schema.graphql
+ fragmentTypes.json
+diff --git a/apolloschurchapp/android/app/apollos.keystore.enc b/apolloschurchapp/android/app/apollos.keystore.enc
+index 84d919dad1f07b2792148548e1ed909adfe1e36e..08bbda40e135673e93b4cb1f0c86e9f71b1bdd76 100644
+GIT binary patch
+literal 2272
+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
+
+literal 2272
+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
+
+diff --git a/apolloschurchapp/android/key.json.enc b/apolloschurchapp/android/key.json.enc
+index 874dbdeb21a17deaca4461e1bf7a1a534ac33cda..f384332894c356853e0032197cf83f21c942fbe1 100644
+GIT binary patch
+literal 2384
+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
+Cw3VL#
+
+literal 2384
+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
+CZ<VzG
+
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index ff5df7bd..f5c5dd88 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.21.0",
++    "version": "2.14.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 0c820572..00b6651a 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -21,7 +21,7 @@ end
+ 
+ platform :ios do
+ 
+-  desc "Push a new internal build to TestFlight"
++  desc "Push a new beta build to TestFlight"
+   lane :deploy do
+ 
+     # get project name
+@@ -59,21 +59,6 @@ platform :android do
+     gradle(task: 'clean', project_dir: 'android')
+     gradle(task: 'bundle', build_type: 'Release', project_dir: 'android')
+     changelog_from_git_commits
+-
+-    path = '../android/app/build.gradle'
+-    re = /applicationId\s+"([\w+\.]*)"/
+-    s = File.read("../android/app/build.gradle")
+-    package_name = s[re, 1]
+-
+-    upload_to_play_store(
+-      track: "internal",
+-      skip_upload_apk: true,
+-      json_key: "android/key.json",
+-      package_name: package_name
+-    )
++    upload_to_play_store(track: "internal", skip_upload_apk: true, json_key_file: "android/key.json")
+   end
+ end
+-
+-error do |lane, exception|
+-   slack(message: exception.to_s, success: false)
+-end
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 96269c23..30739b2b 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -242,7 +242,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.21.0):
++  - react-native-apollos-player (2.14.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -639,7 +639,7 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 61af1c30ce4b521e38be01d2334a4dad1408ef78
++  react-native-apollos-player: 74f9763544b42cf4a3208d3f546a562be7566004
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+diff --git a/apolloschurchapp/ios/apollos.p8.enc b/apolloschurchapp/ios/apollos.p8.enc
+index 5947bea7fec93d5d37b440d73672edab9c52142f..6e961fce2051515987d83cdf79ac0f1a9c2ecbaf 100644
+GIT binary patch
+literal 288
+zcmV+*0pI>pVQh3|WM5yaDW=n?N$sy5`<MP+-NK9QU-`3ZFqwvBct~oLvP0B0GVA2W
+z%xwyws*h@PdtDH_5Ea~bM~Ou`8a(*2L%`*>hm(a+qFHYlJfXm*1m1;HVU?|+@OPK@
+zV(<lUyvDc8kedc<fjHQ}Ob3y<yHzMFexsC!6%Tii+@d&bW>o-1Tw77z<JEeFp(FYt
+zNWQ~t`~7%4jQ6-_{@kGspiEM;$jRHVs@x0{tcqmgn;>q@i2D9Jrn>M3VG+?%p3USa
+z&TIk$OrX05wTNd$&7H)}e4@VEvzUNu-ATBPRj}_aEAZG~XE0V{cpfd5#j1(Ted&^-
+mL0eaFWLOppIc{WyQe$Bz@}n|1nmgr6d78O7uz3^4Rkt!@os)V1
+
+literal 288
+zcmV+*0pI>pVQh3|WM5wyX%jgx@mTLxE<@PQRiL_b=E~B@pxV>a5AXLtucBa_d<??^
+z!!?vOBqK9lmA}$c6bJxfO|&)}SQ53b!NI$dhNd0V&wfV*gV(O0xlG&-wSqynWywL>
+z43&`zI5BhZ1M@76V)E<(TesS)g<c413<s|)kT5T?SnO&2+4O(nR&1X|OcH?nbVDk&
+z)nUt3SKY`lqV7vnNLpV(+c^CICP9J4q1zRzk?H@s>*T0*ZxA>Y?s@x5?r6n%?+B@g
+zFeOe)%pjV@Rbh8+X^CWC@#RK)fr-3SP?0K8z@<N%6;CxTe>_r$YT*K(Plo*V{OM4P
+mbUX=AX)QI_vi{0DiUrTzVViYl;j$%ACsIyVnzZOrX+vd3L5$h}
+
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index c429baab..0ffd1038 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -14,7 +14,7 @@
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+ 		1C48DCDE11AC47C48E918489 /* Inter-UI-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DC74A378C1CC40E4B6192D7F /* Inter-UI-Medium.otf */; };
+-		2AE17F608689DAE577F28E4D /* (null) in Frameworks */ = {isa = PBXBuildFile; };
++		2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+ 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+@@ -115,7 +115,7 @@
+ 			isa = PBXFrameworksBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+-				2AE17F608689DAE577F28E4D /* (null) in Frameworks */,
++				2AE17F608689DAE577F28E4D /* BuildFile in Frameworks */,
+ 				EF3A30A2E55D4F8352E116D3 /* libPods-apolloschurchapp-apolloschurchappTests.a in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -308,7 +308,6 @@
+ 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "apolloschurchapp" */;
+ 			buildPhases = (
+ 				DEEF24CE4F76789E5E8C369D /* [CP] Check Pods Manifest.lock */,
+-				4C006E292656868900EE9158 /* Start Packager */,
+ 				13B07F871A680F5B00A75B9A /* Sources */,
+ 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+ 				13B07F8E1A680F5B00A75B9A /* Resources */,
+@@ -551,25 +550,6 @@
+ 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-resources.sh\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		4C006E292656868900EE9158 /* Start Packager */ = {
+-			isa = PBXShellScriptBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			inputFileListPaths = (
+-			);
+-			inputPaths = (
+-			);
+-			name = "Start Packager";
+-			outputFileListPaths = (
+-			);
+-			outputPaths = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-			shellPath = /bin/sh;
+-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+-			showEnvVarsInLog = 0;
+-		};
+ 		84E19E444A56C704431362B6 /* [CP] Embed Pods Frameworks */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index 34c34367..1d5d1c85 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -13,12 +13,15 @@
+     "ios": "react-native run-ios",
+     "android": "SIM=\"$($HOME/Library/Android/sdk/emulator/emulator -list-avds | sed -n 1p)\" && $HOME/Library/Android/sdk/emulator/emulator -avd \"${SIM}\" & react-native run-android",
+     "codecov": "cat ./coverage/lcov.info | codecov",
++    "link-packages": "node ./scripts/link-packages && yarn yalc update",
++    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
+     "generate-stories": "rnstl --searchDir ./src --pattern **/*.stories.js",
+     "lint": "eslint ./src --ext .js",
++    "get-schema": "eval $(grep ^APP_DATA_URL .env) && sleep 10 && get-graphql-schema $APP_DATA_URL > schema.graphql",
+     "postinstall": "jetify && yarn pods",
+     "pods": "(bundle install && cd ios && bundle exec pod install --repo-update)",
+     "start": "yarn start:dev",
+-    "start:dev": "yarn generate-stories && node ./scripts/get-introspection-data.js && react-native start",
++    "start:dev": "yarn generate-stories & yarn get-schema && node ./scripts/get-introspection-data.js && react-native start",
+     "test": "TZ=UTC jest",
+     "icons": "react-native set-icon --path",
+     "splash": "react-native set-splash --path"
+@@ -43,23 +46,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.21.0",
++    "@apollosproject/config": "^2.14.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.21.0",
+-    "@apollosproject/ui-auth": "^2.21.0",
+-    "@apollosproject/ui-connected": "^2.21.0",
+-    "@apollosproject/ui-fragments": "^2.21.0",
+-    "@apollosproject/ui-htmlview": "^2.21.0",
+-    "@apollosproject/ui-kit": "^2.21.0",
+-    "@apollosproject/ui-mapview": "^2.21.0",
+-    "@apollosproject/ui-media-player": "^2.21.0",
+-    "@apollosproject/ui-notifications": "^2.21.0",
+-    "@apollosproject/ui-onboarding": "^2.21.0",
+-    "@apollosproject/ui-passes": "^2.21.0",
+-    "@apollosproject/ui-prayer": "^2.21.0",
+-    "@apollosproject/ui-scripture": "^2.21.0",
+-    "@apollosproject/ui-storybook": "^2.21.0",
+-    "@apollosproject/ui-test-utils": "^2.21.0",
++    "@apollosproject/ui-analytics": "^2.14.0",
++    "@apollosproject/ui-auth": "^2.14.0",
++    "@apollosproject/ui-connected": "^2.14.0",
++    "@apollosproject/ui-fragments": "^2.14.0",
++    "@apollosproject/ui-htmlview": "^2.14.0",
++    "@apollosproject/ui-kit": "^2.14.0",
++    "@apollosproject/ui-mapview": "^2.14.0",
++    "@apollosproject/ui-media-player": "^2.14.0",
++    "@apollosproject/ui-notifications": "^2.14.0",
++    "@apollosproject/ui-onboarding": "^2.14.0",
++    "@apollosproject/ui-passes": "^2.14.0",
++    "@apollosproject/ui-prayer": "^2.14.0",
++    "@apollosproject/ui-scripture": "^2.14.0",
++    "@apollosproject/ui-storybook": "^2.14.0",
++    "@apollosproject/ui-test-utils": "^2.14.0",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+@@ -97,6 +100,7 @@
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+     "react-native-maps": "^0.27.1",
++    "react-native-modal-datetime-picker": "9.0.0",
+     "react-native-music-control": "0.10.8",
+     "react-native-onesignal": "3.9.1",
+     "react-native-passkit-wallet": "^0.1.4",
+@@ -116,7 +120,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.21.0",
++    "@apollosproject/eslint-config": "^2.14.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+@@ -140,6 +144,7 @@
+     "eslint-plugin-react-hooks": "^4.0.2",
+     "eslint-plugin-react-native": "^3.2.1",
+     "get-dev-paths": "^0.1.0",
++    "get-graphql-schema": "^2.1.2",
+     "graphql-import": "^0.7.1",
+     "jest": "^25.1.0",
+     "jetifier": "^1.6.4",
+@@ -150,7 +155,8 @@
+     "react-dom": "16.6.3",
+     "react-native-storybook-loader": "1.8.0",
+     "react-test-renderer": "16.13.1",
+-    "waait": "1.0.2"
++    "waait": "1.0.2",
++    "yalc": "^1.0.0-pre.47"
+   },
+   "rnpm": {
+     "assets": [
+diff --git a/apolloschurchapp/scripts/link-packages.js b/apolloschurchapp/scripts/link-packages.js
+new file mode 100644
+index 00000000..7778c0a4
+--- /dev/null
++++ b/apolloschurchapp/scripts/link-packages.js
+@@ -0,0 +1,16 @@
++const fs = require('fs');
++const { execSync } = require('child_process');
++
++const direction = process.argv[2] || 'link';
++
++const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
++
++const dependencies = [
++  ...Object.keys(packageJson.dependencies),
++  ...Object.keys(packageJson.devDependencies),
++].filter((d) => d.includes('@apollosproject'));
++
++dependencies.forEach((dep) => {
++  const output = execSync(`yalc ${direction} ${dep}`, { encoding: 'utf8' });
++  console.log(output);
++});
+diff --git a/apolloschurchapp/src/content-feed/content-feed.tests.js b/apolloschurchapp/src/content-feed/content-feed.tests.js
+new file mode 100644
+index 00000000..3c967931
+--- /dev/null
++++ b/apolloschurchapp/src/content-feed/content-feed.tests.js
+@@ -0,0 +1,119 @@
++import React from 'react';
++
++import { renderWithApolloData, Providers } from '@apollosproject/ui-test-utils';
++import { MockedProvider } from '@apollo/client/testing';
++import { GET_CONTENT_CARD } from '@apollosproject/ui-connected';
++import GET_CONTENT_FEED from './getContentFeed';
++
++import ContentFeed from './index';
++
++describe('content feed query component', () => {
++  it('renders a feedview after successful query', async () => {
++    const mock = {
++      request: {
++        query: GET_CONTENT_FEED,
++        variables: { itemId: 'ContentChannel:123' },
++      },
++      result: {
++        data: {
++          node: {
++            __typename: 'ContentChannel',
++            childContentItemsConnection: {
++              pageInfo: {
++                endCursor: 'blablalba',
++                __typename: 'PaginationInfo',
++              },
++              __typename: 'ContentItemsConnection',
++              edges: [
++                {
++                  __typename: 'ContentItemsConnectionEdge',
++                  node: {
++                    __typename: 'UniversalContentItem',
++                    id: 'UniversalContentItem:d57994350b9d213866b24dea3a97433d',
++                    coverImage: null,
++                    parentChannel: {
++                      id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++                      name: 'Editorial',
++                      iconName: 'text',
++                      __typename: 'ContentChannel',
++                    },
++                    title: 'Mea Animal Aperiam Ornatus Eu',
++                    hyphenatedTitle: 'Mea Animal Aperiam Ornatus Eu',
++                    summary: 'Bla bla bla',
++                    theme: null,
++                    isLiked: false,
++                    likedCount: 0,
++                    videos: [],
++                    audios: [],
++                  },
++                },
++                {
++                  __typename: 'ContentItemsConnectionEdge',
++                  node: {
++                    __typename: 'UniversalContentItem',
++                    id: 'UniversalContentItem:b36e55d803443431e96bb4b5068147ec',
++                    coverImage: null,
++                    parentChannel: {
++                      id: 'ContentChannel:4f68015ba18662a7409d1219a4ce013e',
++                      name: 'Editorial',
++                      iconName: 'text',
++                      __typename: 'ContentChannel',
++                    },
++                    title: 'Probo Senserit Id Mea, Ut Sed Malis Postea,',
++                    hyphenatedTitle:
++                      'Probo Senserit Id Mea, Ut Sed Malis Postea,',
++                    summary: 'Bla bla bla',
++                    theme: null,
++                    isLiked: false,
++                    likedCount: 0,
++                    videos: [],
++                    audios: [],
++                  },
++                },
++              ],
++            },
++          },
++        },
++      },
++    };
++
++    const additionalMocks = mock.result.data.node.childContentItemsConnection.edges.map(
++      ({ node }) => ({
++        request: {
++          query: GET_CONTENT_CARD,
++          variables: { contentId: node.id },
++        },
++        result: {
++          data: {
++            node: {
++              ...node,
++              coverImage: {
++                name: 'Boom',
++                ...node.coverImage,
++              },
++            },
++          },
++        },
++      })
++    );
++
++    const initialTree = await renderWithApolloData(
++      <Providers
++        MockedProvider={MockedProvider}
++        mocks={[mock, ...additionalMocks]}
++      >
++        <ContentFeed route={{ params: { itemId: 'ContentChannel:123' } }} />
++      </Providers>
++    );
++    const tree = await renderWithApolloData(
++      <Providers
++        MockedProvider={MockedProvider}
++        mocks={[mock, ...additionalMocks]}
++      >
++        <ContentFeed route={{ params: { itemId: 'ContentChannel:123' } }} />
++      </Providers>,
++      initialTree
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/content-feed/getContentFeed.js b/apolloschurchapp/src/content-feed/getContentFeed.js
+new file mode 100644
+index 00000000..38ed31fb
+--- /dev/null
++++ b/apolloschurchapp/src/content-feed/getContentFeed.js
+@@ -0,0 +1,22 @@
++import gql from 'graphql-tag';
++import ApollosConfig from '@apollosproject/config';
++
++export default gql`
++  query getContentFeed($itemId: ID!, $after: String, $first: Int) {
++    node(id: $itemId) {
++      ... on ContentChannel {
++        childContentItemsConnection(after: $after, first: $first) {
++          pageInfo {
++            endCursor
++          }
++          edges {
++            node {
++              ...contentCardFragment
++            }
++          }
++        }
++      }
++    }
++  }
++  ${ApollosConfig.FRAGMENTS.CONTENT_CARD_FRAGMENT}
++`;
+diff --git a/apolloschurchapp/src/content-feed/index.js b/apolloschurchapp/src/content-feed/index.js
+new file mode 100644
+index 00000000..ea033d8d
+--- /dev/null
++++ b/apolloschurchapp/src/content-feed/index.js
+@@ -0,0 +1,78 @@
++import React, { PureComponent } from 'react';
++import { Query } from '@apollo/client/react/components';
++import { get } from 'lodash';
++import PropTypes from 'prop-types';
++
++import {
++  ContentCardConnected,
++  fetchMoreResolver,
++} from '@apollosproject/ui-connected';
++
++import { BackgroundView, FeedView } from '@apollosproject/ui-kit';
++
++import GET_CONTENT_FEED from './getContentFeed';
++/**
++ * This is where the component description lives
++ * A FeedView wrapped in a query to pull content data.
++ */
++class ContentFeed extends PureComponent {
++  static propTypes = {
++    /** Functions passed down from React Navigation to use in navigating to/from
++     * items in the feed.
++     */
++    navigation: PropTypes.shape({
++      navigate: PropTypes.func,
++    }),
++    route: PropTypes.shape({
++      params: PropTypes.shape({
++        itemId: PropTypes.string,
++      }),
++    }),
++  };
++
++  /** Function that is called when a card in the feed is pressed.
++   * Takes the user to the ContentSingle
++   */
++  handleOnPress = (item) =>
++    this.props.navigation.navigate('ContentSingle', {
++      itemId: item.id,
++      sharing: item.sharing,
++    });
++
++  render() {
++    const { route } = this.props;
++    const { itemId } = route.params;
++    return (
++      <BackgroundView>
++        <Query
++          query={GET_CONTENT_FEED}
++          variables={{ itemId }}
++          fetchPolicy="cache-and-network"
++        >
++          {({ loading, error, data, refetch, fetchMore, variables }) => (
++            <FeedView
++              ListItemComponent={ContentCardConnected}
++              content={get(
++                data,
++                'node.childContentItemsConnection.edges',
++                []
++              ).map((edge) => edge.node)}
++              fetchMore={fetchMoreResolver({
++                collectionName: 'node.childContentItemsConnection',
++                fetchMore,
++                variables,
++                data,
++              })}
++              isLoading={loading}
++              error={error}
++              refetch={refetch}
++              onPressItem={this.handleOnPress}
++            />
++          )}
++        </Query>
++      </BackgroundView>
++    );
++  }
++}
++
++export default ContentFeed;
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 17568050..89028440 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -1,13 +1,9 @@
+ /* eslint-disable react/jsx-handler-names */
+ 
++import hoistNonReactStatic from 'hoist-non-react-statics';
+ import React from 'react';
+-import { StatusBar } from 'react-native';
+-import {
+-  NavigationContainer,
+-  useNavigation,
+-  DarkTheme,
+-  DefaultTheme,
+-} from '@react-navigation/native';
++import { StatusBar, Platform } from 'react-native';
++import { NavigationContainer } from '@react-navigation/native';
+ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+ import SplashScreen from 'react-native-splash-screen';
+ import 'react-native-gesture-handler'; // required for react-navigation
+@@ -21,17 +17,15 @@ import {
+ import Passes from '@apollosproject/ui-passes';
+ import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+ import Auth, { ProtectedRoute } from '@apollosproject/ui-auth';
++import ApollosConfig from '@apollosproject/config';
+ 
+-import {
+-  ContentFeedConnected,
+-  SearchScreenConnected,
+-} from '@apollosproject/ui-connected';
+ import Providers from './Providers';
+ import ContentSingle from './content-single';
+ import Event from './event';
+ import Tabs from './tabs';
+ import LandingScreen from './ui/LandingScreen';
+ import Onboarding from './ui/Onboarding';
++import Search from './ui/Search';
+ 
+ enableScreens(); // improves performance for react-navigation
+ 
+@@ -40,52 +34,56 @@ const AppStatusBar = withTheme(({ theme }) => ({
+   backgroundColor: theme.colors.background.paper,
+ }))(StatusBar);
+ 
+-const ProtectedRouteWithSplashScreen = () => {
++const ProtectedRouteWithSplashScreen = (props) => {
+   const handleOnRouteChange = () => SplashScreen.hide();
+-  const navigation = useNavigation();
+-  return (
+-    <ProtectedRoute
+-      onRouteChange={handleOnRouteChange}
+-      navigation={navigation}
+-    />
+-  );
++
++  return <ProtectedRoute {...props} onRouteChange={handleOnRouteChange} />;
+ };
+ 
+-const ThemedNavigationContainer = withTheme(({ theme, ...props }) => ({
+-  theme: {
+-    ...(theme.type === 'dark' ? DarkTheme : DefaultTheme),
+-    dark: theme.type === 'dark',
+-    colors: {
+-      ...(theme.type === 'dark' ? DarkTheme.colors : DefaultTheme.colors),
+-      primary: theme.colors.secondary,
+-      background: theme.colors.background.screen,
+-      card: theme.colors.background.paper,
+-      text: theme.colors.text.primary,
+-    },
+-  },
+-  ...props,
+-}))(({ containerRef, ...props }) => (
+-  <NavigationContainer ref={containerRef} {...props} />
+-));
++const { APP_DATA_URL } = ApollosConfig;
++
++// Hack to avoid needing to pass emailRequired through the navigator.navigate
++const EnhancedAuth = (props) => (
++  <Auth
++    {...props}
++    emailRequired
++    forgotPasswordURL={`${APP_DATA_URL}/forgot-password`}
++  />
++);
++// 😑
++hoistNonReactStatic(EnhancedAuth, Auth);
+ 
+ const { Navigator, Screen } = createNativeStackNavigator();
++const ThemedNavigator = withTheme(({ theme, ...props }) => ({
++  ...props,
++  screenOptions: {
++    headerTintColor: theme.colors.action.secondary,
++    headerTitleStyle: {
++      color: theme.colors.text.primary,
++    },
++    headerStyle: {
++      backgroundColor: theme.colors.background.paper,
++      ...Platform.select(theme.shadows.default),
++    },
++    headerShown: false,
++    stackPresentation: 'modal',
++  },
++}))(Navigator);
+ 
+-const App = () => (
++const App = (props) => (
+   <Providers>
+     <BackgroundView>
+       <AppStatusBar />
+-      <ThemedNavigationContainer
+-        containerRef={NavigationService.setTopLevelNavigator}
++      <NavigationContainer
++        ref={NavigationService.setTopLevelNavigator}
+         onReady={NavigationService.setIsReady}
+       >
+-        <Navigator
+-          screenOptions={{ headerShown: false, stackPresentation: 'modal' }}
+-        >
++        <ThemedNavigator initialRouteName="ProtectedRoute" {...props}>
+           <Screen
+             name="ProtectedRoute"
+             component={ProtectedRouteWithSplashScreen}
+           />
+-          <Screen name="Tabs" component={Tabs} />
++          <Screen name="Tabs" component={Tabs} options={{ title: 'Home' }} />
+           <Screen
+             name="ContentSingle"
+             component={ContentSingle}
+@@ -94,25 +92,21 @@ const App = () => (
+               stackPresentation: 'push',
+             }}
+           />
+-          <Screen
+-            component={ContentFeedConnected}
+-            name="ContentFeed"
+-            options={({ route }) => ({
+-              title: route.params.itemTitle || 'Content Feed',
+-              stackPresentation: 'push',
+-            })}
+-          />
+-
+           <Screen name="Event" component={Event} options={{ title: 'Event' }} />
+           <Screen
+             name="Auth"
+-            component={Auth}
++            component={EnhancedAuth}
+             options={{
++              title: 'Login',
+               gestureEnabled: false,
+               stackPresentation: 'push',
+             }}
+           />
+-          <Screen name="Location" component={Location} />
++          <Screen
++            name="Location"
++            component={Location}
++            options={{ headerShown: true }}
++          />
+           <Screen
+             name="Passes"
+             component={Passes}
+@@ -122,14 +116,19 @@ const App = () => (
+             name="Onboarding"
+             component={Onboarding}
+             options={{
++              title: 'Onboarding',
+               gestureEnabled: false,
+               stackPresentation: 'push',
+             }}
+           />
+-          <Screen name="LandingScreen" component={LandingScreen} />
+-          <Screen name="Search" component={SearchScreenConnected} />
+-        </Navigator>
+-      </ThemedNavigationContainer>
++          <Screen
++            name="LandingScreen"
++            component={LandingScreen}
++            options={{ headerShown: false }}
++          />
++          <Screen component={Search} name="Search" />
++        </ThemedNavigator>
++      </NavigationContainer>
+     </BackgroundView>
+   </Providers>
+ );
+diff --git a/apolloschurchapp/src/tabs/discover/Discover.js b/apolloschurchapp/src/tabs/discover/Discover.js
+new file mode 100644
+index 00000000..5153afba
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/discover/Discover.js
+@@ -0,0 +1,59 @@
++import React from 'react';
++
++import { SafeAreaView } from 'react-native-safe-area-context';
++import gql from 'graphql-tag';
++import { Query } from '@apollo/client/react/components';
++import { useNavigation } from '@react-navigation/native';
++
++import { BackgroundView } from '@apollosproject/ui-kit';
++import {
++  FeaturesFeedConnected,
++  FEATURE_FEED_ACTION_MAP,
++  RockAuthedWebBrowser,
++} from '@apollosproject/ui-connected';
++
++function handleOnPress({ action, ...props }) {
++  if (FEATURE_FEED_ACTION_MAP[action]) {
++    FEATURE_FEED_ACTION_MAP[action]({ action, ...props });
++  }
++  // If you add additional actions, you can handle them here.
++  // Or add them to the FEATURE_FEED_ACTION_MAP, with the syntax
++  // { [ActionName]: function({ relatedNode, action, ...FeatureFeedConnectedProps}) }
++}
++
++// getHomeFeed uses the HOME_FEATURES in the config.yml
++// You can also hardcode an ID if you are confident it will never change
++// Or use some other strategy to get a FeatureFeed.id
++export const GET_DISCOVER_FEED = gql`
++  query getDiscoverFeatureFeed {
++    discoverFeedFeatures {
++      id
++    }
++  }
++`;
++
++const Discover = () => {
++  const navigation = useNavigation();
++  return (
++    <RockAuthedWebBrowser>
++      {(openUrl) => (
++        <BackgroundView>
++          <SafeAreaView edges={['right', 'top', 'left']}>
++            <Query query={GET_DISCOVER_FEED}>
++              {({ data }) => (
++                <FeaturesFeedConnected
++                  openUrl={openUrl}
++                  navigation={navigation}
++                  featureFeedId={data?.discoverFeedFeatures?.id}
++                  onPressActionItem={handleOnPress}
++                />
++              )}
++            </Query>
++          </SafeAreaView>
++        </BackgroundView>
++      )}
++    </RockAuthedWebBrowser>
++  );
++};
++
++export default Discover;
+diff --git a/apolloschurchapp/src/tabs/discover/index.js b/apolloschurchapp/src/tabs/discover/index.js
+new file mode 100644
+index 00000000..f612b1ad
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/discover/index.js
+@@ -0,0 +1,44 @@
++import React from 'react';
++import { Platform } from 'react-native';
++import { createNativeStackNavigator } from 'react-native-screens/native-stack';
++import { withTheme } from '@apollosproject/ui-kit';
++
++import ContentFeed from '../../content-feed';
++
++import Discover from './Discover';
++
++const { Navigator, Screen } = createNativeStackNavigator();
++
++const DiscoverNavigator = (props) => (
++  <Navigator initialRouteName="Discover" {...props}>
++    <Screen
++      component={Discover}
++      name="Discover"
++      options={{ headerShown: false }}
++    />
++    <Screen
++      component={ContentFeed}
++      name="ContentFeed"
++      /** Function for React Navigation to set information in the header. */
++      options={({ route }) => ({
++        title: route.params.itemTitle || 'Content Feed',
++      })}
++    />
++  </Navigator>
++);
++const EnhancedDiscover = withTheme(({ theme, ...props }) => ({
++  ...props,
++  screenOptions: {
++    headerTintColor: theme.colors.action.secondary,
++    headerTitleStyle: {
++      color: theme.colors.text.primary,
++    },
++    headerStyle: {
++      backgroundColor: theme.colors.background.paper,
++      ...Platform.select(theme.shadows.default),
++    },
++    headerLargeTitle: true,
++  },
++}))(DiscoverNavigator);
++
++export default EnhancedDiscover;
+diff --git a/apolloschurchapp/src/tabs/home/index.js b/apolloschurchapp/src/tabs/home/index.js
+new file mode 100644
+index 00000000..91f9323c
+--- /dev/null
++++ b/apolloschurchapp/src/tabs/home/index.js
+@@ -0,0 +1,94 @@
++import React, { useEffect } from 'react';
++import { Image } from 'react-native';
++import { SafeAreaView } from 'react-native-safe-area-context';
++import { Query } from '@apollo/client/react/components';
++import { gql, useApolloClient } from '@apollo/client';
++import { useNavigation } from '@react-navigation/native';
++
++import {
++  styled,
++  BackgroundView,
++  NavigationService,
++} from '@apollosproject/ui-kit';
++import {
++  FeaturesFeedConnected,
++  FEATURE_FEED_ACTION_MAP,
++  RockAuthedWebBrowser,
++} from '@apollosproject/ui-connected';
++
++import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
++
++import { SearchButton } from '../../ui/Search';
++import { ONBOARDING_VERSION } from '../../ui/Onboarding';
++
++const LogoTitle = styled(({ theme }) => ({
++  height: theme.sizing.baseUnit,
++  margin: theme.sizing.baseUnit,
++  alignSelf: 'center',
++  resizeMode: 'contain',
++}))(Image);
++
++function handleOnPress({ action, ...props }) {
++  if (FEATURE_FEED_ACTION_MAP[action]) {
++    FEATURE_FEED_ACTION_MAP[action]({ action, ...props });
++  }
++  // If you add additional actions, you can handle them here.
++  // Or add them to the FEATURE_FEED_ACTION_MAP, with the syntax
++  // { [ActionName]: function({ relatedNode, action, ...FeatureFeedConnectedProps}) }
++}
++
++// getHomeFeed uses the HOME_FEATURES in the config.yml
++// You can also hardcode an ID if you are confident it will never change
++// Or use some other strategy to get a FeatureFeed.id
++export const GET_HOME_FEED = gql`
++  query getHomeFeatureFeed {
++    homeFeedFeatures {
++      id
++    }
++  }
++`;
++
++const Home = () => {
++  const navigation = useNavigation();
++  const client = useApolloClient();
++
++  useEffect(() => {
++    checkOnboardingStatusAndNavigate({
++      client,
++      navigation: NavigationService,
++      latestOnboardingVersion: ONBOARDING_VERSION,
++      navigateHome: false,
++    });
++  }, []);
++
++  return (
++    <RockAuthedWebBrowser>
++      {(openUrl) => (
++        <BackgroundView>
++          <SafeAreaView edges={['top', 'left', 'right']}>
++            <Query query={GET_HOME_FEED} fetchPolicy="cache-and-network">
++              {({ data }) => (
++                <FeaturesFeedConnected
++                  openUrl={openUrl}
++                  navigation={navigation}
++                  featureFeedId={data?.homeFeedFeatures?.id}
++                  onPressActionItem={handleOnPress}
++                  ListHeaderComponent={
++                    <>
++                      <LogoTitle source={require('./wordmark.png')} />
++                      <SearchButton
++                        onPress={() => navigation.navigate('Search')}
++                      />
++                    </>
++                  }
++                />
++              )}
++            </Query>
++          </SafeAreaView>
++        </BackgroundView>
++      )}
++    </RockAuthedWebBrowser>
++  );
++};
++
++export default Home;
+diff --git a/apolloschurchapp/src/tabs/wordmark.png b/apolloschurchapp/src/tabs/home/wordmark.png
+similarity index 100%
+rename from apolloschurchapp/src/tabs/wordmark.png
+rename to apolloschurchapp/src/tabs/home/wordmark.png
+diff --git a/apolloschurchapp/src/tabs/index.js b/apolloschurchapp/src/tabs/index.js
+index db5610a4..3e2a5b8c 100644
+--- a/apolloschurchapp/src/tabs/index.js
++++ b/apolloschurchapp/src/tabs/index.js
+@@ -1,129 +1,45 @@
+-import React, { useEffect } from 'react';
+-import PropTypes from 'prop-types';
+-import { Image } from 'react-native';
+-import { useNavigation } from '@react-navigation/native';
++import React from 'react';
++import { Platform } from 'react-native';
+ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+-import {
+-  NavigationService,
+-  withTheme,
+-  Icon,
+-  Touchable,
+-} from '@apollosproject/ui-kit';
+-import { useApolloClient } from '@apollo/client';
+-import { createFeatureFeedTab } from '@apollosproject/ui-connected';
+-import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+-import { ONBOARDING_VERSION } from '../ui/Onboarding';
++import { withTheme } from '@apollosproject/ui-kit';
++
+ import Connect from './connect';
++import Home from './home';
++import Discover from './discover';
+ import tabBarIcon from './tabBarIcon';
+ 
+-const HeaderLogo = withTheme(({ theme }) => ({
+-  style: {
+-    height: theme.sizing.baseUnit * 2.5,
+-    width: '70%',
+-    resizeMode: 'contain',
+-  },
+-  source:
+-    theme.type === 'light'
+-      ? require('./wordmark.png')
+-      : require('./wordmark.dark.png'),
+-}))(Image);
+-
+-const SearchIcon = withTheme(({ theme: { colors, sizing: { baseUnit } } }) => ({
+-  name: 'search',
+-  size: baseUnit * 2,
+-  fill: colors.primary,
+-}))(Icon);
++const { Navigator, Screen } = createBottomTabNavigator();
+ 
+-const SearchButton = ({ onPress }) => (
+-  <Touchable onPress={onPress}>
+-    <SearchIcon />
+-  </Touchable>
++const TabNavigator = (props) => (
++  <Navigator {...props} lazy>
++    <Screen
++      name="Home"
++      component={Home}
++      options={{ tabBarIcon: tabBarIcon('home') }}
++    />
++    <Screen
++      name="Discover"
++      component={Discover}
++      options={{ tabBarIcon: tabBarIcon('sections') }}
++    />
++    <Screen
++      name="Connect"
++      component={Connect}
++      options={{ tabBarIcon: tabBarIcon('profile') }}
++    />
++  </Navigator>
+ );
+ 
+-SearchButton.propTypes = {
+-  onPress: PropTypes.func,
+-};
+-
+-const HeaderCenter = () => <HeaderLogo source={require('./wordmark.png')} />;
+-const HeaderRight = () => {
+-  const navigation = useNavigation();
+-  return <SearchButton onPress={() => navigation.navigate('Search')} />;
+-};
+-
+-// we nest stack inside of tabs so we can use all the fancy native header features
+-const HomeTab = createFeatureFeedTab({
+-  screenOptions: {
+-    headerHideShadow: true,
+-    headerCenter: HeaderCenter,
+-    headerRight: HeaderRight,
+-    headerLargeTitle: false,
+-  },
+-  tabName: 'Home',
+-  feedName: 'HOME',
+-});
+-
+-const ReadTab = createFeatureFeedTab({
+-  tabName: 'Read',
+-  feedName: 'READ',
+-});
+-
+-const WatchTab = createFeatureFeedTab({
+-  tabName: 'Watch',
+-  feedName: 'WATCH',
+-});
+-
+-const PrayTab = createFeatureFeedTab({
+-  tabName: 'Pray',
+-  feedName: 'PRAY',
+-});
+-
+-const { Navigator, Screen } = createBottomTabNavigator();
+-
+-const TabNavigator = () => {
+-  const client = useApolloClient();
+-  // this is only used by the tab loaded first
+-  // if there is a new version of the onboarding flow,
+-  // we'll navigate there first to show new screens
+-  useEffect(
+-    () => {
+-      checkOnboardingStatusAndNavigate({
+-        client,
+-        navigation: NavigationService,
+-        latestOnboardingVersion: ONBOARDING_VERSION,
+-        navigateHome: false,
+-      });
++const ThemedTabNavigator = withTheme(({ theme }) => ({
++  tabBarOptions: {
++    activeTintColor: theme?.colors?.secondary,
++    inactiveTintColor: theme?.colors?.text?.tertiary,
++    style: {
++      backgroundColor: theme?.colors?.background?.paper,
++      borderTopColor: theme?.colors?.shadows.default,
++      ...Platform.select(theme?.shadows.default),
+     },
+-    [client]
+-  );
+-  return (
+-    <Navigator lazy>
+-      <Screen
+-        name="Home"
+-        component={HomeTab}
+-        options={{ tabBarIcon: tabBarIcon('home') }}
+-      />
+-      <Screen
+-        name="Read"
+-        component={ReadTab}
+-        options={{ tabBarIcon: tabBarIcon('sections') }}
+-      />
+-      <Screen
+-        name="Watch"
+-        component={WatchTab}
+-        options={{ tabBarIcon: tabBarIcon('video') }}
+-      />
+-      <Screen
+-        name="Pray"
+-        component={PrayTab}
+-        options={{ tabBarIcon: tabBarIcon('like') }}
+-      />
+-      <Screen
+-        name="Connect"
+-        component={Connect}
+-        options={{ tabBarIcon: tabBarIcon('profile') }}
+-      />
+-    </Navigator>
+-  );
+-};
++  },
++}))(TabNavigator);
+ 
+-export default TabNavigator;
++export default ThemedTabNavigator;
+diff --git a/apolloschurchapp/src/tabs/wordmark.dark.png b/apolloschurchapp/src/tabs/wordmark.dark.png
+deleted file mode 100644
+index 93229c35ef61c3842a7bf0acb5c9ed910093adb0..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 8241
+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
+
+diff --git a/apolloschurchapp/src/theme/propOverrides.js b/apolloschurchapp/src/theme/propOverrides.js
+new file mode 100644
+index 00000000..6d46cc8b
+--- /dev/null
++++ b/apolloschurchapp/src/theme/propOverrides.js
+@@ -0,0 +1,2 @@
++/* Export your custom prop overrides here. */
++export {};
+diff --git a/apolloschurchapp/src/theme/styleOverrides.js b/apolloschurchapp/src/theme/styleOverrides.js
+new file mode 100644
+index 00000000..3599e309
+--- /dev/null
++++ b/apolloschurchapp/src/theme/styleOverrides.js
+@@ -0,0 +1,2 @@
++/* Export your custom style overrides here. */
++export {};
+diff --git a/apolloschurchapp/src/theme/theme.js b/apolloschurchapp/src/theme/theme.js
+index fe1c84f1..b2aeb3cb 100644
+--- a/apolloschurchapp/src/theme/theme.js
++++ b/apolloschurchapp/src/theme/theme.js
+@@ -1,3 +1,6 @@
++// import styleOverrides from './styleOverrides';
++// import propOverrides from './propOverrides';
++
+ /* Add your custom theme definitions below. Anything that is supported in UI-Kit Theme can be
+  overridden and/or customized here! */
+ 
+@@ -48,6 +51,9 @@
+  * }
+  * ```
+  */
+-// const overrides = {};
++// const overrides = {
++//   ...styleOverrides,
++//   ...propOverrides,
++// };
+ 
+ export default {};
+diff --git a/apolloschurchapp/src/ui/Search/Search.js b/apolloschurchapp/src/ui/Search/Search.js
+new file mode 100644
+index 00000000..01c6476a
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Search/Search.js
+@@ -0,0 +1,68 @@
++import React, { useState, useEffect, useRef } from 'react';
++import { View } from 'react-native';
++import { SafeAreaView } from 'react-native-safe-area-context';
++import PropTypes from 'prop-types';
++import { throttle } from 'lodash';
++
++import { styled } from '@apollosproject/ui-kit';
++import {
++  SearchFeedConnected,
++  SearchInputHeader,
++} from '@apollosproject/ui-connected';
++
++const SearchBackground = styled(({ theme }) => ({
++  backgroundColor: theme.colors.background.paper,
++}))(View);
++
++const HeaderContainer = styled({
++  paddingTop: 8,
++})(View);
++
++const SearchContainer = styled({ height: '100%' })(View);
++
++function Search(props) {
++  const [searchText, setSearchText] = useState('');
++  const [isFocused, setIsFocused] = useState(true);
++
++  const searchRef = useRef(null);
++
++  useEffect(() => {
++    searchRef.current.focus();
++  }, []);
++
++  useEffect(
++    () => {
++      if (!isFocused && searchText === '') {
++        props.navigation.pop();
++      }
++    },
++    [isFocused]
++  );
++
++  return (
++    <SearchBackground>
++      <SafeAreaView edges={['right', 'left']}>
++        <HeaderContainer>
++          <SearchInputHeader
++            onChangeText={throttle(setSearchText, 300)}
++            onFocus={setIsFocused}
++            inputRef={searchRef}
++          />
++        </HeaderContainer>
++        <SearchContainer>
++          <SearchFeedConnected searchText={searchText} />
++        </SearchContainer>
++      </SafeAreaView>
++    </SearchBackground>
++  );
++}
++
++Search.propTypes = {
++  navigation: PropTypes.shape({
++    getParam: PropTypes.func,
++    setParams: PropTypes.func,
++    navigate: PropTypes.func,
++  }),
++};
++
++export default Search;
+diff --git a/apolloschurchapp/src/ui/Search/SearchButton.js b/apolloschurchapp/src/ui/Search/SearchButton.js
+new file mode 100644
+index 00000000..9dd742f6
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Search/SearchButton.js
+@@ -0,0 +1,31 @@
++import React from 'react';
++import { Animated } from 'react-native';
++import PropTypes from 'prop-types';
++
++import { styled, withTheme, Touchable, Icon } from '@apollosproject/ui-kit';
++
++const SearchIcon = withTheme(({ theme: { colors, sizing: { baseUnit } } }) => ({
++  name: 'search',
++  size: baseUnit * 2,
++  fill: colors.primary,
++}))(Icon);
++
++const SearchButtonContainer = styled(({ theme: { sizing: { baseUnit } } }) => ({
++  position: 'absolute',
++  right: baseUnit,
++  top: baseUnit / 2,
++}))(Animated.View);
++
++const HomeSearchButton = ({ onPress }) => (
++  <SearchButtonContainer>
++    <Touchable onPress={onPress}>
++      <SearchIcon />
++    </Touchable>
++  </SearchButtonContainer>
++);
++
++HomeSearchButton.propTypes = {
++  onPress: PropTypes.func,
++};
++
++export default HomeSearchButton;
+diff --git a/apolloschurchapp/src/ui/Search/index.js b/apolloschurchapp/src/ui/Search/index.js
+new file mode 100644
+index 00000000..99ed1d41
+--- /dev/null
++++ b/apolloschurchapp/src/ui/Search/index.js
+@@ -0,0 +1,5 @@
++import Search from './Search';
++import SearchButton from './SearchButton';
++
++export { SearchButton };
++export default Search;
