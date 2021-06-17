@@ -182,8 +182,15 @@ function cleanUp() {
     rm -rf "$ReadmeHeader" "$ReadmeFooter" "$ReadmeTable" "$ReadmeTableBig"
 }
 
+if [ -z ${GITHUB_TOKEN+x} ]; then
+    TAGS=$(curl https://api.github.com/repos/apollosproject/apollos-templates/tags);
+else
+    TAGS=$(curl https://api.github.com/repos/apollosproject/apollos-templates/tags -H"Authorization: Bearer ${GITHUB_TOKEN}");
+fi
+
+# get latest apps version
 newRelease=$(
-    curl -s "https://api.github.com/repos/apollosproject/apollos-templates/tags" |
+    echo $TAGS |
         python -c "import sys, json; print json.load(sys.stdin)[0]['name'][1:]"
 )
 
