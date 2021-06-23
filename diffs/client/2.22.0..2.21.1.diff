@@ -1,0 +1,1084 @@
+diff --git a/apolloschurchapp/Gemfile b/apolloschurchapp/Gemfile
+index 0eeccaa5..77041843 100644
+--- a/apolloschurchapp/Gemfile
++++ b/apolloschurchapp/Gemfile
+@@ -1,4 +1,3 @@
+ source 'https://rubygems.org'
+ gem 'cocoapods', '1.10.1'
+ gem 'fastlane', '2.179.0'
+-gem 'xcodeproj'
+diff --git a/apolloschurchapp/Gemfile.lock b/apolloschurchapp/Gemfile.lock
+index 1b973874..a0fa52db 100644
+--- a/apolloschurchapp/Gemfile.lock
++++ b/apolloschurchapp/Gemfile.lock
+@@ -266,7 +266,6 @@ PLATFORMS
+ DEPENDENCIES
+   cocoapods (= 1.10.1)
+   fastlane (= 2.179.0)
+-  xcodeproj
+ 
+ BUNDLED WITH
+    2.2.4
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 6d6012d1..c15e67df 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.22.0",
++    "version": "2.21.1",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 36f00fef..0c820572 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -1,4 +1,3 @@
+-require 'xcodeproj'
+ # This file contains the fastlane.tools configuration
+ # You can find the documentation at https://docs.fastlane.tools
+ #
+@@ -14,20 +13,12 @@ require 'xcodeproj'
+ # Uncomment the line if you want fastlane to automatically update itself
+ #update_fastlane
+ 
+-def product_bundle_id(path:)
+-  project = Xcodeproj::Project.open(path)
+-  scheme = project.native_targets.first
+-  build_configuration = scheme.build_configurations.first
+-  build_configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER']
+-end
+-
+ before_all do
+   ensure_git_branch
+   ensure_git_status_clean
+   git_pull
+ end
+ 
+-
+ platform :ios do
+ 
+   desc "Push a new internal build to TestFlight"
+@@ -36,11 +27,9 @@ platform :ios do
+     # get project name
+     proj = Dir.glob("../ios/*.xcworkspace")[0][7..-13]
+ 
+-    identifier = product_bundle_id(path: "../ios/" << proj << ".xcodeproj")
+-
+-    app_store_connect_api_key(key_filepath: "ios/apollos.p8", in_house: false)
++    app_store_connect_api_key(key_filepath: "ios/apollos.p8")
+     setup_ci
+-    match(type: 'appstore', app_identifier: [identifier, "#{identifier}.OneSignalNotificationServiceExtension"], readonly: true)
++    match(type: 'appstore', readonly: true)
+     increment_build_number(build_number: number_of_commits, xcodeproj: "ios/" << proj << ".xcodeproj")
+     build_app(workspace: "ios/" << proj << ".xcworkspace", scheme: proj)
+     changelog_from_git_commits
+diff --git a/apolloschurchapp/fastlane/README.md b/apolloschurchapp/fastlane/README.md
+index fbb662dc..026e1080 100644
+--- a/apolloschurchapp/fastlane/README.md
++++ b/apolloschurchapp/fastlane/README.md
+@@ -16,6 +16,11 @@ or alternatively using `brew install fastlane`
+ 
+ # Available Actions
+ ## iOS
++### ios certificates
++```
++fastlane ios certificates
++```
++Fetch certificates and provisioning profiles
+ ### ios deploy
+ ```
+ fastlane ios deploy
+diff --git a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/Info.plist b/apolloschurchapp/ios/OneSignalNotificationServiceExtension/Info.plist
+deleted file mode 100644
+index 4c1c3834..00000000
+--- a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/Info.plist
++++ /dev/null
+@@ -1,31 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+-<plist version="1.0">
+-<dict>
+-	<key>CFBundleDevelopmentRegion</key>
+-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+-	<key>CFBundleDisplayName</key>
+-	<string>OneSignalNotificationServiceExtension</string>
+-	<key>CFBundleExecutable</key>
+-	<string>$(EXECUTABLE_NAME)</string>
+-	<key>CFBundleIdentifier</key>
+-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+-	<key>CFBundleInfoDictionaryVersion</key>
+-	<string>6.0</string>
+-	<key>CFBundleName</key>
+-	<string>$(PRODUCT_NAME)</string>
+-	<key>CFBundlePackageType</key>
+-	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+-	<key>CFBundleShortVersionString</key>
+-	<string>1.0.0</string>
+-	<key>CFBundleVersion</key>
+-	<string>670</string>
+-	<key>NSExtension</key>
+-	<dict>
+-		<key>NSExtensionPointIdentifier</key>
+-		<string>com.apple.usernotifications.service</string>
+-		<key>NSExtensionPrincipalClass</key>
+-		<string>$(PRODUCT_MODULE_NAME).NotificationService</string>
+-	</dict>
+-</dict>
+-</plist>
+diff --git a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/NotificationService.swift b/apolloschurchapp/ios/OneSignalNotificationServiceExtension/NotificationService.swift
+deleted file mode 100644
+index a8907580..00000000
+--- a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/NotificationService.swift
++++ /dev/null
+@@ -1,31 +0,0 @@
+-import UserNotifications
+-
+-import OneSignal
+-
+-class NotificationService: UNNotificationServiceExtension {
+-    
+-    var contentHandler: ((UNNotificationContent) -> Void)?
+-    var receivedRequest: UNNotificationRequest!
+-    var bestAttemptContent: UNMutableNotificationContent?
+-    
+-    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+-        self.receivedRequest = request;
+-        self.contentHandler = contentHandler
+-        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+-        
+-        if let bestAttemptContent = bestAttemptContent {
+-            OneSignal.didReceiveNotificationExtensionRequest(self.receivedRequest, with: self.bestAttemptContent)
+-            contentHandler(bestAttemptContent)
+-        }
+-    }
+-    
+-    override func serviceExtensionTimeWillExpire() {
+-        // Called just before the extension will be terminated by the system.
+-        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
+-        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
+-            OneSignal.serviceExtensionTimeWillExpireRequest(self.receivedRequest, with: self.bestAttemptContent)
+-            contentHandler(bestAttemptContent)
+-        }
+-    }
+-    
+-}
+diff --git a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements b/apolloschurchapp/ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
+deleted file mode 100644
+index 379cbb9c..00000000
+--- a/apolloschurchapp/ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
++++ /dev/null
+@@ -1,10 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+-<plist version="1.0">
+-<dict>
+-	<key>com.apple.security.application-groups</key>
+-	<array>
+-		<string>group.com.differential.apollos.onesignal</string>
+-	</array>
+-</dict>
+-</plist>
+diff --git a/apolloschurchapp/ios/Podfile b/apolloschurchapp/ios/Podfile
+index cdcd2131..40454274 100644
+--- a/apolloschurchapp/ios/Podfile
++++ b/apolloschurchapp/ios/Podfile
+@@ -48,7 +48,3 @@ target 'apolloschurchapp-tvOS' do
+   end
+ 
+ end
+-
+-target 'OneSignalNotificationServiceExtension' do
+-  pod 'OneSignal', '>= 3.0', '< 4.0'
+-end
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index bf62a882..adffcfbb 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -70,7 +70,7 @@ PODS:
+     - glog
+   - glog (0.3.5)
+   - libevent (2.1.12)
+-  - OneSignal (3.4.3)
++  - OneSignal (2.15.2)
+   - OpenSSL-Universal (1.1.180)
+   - Permission-Notifications (2.2.2):
+     - RNPermissions
+@@ -242,7 +242,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.22.0):
++  - react-native-apollos-player (2.21.1):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -256,8 +256,8 @@ PODS:
+     - React
+   - react-native-music-control (0.10.8):
+     - React
+-  - react-native-onesignal (4.0.8):
+-    - OneSignal (= 3.4.3)
++  - react-native-onesignal (3.9.1):
++    - OneSignal (= 2.15.2)
+     - React (< 1.0.0, >= 0.13.0)
+   - react-native-passkit-wallet (0.1.4):
+     - React
+@@ -420,7 +420,6 @@ DEPENDENCIES:
+   - FlipperKit/SKIOSNetworkPlugin (= 0.75.1)
+   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
+   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+-  - OneSignal (< 4.0, >= 3.0)
+   - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
+   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary.podspec`)
+   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
+@@ -626,7 +625,7 @@ SPEC CHECKSUMS:
+   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
+   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
+   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+-  OneSignal: e4dfb1912410f302dc9661ce98fc829f6c18ff6a
++  OneSignal: 9531e385388565f4d31797ddadbe0fcc786430ec
+   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
+   Permission-Notifications: 9c6b5cc4f0e6599e9fc3395b77cebddc48f1be41
+   Permission-PhotoLibrary: 8227a6ed9f6a971537afe63742d54f5f23a38fe2
+@@ -640,14 +639,14 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 57b7cc6c3f082708dadcb8732d14453bcaabde1e
++  react-native-apollos-player: f5d76891a1baa5c9afc96d96708a5bddb8bb6b8f
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+   react-native-image-picker: 28d8d1f5a643119876b8b2c7d4d1dcfb2b232dd4
+   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+   react-native-music-control: dcfe5b61e56a15898c4618579cb8ce612c9d21a8
+-  react-native-onesignal: 50b047c674b79ba700218338fdefb45220da4db5
++  react-native-onesignal: ad2eaab1517951e50d19fa3eccd16d3048167181
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+   react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
+   react-native-safe-area-context: ef6f16c66b0797ecae1bf86c103dfb3dc16fc33d
+@@ -681,6 +680,6 @@ SPEC CHECKSUMS:
+   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
+   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+ 
+-PODFILE CHECKSUM: 018672643cc187bdb580850b8d0871ad9b670d36
++PODFILE CHECKSUM: 6de27767413bc4f48feeecbc37bbce2b733bfe20
+ 
+ COCOAPODS: 1.10.1
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+index 99636519..a29992c9 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOS/Info.plist
+@@ -19,7 +19,7 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>670</string>
++	<string>507</string>
+ 	<key>LSRequiresIPhoneOS</key>
+ 	<true />
+ 	<key>UILaunchStoryboardName</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+index b3f0aac9..a9ab744c 100644
+--- a/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp-tvOSTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>670</string>
++	<string>507</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+index 7922c128..c429baab 100644
+--- a/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
++++ b/apolloschurchapp/ios/apolloschurchapp.xcodeproj/project.pbxproj
+@@ -10,7 +10,6 @@
+ 		00E356F31AD99517003FC87E /* apolloschurchappTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* apolloschurchappTests.m */; };
+ 		01F091B02048490A8F9EF4FE /* Inter-UI-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 63F6EE53A9B44B4388B5F1C2 /* Inter-UI-Italic.otf */; };
+ 		08CE105F17284254AD54AF84 /* DroidSerif-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3B8A0AC5A6B4FABB3BDF6CB /* DroidSerif-Bold.ttf */; };
+-		0FAB39D70A1174DFF70E38DA /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB0031860411B96BE5F3DCD0 /* libPods-OneSignalNotificationServiceExtension.a */; };
+ 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+ 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+ 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+@@ -35,8 +34,6 @@
+ 		93A2B0A9328A46A4B7DD5EFA /* DroidSerif-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4E007B33EDD74B82AEF02C24 /* DroidSerif-Regular.ttf */; };
+ 		AB3BD177B8A14193A5EEDDF8 /* Inter-UI-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A613256118404CB691DE2C8E /* Inter-UI-Regular.otf */; };
+ 		B02F194A3F6A4FE29AC799B4 /* DroidSerif-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A93F9D112A034626A9421759 /* DroidSerif-BoldItalic.ttf */; };
+-		BF49AE872649A852001C7B78 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF49AE862649A852001C7B78 /* NotificationService.swift */; };
+-		BF49AE8B2649A852001C7B78 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = BF49AE842649A852001C7B78 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+ 		BFC9F08425757C2D00FF49D7 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9F08325757C2D00FF49D7 /* File.swift */; };
+ 		E875558F3FB8FA2024EF7DC2 /* libPods-apolloschurchapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB6B5B7B6A0D1ECB68CF0DD /* libPods-apolloschurchapp.a */; };
+ 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
+@@ -60,29 +57,8 @@
+ 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
+ 			remoteInfo = "apolloschurchapp-tvOS";
+ 		};
+-		BF49AE892649A852001C7B78 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+-			proxyType = 1;
+-			remoteGlobalIDString = BF49AE832649A852001C7B78;
+-			remoteInfo = OneSignalNotificationServiceExtension;
+-		};
+ /* End PBXContainerItemProxy section */
+ 
+-/* Begin PBXCopyFilesBuildPhase section */
+-		BF49AE8C2649A852001C7B78 /* Embed App Extensions */ = {
+-			isa = PBXCopyFilesBuildPhase;
+-			buildActionMask = 2147483647;
+-			dstPath = "";
+-			dstSubfolderSpec = 13;
+-			files = (
+-				BF49AE8B2649A852001C7B78 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
+-			);
+-			name = "Embed App Extensions";
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-/* End PBXCopyFilesBuildPhase section */
+-
+ /* Begin PBXFileReference section */
+ 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+ 		00E356EE1AD99517003FC87E /* apolloschurchappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = apolloschurchappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+@@ -108,7 +84,6 @@
+ 		4E007B33EDD74B82AEF02C24 /* DroidSerif-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DroidSerif-Regular.ttf"; path = "../assets/fonts/DroidSerif-Regular.ttf"; sourceTree = "<group>"; };
+ 		54F271B8EB67A4997A2C7D96 /* Pods-apolloschurchapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp.debug.xcconfig"; sourceTree = "<group>"; };
+ 		59218083CDDF8EF2ABA9BCD1 /* Pods-apolloschurchapp-apolloschurchappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-apolloschurchappTests.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests.debug.xcconfig"; sourceTree = "<group>"; };
+-		59B7EF0894518FA2172F644D /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+ 		5A5A2BC2998547F4816B82E4 /* Inter-UI-BlackItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-BlackItalic.otf"; path = "../assets/fonts/Inter-UI-BlackItalic.otf"; sourceTree = "<group>"; };
+ 		63F6EE53A9B44B4388B5F1C2 /* Inter-UI-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Italic.otf"; path = "../assets/fonts/Inter-UI-Italic.otf"; sourceTree = "<group>"; };
+ 		745C835CA2F1E1EC2425152A /* Pods-apolloschurchapp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOS/Pods-apolloschurchapp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+@@ -119,17 +94,11 @@
+ 		AC02408E578A898123910157 /* libPods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		ADC3D2DB245545ADB1CAB3FE /* DroidSerif-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DroidSerif-Italic.ttf"; path = "../assets/fonts/DroidSerif-Italic.ttf"; sourceTree = "<group>"; };
+ 		AE85030F59F256E90D5A4C2B /* Pods-apolloschurchapp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOS/Pods-apolloschurchapp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+-		BF49AE842649A852001C7B78 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+-		BF49AE862649A852001C7B78 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+-		BF49AE882649A852001C7B78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+-		BFC57C392649ADC400EC15D9 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
+ 		BFC9F08225757C2D00FF49D7 /* apolloschurchapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "apolloschurchapp-Bridging-Header.h"; sourceTree = "<group>"; };
+ 		BFC9F08325757C2D00FF49D7 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+ 		C6895BD78D40E00368BEB025 /* Pods-apolloschurchapp-apolloschurchappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-apolloschurchappTests.release.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests.release.xcconfig"; sourceTree = "<group>"; };
+-		CB0031860411B96BE5F3DCD0 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		D394E3064D75710E81C51EB0 /* Pods-apolloschurchapp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOSTests/Pods-apolloschurchapp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+ 		D5157D807E164356ADE87867 /* Inter-UI-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Bold.otf"; path = "../assets/fonts/Inter-UI-Bold.otf"; sourceTree = "<group>"; };
+-		D73A12BF0099DED435E951E7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+ 		DA9745795726553C6FA9E7A8 /* Pods-apolloschurchapp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-apolloschurchapp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-apolloschurchapp-tvOSTests/Pods-apolloschurchapp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+ 		DC74A378C1CC40E4B6192D7F /* Inter-UI-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-UI-Medium.otf"; path = "../assets/fonts/Inter-UI-Medium.otf"; sourceTree = "<group>"; };
+ 		DCB1270C2429347200079762 /* apolloschurchapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = apolloschurchapp.entitlements; path = apolloschurchapp/apolloschurchapp.entitlements; sourceTree = "<group>"; };
+@@ -178,14 +147,6 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+-		BF49AE812649A852001C7B78 /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				0FAB39D70A1174DFF70E38DA /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+ /* End PBXFrameworksBuildPhase section */
+ 
+ /* Begin PBXGroup section */
+@@ -233,7 +194,6 @@
+ 				38B9762ACA099D28C28DBB31 /* libPods-apolloschurchapp-tvOS.a */,
+ 				AC02408E578A898123910157 /* libPods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.a */,
+ 				12D0F1F316A88242D1FD60FB /* libPods-apolloschurchapp-apolloschurchappTests.a */,
+-				CB0031860411B96BE5F3DCD0 /* libPods-OneSignalNotificationServiceExtension.a */,
+ 			);
+ 			name = Frameworks;
+ 			sourceTree = "<group>";
+@@ -272,8 +232,6 @@
+ 				C6895BD78D40E00368BEB025 /* Pods-apolloschurchapp-apolloschurchappTests.release.xcconfig */,
+ 				1ECA88A0369BB1DDE56EE65D /* Pods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.debug.xcconfig */,
+ 				4D3B523797B74698347A5317 /* Pods-apolloschurchapp-tvOS-apolloschurchapp-tvOSTests.release.xcconfig */,
+-				59B7EF0894518FA2172F644D /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+-				D73A12BF0099DED435E951E7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+ 			);
+ 			path = Pods;
+ 			sourceTree = "<group>";
+@@ -299,7 +257,6 @@
+ 				13B07FAE1A68108700A75B9A /* apolloschurchapp */,
+ 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+ 				00E356EF1AD99517003FC87E /* apolloschurchappTests */,
+-				BF49AE852649A852001C7B78 /* OneSignalNotificationServiceExtension */,
+ 				83CBBA001A601CBA00E9B192 /* Products */,
+ 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+ 				58D6A3E05A234CD89DC0BCE1 /* Resources */,
+@@ -318,21 +275,10 @@
+ 				00E356EE1AD99517003FC87E /* apolloschurchappTests.xctest */,
+ 				2D02E47B1E0B4A5D006451C7 /* apolloschurchapp-tvOS.app */,
+ 				2D02E4901E0B4A5D006451C7 /* apolloschurchapp-tvOSTests.xctest */,
+-				BF49AE842649A852001C7B78 /* OneSignalNotificationServiceExtension.appex */,
+ 			);
+ 			name = Products;
+ 			sourceTree = "<group>";
+ 		};
+-		BF49AE852649A852001C7B78 /* OneSignalNotificationServiceExtension */ = {
+-			isa = PBXGroup;
+-			children = (
+-				BFC57C392649ADC400EC15D9 /* OneSignalNotificationServiceExtension.entitlements */,
+-				BF49AE862649A852001C7B78 /* NotificationService.swift */,
+-				BF49AE882649A852001C7B78 /* Info.plist */,
+-			);
+-			path = OneSignalNotificationServiceExtension;
+-			sourceTree = "<group>";
+-		};
+ /* End PBXGroup section */
+ 
+ /* Begin PBXNativeTarget section */
+@@ -345,7 +291,7 @@
+ 				00E356EB1AD99517003FC87E /* Frameworks */,
+ 				00E356EC1AD99517003FC87E /* Resources */,
+ 				892ED59C47CEB9B13B75EC71 /* [CP] Copy Pods Resources */,
+-				07E1EAA0838946D1A5AB5FCD /* [CP] Embed Pods Frameworks */,
++				3E2635F41ADA8FBB628BB92D /* [CP] Embed Pods Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
+@@ -368,13 +314,11 @@
+ 				13B07F8E1A680F5B00A75B9A /* Resources */,
+ 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+ 				43D579D8398224D7B09F58F6 /* [CP] Copy Pods Resources */,
+-				BF49AE8C2649A852001C7B78 /* Embed App Extensions */,
+-				C777F5323DB998E21CEC6765 /* [CP] Embed Pods Frameworks */,
++				84E19E444A56C704431362B6 /* [CP] Embed Pods Frameworks */,
+ 			);
+ 			buildRules = (
+ 			);
+ 			dependencies = (
+-				BF49AE8A2649A852001C7B78 /* PBXTargetDependency */,
+ 			);
+ 			name = apolloschurchapp;
+ 			productName = "Hello World";
+@@ -419,31 +363,12 @@
+ 			productReference = 2D02E4901E0B4A5D006451C7 /* apolloschurchapp-tvOSTests.xctest */;
+ 			productType = "com.apple.product-type.bundle.unit-test";
+ 		};
+-		BF49AE832649A852001C7B78 /* OneSignalNotificationServiceExtension */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = BF49AE8F2649A852001C7B78 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+-			buildPhases = (
+-				1C5838107635CD85541B244F /* [CP] Check Pods Manifest.lock */,
+-				BF49AE802649A852001C7B78 /* Sources */,
+-				BF49AE812649A852001C7B78 /* Frameworks */,
+-				BF49AE822649A852001C7B78 /* Resources */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-			);
+-			name = OneSignalNotificationServiceExtension;
+-			productName = OneSignalNotificationServiceExtension;
+-			productReference = BF49AE842649A852001C7B78 /* OneSignalNotificationServiceExtension.appex */;
+-			productType = "com.apple.product-type.app-extension";
+-		};
+ /* End PBXNativeTarget section */
+ 
+ /* Begin PBXProject section */
+ 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+ 			isa = PBXProject;
+ 			attributes = {
+-				LastSwiftUpdateCheck = 1250;
+ 				LastUpgradeCheck = 1170;
+ 				ORGANIZATIONNAME = Apollos;
+ 				TargetAttributes = {
+@@ -466,11 +391,6 @@
+ 						ProvisioningStyle = Automatic;
+ 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
+ 					};
+-					BF49AE832649A852001C7B78 = {
+-						CreatedOnToolsVersion = 12.5;
+-						DevelopmentTeam = 7KS82J74VW;
+-						ProvisioningStyle = Manual;
+-					};
+ 				};
+ 			};
+ 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "apolloschurchapp" */;
+@@ -491,7 +411,6 @@
+ 				00E356ED1AD99517003FC87E /* apolloschurchappTests */,
+ 				2D02E47A1E0B4A5D006451C7 /* apolloschurchapp-tvOS */,
+ 				2D02E48F1E0B4A5D006451C7 /* apolloschurchapp-tvOSTests */,
+-				BF49AE832649A852001C7B78 /* OneSignalNotificationServiceExtension */,
+ 			);
+ 		};
+ /* End PBXProject section */
+@@ -543,13 +462,6 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+-		BF49AE822649A852001C7B78 /* Resources */ = {
+-			isa = PBXResourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+ /* End PBXResourcesBuildPhase section */
+ 
+ /* Begin PBXShellScriptBuildPhase section */
+@@ -567,25 +479,7 @@
+ 			shellPath = /bin/sh;
+ 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		07E1EAA0838946D1A5AB5FCD /* [CP] Embed Pods Frameworks */ = {
+-			isa = PBXShellScriptBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			inputPaths = (
+-				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh",
+-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+-			);
+-			name = "[CP] Embed Pods Frameworks";
+-			outputPaths = (
+-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-			shellPath = /bin/sh;
+-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh\"\n";
+-			showEnvVarsInLog = 0;
+-		};
+-		1C5838107635CD85541B244F /* [CP] Check Pods Manifest.lock */ = {
++		2C62ED438C51D0F43EC7017B /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+@@ -600,48 +494,44 @@
+ 			outputFileListPaths = (
+ 			);
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-OneSignalNotificationServiceExtension-checkManifestLockResult.txt",
++				"$(DERIVED_FILE_DIR)/Pods-apolloschurchapp-apolloschurchappTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		2C62ED438C51D0F43EC7017B /* [CP] Check Pods Manifest.lock */ = {
++		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 			);
+-			inputFileListPaths = (
+-			);
+ 			inputPaths = (
+-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+-				"${PODS_ROOT}/Manifest.lock",
+-			);
+-			name = "[CP] Check Pods Manifest.lock";
+-			outputFileListPaths = (
+ 			);
++			name = "Bundle React Native Code And Images";
+ 			outputPaths = (
+-				"$(DERIVED_FILE_DIR)/Pods-apolloschurchapp-apolloschurchappTests-checkManifestLockResult.txt",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+-			showEnvVarsInLog = 0;
++			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+ 		};
+-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
++		3E2635F41ADA8FBB628BB92D /* [CP] Embed Pods Frameworks */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+ 			files = (
+ 			);
+ 			inputPaths = (
++				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh",
++				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+ 			);
+-			name = "Bundle React Native Code And Images";
++			name = "[CP] Embed Pods Frameworks";
+ 			outputPaths = (
++				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 			shellPath = /bin/sh;
+-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
++			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp-apolloschurchappTests/Pods-apolloschurchapp-apolloschurchappTests-frameworks.sh\"\n";
++			showEnvVarsInLog = 0;
+ 		};
+ 		43D579D8398224D7B09F58F6 /* [CP] Copy Pods Resources */ = {
+ 			isa = PBXShellScriptBuildPhase;
+@@ -680,6 +570,24 @@
+ 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+ 			showEnvVarsInLog = 0;
+ 		};
++		84E19E444A56C704431362B6 /* [CP] Embed Pods Frameworks */ = {
++			isa = PBXShellScriptBuildPhase;
++			buildActionMask = 2147483647;
++			files = (
++			);
++			inputPaths = (
++				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh",
++				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
++			);
++			name = "[CP] Embed Pods Frameworks";
++			outputPaths = (
++				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
++			);
++			runOnlyForDeploymentPostprocessing = 0;
++			shellPath = /bin/sh;
++			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh\"\n";
++			showEnvVarsInLog = 0;
++		};
+ 		892ED59C47CEB9B13B75EC71 /* [CP] Copy Pods Resources */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+@@ -742,24 +650,6 @@
+ 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+ 			showEnvVarsInLog = 0;
+ 		};
+-		C777F5323DB998E21CEC6765 /* [CP] Embed Pods Frameworks */ = {
+-			isa = PBXShellScriptBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			inputPaths = (
+-				"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh",
+-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+-			);
+-			name = "[CP] Embed Pods Frameworks";
+-			outputPaths = (
+-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-			shellPath = /bin/sh;
+-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-apolloschurchapp/Pods-apolloschurchapp-frameworks.sh\"\n";
+-			showEnvVarsInLog = 0;
+-		};
+ 		DEEF24CE4F76789E5E8C369D /* [CP] Check Pods Manifest.lock */ = {
+ 			isa = PBXShellScriptBuildPhase;
+ 			buildActionMask = 2147483647;
+@@ -820,14 +710,6 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+-		BF49AE802649A852001C7B78 /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				BF49AE872649A852001C7B78 /* NotificationService.swift in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+ /* End PBXSourcesBuildPhase section */
+ 
+ /* Begin PBXTargetDependency section */
+@@ -841,11 +723,6 @@
+ 			target = 2D02E47A1E0B4A5D006451C7 /* apolloschurchapp-tvOS */;
+ 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+ 		};
+-		BF49AE8A2649A852001C7B78 /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			target = BF49AE832649A852001C7B78 /* OneSignalNotificationServiceExtension */;
+-			targetProxy = BF49AE892649A852001C7B78 /* PBXContainerItemProxy */;
+-		};
+ /* End PBXTargetDependency section */
+ 
+ /* Begin XCBuildConfiguration section */
+@@ -912,7 +789,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "iPhone Developer";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 670;
++				CURRENT_PROJECT_VERSION = 507;
+ 				DEAD_CODE_STRIPPING = YES;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+@@ -946,7 +823,7 @@
+ 				CODE_SIGN_ENTITLEMENTS = apolloschurchapp/apolloschurchapp.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Distribution: Differential Dev Shop, LLC (7KS82J74VW)";
+ 				CODE_SIGN_STYLE = Manual;
+-				CURRENT_PROJECT_VERSION = 670;
++				CURRENT_PROJECT_VERSION = 507;
+ 				DEVELOPMENT_TEAM = 7KS82J74VW;
+ 				HEADER_SEARCH_PATHS = (
+ 					"$(inherited)",
+@@ -1218,71 +1095,6 @@
+ 			};
+ 			name = Release;
+ 		};
+-		BF49AE8D2649A852001C7B78 /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			baseConfigurationReference = 59B7EF0894518FA2172F644D /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+-			buildSettings = {
+-				CLANG_ANALYZER_NONNULL = YES;
+-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+-				CLANG_ENABLE_OBJC_WEAK = YES;
+-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+-				CODE_SIGN_IDENTITY = "iPhone Developer";
+-				CODE_SIGN_STYLE = Manual;
+-				DEBUG_INFORMATION_FORMAT = dwarf;
+-				DEVELOPMENT_TEAM = 7KS82J74VW;
+-				GCC_C_LANGUAGE_STANDARD = gnu11;
+-				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+-				MTL_FAST_MATH = YES;
+-				PRODUCT_BUNDLE_IDENTIFIER = com.differential.apollos.OneSignalNotificationServiceExtension;
+-				PRODUCT_NAME = "$(TARGET_NAME)";
+-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.differential.apollos.OneSignalNotificationServiceExtension";
+-				SKIP_INSTALL = YES;
+-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+-				SWIFT_VERSION = 5.0;
+-				TARGETED_DEVICE_FAMILY = "1,2";
+-			};
+-			name = Debug;
+-		};
+-		BF49AE8E2649A852001C7B78 /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			baseConfigurationReference = D73A12BF0099DED435E951E7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+-			buildSettings = {
+-				CLANG_ANALYZER_NONNULL = YES;
+-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+-				CLANG_ENABLE_OBJC_WEAK = YES;
+-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+-				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+-				CODE_SIGN_IDENTITY = "Apple Distribution: Differential Dev Shop, LLC (7KS82J74VW)";
+-				CODE_SIGN_STYLE = Manual;
+-				COPY_PHASE_STRIP = NO;
+-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+-				DEVELOPMENT_TEAM = 7KS82J74VW;
+-				GCC_C_LANGUAGE_STANDARD = gnu11;
+-				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+-				MTL_FAST_MATH = YES;
+-				PRODUCT_BUNDLE_IDENTIFIER = com.differential.apollos.OneSignalNotificationServiceExtension;
+-				PRODUCT_NAME = "$(TARGET_NAME)";
+-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.differential.apollos.OneSignalNotificationServiceExtension";
+-				SKIP_INSTALL = YES;
+-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+-				SWIFT_VERSION = 5.0;
+-				TARGETED_DEVICE_FAMILY = "1,2";
+-			};
+-			name = Release;
+-		};
+ /* End XCBuildConfiguration section */
+ 
+ /* Begin XCConfigurationList section */
+@@ -1331,15 +1143,6 @@
+ 			defaultConfigurationIsVisible = 0;
+ 			defaultConfigurationName = Release;
+ 		};
+-		BF49AE8F2649A852001C7B78 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				BF49AE8D2649A852001C7B78 /* Debug */,
+-				BF49AE8E2649A852001C7B78 /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+ /* End XCConfigurationList section */
+ 	};
+ 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+diff --git a/apolloschurchapp/ios/apolloschurchapp/Info.plist b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+index 8e204430..41c62da6 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchapp/Info.plist
+@@ -34,7 +34,7 @@
+ 		<string>mailto</string>
+ 	</array>
+ 	<key>CFBundleVersion</key>
+-	<string>670</string>
++	<string>0</string>
+ 	<key>ITSAppUsesNonExemptEncryption</key>
+ 	<false/>
+ 	<key>LSRequiresIPhoneOS</key>
+diff --git a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+index 5274d253..676be42e 100644
+--- a/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
++++ b/apolloschurchapp/ios/apolloschurchapp/apolloschurchapp.entitlements
+@@ -8,9 +8,5 @@
+ 	<array>
+ 		<string>applink:$(APP_DATA_URL)</string>
+ 	</array>
+-	<key>com.apple.security.application-groups</key>
+-	<array>
+-		<string>group.com.differential.apollos.onesignal</string>
+-	</array>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/ios/apolloschurchappTests/Info.plist b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+index 3d76805a..d51806dc 100644
+--- a/apolloschurchapp/ios/apolloschurchappTests/Info.plist
++++ b/apolloschurchapp/ios/apolloschurchappTests/Info.plist
+@@ -19,6 +19,6 @@
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>670</string>
++	<string>507</string>
+ </dict>
+ </plist>
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index e5508eed..866746c1 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -43,23 +43,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.22.0",
++    "@apollosproject/config": "^2.21.1",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.22.0",
+-    "@apollosproject/ui-auth": "^2.22.0",
+-    "@apollosproject/ui-connected": "^2.22.0",
+-    "@apollosproject/ui-fragments": "^2.22.0",
+-    "@apollosproject/ui-htmlview": "^2.22.0",
+-    "@apollosproject/ui-kit": "^2.22.0",
+-    "@apollosproject/ui-mapview": "^2.22.0",
+-    "@apollosproject/ui-media-player": "^2.22.0",
+-    "@apollosproject/ui-notifications": "^2.22.0",
+-    "@apollosproject/ui-onboarding": "^2.22.0",
+-    "@apollosproject/ui-passes": "^2.22.0",
+-    "@apollosproject/ui-prayer": "^2.22.0",
+-    "@apollosproject/ui-scripture": "^2.22.0",
+-    "@apollosproject/ui-storybook": "^2.22.0",
+-    "@apollosproject/ui-test-utils": "^2.22.0",
++    "@apollosproject/ui-analytics": "^2.21.1",
++    "@apollosproject/ui-auth": "^2.21.1",
++    "@apollosproject/ui-connected": "^2.21.1",
++    "@apollosproject/ui-fragments": "^2.21.1",
++    "@apollosproject/ui-htmlview": "^2.21.1",
++    "@apollosproject/ui-kit": "^2.21.1",
++    "@apollosproject/ui-mapview": "^2.21.1",
++    "@apollosproject/ui-media-player": "^2.21.1",
++    "@apollosproject/ui-notifications": "^2.21.1",
++    "@apollosproject/ui-onboarding": "^2.21.1",
++    "@apollosproject/ui-passes": "^2.21.1",
++    "@apollosproject/ui-prayer": "^2.21.1",
++    "@apollosproject/ui-scripture": "^2.21.1",
++    "@apollosproject/ui-storybook": "^2.21.1",
++    "@apollosproject/ui-test-utils": "^2.21.1",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+@@ -98,7 +98,7 @@
+     "react-native-linear-gradient": "^2.5.4",
+     "react-native-maps": "^0.27.1",
+     "react-native-music-control": "0.10.8",
+-    "react-native-onesignal": "4.0.8",
++    "react-native-onesignal": "3.9.1",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-permissions": "^2.0.5",
+     "react-native-reanimated": "^2.0.0",
+@@ -116,7 +116,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.22.0",
++    "@apollosproject/eslint-config": "^2.21.1",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+     "@bam.tech/react-native-make": "^3.0.0",
+diff --git a/apolloschurchapp/src/Providers.js b/apolloschurchapp/src/Providers.js
+index bd897e33..1359d210 100644
+--- a/apolloschurchapp/src/Providers.js
++++ b/apolloschurchapp/src/Providers.js
+@@ -1,7 +1,6 @@
+ import React from 'react';
+-import PropTypes from 'prop-types';
+ import ApollosConfig from '@apollosproject/config';
+-import { NavigationService } from '@apollosproject/ui-kit';
++import { Providers, NavigationService } from '@apollosproject/ui-kit';
+ import { AuthProvider } from '@apollosproject/ui-auth';
+ import { AnalyticsProvider } from '@apollosproject/ui-analytics';
+ import { NotificationsProvider } from '@apollosproject/ui-notifications';
+@@ -12,6 +11,7 @@ import {
+ import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+ 
+ import ClientProvider, { client } from './client';
++import customTheme, { customIcons } from './theme';
+ 
+ const AppProviders = (props) => (
+   <ClientProvider {...props}>
+@@ -50,15 +50,17 @@ const AppProviders = (props) => (
+         }
+       >
+         <AnalyticsProvider>
+-          <LiveProvider>{props.children}</LiveProvider>
++          <LiveProvider>
++            <Providers
++              themeInput={customTheme}
++              iconInput={customIcons}
++              {...props}
++            />
++          </LiveProvider>
+         </AnalyticsProvider>
+       </AuthProvider>
+     </NotificationsProvider>
+   </ClientProvider>
+ );
+ 
+-AppProviders.propTypes = {
+-  children: PropTypes.shape({}),
+-};
+-
+ export default AppProviders;
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index 63626d27..3a48754e 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -17,7 +17,6 @@ import {
+   BackgroundView,
+   withTheme,
+   NavigationService,
+-  Providers as ThemeProvider,
+ } from '@apollosproject/ui-kit';
+ import Passes from '@apollosproject/ui-passes';
+ import { MapViewConnected as Location } from '@apollosproject/ui-mapview';
+@@ -33,7 +32,6 @@ import ContentSingle from './content-single';
+ import Event from './event';
+ import Tabs from './tabs';
+ import LandingScreen from './ui/LandingScreen';
+-import customTheme, { customIcons } from './theme';
+ 
+ enableScreens(); // improves performance for react-navigation
+ 
+@@ -73,73 +71,67 @@ const ThemedNavigationContainer = withTheme(({ theme, ...props }) => ({
+ const { Navigator, Screen } = createNativeStackNavigator();
+ 
+ const App = () => (
+-  <ThemeProvider themeInput={customTheme} iconInput={customIcons}>
++  <Providers>
+     <BackgroundView>
+       <AppStatusBar />
+       <ThemedNavigationContainer
+         containerRef={NavigationService.setTopLevelNavigator}
+         onReady={NavigationService.setIsReady}
+       >
+-        <Providers>
+-          <Navigator
+-            screenOptions={{ headerShown: false, stackPresentation: 'modal' }}
+-          >
+-            <Screen
+-              name="ProtectedRoute"
+-              component={ProtectedRouteWithSplashScreen}
+-            />
+-            <Screen name="Tabs" component={Tabs} />
+-            <Screen
+-              name="ContentSingle"
+-              component={ContentSingle}
+-              options={{
+-                title: 'Content',
+-                stackPresentation: 'push',
+-              }}
+-            />
+-            <Screen
+-              component={ContentFeedConnected}
+-              name="ContentFeed"
+-              options={({ route }) => ({
+-                title: route.params.itemTitle || 'Content Feed',
+-                stackPresentation: 'push',
+-              })}
+-            />
++        <Navigator
++          screenOptions={{ headerShown: false, stackPresentation: 'modal' }}
++        >
++          <Screen
++            name="ProtectedRoute"
++            component={ProtectedRouteWithSplashScreen}
++          />
++          <Screen name="Tabs" component={Tabs} />
++          <Screen
++            name="ContentSingle"
++            component={ContentSingle}
++            options={{
++              title: 'Content',
++              stackPresentation: 'push',
++            }}
++          />
++          <Screen
++            component={ContentFeedConnected}
++            name="ContentFeed"
++            options={({ route }) => ({
++              title: route.params.itemTitle || 'Content Feed',
++              stackPresentation: 'push',
++            })}
++          />
+ 
+-            <Screen
+-              name="Event"
+-              component={Event}
+-              options={{ title: 'Event' }}
+-            />
+-            <Screen
+-              name="Auth"
+-              component={Auth}
+-              options={{
+-                gestureEnabled: false,
+-                stackPresentation: 'push',
+-              }}
+-            />
+-            <Screen name="Location" component={Location} />
+-            <Screen
+-              name="Passes"
+-              component={Passes}
+-              options={{ title: 'Check-In Pass' }}
+-            />
+-            <Screen
+-              name="Onboarding"
+-              component={Onboarding}
+-              options={{
+-                gestureEnabled: false,
+-                stackPresentation: 'push',
+-              }}
+-            />
+-            <Screen name="LandingScreen" component={LandingScreen} />
+-            <Screen name="Search" component={SearchScreenConnected} />
+-          </Navigator>
+-        </Providers>
++          <Screen name="Event" component={Event} options={{ title: 'Event' }} />
++          <Screen
++            name="Auth"
++            component={Auth}
++            options={{
++              gestureEnabled: false,
++              stackPresentation: 'push',
++            }}
++          />
++          <Screen name="Location" component={Location} />
++          <Screen
++            name="Passes"
++            component={Passes}
++            options={{ title: 'Check-In Pass' }}
++          />
++          <Screen
++            name="Onboarding"
++            component={Onboarding}
++            options={{
++              gestureEnabled: false,
++              stackPresentation: 'push',
++            }}
++          />
++          <Screen name="LandingScreen" component={LandingScreen} />
++          <Screen name="Search" component={SearchScreenConnected} />
++        </Navigator>
+       </ThemedNavigationContainer>
+     </BackgroundView>
+-  </ThemeProvider>
++  </Providers>
+ );
+ 
+ export default App;
