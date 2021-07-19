@@ -1,0 +1,86 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index e6ba1a6f..006a3a58 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.24.0",
++  "version": "2.27.0",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index d465161c..fb734907 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -17,21 +17,21 @@
+     "node": "12"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^2.24.0",
+-    "@apollosproject/data-connector-algolia-search": "^2.24.0",
+-    "@apollosproject/data-connector-analytics": "^2.24.0",
+-    "@apollosproject/data-connector-bible": "^2.24.0",
+-    "@apollosproject/data-connector-church-online": "^2.24.0",
+-    "@apollosproject/data-connector-cloudinary": "^2.24.0",
+-    "@apollosproject/data-connector-onesignal": "^2.24.0",
+-    "@apollosproject/data-connector-passes": "^2.24.0",
+-    "@apollosproject/data-connector-postgres": "^2.24.0",
+-    "@apollosproject/data-connector-redis-cache": "^2.24.0",
+-    "@apollosproject/data-connector-rock": "^2.24.0",
+-    "@apollosproject/data-connector-twilio": "^2.24.0",
+-    "@apollosproject/data-schema": "^2.24.0",
+-    "@apollosproject/rock-apollo-data-source": "^2.24.0",
+-    "@apollosproject/server-core": "^2.24.0",
++    "@apollosproject/config": "^2.27.0",
++    "@apollosproject/data-connector-algolia-search": "^2.27.0",
++    "@apollosproject/data-connector-analytics": "^2.27.0",
++    "@apollosproject/data-connector-bible": "^2.27.0",
++    "@apollosproject/data-connector-church-online": "^2.27.0",
++    "@apollosproject/data-connector-cloudinary": "^2.27.0",
++    "@apollosproject/data-connector-onesignal": "^2.27.0",
++    "@apollosproject/data-connector-passes": "^2.27.0",
++    "@apollosproject/data-connector-postgres": "^2.27.0",
++    "@apollosproject/data-connector-redis-cache": "^2.27.0",
++    "@apollosproject/data-connector-rock": "^2.27.0",
++    "@apollosproject/data-connector-twilio": "^2.27.0",
++    "@apollosproject/data-schema": "^2.27.0",
++    "@apollosproject/rock-apollo-data-source": "^2.27.0",
++    "@apollosproject/server-core": "^2.27.0",
+     "apollo-server": "^2.24.1",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+@@ -41,9 +41,9 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.24.0",
+-    "@apollosproject/babel-preset-apollos": "^2.24.0",
+-    "@apollosproject/eslint-config": "^2.24.0",
++    "@apollosproject/apollo-server-env-mock": "^2.27.0",
++    "@apollosproject/babel-preset-apollos": "^2.27.0",
++    "@apollosproject/eslint-config": "^2.27.0",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+index ea1b9155..f64f85da 100644
+--- a/apollos-church-api/src/data/index.postgres.js
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -48,6 +48,8 @@ import {
+   Media as PostgresMedia,
+   ContentItem as PostgresContentItem,
+   ContentItemsConnection,
++  ContentItemCategory,
++  Tag,
+ } from '@apollosproject/data-connector-postgres';
+ 
+ import * as Theme from './theme';
+@@ -67,6 +69,8 @@ const data = {
+   PostgresMedia,
+   PostgresContentItem,
+   ContentItemsConnection,
++  ContentItemCategory,
++  Tag,
+   Cloudinary,
+   Auth,
+   AuthSms,
