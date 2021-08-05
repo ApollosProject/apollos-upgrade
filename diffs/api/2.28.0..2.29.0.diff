@@ -1,0 +1,10 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index e36b4e8a..39a3ce9a 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.28.0",
++  "version": "2.29.0",
+   "environment": "api"
+ }
