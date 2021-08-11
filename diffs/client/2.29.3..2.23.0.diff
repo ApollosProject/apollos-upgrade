@@ -1,0 +1,981 @@
+diff --git a/apolloschurchapp/Gemfile.lock b/apolloschurchapp/Gemfile.lock
+index 92818e11..1b973874 100644
+--- a/apolloschurchapp/Gemfile.lock
++++ b/apolloschurchapp/Gemfile.lock
+@@ -7,7 +7,7 @@ GEM
+       i18n (>= 0.7, < 2)
+       minitest (~> 5.1)
+       tzinfo (~> 1.1)
+-    addressable (2.8.0)
++    addressable (2.7.0)
+       public_suffix (>= 2.0.2, < 5.0)
+     algoliasearch (1.27.5)
+       httpclient (~> 2.8, >= 2.8.3)
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index 8580b826..c730c584 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.29.3",
++    "version": "2.23.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 2e5ba5f1..36f00fef 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -21,15 +21,6 @@ def product_bundle_id(path:)
+   build_configuration.build_settings['PRODUCT_BUNDLE_IDENTIFIER']
+ end
+ 
+-def bump_version_code()
+-    s = File.read("../android/app/build.gradle")
+-    versionCode = number_of_commits
+-    s[/versionCode\s+(\d+)/, 1] = (versionCode).to_s
+-    f = File.new('../android/app/build.gradle', 'w')
+-    f.write(s)
+-    f.close
+-end
+-
+ before_all do
+   ensure_git_branch
+   ensure_git_status_clean
+@@ -59,6 +50,20 @@ end
+ 
+ platform :android do
+ 
++  desc "Bumps Android versionCode"
++  lane :bump_version_code do
++    path = '../android/app/build.gradle'
++    re = /versionCode\s+(\d+)/
++
++    s = File.read("../android/app/build.gradle")
++    versionCode = number_of_commits
++    s[re, 1] = (versionCode).to_s
++
++    f = File.new(path, 'w')
++    f.write(s)
++    f.close
++  end
++
+   desc "Deploy a new version to the Google Play"
+   lane :deploy do
+     bump_version_code
+@@ -66,8 +71,10 @@ platform :android do
+     gradle(task: 'bundle', build_type: 'Release', project_dir: 'android')
+     changelog_from_git_commits
+ 
++    path = '../android/app/build.gradle'
++    re = /applicationId\s+"([\w+\.]*)"/
+     s = File.read("../android/app/build.gradle")
+-    package_name = s[/applicationId\s+"([\w+\.]*)"/, 1]
++    package_name = s[re, 1]
+ 
+     upload_to_play_store(
+       track: "internal",
+@@ -79,7 +86,5 @@ platform :android do
+ end
+ 
+ error do |lane, exception|
+-  s = File.read("../app.json")
+-  app_name = s[/"name": "(.*)",/, 1]
+-  slack(message: app_name << " - " << exception.to_s, success: false)
++   slack(message: exception.to_s, success: false)
+ end
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index 8a986d6d..399d99b7 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -242,7 +242,7 @@ PODS:
+     - React-cxxreact (= 0.63.4)
+     - React-jsi (= 0.63.4)
+   - React-jsinspector (0.63.4)
+-  - react-native-apollos-player (2.29.3):
++  - react-native-apollos-player (2.22.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -254,8 +254,8 @@ PODS:
+     - React-Core
+   - react-native-maps (0.27.1):
+     - React
+-  - react-native-music-control (1.4.0):
+-    - React-Core
++  - react-native-music-control (0.10.8):
++    - React
+   - react-native-onesignal (4.0.8):
+     - OneSignal (= 3.4.3)
+     - React (< 1.0.0, >= 0.13.0)
+@@ -613,7 +613,7 @@ SPEC CHECKSUMS:
+   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
+   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+-  DoubleConversion: cde416483dac037923206447da6e1454df403714
++  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
+   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
+   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
+   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
+@@ -624,7 +624,7 @@ SPEC CHECKSUMS:
+   Flipper-RSocket: 127954abe8b162fcaf68d2134d34dc2bd7076154
+   FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
+   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
+-  glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
++  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
+   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+   OneSignal: e4dfb1912410f302dc9661ce98fc829f6c18ff6a
+   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
+@@ -640,13 +640,13 @@ SPEC CHECKSUMS:
+   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
+   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
+   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
+-  react-native-apollos-player: 13045c1bfd5f7065cd952a0217ad9821af2f6abc
++  react-native-apollos-player: 57b7cc6c3f082708dadcb8732d14453bcaabde1e
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+   react-native-image-picker: 28d8d1f5a643119876b8b2c7d4d1dcfb2b232dd4
+   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+-  react-native-music-control: 93b521377efdf2e49b46ccade8457f9503359b38
++  react-native-music-control: dcfe5b61e56a15898c4618579cb8ce612c9d21a8
+   react-native-onesignal: 50b047c674b79ba700218338fdefb45220da4db5
+   react-native-passkit-wallet: 51e3babdaeec4c10b5736786ebd1bfb470fcaa36
+   react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index ce0e5cc9..80630d20 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -3,7 +3,7 @@
+   "version": "1.0.0",
+   "private": true,
+   "engines": {
+-    "node": ">=14"
++    "node": "12"
+   },
+   "files": [
+     "src"
+@@ -43,23 +43,23 @@
+   "dependencies": {
+     "@apollo/client": "3.3.0-rc.2",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.29.3",
++    "@apollosproject/config": "^2.22.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.29.3",
+-    "@apollosproject/ui-auth": "^2.29.3",
+-    "@apollosproject/ui-connected": "^2.29.3",
+-    "@apollosproject/ui-fragments": "^2.29.3",
+-    "@apollosproject/ui-htmlview": "^2.29.3",
+-    "@apollosproject/ui-kit": "^2.29.3",
+-    "@apollosproject/ui-mapview": "^2.29.3",
+-    "@apollosproject/ui-media-player": "^2.29.3",
+-    "@apollosproject/ui-notifications": "^2.29.3",
+-    "@apollosproject/ui-onboarding": "^2.29.3",
+-    "@apollosproject/ui-passes": "^2.29.3",
+-    "@apollosproject/ui-prayer": "^2.29.3",
+-    "@apollosproject/ui-scripture": "^2.29.3",
+-    "@apollosproject/ui-storybook": "^2.29.3",
+-    "@apollosproject/ui-test-utils": "^2.29.3",
++    "@apollosproject/ui-analytics": "^2.22.0",
++    "@apollosproject/ui-auth": "^2.22.0",
++    "@apollosproject/ui-connected": "^2.22.0",
++    "@apollosproject/ui-fragments": "^2.22.0",
++    "@apollosproject/ui-htmlview": "^2.22.0",
++    "@apollosproject/ui-kit": "^2.22.0",
++    "@apollosproject/ui-mapview": "^2.22.0",
++    "@apollosproject/ui-media-player": "^2.22.0",
++    "@apollosproject/ui-notifications": "^2.22.0",
++    "@apollosproject/ui-onboarding": "^2.22.0",
++    "@apollosproject/ui-passes": "^2.22.0",
++    "@apollosproject/ui-prayer": "^2.22.0",
++    "@apollosproject/ui-scripture": "^2.22.0",
++    "@apollosproject/ui-storybook": "^2.22.0",
++    "@apollosproject/ui-test-utils": "^2.22.0",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@metarouter/analytics-react-native": "^1.1.5",
+     "@react-native-community/async-storage": "^1.5.1",
+@@ -97,7 +97,7 @@
+     "react-native-inappbrowser-reborn": "^3.0.0",
+     "react-native-linear-gradient": "^2.5.4",
+     "react-native-maps": "^0.27.1",
+-    "react-native-music-control": "^1.3.0",
++    "react-native-music-control": "0.10.8",
+     "react-native-onesignal": "4.0.8",
+     "react-native-passkit-wallet": "^0.1.4",
+     "react-native-permissions": "^2.0.5",
+@@ -116,10 +116,10 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.29.3",
++    "@apollosproject/eslint-config": "^2.22.0",
+     "@babel/core": "^7.8.4",
+     "@babel/runtime": "^7.8.4",
+-    "@bam.tech/react-native-make": "^3.0.3",
++    "@bam.tech/react-native-make": "^3.0.0",
+     "@carimus/metro-symlinked-deps": "^1.1.0",
+     "@react-native-community/eslint-config": "^2.0.0",
+     "@react-native-community/eslint-plugin": "^1.1.0",
+diff --git a/apolloschurchapp/src/content-single/ActionContainer/index.js b/apolloschurchapp/src/content-single/ActionContainer/index.js
+new file mode 100644
+index 00000000..059c2e02
+--- /dev/null
++++ b/apolloschurchapp/src/content-single/ActionContainer/index.js
+@@ -0,0 +1,43 @@
++import React from 'react';
++import { Platform, View } from 'react-native';
++import { useSafeAreaInsets } from 'react-native-safe-area-context';
++import PropTypes from 'prop-types';
++import { SideBySideView, styled } from '@apollosproject/ui-kit';
++import {
++  LikeButtonConnected,
++  ShareButtonConnected,
++} from '@apollosproject/ui-connected';
++
++const PositioningView = styled(({ theme }) => ({
++  justifyContent: 'space-around',
++  paddingVertical: theme.sizing.baseUnit / 2,
++  paddingHorizontal: theme.sizing.baseUnit,
++}))(SideBySideView);
++
++const Container = styled(({ theme, safeAreaMargin }) => ({
++  backgroundColor: theme.colors.background.paper,
++  position: 'absolute',
++  width: '100%',
++  bottom: 0,
++  paddingBottom: safeAreaMargin,
++  ...Platform.select(theme.shadows.default),
++}))(View);
++
++const ActionContainer = ({ itemId }) => {
++  const { bottom } = useSafeAreaInsets();
++  return (
++    <Container safeAreaMargin={bottom}>
++      <PositioningView>
++        <LikeButtonConnected itemId={itemId} />
++        <ShareButtonConnected itemId={itemId} />
++      </PositioningView>
++    </Container>
++  );
++};
++
++ActionContainer.propTypes = {
++  content: PropTypes.shape({}),
++  itemId: PropTypes.string,
++};
++
++export default ActionContainer;
+diff --git a/apolloschurchapp/src/content-single/ContentSingle.js b/apolloschurchapp/src/content-single/ContentSingle.js
+index d60e5f5a..9e296c06 100644
+--- a/apolloschurchapp/src/content-single/ContentSingle.js
++++ b/apolloschurchapp/src/content-single/ContentSingle.js
+@@ -11,6 +11,8 @@ import {
+ 
+ import { styled } from '@apollosproject/ui-kit';
+ 
++import ActionContainer from './ActionContainer';
++
+ const PaddedNodeSingleConnected = styled(({ theme: { sizing } }) => ({
+   paddingBottom: sizing.baseUnit * 5,
+ }))(NodeSingleConnected);
+@@ -45,7 +47,9 @@ const ContentSingle = (props) => {
+           itemId: nodeId,
+         }}
+       />
+-      <PaddedNodeSingleConnected nodeId={nodeId} />
++      <PaddedNodeSingleConnected nodeId={nodeId}>
++        <ActionContainer itemId={nodeId} />
++      </PaddedNodeSingleConnected>
+     </ThemeMixinConnected>
+   );
+ };
+diff --git a/apolloschurchapp/src/tabs/connect/ActionBar.js b/apolloschurchapp/src/tabs/connect/ActionBar.js
+index 900f129f..da1aafa3 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionBar.js
++++ b/apolloschurchapp/src/tabs/connect/ActionBar.js
+@@ -19,6 +19,11 @@ const Toolbar = () => {
+             icon="download"
+             label="Give"
+           />
++          <ActionBarItem
++            onPress={() => navigation.navigate('TestingControlPanel')}
++            icon="information"
++            label="Test"
++          />
+         </ActionBar>
+       )}
+     </RockAuthedWebBrowser>
+diff --git a/apolloschurchapp/src/tabs/connect/ActionTable/index.js b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+index df57ba0e..12e9374f 100644
+--- a/apolloschurchapp/src/tabs/connect/ActionTable/index.js
++++ b/apolloschurchapp/src/tabs/connect/ActionTable/index.js
+@@ -1,5 +1,6 @@
+ import React from 'react';
+ import { View } from 'react-native';
++import { useNavigation } from '@react-navigation/native';
+ 
+ import {
+   TableView,
+@@ -25,47 +26,67 @@ const Name = styled({
+   flexGrow: 1,
+ })(View);
+ 
+-const ActionTable = () => (
+-  <RockAuthedWebBrowser>
+-    {(openUrl) => (
+-      <View>
+-        <RowHeader>
+-          <Name>
+-            <H4>{'Connect with Apollos'}</H4>
+-          </Name>
+-        </RowHeader>
+-        <TableView>
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/235')}
+-          >
+-            <Cell>
+-              <CellText>Find a serving opportunity</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-          <Divider />
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/236')}
+-          >
+-            <Cell>
+-              <CellText>Join a small group</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-          <Divider />
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/233')}
+-          >
+-            <Cell>
+-              <CellText>I need prayer</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-        </TableView>
+-      </View>
+-    )}
+-  </RockAuthedWebBrowser>
+-);
++const ActionTable = () => {
++  const navigation = useNavigation();
++  return (
++    <RockAuthedWebBrowser>
++      {(openUrl) => (
++        <View>
++          <RowHeader>
++            <Name>
++              <H4>{'Connect with Apollos'}</H4>
++            </Name>
++          </RowHeader>
++          <TableView>
++            <Touchable
++              onPress={() =>
++                openUrl('https://apollosrock.newspring.cc/page/235')
++              }
++            >
++              <Cell>
++                <CellText>Find a serving opportunity</CellText>
++                <CellIcon name="arrow-next" />
++              </Cell>
++            </Touchable>
++            <Divider />
++            <Touchable
++              onPress={() =>
++                openUrl('https://apollosrock.newspring.cc/page/236')
++              }
++            >
++              <Cell>
++                <CellText>Join a small group</CellText>
++                <CellIcon name="arrow-next" />
++              </Cell>
++            </Touchable>
++            <Divider />
++            <Touchable
++              onPress={() =>
++                openUrl('https://apollosrock.newspring.cc/page/233')
++              }
++            >
++              <Cell>
++                <CellText>I need prayer</CellText>
++                <CellIcon name="arrow-next" />
++              </Cell>
++            </Touchable>
++          </TableView>
++          <TableView>
++            <Touchable
++              onPress={() => navigation.navigate('TestingControlPanel')}
++            >
++              <Cell>
++                <CellIcon name="settings" />
++                <CellText>Open Testing Panel</CellText>
++                <CellIcon name="arrow-next" />
++              </Cell>
++            </Touchable>
++          </TableView>
++        </View>
++      )}
++    </RockAuthedWebBrowser>
++  );
++};
+ 
+ const StyledActionTable = styled(({ theme }) => ({
+   paddingBottom: theme.sizing.baseUnit * 100,
+diff --git a/apolloschurchapp/src/tabs/connect/index.js b/apolloschurchapp/src/tabs/connect/index.js
+index 8659793d..da182421 100644
+--- a/apolloschurchapp/src/tabs/connect/index.js
++++ b/apolloschurchapp/src/tabs/connect/index.js
+@@ -7,6 +7,7 @@ import { NotificationSettingsConnected } from '@apollosproject/ui-notifications'
+ import UserSettings from '../../user-settings';
+ import PersonalDetails from '../../user-settings/PersonalDetails';
+ import ChangePassword from '../../user-settings/ChangePassword';
++import TestingControlPanel from '../../testing-control-panel';
+ 
+ import Connect from './Connect';
+ 
+@@ -19,6 +20,11 @@ const ConnectNavigator = (props) => (
+       name="Connect"
+       options={{ headerShown: false }}
+     />
++    <Screen
++      component={TestingControlPanel}
++      name="TestingControlPanel"
++      options={{ headerTitle: 'Testing' }}
++    />
+     <Screen
+       component={NotificationSettingsConnected}
+       name="Notifications"
+@@ -29,6 +35,7 @@ const ConnectNavigator = (props) => (
+       name="UserSettings"
+       options={{ headerTitle: 'Settings' }}
+     />
++
+     <Screen
+       name="PersonalDetails"
+       component={PersonalDetails}
+diff --git a/apolloschurchapp/src/testing-control-panel/TouchableCell.js b/apolloschurchapp/src/testing-control-panel/TouchableCell.js
+new file mode 100644
+index 00000000..bfe51df3
+--- /dev/null
++++ b/apolloschurchapp/src/testing-control-panel/TouchableCell.js
+@@ -0,0 +1,20 @@
++import React from 'react';
++import PropType from 'prop-types';
++import { Touchable, Cell, CellIcon, CellText } from '@apollosproject/ui-kit';
++
++const TouchableCell = ({ iconName, cellText, handlePress }) => (
++  <Touchable onPress={handlePress}>
++    <Cell>
++      <CellIcon name={iconName} />
++      <CellText>{cellText}</CellText>
++    </Cell>
++  </Touchable>
++);
++
++TouchableCell.propTypes = {
++  iconName: PropType.string.isRequired,
++  cellText: PropType.string.isRequired,
++  handlePress: PropType.func.isRequired,
++};
++
++export default TouchableCell;
+diff --git a/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js b/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js
+new file mode 100644
+index 00000000..75bc5b07
+--- /dev/null
++++ b/apolloschurchapp/src/testing-control-panel/TouchableCell.tests.js
+@@ -0,0 +1,21 @@
++import React from 'react';
++import renderer from 'react-test-renderer';
++
++import { Providers } from '@apollosproject/ui-test-utils';
++
++import TouchableCell from './TouchableCell';
++
++describe('touchable cell', () => {
++  it('renders the cell, icon, and text', () => {
++    const tree = renderer.create(
++      <Providers>
++        <TouchableCell
++          cellText="This is a cell"
++          iconName="play"
++          handlePress={() => ({})}
++        />
++      </Providers>
++    );
++    expect(tree).toMatchSnapshot();
++  });
++});
+diff --git a/apolloschurchapp/src/testing-control-panel/index.js b/apolloschurchapp/src/testing-control-panel/index.js
+new file mode 100644
+index 00000000..7f77a7cc
+--- /dev/null
++++ b/apolloschurchapp/src/testing-control-panel/index.js
+@@ -0,0 +1,54 @@
++import React from 'react';
++import {
++  TableView,
++  BackgroundView,
++  NavigationService,
++} from '@apollosproject/ui-kit';
++import {
++  checkOnboardingStatusAndNavigate,
++  onboardingComplete,
++} from '@apollosproject/ui-onboarding';
++import { useApolloClient, useQuery, gql } from '@apollo/client';
++import TouchableCell from './TouchableCell';
++
++export default function TestingControlPanel() {
++  const client = useApolloClient();
++  const { data } = useQuery(gql`
++    query currentUserId {
++      currentUser {
++        id
++      }
++    }
++  `);
++  return (
++    <BackgroundView>
++      <TableView>
++        <TouchableCell
++          handlePress={() =>
++            checkOnboardingStatusAndNavigate({
++              latestOnboardingVersion: 2,
++              navigation: NavigationService,
++              client,
++            })
++          }
++          iconName="Avatar"
++          cellText={`Launch Onboarding`}
++        />
++      </TableView>
++      <TouchableCell
++        handlePress={() =>
++          onboardingComplete({ version: 0, userId: data?.currentUser?.id })
++        }
++        iconName="Avatar"
++        cellText={`Reset Onboarding to Unseen`}
++      />
++      <TouchableCell
++        handlePress={() =>
++          onboardingComplete({ version: 1, userId: data?.currentUser?.id })
++        }
++        iconName="Avatar"
++        cellText={`Reset Onboarding to Seen v1`}
++      />
++    </BackgroundView>
++  );
++}
+diff --git a/apolloschurchapp/src/user-settings/UserSettings.tests.js b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+index 48966e2a..5753d4ae 100644
+--- a/apolloschurchapp/src/user-settings/UserSettings.tests.js
++++ b/apolloschurchapp/src/user-settings/UserSettings.tests.js
+@@ -1,36 +1,12 @@
+ import React from 'react';
+ 
+ import { GET_LOGIN_STATE } from '@apollosproject/ui-auth';
+-import {
+-  renderWithApolloData,
+-  Providers,
+-  WithReactNavigator,
+-} from '@apollosproject/ui-test-utils';
+-import { gql } from '@apollo/client';
++import { renderWithApolloData, Providers } from '@apollosproject/ui-test-utils';
+ import { MockedProvider } from '@apollo/client/testing';
+ import { InMemoryCache } from '@apollo/client/cache';
+ 
+ import UserSettings from '.';
+ 
+-const mock = {
+-  request: {
+-    query: gql`
+-      query currentUserId {
+-        currentUser {
+-          id
+-        }
+-      }
+-    `,
+-  },
+-  result: {
+-    data: {
+-      currentUser: {
+-        id: 1,
+-      },
+-    },
+-  },
+-};
+-
+ describe('UserSettings component', () => {
+   it('renders UserSettings when logged in', async () => {
+     const cache = new InMemoryCache();
+@@ -38,12 +14,11 @@ describe('UserSettings component', () => {
+       query: GET_LOGIN_STATE,
+       data: { isLoggedIn: true },
+     });
++    const navigation = { navigate: jest.fn() };
+     const tree = await renderWithApolloData(
+-      WithReactNavigator(
+-        <Providers cache={cache} MockedProvider={MockedProvider} mocks={[mock]}>
+-          <UserSettings />
+-        </Providers>
+-      )
++      <Providers cache={cache} MockedProvider={MockedProvider}>
++        <UserSettings navigation={navigation} />
++      </Providers>
+     );
+     expect(tree).toMatchSnapshot();
+   });
+diff --git a/apolloschurchapp/src/user-settings/index.js b/apolloschurchapp/src/user-settings/index.js
+index 9a0a8aed..1db143da 100644
+--- a/apolloschurchapp/src/user-settings/index.js
++++ b/apolloschurchapp/src/user-settings/index.js
+@@ -1,7 +1,7 @@
+-import React from 'react';
++import React, { PureComponent } from 'react';
+ import { ScrollView } from 'react-native';
+-import { useQuery, useMutation, useApolloClient, gql } from '@apollo/client';
+-import { useNavigation } from '@react-navigation/native';
++import PropTypes from 'prop-types';
++import { Query, Mutation } from '@apollo/client/react/components';
+ import { getVersion, getBuildNumber } from 'react-native-device-info';
+ 
+ import {
+@@ -14,198 +14,150 @@ import {
+   Touchable,
+   ActivityIndicator,
+   NavigationService,
+-  H4,
+-  PaddedView,
+ } from '@apollosproject/ui-kit';
+-import {
+-  checkOnboardingStatusAndNavigate,
+-  onboardingComplete,
+-} from '@apollosproject/ui-onboarding';
++
+ import { GET_LOGIN_STATE, LOGOUT } from '@apollosproject/ui-auth';
+ import {
+   RockAuthedWebBrowser,
+   UserAvatarUpdate,
+ } from '@apollosproject/ui-connected';
+ 
+-const UserSettings = () => {
+-  const navigation = useNavigation();
+-  const {
+-    data: { isLoggedIn = false },
+-    loading,
+-  } = useQuery(GET_LOGIN_STATE, { fetchPolicy: 'cache-and-network' });
+-  const [logout] = useMutation(LOGOUT);
+-  const client = useApolloClient();
+-  const { data } = useQuery(gql`
+-    query currentUserId {
+-      currentUser {
+-        id
+-      }
+-    }
+-  `);
+-
+-  if (loading) return <ActivityIndicator />;
+-  if (!isLoggedIn) return null;
+-  return (
+-    <BackgroundView>
+-      <ScrollView>
+-        <UserAvatarUpdate />
++class UserSettings extends PureComponent {
++  static propTypes = {
++    navigation: PropTypes.shape({
++      navigate: PropTypes.func,
++    }),
++  };
+ 
+-        <RockAuthedWebBrowser>
+-          {(openUrl) => (
+-            <>
+-              <TableView>
+-                <Touchable
+-                  onPress={() => {
+-                    navigation.navigate('PersonalDetails');
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Personal Details</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-                <Divider />
+-                <Touchable
+-                  onPress={() => {
+-                    navigation.navigate('Location');
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Location</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-                <Divider />
+-                <Touchable
+-                  onPress={() => {
+-                    navigation.navigate('ChangePassword');
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Change Password</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-                <Touchable
+-                  onPress={() => {
+-                    navigation.navigate('Notifications');
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Notification Settings</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-              </TableView>
+-              <TableView>
+-                <Touchable
+-                  onPress={() => {
+-                    openUrl('mailto:support@apollos.app');
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Give Feedback</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-              </TableView>
+-              <TableView>
+-                <Touchable
+-                  onPress={() => openUrl('https://apollosrock.newspring.cc/')}
+-                >
+-                  <Cell>
+-                    <CellText>Privacy Policy</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-                <Divider />
+-                <Touchable
+-                  onPress={() => openUrl('https://apollosrock.newspring.cc/')}
+-                >
+-                  <Cell>
+-                    <CellText>Terms of Use</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-              </TableView>
+-              <TableView>
+-                <Touchable
+-                  onPress={async () => {
+-                    await logout();
+-                    // This resets the navigation stack, and the navigates to the first auth screen.
+-                    // This ensures that user isn't navigated to a subscreen of Auth, like the pin entry screen.
+-                    NavigationService.resetToAuth();
+-                  }}
+-                >
+-                  <Cell>
+-                    <CellText>Logout</CellText>
+-                    <CellIcon name="arrow-next" />
+-                  </Cell>
+-                </Touchable>
+-              </TableView>
+-              <TableView>
+-                <Cell>
+-                  <CellText>
+-                    {`App Version: ${getVersion()}.${getBuildNumber()}`}
+-                  </CellText>
+-                </Cell>
+-              </TableView>
++  render() {
++    return (
++      <Query query={GET_LOGIN_STATE} fetchPolicy="cache-and-network">
++        {({ data: { isLoggedIn = false }, loading }) => {
++          if (loading) return <ActivityIndicator />;
++          if (!isLoggedIn) return null;
++          return (
++            <BackgroundView>
++              <ScrollView>
++                <UserAvatarUpdate />
+ 
+-              {/* testing panel */}
+-              {process.env.NODE_ENV !== 'production' ? (
+-                <>
+-                  <PaddedView>
+-                    <H4>For development only</H4>
+-                  </PaddedView>
+-                  <TableView>
+-                    <Touchable
+-                      onPress={() =>
+-                        checkOnboardingStatusAndNavigate({
+-                          latestOnboardingVersion: 2,
+-                          navigation: NavigationService,
+-                          client,
+-                        })
+-                      }
+-                    >
+-                      <Cell>
+-                        <CellText>Launch Onboarding</CellText>
+-                      </Cell>
+-                    </Touchable>
+-                    <Divider />
+-                    <Touchable
+-                      onPress={() =>
+-                        onboardingComplete({
+-                          version: 0,
+-                          userId: data?.currentUser?.id,
+-                        })
+-                      }
+-                    >
+-                      <Cell>
+-                        <CellText>Reset Onboarding to Unseen</CellText>
+-                      </Cell>
+-                    </Touchable>
+-                    <Divider />
+-                    <Touchable
+-                      onPress={() =>
+-                        onboardingComplete({
+-                          version: 1,
+-                          userId: data?.currentUser?.id,
+-                        })
+-                      }
+-                    >
+-                      <Cell>
+-                        <CellText>Reset Onboarding to Seen v1</CellText>
+-                      </Cell>
+-                    </Touchable>
+-                  </TableView>
+-                </>
+-              ) : null}
+-            </>
+-          )}
+-        </RockAuthedWebBrowser>
+-      </ScrollView>
+-    </BackgroundView>
+-  );
+-};
++                <RockAuthedWebBrowser>
++                  {(openUrl) => (
++                    <>
++                      <TableView>
++                        <Touchable
++                          onPress={() => {
++                            this.props.navigation.navigate('PersonalDetails');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Personal Details</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                        <Divider />
++                        <Touchable
++                          onPress={() => {
++                            this.props.navigation.navigate('Location');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Location</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                        <Divider />
++                        <Touchable
++                          onPress={() => {
++                            this.props.navigation.navigate('ChangePassword');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Change Password</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                        <Touchable
++                          onPress={() => {
++                            this.props.navigation.navigate('Notifications');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Notification Settings</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                      </TableView>
++                      <TableView>
++                        <Touchable
++                          onPress={() => {
++                            openUrl('mailto:support@apollos.app');
++                          }}
++                        >
++                          <Cell>
++                            <CellText>Give Feedback</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                      </TableView>
++                      <TableView>
++                        <Touchable
++                          onPress={() =>
++                            openUrl('https://apollosrock.newspring.cc/')
++                          }
++                        >
++                          <Cell>
++                            <CellText>Privacy Policy</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                        <Divider />
++                        <Touchable
++                          onPress={() =>
++                            openUrl('https://apollosrock.newspring.cc/')
++                          }
++                        >
++                          <Cell>
++                            <CellText>Terms of Use</CellText>
++                            <CellIcon name="arrow-next" />
++                          </Cell>
++                        </Touchable>
++                      </TableView>
++                      <TableView>
++                        <Mutation mutation={LOGOUT}>
++                          {(handleLogout) => (
++                            <Touchable
++                              onPress={async () => {
++                                await handleLogout();
++                                // This resets the navigation stack, and the navigates to the first auth screen.
++                                // This ensures that user isn't navigated to a subscreen of Auth, like the pin entry screen.
++                                await NavigationService.resetToAuth();
++                              }}
++                            >
++                              <Cell>
++                                <CellText>Logout</CellText>
++                                <CellIcon name="arrow-next" />
++                              </Cell>
++                            </Touchable>
++                          )}
++                        </Mutation>
++                      </TableView>
++                      <TableView>
++                        <Cell>
++                          <CellText>
++                            {`App Version: ${getVersion()}.${getBuildNumber()}`}
++                          </CellText>
++                        </Cell>
++                      </TableView>
++                    </>
++                  )}
++                </RockAuthedWebBrowser>
++              </ScrollView>
++            </BackgroundView>
++          );
++        }}
++      </Query>
++    );
++  }
++}
+ 
+ export default UserSettings;
