@@ -1,0 +1,456 @@
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index 4decd07a..6c37ad46 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.33.1",
++  "version": "2.29.3",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index de32f786..7bb82c12 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -5,7 +5,6 @@
+   "main": "lib/index.js",
+   "scripts": {
+     "setup": "./scripts/init.sh",
+-    "migrator": "node ./lib/migrator.js",
+     "start": "NODE_ENV=production node ./lib/index.js",
+     "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+     "postinstall": "yarn build",
+@@ -18,33 +17,34 @@
+     "node": ">=14"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^2.33.1",
+-    "@apollosproject/data-connector-algolia-search": "^2.33.1",
+-    "@apollosproject/data-connector-analytics": "^2.33.1",
+-    "@apollosproject/data-connector-bible": "^2.33.1",
+-    "@apollosproject/data-connector-church-online": "^2.33.1",
+-    "@apollosproject/data-connector-cloudinary": "^2.33.1",
+-    "@apollosproject/data-connector-onesignal": "^2.33.1",
+-    "@apollosproject/data-connector-passes": "^2.33.1",
+-    "@apollosproject/data-connector-postgres": "^2.33.1",
+-    "@apollosproject/data-connector-redis-cache": "^2.33.1",
+-    "@apollosproject/data-connector-rock": "^2.33.1",
+-    "@apollosproject/data-connector-twilio": "^2.33.1",
+-    "@apollosproject/data-schema": "^2.33.1",
+-    "@apollosproject/rock-apollo-data-source": "^2.33.1",
+-    "@apollosproject/server-core": "^2.33.1",
++    "@apollosproject/config": "^2.29.3",
++    "@apollosproject/data-connector-algolia-search": "^2.29.3",
++    "@apollosproject/data-connector-analytics": "^2.29.3",
++    "@apollosproject/data-connector-bible": "^2.29.3",
++    "@apollosproject/data-connector-church-online": "^2.29.3",
++    "@apollosproject/data-connector-cloudinary": "^2.29.3",
++    "@apollosproject/data-connector-onesignal": "^2.29.3",
++    "@apollosproject/data-connector-passes": "^2.29.3",
++    "@apollosproject/data-connector-postgres": "^2.29.3",
++    "@apollosproject/data-connector-redis-cache": "^2.29.3",
++    "@apollosproject/data-connector-rock": "^2.29.3",
++    "@apollosproject/data-connector-twilio": "^2.29.3",
++    "@apollosproject/data-schema": "^2.29.3",
++    "@apollosproject/rock-apollo-data-source": "^2.29.3",
++    "@apollosproject/server-core": "^2.29.3",
+     "apollo-server": "^2.24.1",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+     "express": "^4.17.0",
+     "graphql": "14.6.0",
++    "graphql-upload": "^12.0.0",
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.33.0",
+-    "@apollosproject/babel-preset-apollos": "^2.33.0",
+-    "@apollosproject/eslint-config": "^2.33.0",
++    "@apollosproject/apollo-server-env-mock": "^2.29.3",
++    "@apollosproject/babel-preset-apollos": "^2.29.3",
++    "@apollosproject/eslint-config": "^2.29.3",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+diff --git a/apollos-church-api/src/config.js b/apollos-church-api/src/config.js
+index 53b6558c..8291fd33 100644
+--- a/apollos-church-api/src/config.js
++++ b/apollos-church-api/src/config.js
+@@ -3,14 +3,12 @@ import fetch from 'node-fetch';
+ import dotenv from "dotenv/config"; // eslint-disable-line
+ import ApollosConfig from '@apollosproject/config';
+ 
++const configName = process.env.DATABASE_URL
++  ? 'config.postgres.yml'
++  : 'config.yml';
++
+ ApollosConfig.loadYaml({
+-  configPath: path.join(
+-    __dirname,
+-    '..',
+-    process.env.DATABASE_CONTENT === 'true'
+-      ? 'config.postgres.yml'
+-      : 'config.yml'
+-  ),
++  configPath: path.join(__dirname, '..', configName),
+ });
+ 
+ // defaults
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+index 1fdc489e..4acac1d5 100644
+--- a/apollos-church-api/src/data/index.postgres.js
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -15,24 +15,20 @@ import * as Cache from '@apollosproject/data-connector-redis-cache';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+-  Interactions as RockInteractions,
++  Interactions,
+   RockConstants,
+   Sharable,
+   Auth,
+   PersonalDevice,
+   Template,
+   AuthSms,
++  Campus,
+   Group,
+   BinaryFiles,
+   FeatureFeed,
+   Event,
+   PrayerRequest,
+   Person as RockPerson,
+-  ContentItem as RockContentItem,
+-  Campus as RockCampus,
+-  ContentChannel,
+-  Feature as RockFeature,
+-  ActionAlgorithm as RockActionAlgorithm,
+ } from '@apollosproject/data-connector-rock';
+ 
+ import {
+@@ -40,20 +36,17 @@ import {
+   UserFlag,
+   UserLike,
+   Follow,
+-  Interactions,
+-  Likes,
+   Notification,
+   NotificationPreference,
+-  Tag,
+-  Campus,
++  Campus as PostgresCampus,
+   Person as PostgresPerson,
+   Media as PostgresMedia,
+-  Feature as PostgresFeature,
+-  ContentItem as PostgresContentItem,
++  Feature,
++  Tag,
++  ContentItem,
+   ContentItemsConnection,
+-  ContentItemCategory,
+-  ActionAlgorithm as PostgresActionAlgorithm,
+-  PrayerRequest as PostgresPrayerRequest,
++  ContentItemCategory as ContentChannel,
++  ActionAlgorithm,
+ } from '@apollosproject/data-connector-postgres';
+ 
+ import * as Theme from './theme';
+@@ -63,48 +56,24 @@ import * as Theme from './theme';
+ import {
+   Person,
+   OneSignal,
+-  PostgresDefaultCampusOverride,
+-  RockDefaultCampusOverride,
++  Followings as FollowingsPostgresBridge,
+ } from './rockWithPostgres';
+ 
+-const postgresContentModules = {
+-  Interactions,
+-  Likes,
+-  ActionAlgorithm: PostgresActionAlgorithm,
+-  Feature: PostgresFeature,
+-  PostgresMedia,
+-  Tag,
+-  ContentItem: PostgresContentItem,
+-  ContentItemsConnection,
+-  ContentChannel: ContentItemCategory,
+-  PrayerRequest: PostgresPrayerRequest,
+-  RockCampus: { dataSource: RockCampus.dataSource },
+-  Campus,
+-  PostgresDefaultCampusOverride,
+-};
+-
+-const rockContentModules = {
+-  Interactions: RockInteractions,
+-  Followings,
+-  ActionAlgorithm: RockActionAlgorithm,
+-  Feature: RockFeature,
+-  ContentItem: RockContentItem,
+-  ContentChannel,
+-  PrayerRequest,
+-  PostgresCampus: { dataSource: Campus.dataSource },
+-  Campus: RockCampus,
+-  RockDefaultCampusOverride,
+-};
+-
+ const data = {
+   Interfaces,
++  Followings,
++  FollowingsPostgresBridge, // This entry needs to come after Followings.
+   FeatureFeed,
++  ActionAlgorithm,
+   RockPerson, // This entry needs to come before (postgres) Person
+   BinaryFiles, // This entry needs to come before (postgres) Person
+   PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
+-  ...(process.env.DATABASE_CONTENT
+-    ? postgresContentModules
+-    : rockContentModules),
++  PostgresMedia,
++  Feature,
++  Tag,
++  ContentItem,
++  ContentItemsConnection,
++  ContentChannel,
+   Cloudinary,
+   Auth,
+   AuthSms,
+@@ -112,6 +81,7 @@ const data = {
+   LiveStream,
+   Theme,
+   Scripture,
++  Interactions,
+   RockConstants,
+   Sharable,
+   Analytics,
+@@ -119,13 +89,17 @@ const data = {
+   Pass,
+   Search,
+   Template,
++  Campus,
+   Group,
++  // ActionAlgorithm,
+   Event,
+   Cache,
++  PrayerRequest,
+   Comment,
+   UserLike,
+   UserFlag,
+   Follow,
++  PostgresCampus,
+   Notification,
+   NotificationPreference,
+   OneSignal,
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+index baf9d817..b22f5a30 100644
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ b/apollos-church-api/src/data/rockWithPostgres.js
+@@ -42,6 +42,21 @@ const personResolver = {
+       ]); // updates in Postgres. Reuses already uploaded imageUrl
+       // return dataSources.Person.uploadProfileImage(file, size); // updates in Postgres. Performs the upload again.
+     },
++    updateUserCampus: async (root, { campusId }, { dataSources }) => {
++      await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
++
++      const { id: rockCampusId } = parseGlobalId(campusId);
++      const campus = await dataSources.PostgresCampus.getFromId(
++        rockCampusId,
++        null,
++        {
++          originType: 'rock',
++        }
++      ); // finds the postgres campus id
++      return dataSources.Person.updateProfile([
++        { field: 'campusId', value: campus.id },
++      ]); // updates in Postgres
++    },
+     updateUserPushSettings: async (root, { input }, { dataSources }) => {
+       // register the changes w/ postgres
+       await dataSources.NotificationPreference.updateUserNotificationPreference(
+@@ -119,40 +134,91 @@ export const OneSignal = {
+   dataSource: oneSignalDataSource,
+ };
+ 
+-// Used when IDs coming from the API are Rock APIS.
+-export const RockDefaultCampusOverride = {
+-  resolver: {
+-    Mutation: {
+-      updateUserCampus: async (root, { campusId }, { dataSources }) => {
+-        await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
++const defaultContentItemResolvers = {
++  likedCount: (root, args, { dataSources }) =>
++    console.log(root, root.apollosId, root.originId) ||
++    dataSources.Followings.getFollowingsCountByNodeId({
++      nodeId: root.apollosId,
++      originId: root.originId,
++    }),
+ 
+-        const { id: rockCampusId } = parseGlobalId(campusId);
+-        const campus = await dataSources.PostgresCampus.getFromId(
+-          rockCampusId,
+-          null,
+-          {
+-            originType: 'rock',
+-          }
+-        ); // finds the postgres campus id
+-        return dataSources.Person.updateProfile([
+-          { field: 'campusId', value: campus.id },
+-        ]); // updates in Postgres
+-      },
++  isLiked: async (root, args, { dataSources }) =>
++    dataSources.Followings.getIsLikedForCurrentUserAndNode({
++      nodeId: root.apollosId,
++      originId: root.originId,
++      isLiked: null,
++    }),
++};
++
++const followingsResolvers = {
++  Mutation: {
++    updateLikeEntity: async (
++      root,
++      { input: { nodeId, operation } },
++      { dataSources },
++      resolveInfo
++    ) => {
++      const { originId } = await dataSources.ContentItem.getFromId(
++        nodeId.split(':')[1]
++      );
++      return dataSources.Followings.updateLikeContentItem({
++        nodeId,
++        originId,
++        operation,
++        resolveInfo,
++      });
++    },
++    updateLikeNode: async (
++      root,
++      { input: { nodeId, operation } },
++      { dataSources },
++      resolveInfo
++    ) => {
++      const { originId } = await dataSources.ContentItem.getFromId(
++        nodeId.split(':')[1]
++      );
++      return dataSources.Followings.updateLikeNode({
++        nodeId,
++        originId,
++        operation,
++        resolveInfo,
++      });
+     },
+   },
+-};
++  Query: {
++    likedContent: async (root, { after, first }, { dataSources }) => {
++      const followingsPaginated = await dataSources.Followings.paginatedGetFollowingsForCurrentUser(
++        { type: 'ContentItem', after, first }
++      );
++
++      const followings = await followingsPaginated.edges;
++      const ids = followings.map((f) => f.node.entityId);
++      const contentItems = await dataSources.ContentItem.getFromOriginIds(ids);
++      const contentItemEdges = contentItems.map((contentItem) => ({
++        node: contentItem,
++        following: followings.find(
++          (f) => String(f.node.entityId) === contentItem.originId
++        ).node,
++        cursor: followings.find(
++          (f) => String(f.node.entityId) === contentItem.originId
++        ).cursor,
++      }));
++      const sortedContentItemEdges = contentItemEdges.sort(
++        (a, b) =>
++          new Date(a.following.createdDateTime) <
++          new Date(b.following.createdDateTime)
++      );
+ 
+-// Used when IDs coming from the API are Postgres APIS.
+-export const PostgresDefaultCampusOverride = {
+-  resolver: {
+-    Mutation: {
+-      updateUserCampus: async (root, { campusId }, { dataSources }) => {
+-        const campus = await dataSources.Campus.getFromId(campusId); // finds the postgres campus id
+-        await dataSources.RockPerson.updateProfile([
+-          { field: 'campusId', value: campus.originId },
+-        ]); // updates in Rock
+-        return dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Postgres
+-      },
++      return { edges: sortedContentItemEdges };
+     },
+   },
++  UniversalContentItem: defaultContentItemResolvers,
++  DevotionalContentItem: defaultContentItemResolvers,
++  ContentSeriesContentItem: defaultContentItemResolvers,
++  WeekendContentItem: defaultContentItemResolvers,
++  MediaContentItem: defaultContentItemResolvers,
++};
++
++export const Followings = {
++  resolver: followingsResolvers,
+ };
+diff --git a/apollos-church-api/src/migrator.js b/apollos-church-api/src/migrator.js
+deleted file mode 100644
+index 72366cf8..00000000
+--- a/apollos-church-api/src/migrator.js
++++ /dev/null
+@@ -1,31 +0,0 @@
+-import dotenv from 'dotenv/config'; // eslint-disable-line
+-import '@apollosproject/data-connector-postgres/lib/postgres/pgEnum-fix';
+-import config from './config'; // eslint-disable-line
+-
+-import ApollosConfig from '@apollosproject/config';
+-import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
+-
+-let dataObj;
+-
+-if (ApollosConfig?.DATABASE?.URL) {
+-  dataObj = require('./data/index.postgres');
+-} else {
+-  dataObj = require('./data/index');
+-}
+-
+-const { migrations } = dataObj;
+-
+-// make sure this is called last.
+-// (or at least after the apollos server setup)
+-(async () => {
+-  if (ApollosConfig?.DATABASE?.URL) {
+-    try {
+-      const migrationRunner = await createMigrationRunner({ migrations });
+-      migrationRunner.runAsCLI();
+-    } catch (e) {
+-      console.log(e);
+-    }
+-  } else {
+-    console.warn('Please specify a database URL to perform migrations');
+-  }
+-})();
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index ae3b1cf4..d334a052 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -84,23 +84,7 @@ apolloServer.applyMiddleware({ app, path: '/' });
+ (async () => {
+   if (ApollosConfig?.DATABASE?.URL) {
+     const migrationRunner = await createMigrationRunner({ migrations });
+-    const pending = await migrationRunner.pending();
+-    if (pending.length) {
+-      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
+-      console.log(
+-        '\x1b[36m',
+-        'You currently have a number of pending migrations',
+-        '\x1b[0m'
+-      );
+-      console.log(pending);
+-      console.log(
+-        `Keep in mind, you are currently connected to ${
+-          migrationRunner?.options?.context?.sequelize?.options?.host
+-        }`
+-      );
+-      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
+-    }
+-    if (ApollosConfig.AUTO_MIGRATE) await migrationRunner.up();
++    await migrationRunner.up();
+   }
+ })();
+ 
