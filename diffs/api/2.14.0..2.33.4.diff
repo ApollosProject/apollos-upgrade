@@ -1,0 +1,1518 @@
+diff --git a/apollos-church-api/.env.shared.enc b/apollos-church-api/.env.shared.enc
+index 465f8269fe268e8ed93e2dbfc77e66f8f3eed5a2..9c70164de3093bc053a8b702ef744f2ee4efbaa2 100644
+GIT binary patch
+literal 7056
+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
+
+literal 6976
+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
+S$D!-Wa3liI6_ZZuc)+yo9F2|u
+
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index 57604a01..57002c1a 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.14.0",
++  "version": "2.33.4",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/config.postgres.yml b/apollos-church-api/config.postgres.yml
+new file mode 100644
+index 00000000..f8b68c10
+--- /dev/null
++++ b/apollos-church-api/config.postgres.yml
+@@ -0,0 +1,240 @@
++# This file, in conjuction with your .env file,
++# should be used to configure the apollos server.
++
++# Any values you wish to keep secret should be placed in `.env`
++# You can access those values (and any other values in your environment)
++# using the ${VARIABLE_NAME} syntax
++
++# This file should be checked into version control.
++# `.env` should NOT be checked into version control.
++APP:
++  # This variable is used for generating deep links.
++  # It should match whatver is in your Info.plist `CFBundleURLTypes`
++  DEEP_LINK_HOST: ${DEEP_LINK_HOST}
++  UNIVERSAL_LINK_HOST: ${UNIVERSAL_LINK_HOST}
++  ROOT_API_URL: ${ROOT_URL}
++  JOBS_USERNAME: ${JOBS_USERNAME}
++  JOBS_PASSWORD: ${JOBS_PASSWORD}
++DATABASE:
++  URL: ${DATABASE_URL}
++BUGSNAG:
++  API_KEY: ${BUGSNAG_KEY}
++ROCK:
++  URL: ${ROCK_URL}
++  API_TOKEN: ${ROCK_TOKEN}
++UNIVERSAL_LINKS:
++  APPLE_APP_ID: ${APPLE_APP_ID}
++  APPLE_TEAM_ID: ${APPLE_TEAM_ID}
++  APP_STORE_LINK: ${IOS_REDIRECT}
++  PLAY_STORE_LINK: ${ANDROID_REDIRECT}
++  GOOGLE_APP_ID: ${GOOGLE_APP_ID}
++  GOOGLE_KEYSTORE_SHA256: ${GOOGLE_KEYSTORE_SHA256}
++ONE_SIGNAL:
++  APP_ID: ${ONE_SIGNAL_APP_ID}
++  REST_KEY: ${ONE_SIGNAL_REST_KEY}
++CHURCH_ONLINE:
++  URL: ${CHURCH_ONLINE_URL}
++  WEB_VIEW_URL: https://apollos.online.church/
++ALGOLIA:
++  APPLICATION_ID: ${ALGOLIASEARCH_APPLICATION_ID}
++  API_KEY: ${ALGOLIASEARCH_API_KEY}
++TWILIO:
++  ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
++  AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
++  FROM_NUMBER: ${TWILIO_FROM_NUMBER}
++PASS:
++  TEMPLATES:
++    CHECKIN: ${PWD}/wallet-passes/checkin.pass
++  CERTIFICATES:
++    WWDR: ${PASS_WWDR_CERT}
++    SIGNER_CERT: ${PASS_SIGNER_CERT}
++    SIGNER_KEY: ${PASS_SIGNER_KEY}
++    SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
++BIBLE_API:
++  KEY: ${BIBLE_API_KEY}
++  BIBLE_ID:
++    WEB: '9879dbb7cfe39e4d-01'
++    KJV: 'de4e12af7f28f599-02'
++CLOUDINARY:
++  URL: ${CLOUDINARY_URL}
++
++CONTENT:
++  SERMON_CHANNEL_ID: cbc0994a-97f1-471a-a7d5-4eff59d8a389
++  TYPES:
++    - ContentSeriesContentItem
++    - DevotionalContentItem
++    - MediaContentItem
++    - UniversalContentItem
++    - WeekendContentItem
++    - ContentItem
++
++
++TABS:
++  HOME:
++    - type: ActionBar
++      title: Welcome to Apollos
++      actions:
++        [
++          {
++            title: Check In,
++            icon: check,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++        ]
++    - algorithms:
++      - type: CONTENT_FEED
++        arguments:
++          channelIds:
++            - c7f43eb9-2200-4267-ab28-871e0d5e785f
++            - 3dfe7149-136b-4134-bd91-fdd935ef2221
++      type: HeroList
++      primaryAction:
++        # Right now, you hardcode exactly what GraphQL should return.
++        # Long term, we hope to have a more sophisticated mechanism for driving this field
++        action: OPEN_NODE
++        title: 'Read More'
++        relatedNode:
++          __typename: UniversalContentItem
++          id: a2c42d1d-98c8-46fb-aeea-603bc569cf7d
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - algorithms:
++        - type: CAMPAIGN_ITEMS
++          channelIds:
++            - 4b23ebc9-248e-4092-99f9-8829e1b6f1cc
++      type: HeroList
++      isFeatured: true
++      subtitle: Featured
++    - title: FOR YOU
++      algorithms: [SERMON_CHILDREN, PERSONA_FEED]
++      subtitle: Explore what God calls you to today
++      type: ActionList
++    - algorithms: [SERIES_IN_PROGRESS]
++      subtitle: Continue
++      type: HorizontalCardList
++    - title: RECOMMENDED
++      algorithms: [SERMON_CHILDREN]
++      subtitle: For Him
++      type: VerticalCardList
++    - title: BULLETIN
++      subtitle: What's happening at apollos?
++      type: ActionList
++      algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 13
++        - type: UPCOMING_EVENTS
++
++  READ:
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - c7f43eb9-2200-4267-ab28-871e0d5e785f
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Podcast Messages
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Podcast Messages
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - d9da719f-84ef-4cf0-9875-22fea4bf09eb
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Devotionals
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:d9da719f-84ef-4cf0-9875-22fea4bf09eb
++          title: Devotionals
++
++  WATCH:
++    - algorithms:
++        - type: LATEST_SERIES_CHILDREN
++          arguments:
++            channelId: 8f0a93f5-ccec-4cc1-8fd8-06afe5982f7b
++      type: HeroList
++      title: Catch up
++      subtitle: Latest Series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++      type: VerticalCardList
++      subtitle: All series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 8f0a93f5-ccec-4cc1-8fd8-06afe5982f7b
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Sermons
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Podcasts
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Podcasts
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++            limit: 3
++      type: HorizontalCardList
++      title: Videos
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Videos
++
++  PRAY:
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - type: VerticalPrayerList
++      title: Your Prayers
++  CONNECT:
++    - type: ActionTable
++      title: Connect to Apollos
++      actions:
++        [
++          {
++            title: Google,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++          {
++            title: Facebook,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.facebook.com' },
++          },
++        ]
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index 71745f7a..5ac0d92a 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -15,60 +15,29 @@ APP:
+   ROOT_API_URL: ${ROOT_URL}
+   JOBS_USERNAME: ${JOBS_USERNAME}
+   JOBS_PASSWORD: ${JOBS_PASSWORD}
+-  FLAG_LIMIT: 1
+ DATABASE:
+   URL: ${DATABASE_URL}
+-  OPTIONS:
+-    dialectOptions:
+-      ssl:
+-        require: false
+-        rejectUnauthorized: false
+ BUGSNAG:
+-  ## Optional, but you'll need to remove references to @apollosproject/bugsnag if you don't wish to use.
+   API_KEY: ${BUGSNAG_KEY}
+ ROCK:
+   URL: ${ROCK_URL}
+-  API_URL: ${ROCK_API}
+   API_TOKEN: ${ROCK_TOKEN}
+-  IMAGE_URL: https://rock.apollos.app/GetImage.ashx
+-  SHARE_URL: https://rock.apollos.app
+-  # This should match the timezone of the Rock server
+-  TIMEZONE: 'America/New_York'
+ UNIVERSAL_LINKS:
+-  # This should be your app's bundle ID, as found in your info.plist.
+   APPLE_APP_ID: ${APPLE_APP_ID}
+-  # This should be your app's team ID, as found in Xcode
+   APPLE_TEAM_ID: ${APPLE_TEAM_ID}
+-  # Where should a user be redirected if they don't have your app installed?
+   APP_STORE_LINK: ${IOS_REDIRECT}
+   PLAY_STORE_LINK: ${ANDROID_REDIRECT}
+-  # Your app Id, as found in your app/build.gradle.
+   GOOGLE_APP_ID: ${GOOGLE_APP_ID}
+-  # https://docs.getsocial.im/knowledge-base/android-signing-key-sha256/
+   GOOGLE_KEYSTORE_SHA256: ${GOOGLE_KEYSTORE_SHA256}
+ ONE_SIGNAL:
+   APP_ID: ${ONE_SIGNAL_APP_ID}
+   REST_KEY: ${ONE_SIGNAL_REST_KEY}
+ CHURCH_ONLINE:
+   URL: ${CHURCH_ONLINE_URL}
+-  MEDIA_URLS: []
+   WEB_VIEW_URL: https://apollos.online.church/
+ ALGOLIA:
+   APPLICATION_ID: ${ALGOLIASEARCH_APPLICATION_ID}
+   API_KEY: ${ALGOLIASEARCH_API_KEY}
+-  SEARCH_INDEX: prod_ContentItem
+-  # Configure Algolia custom settings here
+-  # https://www.algolia.com/doc/api-reference/settings-api-parameters/
+-  CONFIGURATION:
+-    searchableAttributes:
+-      - title
+-      - unordered(summary)
+-    #customRankings:
+-    # NOT CURRENTLY INCLUDED
+-    # This just demonstrates what's possible
+-    # To include likedCount (or any other field) override search package
+-    # and add field to config below
+-    #- desc(likedCount)
+ TWILIO:
+   ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+   AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+@@ -81,36 +50,16 @@ PASS:
+     SIGNER_CERT: ${PASS_SIGNER_CERT}
+     SIGNER_KEY: ${PASS_SIGNER_KEY}
+     SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
+-ANALYTICS:
+-  # Filling out these fields will automatically enable analytics tracking
+-  # on the accompanying service
+-  SEGMENT_KEY:
+-  GA_ID:
+-  USE_ROCK: false
+ BIBLE_API:
+   KEY: ${BIBLE_API_KEY}
+   BIBLE_ID:
+     WEB: '9879dbb7cfe39e4d-01'
+     KJV: 'de4e12af7f28f599-02'
+ CLOUDINARY:
+-  # Cloudinary is used to improve image loading
+-  # value should look something like
+-  # cloudinary://123123123:adkfnla_adASDv_adAS@test
+   URL: ${CLOUDINARY_URL}
+-ENGINE:
+-  API_KEY: ${ENGINE_API_KEY}
+-  SCHEMA_TAG: ${ENGINE_SCHEMA_TAG}
+ 
+ # This key holds various properties that allow our GraphQL server to map to your Rock Instance
+ ROCK_MAPPINGS:
+-  INTERACTIONS:
+-    # Name of the InteractionChannel that will be created per EntityType
+-    CHANNEL_NAME: Apollos App
+-    # Prefix for the name of the InteractionComponent that will be created per Entity
+-    COMPONENT_NAME: Apollos App Component
+-    # 512 is "Mobile App"
+-    CHANNEL_MEDIUM_TYPE_ID: 512
+-
+   CONTENT_ITEM:
+     ContentSeriesContentItem:
+       # When resolving "ContentSeriesContentItem" look in rock for a "ContentChannelItem"
+@@ -134,256 +83,172 @@ ROCK_MAPPINGS:
+     # Id of the category used to store all persona dataviews
+     PersonaId: 210
+ 
+-  # TODO deprecated
+-  # used for the contentChannels root level query
+-  DISCOVER_CONTENT_CHANNEL_IDS:
++  ALL_CONTENT_CHANNELS:
+     - 3
+     - 5
+     - 6
+     - 8
+ 
+-  # These channels are also pulled when indexing searchable content.
+-  ACTIVE_CONTENT_CHANNEL_IDS:
+-    - 6
+-
+   SERMON_CHANNEL_ID: 5
+ 
+-  SERVING_GROUP_TYPE_ID: 23
+-  COMMUNITY_GROUP_TYPE_ID: 25
+-  FAMILY_GROUP_TYPE_ID: 10
+-
+-  MOBILE_DEVICE_TYPE_ID: 671
+-
+-HOME_FEATURES:
+-  - type: ActionBar
+-    title: Welcome to Apollos
+-    actions:
+-      [
+-        {
+-          title: Check In,
+-          icon: check,
+-          action: OPEN_URL,
+-          relatedNode: { __typename: Url, url: 'https://www.google.com' },
+-        },
+-      ]
+-  - algorithms:
+-    - type: CONTENT_FEED
+-      arguments:
+-        channelIds:
+-          - 6
+-    type: HeroList
+-    primaryAction:
+-      # Right now, you hardcode exactly what GraphQL should return.
+-      # Long term, we hope to have a more sophisticated mechanism for driving this field
+-      action: OPEN_NODE
+-      title: 'Read More'
+-      relatedNode:
+-        __typename: UniversalContentItem
+-        id: 21
+-  - algorithms: [DAILY_PRAYER]
+-    isCard: false
+-    type: PrayerList
+-    title: Daily Prayer
+-  - algorithms:
+-      - type: CAMPAIGN_ITEMS
+-        channelIds:
+-          - 9
+-    type: HeroList
+-    isFeatured: true
+-    subtitle: Featured
+-  - title: FOR YOU
+-    algorithms: [SERMON_CHILDREN, PERSONA_FEED]
+-    subtitle: Explore what God calls you to today
+-    type: ActionList
+-  - algorithms: [PERSONA_FEED]
+-    subtitle: Continue
+-    type: HorizontalCardList
+-  - title: RECOMMENDED
+-    algorithms: [SERMON_CHILDREN]
+-    subtitle: For Him
+-    type: VerticalCardList
+-  - title: BULLETIN
+-    subtitle: What's happening at apollos?
+-    type: ActionList
+-    algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
+-          channelIds:
+-            - 13
+-      - type: UPCOMING_EVENTS
+-
+-DISCOVER_FEATURES:
+-  - algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
+-          channelIds:
+-            - 3
+-          limit: 3
+-    type: HorizontalCardList
+-    subtitle: Sermons
+-  - algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
+-          channelIds:
+-            - 5
+-          limit: 3
+-    type: HorizontalCardList
+-    subtitle: Podcasts
+-    primaryAction:
+-      action: OPEN_CHANNEL
+-      title: 'Read More'
+-      relatedNode:
+-        __typename: ContentChannel
+-        id: 5
+-        name: Podcasts
+-  - algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
+-          channelIds:
+-            - 7
+-          limit: 3
+-    type: HorizontalCardList
+-    subtitle: Devotionals
+-    primaryAction:
+-      action: OPEN_CHANNEL
+-      title: 'Read More'
+-      relatedNode:
+-        __typename: ContentChannel
+-        id: 7
+-        name: Devotionals
+-  - algorithms:
++TABS:
++  HOME:
++    - type: ActionBar
++      title: Welcome to Apollos
++      actions:
++        [
++          {
++            title: Check In,
++            icon: check,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++        ]
++    - algorithms:
+       - type: CONTENT_FEED
+         arguments:
+           channelIds:
+             - 6
+-          limit: 3
+-    type: HorizontalCardList
+-    title: Videos
+-    primaryAction:
+-      action: OPEN_CHANNEL
+-      title: 'Read More'
+-      relatedNode:
+-        __typename: ContentChannel
+-        id: 6
+-        name: Videos
+-  - algorithms:
+-      - type: CONTENT_FEED
+-        arguments:
++      type: HeroList
++      primaryAction:
++        # Right now, you hardcode exactly what GraphQL should return.
++        # Long term, we hope to have a more sophisticated mechanism for driving this field
++        action: OPEN_NODE
++        title: 'Read More'
++        relatedNode:
++          __typename: UniversalContentItem
++          id: 21
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - algorithms:
++        - type: CAMPAIGN_ITEMS
+           channelIds:
+-            - 8
+-          limit: 3
+-    type: HorizontalCardList
+-    subtitle: Something Else
++            - 9
++      type: HeroList
++      isFeatured: true
++      subtitle: Featured
++    - title: FOR YOU
++      algorithms: [SERMON_CHILDREN, PERSONA_FEED]
++      subtitle: Explore what God calls you to today
++      type: ActionList
++    - algorithms: [PERSONA_FEED]
++      subtitle: Continue
++      type: HorizontalCardList
++    - title: RECOMMENDED
++      algorithms: [SERMON_CHILDREN]
++      subtitle: For Him
++      type: VerticalCardList
++    - title: BULLETIN
++      subtitle: What's happening at apollos?
++      type: ActionList
++      algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 13
++        - type: UPCOMING_EVENTS
++
++  READ:
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 7
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Devotionals
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          id: 7
++          name: Devotionals
++
++  WATCH:
++    - algorithms:
++        - type: LATEST_SERIES_CHILDREN
++          arguments:
++            channelId: 4
++      type: HeroList
++      title: Catch up
++      subtitle: Latest Series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 4
++      type: VerticalCardList
++      subtitle: All series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 3
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Sermons
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 5
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Podcasts
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          id: 5
++          name: Podcasts
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 6
++            limit: 3
++      type: HorizontalCardList
++      title: Videos
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          id: 6
++          name: Videos
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 8
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Something Else
+ 
+-# Default mapping of field types -> ids. There's probably no reason to edit this.
+-ROCK_CONSTANTS:
+-  TEXT: 1
+-  MULTI_SELECT: 2
+-  BOOLEAN: 3
+-  COLOR: 4
+-  SINGLE_SELECT: 6
+-  INTEGER: 7
+-  PAGE_REFERENCE: 8
+-  IMAGE: 10
+-  DATE: 11
+-  DECIMAL: 14
+-  DEFINED_TYPE: 15
+-  DEFINED_VALUE: 16
+-  PERSON: 18
+-  HTML: 20
+-  MEMO: 21
+-  GROUP_TYPES: 22
+-  GROUP: 23
+-  CAMPUSES: 26
+-  ENTITY_TYPE: 29
+-  CAMPUS: 30
+-  EMAIL_TEMPLATE: 31
+-  FILE: 32
+-  GROUP_TYPE: 33
+-  KEY_VALUE_LIST: 34
+-  BINARY_FILE_TYPE: 35
+-  WORKFLOW_TYPE: 36
+-  BINARY_FILE: 37
+-  FINANCIAL_ACCOUNT: 38
+-  FINANCIAL_ACCOUNTS: 39
+-  COMPONENT: 40
+-  COMPONENTS: 41
+-  CATEGORIES: 42
+-  GROUP_ROLE: 43
+-  CATEGORY: 44
+-  LOCATION: 45
+-  DATE_RANGE: 46
+-  DECIMAL_RANGE: 47
+-  INTEGER_RANGE: 48
+-  TIME: 49
+-  GROUP_LOCATION_TYPE: 50
+-  CODE_EDITOR: 51
+-  PERSON_BADGES: 52
+-  SITE: 53
+-  COMMUNICATION_TEMPLATE: 54
+-  DAY_OF_WEEK: 55
+-  DAYS_OF_WEEK: 56
+-  REMOTE_AUTHS: 57
+-  COMPARISON: 58
+-  METRIC_ENTITY: 59
+-  WORKFLOW_ACTIVITY: 60
+-  WORKFLOW_ATTRIBUTE: 61
+-  METRICS: 62
+-  ENTITY: 63
+-  METRIC_CATEGORIES: 64
+-  WORKFLOW_TEXT_OR_ATTRIBUTE: 65
+-  SLIDING_DATE_RANGE: 66
+-  GROUP_TYPE_GROUP: 67
+-  SECURITY_ROLE: 68
+-  VALUE_LIST: 69
+-  CURRENCY: 70
+-  EMAIL: 71
+-  URL_LINK: 72
+-  WORKFLOW_TYPES: 73
+-  ATTRIBUTE: 74
+-  SCHEDULES: 75
+-  CONTENT_CHANNEL: 76
+-  AUDIO_FILE: 77
+-  AUDIO_URL: 78
+-  VIDEO_FILE: 79
+-  VIDEO_URL: 80
+-  ENCRYPTED_TEXT: 81
+-  FILTER_DATE: 82
+-  DATE_TIME: 83
+-  DEFINED_VALUE_RANGE: 84
+-  RATING: 85
+-  SYSTEM_EMAIL: 86
+-  FINANCIAL_GATEWAY: 87
+-  GROUP_AND_ROLE: 88
+-  NOTE_TYPE: 89
+-  NOTE_TYPES: 90
+-  EVENT_CALENDAR: 91
+-  EVENT_ITEM: 92
+-  CONNECTION_ACTIVITY_TYPE: 93
+-  CONNECTION_OPPORTUNITY: 94
+-  CONNECTION_REQUEST: 95
+-  CONNECTION_STATE: 96
+-  CONNECTION_STATUS: 97
+-  CONNECTION_TYPE: 98
+-  CONNECTION_TYPES: 99
+-  MERGE_TEMPLATE: 100
+-  RANGE_SLIDER: 101
+-  BINARY_FILE_TYPES: 102
+-  MARKDOWN: 103
+-  DATA_VIEW: 104
+-  PHONE_NUMBER: 105
+-  SCHEDULE: 106
+-  LAVA_COMMANDS: 107
+-  ADDRESS: 108
+-  BENEVOLENCE_REQUEST: 109
+-  CONTENT_CHANNEL_TYPES: 110
+-  WORKFLOW: 111
+-  SSN: 112
+-  MATRIX: 113
+-  LAVA: 114
+-  DATA_VIEWS: 115
+-  COMMUNICATION_PREFERENCE: 116
+-  INTERACTION_CHANNEL: 117
+-  GROUP_MEMBER: 118
+-  TIME_ZONE: 119
+-  LABEL: 120
++  PRAY:
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - type: VerticalPrayerList
++      title: Your Prayers
++  CONNECT:
++    - type: ActionTable
++      title: Connect to Apollos
++      actions:
++        [
++          {
++            title: Google,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++          {
++            title: Facebook,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.facebook.com' },
++          },
++        ]
+\ No newline at end of file
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index f0a7255c..5373af3b 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -5,37 +5,35 @@
+   "main": "lib/index.js",
+   "scripts": {
+     "setup": "./scripts/init.sh",
++    "migrator": "node ./lib/migrator.js",
+     "start": "NODE_ENV=production node ./lib/index.js",
+     "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+     "postinstall": "yarn build",
+-    "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
+     "lint": "eslint ./src --ext .js",
+     "translate": "node scripts/translate.js"
+   },
+   "engines": {
+-    "node": ">=12.x.x"
++    "node": ">=14"
+   },
+   "dependencies": {
+-    "@apollosproject/bugsnag": "^2.14.0",
+-    "@apollosproject/config": "^2.14.0",
+-    "@apollosproject/data-connector-algolia-search": "^2.14.0",
+-    "@apollosproject/data-connector-analytics": "^2.14.0",
+-    "@apollosproject/data-connector-bible": "^2.14.0",
+-    "@apollosproject/data-connector-church-online": "^2.14.0",
+-    "@apollosproject/data-connector-cloudinary": "^2.14.0",
+-    "@apollosproject/data-connector-onesignal": "^2.14.0",
+-    "@apollosproject/data-connector-passes": "^2.14.0",
+-    "@apollosproject/data-connector-postgres": "^2.14.0",
+-    "@apollosproject/data-connector-redis-cache": "^2.14.0",
+-    "@apollosproject/data-connector-rock": "^2.14.0",
+-    "@apollosproject/data-connector-twilio": "^2.14.0",
+-    "@apollosproject/data-schema": "^2.14.0",
+-    "@apollosproject/rock-apollo-data-source": "^2.14.0",
+-    "@apollosproject/server-core": "^2.14.0",
+-    "apollo-server": "^2.14.2",
++    "@apollosproject/config": "^2.33.4",
++    "@apollosproject/data-connector-algolia-search": "^2.33.4",
++    "@apollosproject/data-connector-analytics": "^2.33.4",
++    "@apollosproject/data-connector-bible": "^2.33.4",
++    "@apollosproject/data-connector-church-online": "^2.33.4",
++    "@apollosproject/data-connector-cloudinary": "^2.33.4",
++    "@apollosproject/data-connector-onesignal": "^2.33.4",
++    "@apollosproject/data-connector-passes": "^2.33.4",
++    "@apollosproject/data-connector-postgres": "^2.33.4",
++    "@apollosproject/data-connector-redis-cache": "^2.33.4",
++    "@apollosproject/data-connector-rock": "^2.33.4",
++    "@apollosproject/data-connector-twilio": "^2.33.4",
++    "@apollosproject/data-schema": "^2.33.4",
++    "@apollosproject/rock-apollo-data-source": "^2.33.4",
++    "@apollosproject/server-core": "^2.33.4",
++    "apollo-server": "^2.24.1",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+@@ -44,9 +42,9 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.14.0",
+-    "@apollosproject/babel-preset-apollos": "^2.14.0",
+-    "@apollosproject/eslint-config": "^2.14.0",
++    "@apollosproject/apollo-server-env-mock": "^2.33.3",
++    "@apollosproject/babel-preset-apollos": "^2.33.3",
++    "@apollosproject/eslint-config": "^2.33.3",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+@@ -61,7 +59,6 @@
+     "eslint-plugin-prettier": "^2.6.0",
+     "linkemon": "^0.1.1",
+     "nodemon": "1.18.7",
+-    "prettier": "1.12.1",
+-    "yalc": "^1.0.0-pre.47"
++    "prettier": "1.12.1"
+   }
+ }
+diff --git a/apollos-church-api/scripts/link-packages.js b/apollos-church-api/scripts/link-packages.js
+deleted file mode 100644
+index 7778c0a4..00000000
+--- a/apollos-church-api/scripts/link-packages.js
++++ /dev/null
+@@ -1,16 +0,0 @@
+-const fs = require('fs');
+-const { execSync } = require('child_process');
+-
+-const direction = process.argv[2] || 'link';
+-
+-const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
+-
+-const dependencies = [
+-  ...Object.keys(packageJson.dependencies),
+-  ...Object.keys(packageJson.devDependencies),
+-].filter((d) => d.includes('@apollosproject'));
+-
+-dependencies.forEach((dep) => {
+-  const output = execSync(`yalc ${direction} ${dep}`, { encoding: 'utf8' });
+-  console.log(output);
+-});
+diff --git a/apollos-church-api/src/config.js b/apollos-church-api/src/config.js
+index 4db45ed7..53b6558c 100644
+--- a/apollos-church-api/src/config.js
++++ b/apollos-church-api/src/config.js
+@@ -4,12 +4,25 @@ import dotenv from "dotenv/config"; // eslint-disable-line
+ import ApollosConfig from '@apollosproject/config';
+ 
+ ApollosConfig.loadYaml({
+-  configPath: path.join(__dirname, '..', 'config.yml'),
++  configPath: path.join(
++    __dirname,
++    '..',
++    process.env.DATABASE_CONTENT === 'true'
++      ? 'config.postgres.yml'
++      : 'config.yml'
++  ),
++});
++
++// defaults
++ApollosConfig.loadJs({
++  ROCK: { TIMEZONE: ApollosConfig?.ROCK?.TIMEZONE || 'America/New_York' },
+ });
+ 
+ // autodetect some settings
+ (async () => {
+   if (!ApollosConfig.ROCK) return;
++  if (!ApollosConfig.ROCK.URL || !ApollosConfig.ROCK.API_TOKEN)
++    throw new Error('ROCK_URL and ROCK_TOKEN variables are required!');
+ 
+   let res;
+ 
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+index 63052d6f..f890adf6 100644
+--- a/apollos-church-api/src/data/index.postgres.js
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -15,25 +15,24 @@ import * as Cache from '@apollosproject/data-connector-redis-cache';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+-  Interactions,
++  Interactions as RockInteractions,
+   RockConstants,
+-  ContentItem,
+-  ContentChannel,
+   Sharable,
+   Auth,
+   PersonalDevice,
+   Template,
+   AuthSms,
+-  Campus,
+   Group,
+   BinaryFiles,
+-  Feature,
+   FeatureFeed,
+-  ActionAlgorithm,
+   Event,
+   PrayerRequest,
+-  Persona,
+   Person as RockPerson,
++  ContentItem as RockContentItem,
++  Campus as RockCampus,
++  ContentChannel,
++  Feature as RockFeature,
++  ActionAlgorithm as RockActionAlgorithm,
+ } from '@apollosproject/data-connector-rock';
+ 
+ import {
+@@ -41,24 +40,76 @@ import {
+   UserFlag,
+   UserLike,
+   Follow,
+-  Campus as PostgresCampus,
++  Interactions,
++  Likes,
++  Notification,
++  NotificationPreference,
++  Tag,
++  Campus,
+   Person as PostgresPerson,
++  Media as PostgresMedia,
++  Feature as PostgresFeature,
++  ContentItem as PostgresContentItem,
++  ContentItemsConnection,
++  ContentItemCategory,
++  ActionAlgorithm as PostgresActionAlgorithm,
++  PrayerRequest as PostgresPrayerRequest,
+ } from '@apollosproject/data-connector-postgres';
+ 
+ import * as Theme from './theme';
+ 
+ // This modules ties together certain updates so they occurs in both Rock and Postgres.
+ // Will be eliminated in the future through an enhancement to the Shovel
+-import { Person, OneSignal } from './rockWithPostgres';
++import {
++  Person,
++  OneSignal,
++  PostgresDefaultCampusOverride,
++  RockDefaultCampusOverride,
++} from './rockWithPostgres';
+ 
+-const data = {
+-  Interfaces,
++const postgresContentModules = {
++  Interactions,
++  Likes,
++  ActionAlgorithm: PostgresActionAlgorithm,
++  Feature: PostgresFeature,
++  PostgresMedia,
++  Tag,
++  ContentItem: PostgresContentItem,
++  ContentItemsConnection,
++  ContentChannel: ContentItemCategory,
++  PrayerRequest: PostgresPrayerRequest,
++  RockCampus: { dataSource: RockCampus.dataSource },
++  Campus,
++  PostgresDefaultCampusOverride,
++};
++
++const rockContentModules = {
++  Interactions: RockInteractions,
+   Followings,
++  ActionAlgorithm: RockActionAlgorithm,
++  Feature: RockFeature,
++  ContentItem: RockContentItem,
+   ContentChannel,
+-  ContentItem,
++  PrayerRequest,
++  PostgresCampus: {
++    // essentially everything but the resolvers
++    dataSource: Campus.dataSource,
++    models: Campus.models,
++    migrations: Campus.migrations,
++  },
++  Campus: RockCampus,
++  RockDefaultCampusOverride,
++};
++
++const data = {
++  Interfaces,
++  FeatureFeed,
+   RockPerson, // This entry needs to come before (postgres) Person
+   BinaryFiles, // This entry needs to come before (postgres) Person
+   PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
++  ...(process.env.DATABASE_CONTENT
++    ? postgresContentModules
++    : rockContentModules),
+   Cloudinary,
+   Auth,
+   AuthSms,
+@@ -66,29 +117,23 @@ const data = {
+   LiveStream,
+   Theme,
+   Scripture,
+-  Interactions,
+   RockConstants,
+   Sharable,
+   Analytics,
+-  OneSignal,
+   PersonalDevice,
+   Pass,
+   Search,
+   Template,
+-  Campus,
+   Group,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+   Event,
+   Cache,
+-  PrayerRequest,
+   Comment,
+   UserLike,
+   UserFlag,
+   Follow,
+-  PostgresCampus,
+-  Persona,
++  Notification,
++  NotificationPreference,
++  OneSignal,
+   Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
+ };
+ 
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+index cc1696f0..daf925bc 100644
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ b/apollos-church-api/src/data/rockWithPostgres.js
+@@ -42,22 +42,15 @@ const personResolver = {
+       ]); // updates in Postgres. Reuses already uploaded imageUrl
+       // return dataSources.Person.uploadProfileImage(file, size); // updates in Postgres. Performs the upload again.
+     },
+-    updateUserCampus: async (root, { campusId }, { dataSources }) => {
+-      await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
+-
+-      const { id: rockCampusId } = parseGlobalId(campusId);
+-      const campus = await dataSources.PostgresCampus.getFromId(
+-        rockCampusId,
+-        null,
++    updateUserPushSettings: async (root, { input }, { dataSources }) => {
++      // register the changes w/ postgres
++      await dataSources.NotificationPreference.updateUserNotificationPreference(
+         {
+-          originType: 'rock',
++          notificationProviderId: input.pushProviderUserId,
++          notificationProviderType: 'one_signal', // hard coded for now
++          enabled: input.enabled,
+         }
+-      ); // finds the postgres campus id
+-      return dataSources.Person.updateProfile([
+-        { field: 'campusId', value: campus.id },
+-      ]); // updates in Postgres
+-    },
+-    updateUserPushSettings: async (root, { input }, { dataSources }) => {
++      );
+       // register the changes w/ one signal
+       const returnValue = await dataSources.OneSignal.updatePushSettings(input);
+ 
+@@ -125,3 +118,43 @@ export const OneSignal = {
+   ...OneSignalOriginal,
+   dataSource: oneSignalDataSource,
+ };
++
++// Used when IDs coming from the API are Rock APIS.
++export const RockDefaultCampusOverride = {
++  resolver: {
++    Mutation: {
++      updateUserCampus: async (root, { campusId }, { dataSources }) => {
++        await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
++
++        const { id: rockCampusId } = parseGlobalId(campusId);
++        const campus = await dataSources.PostgresCampus.getFromId(
++          rockCampusId,
++          null,
++          {
++            originType: 'rock',
++          }
++        ); // finds the postgres campus id
++        return dataSources.Person.updateProfile([
++          { field: 'campusId', value: campus.id },
++        ]); // updates in Postgres
++      },
++    },
++  },
++};
++
++// Used when IDs coming from the API are Postgres APIS.
++export const PostgresDefaultCampusOverride = {
++  resolver: {
++    Mutation: {
++      updateUserCampus: async (root, { campusId }, { dataSources }) => {
++        const campus = await dataSources.Campus.getFromId(
++          parseGlobalId(campusId).id
++        ); // finds the postgres campus id
++        await dataSources.RockCampus.updateCurrentUserCampus({
++          rockId: campus.originId,
++        }); // updates in Rock
++        return dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Postgres
++      },
++    },
++  },
++};
+diff --git a/apollos-church-api/src/migrator.js b/apollos-church-api/src/migrator.js
+new file mode 100644
+index 00000000..72366cf8
+--- /dev/null
++++ b/apollos-church-api/src/migrator.js
+@@ -0,0 +1,31 @@
++import dotenv from 'dotenv/config'; // eslint-disable-line
++import '@apollosproject/data-connector-postgres/lib/postgres/pgEnum-fix';
++import config from './config'; // eslint-disable-line
++
++import ApollosConfig from '@apollosproject/config';
++import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
++
++let dataObj;
++
++if (ApollosConfig?.DATABASE?.URL) {
++  dataObj = require('./data/index.postgres');
++} else {
++  dataObj = require('./data/index');
++}
++
++const { migrations } = dataObj;
++
++// make sure this is called last.
++// (or at least after the apollos server setup)
++(async () => {
++  if (ApollosConfig?.DATABASE?.URL) {
++    try {
++      const migrationRunner = await createMigrationRunner({ migrations });
++      migrationRunner.runAsCLI();
++    } catch (e) {
++      console.log(e);
++    }
++  } else {
++    console.warn('Please specify a database URL to perform migrations');
++  }
++})();
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index 8c8a4a4d..ae3b1cf4 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -4,7 +4,6 @@ import express from 'express';
+ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+ import { get } from 'lodash';
+ import { setupUniversalLinks } from '@apollosproject/server-core';
+-import { BugsnagPlugin } from '@apollosproject/bugsnag';
+ import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
+ 
+ let dataObj;
+@@ -43,7 +42,7 @@ const cacheOptions = isDev
+       },
+     };
+ 
+-const { ENGINE, ROCK, APP } = ApollosConfig;
++const { ROCK, APP } = ApollosConfig;
+ 
+ const apolloServer = new ApolloServer({
+   typeDefs: schema,
+@@ -52,7 +51,6 @@ const apolloServer = new ApolloServer({
+   context,
+   introspection: true,
+   extensions,
+-  plugins: [new BugsnagPlugin()],
+   formatError: (error) => {
+     console.error(get(error, 'extensions.exception.stacktrace', []).join('\n'));
+     return error;
+@@ -62,11 +60,8 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
++  uploads: false,
+   ...cacheOptions,
+-  engine: {
+-    apiKey: ENGINE.API_KEY,
+-    schemaTag: ENGINE.SCHEMA_TAG,
+-  },
+ });
+ 
+ const app = express();
+@@ -89,7 +84,23 @@ apolloServer.applyMiddleware({ app, path: '/' });
+ (async () => {
+   if (ApollosConfig?.DATABASE?.URL) {
+     const migrationRunner = await createMigrationRunner({ migrations });
+-    await migrationRunner.up();
++    const pending = await migrationRunner.pending();
++    if (pending.length) {
++      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
++      console.log(
++        '\x1b[36m',
++        'You currently have a number of pending migrations',
++        '\x1b[0m'
++      );
++      console.log(pending);
++      console.log(
++        `Keep in mind, you are currently connected to ${
++          migrationRunner?.options?.context?.sequelize?.options?.host
++        }`
++      );
++      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
++    }
++    if (ApollosConfig.AUTO_MIGRATE) await migrationRunner.up();
+   }
+ })();
+ 
