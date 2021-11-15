@@ -1,0 +1,962 @@
+diff --git a/apollos-church-api/.env.shared.enc b/apollos-church-api/.env.shared.enc
+index 201059a5426c35b02de5bbc6e48adc38fb450262..9c70164de3093bc053a8b702ef744f2ee4efbaa2 100644
+GIT binary patch
+literal 7056
+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
+
+literal 7040
+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
+
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index de9f91e6..50817964 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.19.0",
++  "version": "2.38.0",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/config.postgres.yml b/apollos-church-api/config.postgres.yml
+new file mode 100644
+index 00000000..f8b68c10
+--- /dev/null
++++ b/apollos-church-api/config.postgres.yml
+@@ -0,0 +1,240 @@
++# This file, in conjuction with your .env file,
++# should be used to configure the apollos server.
++
++# Any values you wish to keep secret should be placed in `.env`
++# You can access those values (and any other values in your environment)
++# using the ${VARIABLE_NAME} syntax
++
++# This file should be checked into version control.
++# `.env` should NOT be checked into version control.
++APP:
++  # This variable is used for generating deep links.
++  # It should match whatver is in your Info.plist `CFBundleURLTypes`
++  DEEP_LINK_HOST: ${DEEP_LINK_HOST}
++  UNIVERSAL_LINK_HOST: ${UNIVERSAL_LINK_HOST}
++  ROOT_API_URL: ${ROOT_URL}
++  JOBS_USERNAME: ${JOBS_USERNAME}
++  JOBS_PASSWORD: ${JOBS_PASSWORD}
++DATABASE:
++  URL: ${DATABASE_URL}
++BUGSNAG:
++  API_KEY: ${BUGSNAG_KEY}
++ROCK:
++  URL: ${ROCK_URL}
++  API_TOKEN: ${ROCK_TOKEN}
++UNIVERSAL_LINKS:
++  APPLE_APP_ID: ${APPLE_APP_ID}
++  APPLE_TEAM_ID: ${APPLE_TEAM_ID}
++  APP_STORE_LINK: ${IOS_REDIRECT}
++  PLAY_STORE_LINK: ${ANDROID_REDIRECT}
++  GOOGLE_APP_ID: ${GOOGLE_APP_ID}
++  GOOGLE_KEYSTORE_SHA256: ${GOOGLE_KEYSTORE_SHA256}
++ONE_SIGNAL:
++  APP_ID: ${ONE_SIGNAL_APP_ID}
++  REST_KEY: ${ONE_SIGNAL_REST_KEY}
++CHURCH_ONLINE:
++  URL: ${CHURCH_ONLINE_URL}
++  WEB_VIEW_URL: https://apollos.online.church/
++ALGOLIA:
++  APPLICATION_ID: ${ALGOLIASEARCH_APPLICATION_ID}
++  API_KEY: ${ALGOLIASEARCH_API_KEY}
++TWILIO:
++  ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
++  AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
++  FROM_NUMBER: ${TWILIO_FROM_NUMBER}
++PASS:
++  TEMPLATES:
++    CHECKIN: ${PWD}/wallet-passes/checkin.pass
++  CERTIFICATES:
++    WWDR: ${PASS_WWDR_CERT}
++    SIGNER_CERT: ${PASS_SIGNER_CERT}
++    SIGNER_KEY: ${PASS_SIGNER_KEY}
++    SIGNER_KEY_PASSPHRASE: ${PASS_SIGNER_PASSPHRASE}
++BIBLE_API:
++  KEY: ${BIBLE_API_KEY}
++  BIBLE_ID:
++    WEB: '9879dbb7cfe39e4d-01'
++    KJV: 'de4e12af7f28f599-02'
++CLOUDINARY:
++  URL: ${CLOUDINARY_URL}
++
++CONTENT:
++  SERMON_CHANNEL_ID: cbc0994a-97f1-471a-a7d5-4eff59d8a389
++  TYPES:
++    - ContentSeriesContentItem
++    - DevotionalContentItem
++    - MediaContentItem
++    - UniversalContentItem
++    - WeekendContentItem
++    - ContentItem
++
++
++TABS:
++  HOME:
++    - type: ActionBar
++      title: Welcome to Apollos
++      actions:
++        [
++          {
++            title: Check In,
++            icon: check,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++        ]
++    - algorithms:
++      - type: CONTENT_FEED
++        arguments:
++          channelIds:
++            - c7f43eb9-2200-4267-ab28-871e0d5e785f
++            - 3dfe7149-136b-4134-bd91-fdd935ef2221
++      type: HeroList
++      primaryAction:
++        # Right now, you hardcode exactly what GraphQL should return.
++        # Long term, we hope to have a more sophisticated mechanism for driving this field
++        action: OPEN_NODE
++        title: 'Read More'
++        relatedNode:
++          __typename: UniversalContentItem
++          id: a2c42d1d-98c8-46fb-aeea-603bc569cf7d
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - algorithms:
++        - type: CAMPAIGN_ITEMS
++          channelIds:
++            - 4b23ebc9-248e-4092-99f9-8829e1b6f1cc
++      type: HeroList
++      isFeatured: true
++      subtitle: Featured
++    - title: FOR YOU
++      algorithms: [SERMON_CHILDREN, PERSONA_FEED]
++      subtitle: Explore what God calls you to today
++      type: ActionList
++    - algorithms: [SERIES_IN_PROGRESS]
++      subtitle: Continue
++      type: HorizontalCardList
++    - title: RECOMMENDED
++      algorithms: [SERMON_CHILDREN]
++      subtitle: For Him
++      type: VerticalCardList
++    - title: BULLETIN
++      subtitle: What's happening at apollos?
++      type: ActionList
++      algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 13
++        - type: UPCOMING_EVENTS
++
++  READ:
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - c7f43eb9-2200-4267-ab28-871e0d5e785f
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Podcast Messages
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Podcast Messages
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - d9da719f-84ef-4cf0-9875-22fea4bf09eb
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Devotionals
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:d9da719f-84ef-4cf0-9875-22fea4bf09eb
++          title: Devotionals
++
++  WATCH:
++    - algorithms:
++        - type: LATEST_SERIES_CHILDREN
++          arguments:
++            channelId: 8f0a93f5-ccec-4cc1-8fd8-06afe5982f7b
++      type: HeroList
++      title: Catch up
++      subtitle: Latest Series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++      type: VerticalCardList
++      subtitle: All series
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - 8f0a93f5-ccec-4cc1-8fd8-06afe5982f7b
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Sermons
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++            limit: 3
++      type: HorizontalCardList
++      subtitle: Podcasts
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Podcasts
++    - algorithms:
++        - type: CONTENT_FEED
++          arguments:
++            channelIds:
++              - f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++            limit: 3
++      type: HorizontalCardList
++      title: Videos
++      primaryAction:
++        action: OPEN_CHANNEL
++        title: 'Read More'
++        relatedNode:
++          __typename: ContentChannel
++          apollosId: ContentChannel:f4a5890c-4af5-4d9f-afe3-5d1c6aa85419
++          title: Videos
++
++  PRAY:
++    - algorithms: [DAILY_PRAYER]
++      isCard: false
++      type: PrayerList
++      title: Daily Prayer
++    - type: VerticalPrayerList
++      title: Your Prayers
++  CONNECT:
++    - type: ActionTable
++      title: Connect to Apollos
++      actions:
++        [
++          {
++            title: Google,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.google.com' },
++          },
++          {
++            title: Facebook,
++            action: OPEN_URL,
++            relatedNode: { __typename: Url, url: 'https://www.facebook.com' },
++          },
++        ]
+diff --git a/apollos-church-api/config.yml b/apollos-church-api/config.yml
+index be7c7293..5ac0d92a 100644
+--- a/apollos-church-api/config.yml
++++ b/apollos-church-api/config.yml
+@@ -251,4 +251,4 @@ TABS:
+             action: OPEN_URL,
+             relatedNode: { __typename: Url, url: 'https://www.facebook.com' },
+           },
+-        ]
++        ]
+\ No newline at end of file
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index 54be22c8..7cf7312f 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -5,35 +5,34 @@
+   "main": "lib/index.js",
+   "scripts": {
+     "setup": "./scripts/init.sh",
++    "migrator": "node ./lib/migrator.js",
+     "start": "NODE_ENV=production node ./lib/index.js",
+     "start:dev": "linkemon ./src/index.js --exec babel-node --delay 2 -e js,yaml,json,yml",
+     "postinstall": "yarn build",
+-    "link-packages": "node ./scripts/link-packages && yarn yalc update",
+-    "unlink-packages": "node ./scripts/link-packages remove && rm -rf ./node_modules",
+     "build": "NODE_ENV=production rm -rf ./lib && mkdir -p lib && babel ./src -d ./lib",
+     "test": "echo \"No tests in apollos-church-api, all tested code is located in @apollosproject npm modules\"",
+     "lint": "eslint ./src --ext .js",
+     "translate": "node scripts/translate.js"
+   },
+   "engines": {
+-    "node": ">=12.x.x"
++    "node": ">=14"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^2.19.0",
+-    "@apollosproject/data-connector-algolia-search": "^2.19.0",
+-    "@apollosproject/data-connector-analytics": "^2.19.0",
+-    "@apollosproject/data-connector-bible": "^2.19.0",
+-    "@apollosproject/data-connector-church-online": "^2.19.0",
+-    "@apollosproject/data-connector-cloudinary": "^2.19.0",
+-    "@apollosproject/data-connector-onesignal": "^2.19.0",
+-    "@apollosproject/data-connector-passes": "^2.19.0",
+-    "@apollosproject/data-connector-postgres": "^2.19.0",
+-    "@apollosproject/data-connector-redis-cache": "^2.19.0",
+-    "@apollosproject/data-connector-rock": "^2.19.0",
+-    "@apollosproject/data-connector-twilio": "^2.19.0",
+-    "@apollosproject/data-schema": "^2.19.0",
+-    "@apollosproject/rock-apollo-data-source": "^2.19.0",
+-    "@apollosproject/server-core": "^2.19.0",
++    "@apollosproject/config": "^2.38.0",
++    "@apollosproject/data-connector-algolia-search": "^2.38.0",
++    "@apollosproject/data-connector-analytics": "^2.38.0",
++    "@apollosproject/data-connector-bible": "^2.38.0",
++    "@apollosproject/data-connector-church-online": "^2.38.0",
++    "@apollosproject/data-connector-cloudinary": "^2.38.0",
++    "@apollosproject/data-connector-onesignal": "^2.38.0",
++    "@apollosproject/data-connector-passes": "^2.38.0",
++    "@apollosproject/data-connector-postgres": "^2.38.0",
++    "@apollosproject/data-connector-redis-cache": "^2.38.0",
++    "@apollosproject/data-connector-rock": "^2.38.0",
++    "@apollosproject/data-connector-twilio": "^2.38.0",
++    "@apollosproject/data-schema": "^2.38.0",
++    "@apollosproject/rock-apollo-data-source": "^2.38.0",
++    "@apollosproject/server-core": "^2.38.0",
+     "apollo-server": "^2.24.1",
+     "apollo-server-express": "2.14.2",
+     "color": "3.0.0",
+@@ -43,9 +42,9 @@
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.19.0",
+-    "@apollosproject/babel-preset-apollos": "^2.19.0",
+-    "@apollosproject/eslint-config": "^2.19.0",
++    "@apollosproject/apollo-server-env-mock": "^2.38.0",
++    "@apollosproject/babel-preset-apollos": "^2.38.0",
++    "@apollosproject/eslint-config": "^2.38.0",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+@@ -60,7 +59,6 @@
+     "eslint-plugin-prettier": "^2.6.0",
+     "linkemon": "^0.1.1",
+     "nodemon": "1.18.7",
+-    "prettier": "1.12.1",
+-    "yalc": "^1.0.0-pre.47"
++    "prettier": "1.12.1"
+   }
+ }
+diff --git a/apollos-church-api/scripts/link-packages.js b/apollos-church-api/scripts/link-packages.js
+deleted file mode 100644
+index 7778c0a4..00000000
+--- a/apollos-church-api/scripts/link-packages.js
++++ /dev/null
+@@ -1,16 +0,0 @@
+-const fs = require('fs');
+-const { execSync } = require('child_process');
+-
+-const direction = process.argv[2] || 'link';
+-
+-const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/../package.json`));
+-
+-const dependencies = [
+-  ...Object.keys(packageJson.dependencies),
+-  ...Object.keys(packageJson.devDependencies),
+-].filter((d) => d.includes('@apollosproject'));
+-
+-dependencies.forEach((dep) => {
+-  const output = execSync(`yalc ${direction} ${dep}`, { encoding: 'utf8' });
+-  console.log(output);
+-});
+diff --git a/apollos-church-api/src/config.js b/apollos-church-api/src/config.js
+index f73a2aa3..53b6558c 100644
+--- a/apollos-church-api/src/config.js
++++ b/apollos-church-api/src/config.js
+@@ -4,7 +4,13 @@ import dotenv from "dotenv/config"; // eslint-disable-line
+ import ApollosConfig from '@apollosproject/config';
+ 
+ ApollosConfig.loadYaml({
+-  configPath: path.join(__dirname, '..', 'config.yml'),
++  configPath: path.join(
++    __dirname,
++    '..',
++    process.env.DATABASE_CONTENT === 'true'
++      ? 'config.postgres.yml'
++      : 'config.yml'
++  ),
+ });
+ 
+ // defaults
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+index 9dcb0245..f890adf6 100644
+--- a/apollos-church-api/src/data/index.postgres.js
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -15,25 +15,24 @@ import * as Cache from '@apollosproject/data-connector-redis-cache';
+ import * as Sms from '@apollosproject/data-connector-twilio';
+ import {
+   Followings,
+-  Interactions,
++  Interactions as RockInteractions,
+   RockConstants,
+-  ContentItem,
+-  ContentChannel,
+   Sharable,
+   Auth,
+   PersonalDevice,
+   Template,
+   AuthSms,
+-  Campus,
+   Group,
+   BinaryFiles,
+-  Feature,
+   FeatureFeed,
+-  ActionAlgorithm,
+   Event,
+   PrayerRequest,
+-  Persona,
+   Person as RockPerson,
++  ContentItem as RockContentItem,
++  Campus as RockCampus,
++  ContentChannel,
++  Feature as RockFeature,
++  ActionAlgorithm as RockActionAlgorithm,
+ } from '@apollosproject/data-connector-rock';
+ 
+ import {
+@@ -41,26 +40,76 @@ import {
+   UserFlag,
+   UserLike,
+   Follow,
++  Interactions,
++  Likes,
+   Notification,
+   NotificationPreference,
+-  Campus as PostgresCampus,
++  Tag,
++  Campus,
+   Person as PostgresPerson,
++  Media as PostgresMedia,
++  Feature as PostgresFeature,
++  ContentItem as PostgresContentItem,
++  ContentItemsConnection,
++  ContentItemCategory,
++  ActionAlgorithm as PostgresActionAlgorithm,
++  PrayerRequest as PostgresPrayerRequest,
+ } from '@apollosproject/data-connector-postgres';
+ 
+ import * as Theme from './theme';
+ 
+ // This modules ties together certain updates so they occurs in both Rock and Postgres.
+ // Will be eliminated in the future through an enhancement to the Shovel
+-import { Person, OneSignal } from './rockWithPostgres';
++import {
++  Person,
++  OneSignal,
++  PostgresDefaultCampusOverride,
++  RockDefaultCampusOverride,
++} from './rockWithPostgres';
+ 
+-const data = {
+-  Interfaces,
++const postgresContentModules = {
++  Interactions,
++  Likes,
++  ActionAlgorithm: PostgresActionAlgorithm,
++  Feature: PostgresFeature,
++  PostgresMedia,
++  Tag,
++  ContentItem: PostgresContentItem,
++  ContentItemsConnection,
++  ContentChannel: ContentItemCategory,
++  PrayerRequest: PostgresPrayerRequest,
++  RockCampus: { dataSource: RockCampus.dataSource },
++  Campus,
++  PostgresDefaultCampusOverride,
++};
++
++const rockContentModules = {
++  Interactions: RockInteractions,
+   Followings,
++  ActionAlgorithm: RockActionAlgorithm,
++  Feature: RockFeature,
++  ContentItem: RockContentItem,
+   ContentChannel,
+-  ContentItem,
++  PrayerRequest,
++  PostgresCampus: {
++    // essentially everything but the resolvers
++    dataSource: Campus.dataSource,
++    models: Campus.models,
++    migrations: Campus.migrations,
++  },
++  Campus: RockCampus,
++  RockDefaultCampusOverride,
++};
++
++const data = {
++  Interfaces,
++  FeatureFeed,
+   RockPerson, // This entry needs to come before (postgres) Person
+   BinaryFiles, // This entry needs to come before (postgres) Person
+   PostgresPerson, // Postgres person for now, as we extend this dataSource in the 'rockWithPostgres' file
++  ...(process.env.DATABASE_CONTENT
++    ? postgresContentModules
++    : rockContentModules),
+   Cloudinary,
+   Auth,
+   AuthSms,
+@@ -68,7 +117,6 @@ const data = {
+   LiveStream,
+   Theme,
+   Scripture,
+-  Interactions,
+   RockConstants,
+   Sharable,
+   Analytics,
+@@ -76,24 +124,17 @@ const data = {
+   Pass,
+   Search,
+   Template,
+-  Campus,
+   Group,
+-  Feature,
+-  FeatureFeed,
+-  ActionAlgorithm,
+   Event,
+   Cache,
+-  PrayerRequest,
+   Comment,
+   UserLike,
+   UserFlag,
+   Follow,
+-  PostgresCampus,
+-  Persona,
+   Notification,
+   NotificationPreference,
+-  Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
+   OneSignal,
++  Person, // An extension of Postgres person. Will be eliminated in the near future so you can use just postgres/Person.
+ };
+ 
+ const {
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+index 9abcc996..daf925bc 100644
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ b/apollos-church-api/src/data/rockWithPostgres.js
+@@ -42,21 +42,6 @@ const personResolver = {
+       ]); // updates in Postgres. Reuses already uploaded imageUrl
+       // return dataSources.Person.uploadProfileImage(file, size); // updates in Postgres. Performs the upload again.
+     },
+-    updateUserCampus: async (root, { campusId }, { dataSources }) => {
+-      await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
+-
+-      const { id: rockCampusId } = parseGlobalId(campusId);
+-      const campus = await dataSources.PostgresCampus.getFromId(
+-        rockCampusId,
+-        null,
+-        {
+-          originType: 'rock',
+-        }
+-      ); // finds the postgres campus id
+-      return dataSources.Person.updateProfile([
+-        { field: 'campusId', value: campus.id },
+-      ]); // updates in Postgres
+-    },
+     updateUserPushSettings: async (root, { input }, { dataSources }) => {
+       // register the changes w/ postgres
+       await dataSources.NotificationPreference.updateUserNotificationPreference(
+@@ -133,3 +118,43 @@ export const OneSignal = {
+   ...OneSignalOriginal,
+   dataSource: oneSignalDataSource,
+ };
++
++// Used when IDs coming from the API are Rock APIS.
++export const RockDefaultCampusOverride = {
++  resolver: {
++    Mutation: {
++      updateUserCampus: async (root, { campusId }, { dataSources }) => {
++        await dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Rock
++
++        const { id: rockCampusId } = parseGlobalId(campusId);
++        const campus = await dataSources.PostgresCampus.getFromId(
++          rockCampusId,
++          null,
++          {
++            originType: 'rock',
++          }
++        ); // finds the postgres campus id
++        return dataSources.Person.updateProfile([
++          { field: 'campusId', value: campus.id },
++        ]); // updates in Postgres
++      },
++    },
++  },
++};
++
++// Used when IDs coming from the API are Postgres APIS.
++export const PostgresDefaultCampusOverride = {
++  resolver: {
++    Mutation: {
++      updateUserCampus: async (root, { campusId }, { dataSources }) => {
++        const campus = await dataSources.Campus.getFromId(
++          parseGlobalId(campusId).id
++        ); // finds the postgres campus id
++        await dataSources.RockCampus.updateCurrentUserCampus({
++          rockId: campus.originId,
++        }); // updates in Rock
++        return dataSources.Campus.updateCurrentUserCampus({ campusId }); // updates in Postgres
++      },
++    },
++  },
++};
+diff --git a/apollos-church-api/src/migrator.js b/apollos-church-api/src/migrator.js
+new file mode 100644
+index 00000000..72366cf8
+--- /dev/null
++++ b/apollos-church-api/src/migrator.js
+@@ -0,0 +1,31 @@
++import dotenv from 'dotenv/config'; // eslint-disable-line
++import '@apollosproject/data-connector-postgres/lib/postgres/pgEnum-fix';
++import config from './config'; // eslint-disable-line
++
++import ApollosConfig from '@apollosproject/config';
++import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
++
++let dataObj;
++
++if (ApollosConfig?.DATABASE?.URL) {
++  dataObj = require('./data/index.postgres');
++} else {
++  dataObj = require('./data/index');
++}
++
++const { migrations } = dataObj;
++
++// make sure this is called last.
++// (or at least after the apollos server setup)
++(async () => {
++  if (ApollosConfig?.DATABASE?.URL) {
++    try {
++      const migrationRunner = await createMigrationRunner({ migrations });
++      migrationRunner.runAsCLI();
++    } catch (e) {
++      console.log(e);
++    }
++  } else {
++    console.warn('Please specify a database URL to perform migrations');
++  }
++})();
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index b200cb5c..ae3b1cf4 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -60,6 +60,7 @@ const apolloServer = new ApolloServer({
+       'editor.cursorShape': 'line',
+     },
+   },
++  uploads: false,
+   ...cacheOptions,
+ });
+ 
+@@ -83,7 +84,23 @@ apolloServer.applyMiddleware({ app, path: '/' });
+ (async () => {
+   if (ApollosConfig?.DATABASE?.URL) {
+     const migrationRunner = await createMigrationRunner({ migrations });
+-    await migrationRunner.up();
++    const pending = await migrationRunner.pending();
++    if (pending.length) {
++      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
++      console.log(
++        '\x1b[36m',
++        'You currently have a number of pending migrations',
++        '\x1b[0m'
++      );
++      console.log(pending);
++      console.log(
++        `Keep in mind, you are currently connected to ${
++          migrationRunner?.options?.context?.sequelize?.options?.host
++        }`
++      );
++      console.log('\x1b[31m', '██████████████████████████████████', '\x1b[0m');
++    }
++    if (ApollosConfig.AUTO_MIGRATE) await migrationRunner.up();
+   }
+ })();
+ 
