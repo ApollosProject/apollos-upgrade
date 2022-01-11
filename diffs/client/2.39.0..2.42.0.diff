@@ -1,0 +1,1269 @@
+diff --git a/apolloschurchapp/.gitignore b/apolloschurchapp/.gitignore
+index e838e8b6..873c307c 100644
+--- a/apolloschurchapp/.gitignore
++++ b/apolloschurchapp/.gitignore
+@@ -146,6 +146,7 @@ DerivedData
+ 
+ # Fastlane
+ fastlane/report.xml
++fastlane/Preview.html
+ 
+ # symbols
+ *.app.dSYM.zip
+diff --git a/apolloschurchapp/__mocks__/@apollosproject/ui-analytics.js b/apolloschurchapp/__mocks__/@apollosproject/ui-analytics.js
+deleted file mode 100644
+index 0f88a6b3..00000000
+--- a/apolloschurchapp/__mocks__/@apollosproject/ui-analytics.js
++++ /dev/null
+@@ -1,9 +0,0 @@
+-module.exports = {
+-  track: () => '',
+-  AnalyticsConsumer: ({ children }) => children({ test: jest.fn() }),
+-  AnalyticsProvider: ({ children }) => children,
+-  CoreNavigationAnalytics: ({ children }) =>
+-    children({ onNavigationStateChange: jest.fn() }),
+-  TrackEventWhenLoaded: () => null,
+-  withTrackOnPress: (Component) => (props) => <Component {...props} />,
+-};
+diff --git a/apolloschurchapp/__mocks__/@apollosproject/ui-kit.js b/apolloschurchapp/__mocks__/@apollosproject/ui-kit.js
+deleted file mode 100644
+index fcbc8f01..00000000
+--- a/apolloschurchapp/__mocks__/@apollosproject/ui-kit.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-module.exports = {
+-  ...jest.requireActual('@apollosproject/ui-kit'),
+-  NavigationService: {
+-    navigate: jest.fn(),
+-    setTopLevelNavigator: jest.fn(),
+-  },
+-};
+diff --git a/apolloschurchapp/__mocks__/@apollosproject/ui-mapview.js b/apolloschurchapp/__mocks__/@apollosproject/ui-mapview.js
+deleted file mode 100644
+index b3290d22..00000000
+--- a/apolloschurchapp/__mocks__/@apollosproject/ui-mapview.js
++++ /dev/null
+@@ -1,3 +0,0 @@
+-module.exports = {
+-  MapViewConnected: 'MapViewConnected',
+-};
+diff --git a/apolloschurchapp/__mocks__/@apollosproject/ui-media-player.js b/apolloschurchapp/__mocks__/@apollosproject/ui-media-player.js
+deleted file mode 100644
+index 1d439c2e..00000000
+--- a/apolloschurchapp/__mocks__/@apollosproject/ui-media-player.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-module.exports = {
+-  MediaPlayerSpacer: ({ children }) => children,
+-  MediaPlayer: () => 'MediaPlayer',
+-  MediaPlayerProvider: ({ children }) => children,
+-  playVideoMutation: 'mutation { playVideo }',
+-  withTabBarMediaSpacer: () => ({ children }) => children,
+-};
+diff --git a/apolloschurchapp/__mocks__/@apollosproject/ui-notifications.js b/apolloschurchapp/__mocks__/@apollosproject/ui-notifications.js
+deleted file mode 100644
+index 67ae4672..00000000
+--- a/apolloschurchapp/__mocks__/@apollosproject/ui-notifications.js
++++ /dev/null
+@@ -1 +0,0 @@
+-module.exports = { NotificationsProvider: ({ children }) => children };
+diff --git a/apolloschurchapp/__mocks__/@react-native-community/async-storage.js b/apolloschurchapp/__mocks__/@react-native-community/async-storage.js
+deleted file mode 100644
+index a4bf3f4d..00000000
+--- a/apolloschurchapp/__mocks__/@react-native-community/async-storage.js
++++ /dev/null
+@@ -1,23 +0,0 @@
+-let cache = {};
+-export default {
+-  setItem: (key, value) =>
+-    new Promise((resolve, reject) =>
+-      typeof key !== 'string' || typeof value !== 'string'
+-        ? reject(new Error('key and value must be string'))
+-        : resolve((cache[key] = value))
+-    ),
+-  getItem: (key, value) =>
+-    new Promise((resolve) =>
+-      cache.hasOwnProperty(key) ? resolve(cache[key]) : resolve(null)
+-    ),
+-  removeItem: (key) =>
+-    new Promise((resolve, reject) =>
+-      cache.hasOwnProperty(key)
+-        ? resolve(delete cache[key])
+-        : reject('No such key!')
+-    ),
+-  clear: (key) => new Promise((resolve, reject) => resolve((cache = {}))),
+-
+-  getAllKeys: (key) =>
+-    new Promise((resolve, reject) => resolve(Object.keys(cache))),
+-};
+diff --git a/apolloschurchapp/__mocks__/@react-native-community/datetimepicker.js b/apolloschurchapp/__mocks__/@react-native-community/datetimepicker.js
+deleted file mode 100644
+index 86e50600..00000000
+--- a/apolloschurchapp/__mocks__/@react-native-community/datetimepicker.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export default () => 'DateTimePicker';
+diff --git a/apolloschurchapp/__mocks__/@react-native-community/geolocation.js b/apolloschurchapp/__mocks__/@react-native-community/geolocation.js
+deleted file mode 100644
+index 0e77776b..00000000
+--- a/apolloschurchapp/__mocks__/@react-native-community/geolocation.js
++++ /dev/null
+@@ -1,3 +0,0 @@
+-export default {
+-  getCurrentPosition: async () => null,
+-};
+diff --git a/apolloschurchapp/__mocks__/react-native-device-info.js b/apolloschurchapp/__mocks__/react-native-device-info.js
+deleted file mode 100644
+index a838bf87..00000000
+--- a/apolloschurchapp/__mocks__/react-native-device-info.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-module.exports = {
+-  getUniqueId: () => 'id-123',
+-  getSystemVersion: () => 'sys-version-123',
+-  getModel: () => 'ios',
+-  getVersion: () => 'version-123',
+-  getBuildNumber: () => 0,
+-};
+diff --git a/apolloschurchapp/__mocks__/react-native-permissions.js b/apolloschurchapp/__mocks__/react-native-permissions.js
+deleted file mode 100644
+index 4d543c8f..00000000
+--- a/apolloschurchapp/__mocks__/react-native-permissions.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export * from 'react-native-permissions/mock.js';
+diff --git a/apolloschurchapp/__mocks__/react-native-safari-view.js b/apolloschurchapp/__mocks__/react-native-safari-view.js
+deleted file mode 100644
+index 867a6802..00000000
+--- a/apolloschurchapp/__mocks__/react-native-safari-view.js
++++ /dev/null
+@@ -1,5 +0,0 @@
+-module.exports = {
+-  isAvailable: jest.fn().mockImplementation(() => Promise.resolve(true)),
+-  show: jest.fn(),
+-  default: require.requireActual('react-native').SafeAreaView,
+-};
+diff --git a/apolloschurchapp/__mocks__/react-native-safe-area-context.js b/apolloschurchapp/__mocks__/react-native-safe-area-context.js
+deleted file mode 100644
+index 2d7ec53d..00000000
+--- a/apolloschurchapp/__mocks__/react-native-safe-area-context.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-module.exports = {
+-  SafeAreaConsumer: ({ children }) =>
+-    children({ top: 0, bottom: 0, left: 0, right: 0 }),
+-  SafeAreaProvider: ({ children }) => children,
+-  SafeAreaView: jest.requireActual('react-native').SafeAreaView,
+-  useSafeAreaInsets: () => ({ top: 3 }),
+-};
+diff --git a/apolloschurchapp/__mocks__/react-native-splash-screen.js b/apolloschurchapp/__mocks__/react-native-splash-screen.js
+deleted file mode 100644
+index f042176b..00000000
+--- a/apolloschurchapp/__mocks__/react-native-splash-screen.js
++++ /dev/null
+@@ -1,8 +0,0 @@
+-export default {
+-  show: jest.fn().mockImplementation(() => {
+-    console.log('show splash screen');
+-  }),
+-  hide: jest.fn().mockImplementation(() => {
+-    console.log('hide splash screen');
+-  }),
+-};
+diff --git a/apolloschurchapp/__mocks__/react-native-video.js b/apolloschurchapp/__mocks__/react-native-video.js
+deleted file mode 100644
+index 6b2ed22f..00000000
+--- a/apolloschurchapp/__mocks__/react-native-video.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export default () => 'Video';
+diff --git a/apolloschurchapp/__mocks__/rn-fetch-blob.js b/apolloschurchapp/__mocks__/rn-fetch-blob.js
+deleted file mode 100644
+index 17042190..00000000
+--- a/apolloschurchapp/__mocks__/rn-fetch-blob.js
++++ /dev/null
+@@ -1 +0,0 @@
+-export default () => 'Fetch';
+diff --git a/apolloschurchapp/apollos.json b/apolloschurchapp/apollos.json
+index ca5b9da5..0e473118 100644
+--- a/apolloschurchapp/apollos.json
++++ b/apolloschurchapp/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-    "version": "2.39.0",
++    "version": "2.42.0",
+     "environment": "client"
+ }
+diff --git a/apolloschurchapp/fastlane/Fastfile b/apolloschurchapp/fastlane/Fastfile
+index 24676665..20cc57ce 100644
+--- a/apolloschurchapp/fastlane/Fastfile
++++ b/apolloschurchapp/fastlane/Fastfile
+@@ -34,6 +34,8 @@ platform :ios do
+   desc "Generate new provisioning profiles and certificates for app and push notifications"
+   lane :certs do
+     app_store_connect_api_key(key_filepath: "ios/apollos.p8")
++    match_nuke(type: "development", app_identifier: [ENV["DELIVER_APP_IDENTIFIER"], "#{ENV["DELIVER_APP_IDENTIFIER"]}.OneSignalNotificationServiceExtension"])
++    match_nuke(type: "distribution", app_identifier: [ENV["DELIVER_APP_IDENTIFIER"], "#{ENV["DELIVER_APP_IDENTIFIER"]}.OneSignalNotificationServiceExtension"])
+     match(type: 'development', app_identifier: [ENV["DELIVER_APP_IDENTIFIER"], "#{ENV["DELIVER_APP_IDENTIFIER"]}.OneSignalNotificationServiceExtension"],)
+     match(type: 'appstore', app_identifier: [ENV["DELIVER_APP_IDENTIFIER"], "#{ENV["DELIVER_APP_IDENTIFIER"]}.OneSignalNotificationServiceExtension"],)
+     get_push_certificate(app_identifier: ENV["DELIVER_APP_IDENTIFIER"])
+@@ -55,18 +57,30 @@ platform :ios do
+     increment_build_number(build_number: number_of_commits, xcodeproj: "ios/" << proj << ".xcodeproj")
+     build_app(workspace: "ios/" << proj << ".xcworkspace", scheme: proj)
+     changelog_from_git_commits
++    upload_app_privacy_details_to_app_store(
++      app_identifier: ENV["DELIVER_APP_IDENTIFIER"]
++    )
+     testflight
+   end
+ 
++  desc "Promote the most recent TestFlight build to external beta"
++  lane :beta do
++    app_store_connect_api_key(key_filepath: "ios/apollos.p8", in_house: false)
++    testflight(
++      distribute_only: true,
++      distribute_external: true,
++      groups: ["Beta Testers"]
++    )
++  end
++
+   desc "Promote the most recent Testflight version to production"
+   lane :production do
+     app_store_connect_api_key(key_filepath: "ios/apollos.p8", in_house: false)
+     deliver(
+       skip_binary_upload: true,
+-      skip_screenshots: false,
+-      skip_metadata: false,
++      overwrite_screenshots: true,
+       submit_for_review: true,
+-      automatic_release: false,
++      automatic_release: true,
+       submission_information: {
+         add_id_info_uses_idfa: false
+       },
+@@ -95,6 +109,38 @@ platform :android do
+       package_name: package_name
+     )
+   end
++
++  desc "Promote current build to beta"
++  lane :beta do
++    s = File.read("../android/app/build.gradle")
++    package_name = s[/applicationId\s+"([\w+\.]*)"/, 1]
++
++    upload_to_play_store(
++      track: "internal",
++      track_promote_to: "beta",
++      version_code: number_of_commits,
++      skip_upload_apk: true,
++      skip_upload_aab: true,
++      json_key: "android/key.json",
++      package_name: package_name
++    )
++  end
++
++  desc "Promote current build to production"
++  lane :production do
++    s = File.read("../android/app/build.gradle")
++    package_name = s[/applicationId\s+"([\w+\.]*)"/, 1]
++
++    upload_to_play_store(
++      track: "internal",
++      track_promote_to: "production",
++      version_code: number_of_commits,
++      skip_upload_apk: true,
++      skip_upload_aab: true,
++      json_key: "android/key.json",
++      package_name: package_name
++    )
++  end
+ end
+ 
+ error do |lane, exception|
+diff --git a/apolloschurchapp/fastlane/app_privacy_details.json b/apolloschurchapp/fastlane/app_privacy_details.json
+new file mode 100644
+index 00000000..5aaea9ca
+--- /dev/null
++++ b/apolloschurchapp/fastlane/app_privacy_details.json
+@@ -0,0 +1,29 @@
++[
++  {
++    "category": "CRASH_DATA",
++    "purposes": [
++      "APP_FUNCTIONALITY"
++    ],
++    "data_protections": [
++      "DATA_NOT_LINKED_TO_YOU"
++    ]
++  },
++  {
++    "category": "OTHER_DIAGNOSTIC_DATA",
++    "purposes": [
++      "APP_FUNCTIONALITY"
++    ],
++    "data_protections": [
++      "DATA_NOT_LINKED_TO_YOU"
++    ]
++  },
++  {
++    "category": "PRODUCT_INTERACTION",
++    "purposes": [
++      "ANALYTICS"
++    ],
++    "data_protections": [
++      "DATA_NOT_LINKED_TO_YOU"
++    ]
++  }
++]
+\ No newline at end of file
+diff --git a/apolloschurchapp/ios/Podfile.lock b/apolloschurchapp/ios/Podfile.lock
+index db70cd52..87d51638 100644
+--- a/apolloschurchapp/ios/Podfile.lock
++++ b/apolloschurchapp/ios/Podfile.lock
+@@ -297,7 +297,7 @@ PODS:
+   - React-jsinspector (0.66.1)
+   - React-logger (0.66.1):
+     - glog
+-  - react-native-apollos-player (2.39.0):
++  - react-native-apollos-player (2.42.0):
+     - React
+   - react-native-config (0.11.7):
+     - React
+@@ -445,6 +445,8 @@ PODS:
+     - Yoga
+   - RNScreens (3.2.0):
+     - React-Core
++  - RNSha256 (1.4.7):
++    - React
+   - RNSVG (9.13.6):
+     - React
+   - Yoga (1.14.0)
+@@ -537,6 +539,7 @@ DEPENDENCIES:
+   - RNPermissions (from `../node_modules/react-native-permissions`)
+   - RNReanimated (from `../node_modules/react-native-reanimated`)
+   - RNScreens (from `../node_modules/react-native-screens`)
++  - RNSha256 (from `../node_modules/react-native-sha256`)
+   - RNSVG (from `../node_modules/react-native-svg`)
+   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+ 
+@@ -678,6 +681,8 @@ EXTERNAL SOURCES:
+     :path: "../node_modules/react-native-reanimated"
+   RNScreens:
+     :path: "../node_modules/react-native-screens"
++  RNSha256:
++    :path: "../node_modules/react-native-sha256"
+   RNSVG:
+     :path: "../node_modules/react-native-svg"
+   Yoga:
+@@ -720,7 +725,7 @@ SPEC CHECKSUMS:
+   React-jsiexecutor: db2f6e22a534d466fc0e34e622df47d9d20bab2f
+   React-jsinspector: 8c0517dee5e8c70cd6c3066f20213ff7ce54f176
+   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
+-  react-native-apollos-player: 9dc96ae40896773f0ea4562f0b3531c6dd5feea2
++  react-native-apollos-player: 203c12c3dab62663563da3968fb9e6dfbbf04c5b
+   react-native-config: 55548054279d92e0e4566ea15a8b9b81028ec342
+   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+   react-native-geolocation-service: f33626f1ae12381ca2ae60f98b2f5edd676bf95a
+@@ -758,6 +763,7 @@ SPEC CHECKSUMS:
+   RNPermissions: 5df468064df661a4c8c017e2791ce90d7695eea5
+   RNReanimated: b04ef2a4f0cb61b062bbcf033f84a9e470f4f60b
+   RNScreens: c277bfc4b5bb7c2fe977d19635df6f974f95dfd6
++  RNSha256: bf2c90a9e0cec6dcbcc4100e4e19715ae7feaa34
+   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
+   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
+   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
+diff --git a/apolloschurchapp/jest.setup.js b/apolloschurchapp/jest.setup.js
+deleted file mode 100644
+index 1d0062f1..00000000
+--- a/apolloschurchapp/jest.setup.js
++++ /dev/null
+@@ -1,44 +0,0 @@
+-import { Animated } from 'react-native';
+-import ApollosConfig from '@apollosproject/config';
+-import FRAGMENTS from '@apollosproject/ui-fragments';
+-
+-ApollosConfig.loadJs({
+-  FRAGMENTS,
+-  ONE_SIGNAL_KEY: 'doesntmatter',
+-});
+-
+-Animated.timing = (value, config) => ({
+-  start: (callback) => {
+-    value.setValue(config.toValue);
+-    callback && callback({ finished: true });
+-  },
+-  stop: () => ({}),
+-});
+-Animated.spring = (value, config) => ({
+-  start: (callback) => {
+-    value.setValue(config.toValue);
+-    callback && callback({ finished: true });
+-  },
+-  stop: () => ({}),
+-});
+-
+-jest.mock('./src/client/index');
+-
+-jest.mock('react-native-reanimated', () => {
+-  const Reanimated = require('react-native-reanimated/mock');
+-
+-  const Easing = {
+-    exp: jest.fn(),
+-    out: jest.fn(),
+-  };
+-
+-  // The mock for `call` immediately calls the callback which is incorrect
+-  // So we override it with a no-op
+-  Reanimated.default.call = () => {};
+-  Reanimated.Easing = Easing;
+-  Reanimated.EasingNode = Easing;
+-
+-  return Reanimated;
+-});
+-
+-global.__reanimatedWorkletInit = jest.fn();
+diff --git a/apolloschurchapp/loadConfig.js b/apolloschurchapp/loadConfig.js
+index 8eb6c287..63d6039c 100644
+--- a/apolloschurchapp/loadConfig.js
++++ b/apolloschurchapp/loadConfig.js
+@@ -5,15 +5,15 @@ import fragmentTypes from './src/client/fragmentTypes.json';
+ // Create a map all the interfaces each type implements.
+ // If UniversalContentItem implements Node, Card, and ContentNode,
+ // our typemap would be { UniversalContentItem: ['Node', 'Card', 'ContentNode'] }
+-const TYPEMAP = fragmentTypes.__schema.types.reduce((acc, curr) => {
+-  const { name } = curr;
+-  const types = Object.fromEntries(
+-    curr.possibleTypes.map((type) => [type.name, name])
+-  );
+-  Object.keys(types).forEach((key) => {
+-    acc[key] = acc[key] ? [...acc[key], types[key]] : [types[key]];
+-  });
+-  return acc;
+-}, {});
++//
++// Used with Apollo Client cache resolver as well as internal Apollos UI functions
++const TYPEMAP = {};
++fragmentTypes.__schema.types.forEach((supertype) => {
++  if (supertype.possibleTypes) {
++    TYPEMAP[supertype.name] = [
++      ...supertype.possibleTypes.map((subtype) => subtype.name),
++    ];
++  }
++});
+ 
+ ApollosConfig.loadJs({ FRAGMENTS, TYPEMAP });
+diff --git a/apolloschurchapp/package.json b/apolloschurchapp/package.json
+index c332c552..df3afa7f 100644
+--- a/apolloschurchapp/package.json
++++ b/apolloschurchapp/package.json
+@@ -9,7 +9,6 @@
+     "setup": "./scripts/init.sh",
+     "ios": "react-native run-ios",
+     "android": "SIM=\"$($HOME/Library/Android/sdk/emulator/emulator -list-avds | sed -n 1p)\" && $HOME/Library/Android/sdk/emulator/emulator -avd \"${SIM}\" & react-native run-android",
+-    "codecov": "cat ./coverage/lcov.info | codecov",
+     "lint": "eslint .",
+     "postinstall": "jetify && yarn pods",
+     "bump": "yarn version --patch",
+@@ -41,22 +40,22 @@
+   "dependencies": {
+     "@apollo/client": "3.3.20",
+     "@apollo/react-hooks": "^3.1.3",
+-    "@apollosproject/config": "^2.39.0",
++    "@apollosproject/config": "^2.42.0",
+     "@apollosproject/react-native-airplay-btn": "^0.2.0",
+-    "@apollosproject/ui-analytics": "^2.39.0",
+-    "@apollosproject/ui-auth": "^2.39.0",
+-    "@apollosproject/ui-connected": "^2.39.0",
+-    "@apollosproject/ui-fragments": "^2.39.0",
+-    "@apollosproject/ui-htmlview": "^2.39.0",
+-    "@apollosproject/ui-kit": "^2.39.0",
+-    "@apollosproject/ui-mapview": "^2.39.0",
+-    "@apollosproject/ui-media-player": "^2.39.0",
+-    "@apollosproject/ui-notifications": "^2.39.0",
+-    "@apollosproject/ui-onboarding": "^2.39.0",
+-    "@apollosproject/ui-passes": "^2.39.0",
+-    "@apollosproject/ui-prayer": "^2.39.0",
+-    "@apollosproject/ui-scripture": "^2.39.0",
+-    "@apollosproject/ui-test-utils": "^2.39.0",
++    "@apollosproject/ui-analytics": "^2.42.0",
++    "@apollosproject/ui-auth": "^2.42.0",
++    "@apollosproject/ui-connected": "^2.42.0",
++    "@apollosproject/ui-fragments": "^2.42.0",
++    "@apollosproject/ui-htmlview": "^2.42.0",
++    "@apollosproject/ui-kit": "^2.42.0",
++    "@apollosproject/ui-mapview": "^2.42.0",
++    "@apollosproject/ui-media-player": "^2.42.0",
++    "@apollosproject/ui-notifications": "^2.42.0",
++    "@apollosproject/ui-onboarding": "^2.42.0",
++    "@apollosproject/ui-passes": "^2.42.0",
++    "@apollosproject/ui-prayer": "^2.42.0",
++    "@apollosproject/ui-scripture": "^2.42.0",
++    "@apollosproject/ui-test-utils": "^2.42.0",
+     "@gorhom/bottom-sheet": "3.4.1",
+     "@react-native-community/async-storage": "^1.5.1",
+     "@react-native-community/datetimepicker": "^3.0.0",
+@@ -102,6 +101,7 @@
+     "react-native-safari-view": "2.1.0",
+     "react-native-safe-area-context": "^3.0.7",
+     "react-native-screens": "3.2.0",
++    "react-native-sha256": "^1.4.7",
+     "react-native-splash-screen": "^3.2.0",
+     "react-native-svg": "^9.4.0",
+     "react-native-video": "^5.2.0",
+@@ -113,7 +113,7 @@
+     "yup": "0.26.6"
+   },
+   "devDependencies": {
+-    "@apollosproject/eslint-config": "^2.39.0",
++    "@apollosproject/eslint-config": "^2.42.0",
+     "@babel/core": "^7.14.6",
+     "@babel/runtime": "^7.14.6",
+     "@bam.tech/react-native-make": "^3.0.3",
+@@ -121,7 +121,6 @@
+     "@react-native-community/eslint-config": "^3.0.0",
+     "babel-jest": "^26",
+     "babel-plugin-module-resolver": "^4.0.0",
+-    "codecov": "3.7.2",
+     "eslint": "^7.28.0",
+     "eslint-import-resolver-babel-module": "^5.0.0-beta.0",
+     "eslint-plugin-react": "^7.26.1",
+diff --git a/apolloschurchapp/src/client/cache.js b/apolloschurchapp/src/client/cache.js
+index abd9b8f9..be36c6cb 100644
+--- a/apolloschurchapp/src/client/cache.js
++++ b/apolloschurchapp/src/client/cache.js
+@@ -3,18 +3,6 @@ import AsyncStorage from '@react-native-community/async-storage';
+ import { CachePersistor } from 'apollo3-cache-persist';
+ import ApollosConfig from '@apollosproject/config';
+ 
+-// NOTE: this file is generated at runtime
+-// eslint-disable-next-line
+-import introspectionQueryResultData from "./fragmentTypes.json";
+-
+-const finalPossibleTypes = {};
+-introspectionQueryResultData.__schema.types.forEach((supertype) => {
+-  if (supertype.possibleTypes) {
+-    finalPossibleTypes[supertype.name] = [
+-      ...supertype.possibleTypes.map((subtype) => subtype.name),
+-    ];
+-  }
+-});
+ // We reset our apollo cache based an env value and static number.
+ // In the future, we should also look at resetting the app when an error occurs related to Apollo.
+ // You can also increment this number to force a manual reset of the cache.
+@@ -25,7 +13,7 @@ const nodeCacheRedirect = (_, { id }, { getCacheKey }) =>
+   id ? getCacheKey({ __typename: id.split(':')[0], id }) : null;
+ 
+ const cache = new InMemoryCache({
+-  possibleTypes: finalPossibleTypes,
++  possibleTypes: ApollosConfig.TYPEMAP,
+   cacheRedirects: {
+     Query: {
+       node: nodeCacheRedirect,
+diff --git a/apolloschurchapp/src/client/httpLink.js b/apolloschurchapp/src/client/httpLink.js
+deleted file mode 100644
+index 41402ff8..00000000
+--- a/apolloschurchapp/src/client/httpLink.js
++++ /dev/null
+@@ -1,41 +0,0 @@
+-import { Platform } from 'react-native';
+-import { createUploadLink } from 'apollo-upload-client';
+-import ApollosConfig from '@apollosproject/config';
+-import { split, createHttpLink } from '@apollo/client';
+-import { getMainDefinition } from '@apollo/client/utilities';
+-
+-let uri = ApollosConfig.APP_DATA_URL;
+-const androidUri = ApollosConfig.ANDROID_URL || '10.0.2.2';
+-
+-// Android's emulator requires localhost network traffic to go through 10.0.2.2
+-if (Platform.OS === 'android') {
+-  uri = uri.replace('localhost', androidUri);
+-}
+-
+-export default split(
+-  ({ query }) => {
+-    const { kind, operation } = getMainDefinition(query);
+-    return kind === 'OperationDefinition' && operation === 'mutation';
+-  },
+-  createUploadLink({
+-    uri,
+-    headers: {
+-      ...(ApollosConfig.CHURCH_HEADER
+-        ? { 'x-church': ApollosConfig.CHURCH_HEADER }
+-        : {}),
+-    },
+-  }),
+-  createHttpLink({
+-    uri,
+-    useGETForQueries: true,
+-    headers: {
+-      // We can safely send these headers.
+-      // Fastly does not currently respect no-store or no-cache directives. Including either or both of these in a Cache-Control header has no effect on Fastly's caching decision
+-      // https://docs.fastly.com/en/guides/configuring-caching#do-not-cache
+-      'Cache-Control': 'no-cache, no-store',
+-      ...(ApollosConfig.CHURCH_HEADER
+-        ? { 'x-church': ApollosConfig.CHURCH_HEADER }
+-        : {}),
+-    },
+-  })
+-);
+diff --git a/apolloschurchapp/src/client/index.js b/apolloschurchapp/src/client/index.js
+index 929047dd..28061b13 100644
+--- a/apolloschurchapp/src/client/index.js
++++ b/apolloschurchapp/src/client/index.js
+@@ -1,14 +1,18 @@
+ import { useEffect } from 'react';
+ import PropTypes from 'prop-types';
+ import { ApolloProvider, ApolloClient, ApolloLink, gql } from '@apollo/client';
++import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
++import { sha256 } from 'react-native-sha256';
+ import { getVersion, getApplicationName } from 'react-native-device-info';
++import { Platform } from 'react-native';
++import { createUploadLink } from 'apollo-upload-client';
++import ApollosConfig from '@apollosproject/config';
+ 
+ import { authLink, buildErrorLink } from '@apollosproject/ui-auth';
+ import { updatePushId } from '@apollosproject/ui-notifications';
+ 
+ import { NavigationService } from '@apollosproject/ui-kit';
+ 
+-import httpLink from './httpLink';
+ import cache, { ensureCacheHydration } from './cache';
+ 
+ const wipeData = () =>
+@@ -37,9 +41,31 @@ const onAuthError = async () => {
+   NavigationService.resetToAuth();
+ };
+ 
++let uri = ApollosConfig.APP_DATA_URL;
++const androidUri = ApollosConfig.ANDROID_URL || '10.0.2.2';
++
++// Android's emulator requires localhost network traffic to go through 10.0.2.2
++if (Platform.OS === 'android') uri = uri.replace('localhost', androidUri);
++
+ const errorLink = buildErrorLink(onAuthError);
++const apqLink = createPersistedQueryLink({
++  sha256,
++  useGETForHashedQueries: true,
++});
+ 
+-const link = ApolloLink.from([authLink, errorLink, httpLink]);
++const link = ApolloLink.from([
++  authLink,
++  errorLink,
++  apqLink,
++  createUploadLink({
++    uri,
++    headers: {
++      ...(ApollosConfig.CHURCH_HEADER
++        ? { 'x-church': ApollosConfig.CHURCH_HEADER }
++        : {}),
++    },
++  }),
++]);
+ 
+ export const client = new ApolloClient({
+   link,
+diff --git a/apolloschurchapp/src/index.js b/apolloschurchapp/src/index.js
+index c32498f9..9ec765ba 100644
+--- a/apolloschurchapp/src/index.js
++++ b/apolloschurchapp/src/index.js
+@@ -75,11 +75,6 @@ const ThemedNavigationContainer = withTheme(({ theme, ...props }) => ({
+   <NavigationContainer ref={containerRef} {...props} />
+ ));
+ 
+-const LandingToAuth = () => {
+-  const navigation = useNavigation();
+-  return <Landing onPressPrimary={() => navigation.navigate('Auth')} />;
+-};
+-
+ const { Navigator, Screen } = createNativeStackNavigator();
+ 
+ const App = () => (
+@@ -148,7 +143,7 @@ const App = () => (
+                 stackPresentation: 'push',
+               }}
+             />
+-            <Screen name="LandingScreen" component={LandingToAuth} />
++            <Screen name="LandingScreen" component={Landing} />
+             <Screen name="Search" component={SearchScreenConnected} />
+             <Screen
+               name="UserSettingsNavigator"
+diff --git a/apolloschurchapp/src/tabs/index.js b/apolloschurchapp/src/tabs.js
+similarity index 75%
+rename from apolloschurchapp/src/tabs/index.js
+rename to apolloschurchapp/src/tabs.js
+index 211286c3..4358bb41 100644
+--- a/apolloschurchapp/src/tabs/index.js
++++ b/apolloschurchapp/src/tabs.js
+@@ -1,4 +1,5 @@
+ import { useEffect } from 'react';
++import PropTypes from 'prop-types';
+ import { Image, View } from 'react-native';
+ import { useNavigation } from '@react-navigation/native';
+ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+@@ -17,21 +18,17 @@ import {
+   ConnectScreenConnected,
+ } from '@apollosproject/ui-connected';
+ import { checkOnboardingStatusAndNavigate } from '@apollosproject/ui-onboarding';
+-import ActionTable from '../ui/ActionTable';
+-import ActionBar from '../ui/ActionBar';
+-import tabBarIcon from './tabBarIcon';
+ 
+-const HeaderLogo = withTheme(({ theme }) => ({
+-  style: {
+-    height: theme.sizing.baseUnit * 2.5,
+-    width: '70%',
+-    resizeMode: 'contain',
+-  },
+-  source:
+-    theme.type === 'light'
+-      ? require('./wordmark.png')
+-      : require('./wordmark.dark.png'),
+-}))(Image);
++const HeaderLogo = () => {
++  const theme = useTheme();
++  return (
++    <Icon
++      name="brand-icon"
++      size={theme.sizing.baseUnit * 1.5}
++      fill={theme.colors.primary}
++    />
++  );
++};
+ 
+ const ProfileButton = () => {
+   const navigation = useNavigation();
+@@ -66,6 +63,16 @@ const SearchButton = () => {
+   );
+ };
+ 
++const tabBarIcon = (name) => {
++  function TabBarIcon({ color }) {
++    return <Icon name={name} fill={color} size={24} />;
++  }
++  TabBarIcon.propTypes = {
++    color: PropTypes.string,
++  };
++  return TabBarIcon;
++};
++
+ // we nest stack inside of tabs so we can use all the fancy native header features
+ const HomeTab = createFeatureFeedTab({
+   screenOptions: {
+@@ -103,27 +110,13 @@ const PrayTab = createFeatureFeedTab({
+   feedName: 'PRAY',
+ });
+ 
+-const CustomConnectScreen = () => (
+-  <ConnectScreenConnected ActionTable={ActionTable} ActionBar={ActionBar} />
+-);
+-
+-const ConnectTabStack = createNativeStackNavigator();
+-const ConnectTabStackNavigator = () => (
+-  <ConnectTabStack.Navigator
+-    screenOptions={{
+-      headerHideShadow: true,
+-      headerLargeTitle: true,
+-    }}
+-  >
+-    <ConnectTabStack.Screen
+-      name={'Connect'}
+-      component={CustomConnectScreen}
+-      options={{
+-        headerLeft: ProfileButton,
+-      }}
+-    />
+-  </ConnectTabStack.Navigator>
+-);
++const ConnectTab = createFeatureFeedTab({
++  options: {
++    headerLeft: ProfileButton,
++  },
++  tabName: 'Connect',
++  feedName: 'CONNECT',
++});
+ 
+ const { Navigator, Screen } = createBottomTabNavigator();
+ 
+@@ -163,10 +156,8 @@ const TabNavigator = () => {
+       />
+       <Screen
+         name="Connect"
+-        component={ConnectTabStackNavigator}
+-        options={{
+-          tabBarIcon: tabBarIcon('profile'),
+-        }}
++        component={ConnectTab}
++        options={{ tabBarIcon: tabBarIcon('profile') }}
+       />
+     </Navigator>
+   );
+diff --git a/apolloschurchapp/src/tabs/tabBarIcon.js b/apolloschurchapp/src/tabs/tabBarIcon.js
+deleted file mode 100644
+index c0c112d7..00000000
+--- a/apolloschurchapp/src/tabs/tabBarIcon.js
++++ /dev/null
+@@ -1,15 +0,0 @@
+-import PropTypes from 'prop-types';
+-
+-import { Icon } from '@apollosproject/ui-kit';
+-
+-const tabBarIcon = (name) => {
+-  function TabBarIcon({ color }) {
+-    return <Icon name={name} fill={color} size={24} />;
+-  }
+-  TabBarIcon.propTypes = {
+-    color: PropTypes.string,
+-  };
+-  return TabBarIcon;
+-};
+-
+-export default tabBarIcon;
+diff --git a/apolloschurchapp/src/tabs/wordmark.dark.png b/apolloschurchapp/src/tabs/wordmark.dark.png
+deleted file mode 100644
+index 93229c35ef61c3842a7bf0acb5c9ed910093adb0..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 8241
+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
+
+diff --git a/apolloschurchapp/src/tabs/wordmark.png b/apolloschurchapp/src/tabs/wordmark.png
+deleted file mode 100644
+index 93229c35ef61c3842a7bf0acb5c9ed910093adb0..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 8241
+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
+
+diff --git a/apolloschurchapp/src/ui/ActionBar.js b/apolloschurchapp/src/ui/ActionBar.js
+deleted file mode 100644
+index af421256..00000000
+--- a/apolloschurchapp/src/ui/ActionBar.js
++++ /dev/null
+@@ -1,27 +0,0 @@
+-import { ActionBar, ActionBarItem } from '@apollosproject/ui-kit';
+-import { useNavigation } from '@react-navigation/native';
+-import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
+-
+-const Toolbar = () => {
+-  const navigation = useNavigation();
+-  return (
+-    <RockAuthedWebBrowser>
+-      {(openUrl) => (
+-        <ActionBar>
+-          <ActionBarItem
+-            onPress={() => navigation.navigate('Passes')}
+-            icon="check"
+-            label="Check-in"
+-          />
+-          <ActionBarItem
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/186')}
+-            icon="download"
+-            label="Give"
+-          />
+-        </ActionBar>
+-      )}
+-    </RockAuthedWebBrowser>
+-  );
+-};
+-
+-export default Toolbar;
+diff --git a/apolloschurchapp/src/ui/ActionTable/index.js b/apolloschurchapp/src/ui/ActionTable/index.js
+deleted file mode 100644
+index 72b80b3e..00000000
+--- a/apolloschurchapp/src/ui/ActionTable/index.js
++++ /dev/null
+@@ -1,73 +0,0 @@
+-import { View } from 'react-native';
+-
+-import {
+-  TableView,
+-  Cell,
+-  CellIcon,
+-  CellText,
+-  Divider,
+-  Touchable,
+-  styled,
+-  PaddedView,
+-  H4,
+-} from '@apollosproject/ui-kit';
+-import { RockAuthedWebBrowser } from '@apollosproject/ui-connected';
+-
+-const RowHeader = styled(({ theme }) => ({
+-  flexDirection: 'row',
+-  justifyContent: 'space-between',
+-  alignItems: 'center',
+-  paddingVertical: theme.sizing.baseUnit,
+-}))(PaddedView);
+-
+-const Name = styled({
+-  flexGrow: 1,
+-})(View);
+-
+-const ActionTable = () => (
+-  <RockAuthedWebBrowser>
+-    {(openUrl) => (
+-      <View>
+-        <RowHeader>
+-          <Name>
+-            <H4>{'Connect with Apollos'}</H4>
+-          </Name>
+-        </RowHeader>
+-        <TableView>
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/235')}
+-          >
+-            <Cell>
+-              <CellText>Find a serving opportunity</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-          <Divider />
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/236')}
+-          >
+-            <Cell>
+-              <CellText>Join a small group</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-          <Divider />
+-          <Touchable
+-            onPress={() => openUrl('https://apollosrock.newspring.cc/page/233')}
+-          >
+-            <Cell>
+-              <CellText>I need prayer</CellText>
+-              <CellIcon name="arrow-next" />
+-            </Cell>
+-          </Touchable>
+-        </TableView>
+-      </View>
+-    )}
+-  </RockAuthedWebBrowser>
+-);
+-
+-const StyledActionTable = styled(({ theme }) => ({
+-  paddingBottom: theme.sizing.baseUnit * 100,
+-}))(ActionTable);
+-
+-export default StyledActionTable;

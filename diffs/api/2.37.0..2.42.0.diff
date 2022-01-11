@@ -1,0 +1,282 @@
+diff --git a/apollos-church-api/__mocks__/apollo-server-env.js b/apollos-church-api/__mocks__/apollo-server-env.js
+deleted file mode 100644
+index 5ec2ff74..00000000
+--- a/apollos-church-api/__mocks__/apollo-server-env.js
++++ /dev/null
+@@ -1,5 +0,0 @@
+-import createMock from '@apollosproject/apollo-server-env-mock';
+-
+-const apolloServerEnv = require.requireActual('apollo-server-env');
+-
+-module.exports = createMock(apolloServerEnv);
+diff --git a/apollos-church-api/__mocks__/dotenv/config.js b/apollos-church-api/__mocks__/dotenv/config.js
+deleted file mode 100644
+index c312228c..00000000
+--- a/apollos-church-api/__mocks__/dotenv/config.js
++++ /dev/null
+@@ -1 +0,0 @@
+-// console.log('Disable reading from `env` file in test env.');
+diff --git a/apollos-church-api/apollos.json b/apollos-church-api/apollos.json
+index f2289ac6..5d43743d 100644
+--- a/apollos-church-api/apollos.json
++++ b/apollos-church-api/apollos.json
+@@ -1,4 +1,4 @@
+ {
+-  "version": "2.37.0",
++  "version": "2.42.0",
+   "environment": "api"
+ }
+diff --git a/apollos-church-api/config.postgres.yml b/apollos-church-api/config.postgres.yml
+index f8b68c10..dcca9e03 100644
+--- a/apollos-church-api/config.postgres.yml
++++ b/apollos-church-api/config.postgres.yml
+@@ -68,6 +68,9 @@ CONTENT:
+     - WeekendContentItem
+     - ContentItem
+ 
++SUGGESTED_FOLLOWS:
++  - email: vincent@differential.com
++  - email: conrad@differential.com
+ 
+ TABS:
+   HOME:
+@@ -223,6 +226,7 @@ TABS:
+     - type: VerticalPrayerList
+       title: Your Prayers
+   CONNECT:
++    - type: FollowPeople
+     - type: ActionTable
+       title: Connect to Apollos
+       actions:
+diff --git a/apollos-church-api/package.json b/apollos-church-api/package.json
+index cc0ef722..5db37673 100644
+--- a/apollos-church-api/package.json
++++ b/apollos-church-api/package.json
+@@ -18,33 +18,36 @@
+     "node": ">=14"
+   },
+   "dependencies": {
+-    "@apollosproject/config": "^2.37.0",
+-    "@apollosproject/data-connector-algolia-search": "^2.37.0",
+-    "@apollosproject/data-connector-analytics": "^2.37.0",
+-    "@apollosproject/data-connector-bible": "^2.37.0",
+-    "@apollosproject/data-connector-church-online": "^2.37.0",
+-    "@apollosproject/data-connector-cloudinary": "^2.37.0",
+-    "@apollosproject/data-connector-onesignal": "^2.37.0",
+-    "@apollosproject/data-connector-passes": "^2.37.0",
+-    "@apollosproject/data-connector-postgres": "^2.37.0",
+-    "@apollosproject/data-connector-redis-cache": "^2.37.0",
+-    "@apollosproject/data-connector-rock": "^2.37.0",
+-    "@apollosproject/data-connector-twilio": "^2.37.0",
+-    "@apollosproject/data-schema": "^2.37.0",
+-    "@apollosproject/rock-apollo-data-source": "^2.37.0",
+-    "@apollosproject/server-core": "^2.37.0",
++    "@apollosproject/config": "^2.42.0",
++    "@apollosproject/data-connector-algolia-search": "^2.42.0",
++    "@apollosproject/data-connector-analytics": "^2.42.0",
++    "@apollosproject/data-connector-bible": "^2.42.0",
++    "@apollosproject/data-connector-church-online": "^2.42.0",
++    "@apollosproject/data-connector-cloudinary": "^2.42.0",
++    "@apollosproject/data-connector-onesignal": "^2.42.0",
++    "@apollosproject/data-connector-passes": "^2.42.0",
++    "@apollosproject/data-connector-postgres": "^2.42.0",
++    "@apollosproject/data-connector-redis-cache": "^2.42.0",
++    "@apollosproject/data-connector-rock": "^2.42.0",
++    "@apollosproject/data-connector-twilio": "^2.42.0",
++    "@apollosproject/data-schema": "^2.42.0",
++    "@apollosproject/rock-apollo-data-source": "^2.42.0",
++    "@apollosproject/server-core": "^2.42.0",
+     "apollo-server": "^2.24.1",
++    "apollo-server-cache-redis": "^1.5.0",
+     "apollo-server-express": "2.14.2",
++    "apollo-server-plugin-response-cache": "^0.8.0",
+     "color": "3.0.0",
+     "dotenv": "6.0.0",
+     "express": "^4.17.0",
+     "graphql": "14.6.0",
++    "ioredis": "^4.27.2",
+     "randomcolor": "0.5.3"
+   },
+   "devDependencies": {
+-    "@apollosproject/apollo-server-env-mock": "^2.37.0",
+-    "@apollosproject/babel-preset-apollos": "^2.37.0",
+-    "@apollosproject/eslint-config": "^2.37.0",
++    "@apollosproject/apollo-server-env-mock": "^2.42.0",
++    "@apollosproject/babel-preset-apollos": "^2.42.0",
++    "@apollosproject/eslint-config": "^2.42.0",
+     "@babel/cli": "^7.4.5",
+     "@babel/core": "^7.4.5",
+     "@babel/node": "^7.7.4",
+diff --git a/apollos-church-api/src/data/index.postgres.js b/apollos-church-api/src/data/index.postgres.js
+index f890adf6..e5728ba5 100644
+--- a/apollos-church-api/src/data/index.postgres.js
++++ b/apollos-church-api/src/data/index.postgres.js
+@@ -26,13 +26,13 @@ import {
+   BinaryFiles,
+   FeatureFeed,
+   Event,
+-  PrayerRequest,
+   Person as RockPerson,
+   ContentItem as RockContentItem,
+   Campus as RockCampus,
+   ContentChannel,
+   Feature as RockFeature,
+   ActionAlgorithm as RockActionAlgorithm,
++  PrayerRequest as RockPrayerRequest,
+ } from '@apollosproject/data-connector-rock';
+ 
+ import {
+@@ -65,6 +65,7 @@ import {
+   OneSignal,
+   PostgresDefaultCampusOverride,
+   RockDefaultCampusOverride,
++  PrayerRequest,
+ } from './rockWithPostgres';
+ 
+ const postgresContentModules = {
+@@ -77,10 +78,14 @@ const postgresContentModules = {
+   ContentItem: PostgresContentItem,
+   ContentItemsConnection,
+   ContentChannel: ContentItemCategory,
+-  PrayerRequest: PostgresPrayerRequest,
+   RockCampus: { dataSource: RockCampus.dataSource },
+   Campus,
+   PostgresDefaultCampusOverride,
++  RockPrayerRequest: {
++    dataSource: RockPrayerRequest.dataSource,
++  },
++  PostgresPrayerRequest,
++  PrayerRequest,
+ };
+ 
+ const rockContentModules = {
+@@ -90,7 +95,6 @@ const rockContentModules = {
+   Feature: RockFeature,
+   ContentItem: RockContentItem,
+   ContentChannel,
+-  PrayerRequest,
+   PostgresCampus: {
+     // essentially everything but the resolvers
+     dataSource: Campus.dataSource,
+@@ -99,6 +103,7 @@ const rockContentModules = {
+   },
+   Campus: RockCampus,
+   RockDefaultCampusOverride,
++  PrayerRequest: RockPrayerRequest,
+ };
+ 
+ const data = {
+diff --git a/apollos-church-api/src/data/rockWithPostgres.js b/apollos-church-api/src/data/rockWithPostgres.js
+index daf925bc..fbd2ae6b 100644
+--- a/apollos-church-api/src/data/rockWithPostgres.js
++++ b/apollos-church-api/src/data/rockWithPostgres.js
+@@ -1,6 +1,9 @@
+ /* eslint-disable import/prefer-default-export, max-classes-per-file */
+ import { parseGlobalId } from '@apollosproject/server-core';
+-import { Person as postgresPerson } from '@apollosproject/data-connector-postgres';
++import {
++  Person as postgresPerson,
++  PrayerRequest as postgresPrayerRequest,
++} from '@apollosproject/data-connector-postgres';
+ import * as OneSignalOriginal from '@apollosproject/data-connector-onesignal';
+ 
+ class personDataSource extends postgresPerson.dataSource {
+@@ -158,3 +161,25 @@ export const PostgresDefaultCampusOverride = {
+     },
+   },
+ };
++
++class prayerRequestDataSource extends postgresPrayerRequest.dataSource {
++  async getRequestor({ personId }) {
++    return this.context.dataSources.Person.getFromId(personId);
++  }
++}
++
++export const PrayerRequest = {
++  dataSource: prayerRequestDataSource,
++  resolver: {
++    Mutation: {
++      addPrayer: async (root, args, { dataSources }) => {
++        const { id } = await dataSources.RockPrayerRequest.addPrayer(args);
++        return dataSources.PrayerRequest.addPrayer({
++          text: args.text,
++          originId: String(id),
++          originType: 'rock',
++        });
++      },
++    },
++  },
++};
+diff --git a/apollos-church-api/src/server.js b/apollos-church-api/src/server.js
+index ae3b1cf4..4a1e328f 100644
+--- a/apollos-church-api/src/server.js
++++ b/apollos-church-api/src/server.js
+@@ -1,8 +1,12 @@
+ import { ApolloServer } from 'apollo-server-express';
+ import ApollosConfig from '@apollosproject/config';
+ import express from 'express';
++import responseCachePlugin from 'apollo-server-plugin-response-cache';
+ import { RockLoggingExtension } from '@apollosproject/rock-apollo-data-source';
+ import { get } from 'lodash';
++
++import { BaseRedisCache } from 'apollo-server-cache-redis';
++import Redis from 'ioredis';
+ import { setupUniversalLinks } from '@apollosproject/server-core';
+ import { createMigrationRunner } from '@apollosproject/data-connector-postgres';
+ 
+@@ -30,18 +34,6 @@ export { resolvers, schema, testSchema };
+ const isDev =
+   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test';
+ 
+-const extensions = isDev ? [() => new RockLoggingExtension()] : [];
+-
+-const cacheOptions = isDev
+-  ? {}
+-  : {
+-      cacheControl: {
+-        stripFormattedExtensions: false,
+-        calculateHttpHeaders: true,
+-        defaultMaxAge: 3600,
+-      },
+-    };
+-
+ const { ROCK, APP } = ApollosConfig;
+ 
+ const apolloServer = new ApolloServer({
+@@ -50,7 +42,15 @@ const apolloServer = new ApolloServer({
+   dataSources,
+   context,
+   introspection: true,
+-  extensions,
++  extensions: isDev ? [() => new RockLoggingExtension()] : [],
++  plugins: [
++    responseCachePlugin({
++      sessionId: (requestContext) =>
++        requestContext.request.http.headers.get('authorization') || null,
++      shouldReadFromCache: () => !isDev,
++      shouldWriteToCache: () => !isDev,
++    }),
++  ],
+   formatError: (error) => {
+     console.error(get(error, 'extensions.exception.stacktrace', []).join('\n'));
+     return error;
+@@ -61,7 +61,18 @@ const apolloServer = new ApolloServer({
+     },
+   },
+   uploads: false,
+-  ...cacheOptions,
++  ...(process.env.REDIS_URL
++    ? {
++        cache: new BaseRedisCache({
++          client: new Redis(process.env.REDIS_URL),
++        }),
++      }
++    : {}),
++  cacheControl: {
++    stripFormattedExtensions: false,
++    calculateHttpHeaders: true,
++    defaultMaxAge: 3600,
++  },
+ });
+ 
+ const app = express();
